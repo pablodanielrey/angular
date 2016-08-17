@@ -456,6 +456,10 @@
   cursor: pointer;
 }
 
+.myOrders .contentPriority {
+  display: none;
+}
+
 .myOrders .itemDate {
   font-size: 12px;
   /*background: red;*/

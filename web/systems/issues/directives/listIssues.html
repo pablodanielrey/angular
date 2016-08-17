@@ -3,12 +3,19 @@
       <div class="itemOrders" ng-repeat="issue in vm.issues">
           <div class="itemInfo">
 
+              <!-- ---- Prioridad del pedido, por defecto tiene que estar en "normal" ---- -->
+              <div class="contentPriority {{vm.getPriority(issue)}}">
+                  <div class="subContentPriority">&nbsp;</div>
+              </div>
+
+              <!-- ---- Numero de pedido y fecha ---- -->
               <div class="itemDate">
                   <div class="textNumerOrders">Nº {{issue.id}}</div>
                   <div class="textDateOrders">{{vm.getDate(issue) | date: 'd MMMM  yyyy - HH:mm'}} hs</div>
                   <div class="textDaysOrders">{{vm.getDiffDay(issue)}}</div>
               </div>
 
+              <!-- ---- Estado ---- -->
               <div class="itemStatus">
                   <div class="status {{vm.getStatus(issue)}}">
                       <!-- VARIABLES:
@@ -26,21 +33,22 @@
                   </div>
               </div>
 
+              <!-- ---- Info oficina y solicitud ---- -->
               <div class="itemsType">
                 <div class="textType">{{issue.office.name}}</div>
                 <div class="textType2">{{issue.area.name}}</div>
                 <div class="textSubType">{{issue.subject}}</div>
               </div>
 
+              <!-- ---- Usuarios de la carga del pedido ---- -->
               <div class="itemsOffice" ng-class="{true: 'solicitadoPorEl', false: 'solicitadoPorOtro'}[issue.creatorId == null || issue.creatorId == '']">
                 <div>
-                  <div class="textMini">Solicitado por:</div>
-                  <div class="textOffice">{{issue.fromOffice.name}}</div>
-                  <div class="textName">{{vm.getFullName(issue)}}</div>
+                  <div><span class="textMini">Solicitado por: </span> <span classs="textName">{{vm.getFullName(issue)}}</span></div>
+                  <div><span class="textMini">Oficina: </span> <span class="textOffice">{{issue.fromOffice.name}}</span> </div>
                 </div>
                 <div class="userUpload">
-                  <div class="textMini">Cargado por:</div>
-                  <div class="textName">{{vm.getCreator(issue)}}</div> <!-- Usuario que cargo el pedido -->
+                  <span class="textMini">Cargado por: </span>
+                  <span class="textName">{{vm.getCreator(issue)}}</span>
                 </div>
               </div>
 
