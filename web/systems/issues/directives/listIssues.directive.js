@@ -39,6 +39,14 @@
         vm.getDiffDay = getDiffDay;
         vm.getFullName = getFullName;
         vm.viewDetail = viewDetail;
+        vm.getStatus = getStatus;
+        vm.getCreator = getCreator;
+        vm.getPriority = getPriority;
+
+        vm.view= {
+          status: ['','abierta', 'enProgreso', 'cerrada', 'comentarios', 'cerrada', 'rechazada', 'pausada'],
+          priorities: ['baja', 'normal', 'alta', 'alta', 'alta'] //solo se maneja el estilo alta, si esta como urgente o inmediata se lo toma solo como alta
+        }
 
         function viewDetail(issue) {
           vm.detail({issueId: issue.id});
@@ -83,6 +91,30 @@
           }
           var user = vm.users[issue.userId];
           return (user == null) ? 'No tiene nombre' : user.name + ' ' + user.lastname;
+        }
+
+        function getStatus(issue) {
+          if (issue == null) {
+            return '';
+          }
+          return vm.view.status[issue.statusId];
+        }
+
+        function getCreator(issue) {
+          if (issue == null || issue.creatorId == null || issue.creatorId == '') {
+            return '';
+          }
+
+          var user = vm.users[issue.creatorId];
+          return user.name + ' ' + user.lastname ;
+        }
+
+        function getPriority(issue) {
+          if (issue == null) {
+            return '';
+          }
+          var p = (issue.priority > 2) ? 2 : issue.priority - 1;
+          return vm.view.priorities[p];
         }
 
 
