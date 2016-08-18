@@ -25,24 +25,18 @@
           style4: '',
           styles4: ['', 'mensajeCargando', 'mensajeError', 'mensajeEnviado', 'mensajePedidoCreado'],
           status: ['','abierta', 'enProgreso', 'cerrada', 'comentarios', 'cerrada', 'rechazada', 'pausada'],
+          priorities: ['', 'baja', 'normal', 'alta', 'alta', 'alta'], //solo se maneja el estilo alta, si esta como urgente o inmediata se lo toma solo como alta
         }
 
-        vm.openStatus = 1;
-        vm.workingStatus = 2;
-        vm.closeStatus = 5;
-        vm.pausedStatus = 7;
-        vm.rejectedStatus = 6;
-
-        vm.lowPriority = 1;
-        vm.normalPriority = 2;
-        vm.highPriority = 3;
-
-        
 
         // métodos
         vm.issueStatus = issueStatus; //estado del issue
         vm.selectStatus = selectStatus; //seleccion de estado
         vm.setStatus = setStatus; //cambio de estado
+
+        vm.issuePriority = issuePriority; //estado del issue
+        vm.selectPriority = selectPriority; //seleccion de estado
+        vm.setPriority = setPriority; //cambio de estado
 
         activate();
 
@@ -50,7 +44,7 @@
           vm.model.userId = Login.getCredentials()['userId'];
           var params = $routeParams;
           IssuesDD.issueDetail(params.issueId).then(
-            function(issue){ vm.model.issue = issue; },
+            function(issue){ vm.model.issue = issue; console.log(vm.model.issue)},
             function(error){ console.log(error); }
           )
 
@@ -70,12 +64,35 @@
 
         function setStatus(status) {
           vm.view.style2 = vm.view.styles2[0];
-          vm.model.issue.statusId = status;
-          Issues.changeStatus(vm.model.issue, status).then(
+          var statusId = vm.view.status.indexOf(status);
+          vm.model.issue.statusId = statusId;
+
+          Issues.changeStatus(vm.model.issue, statusId).then(
             function(data) { console.log(data); },
             function(error) { console.log(error); }
           )
         }
+
+        function issuePriority() {
+          if (vm.model.issue && "priority" in vm.model.issue) return vm.view.priorities[vm.model.issue.priority];
+        }
+
+
+        function selectPriority() {
+          vm.view.style2 = (vm.view.style2 == vm.view.styles2[7]) ?  vm.view.styles2[0] : vm.view.styles2[7];
+        }
+
+        function setPriority(priority) {
+          vm.view.style2 = vm.view.styles2[0];
+          var priorityId = vm.view.priorities.indexOf(priority);
+          vm.model.issue.priority = priorityId;
+
+          Issues.changePriority(vm.model.issue, priorityId).then(
+            function(data) { console.log(data); },
+            function(error) { console.log(error); }
+          )
+        }
+
 
     }
 })();

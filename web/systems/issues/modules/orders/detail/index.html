@@ -47,27 +47,27 @@
                           <div class="textR2" title="Rechazada">R <i class="fa fa-caret-down"></i></div>
                       </div>
                       <div class="contentSelectState">
-                          <div class="subContentSelectState"  ng-click="vm.setStatus(vm.openStatus)">
+                          <div class="subContentSelectState"  ng-click="vm.setStatus('abierta')">
                               <div class="itemsSelectState abierta2">
                                 <div class="itemState">ABIERTA</div>
                               </div>
                           </div>
-                          <div class="subContentSelectState"  ng-click="vm.setStatus(vm.workingStatus)">
+                          <div class="subContentSelectState"  ng-click="vm.setStatus('enProgreso')">
                               <div class="itemsSelectState enProgreso2">
                                 <div class="itemState">EN CURSO</div>
                               </div>
                           </div>
-                          <div class="subContentSelectState" ng-click="vm.setStatus(vm.pausedStatus)">
+                          <div class="subContentSelectState" ng-click="vm.setStatus('pausada')">
                               <div class="itemsSelectState pausada2">
                                 <div class="itemState">PAUSADA</div>
                               </div>
                           </div>
-                          <div class="subContentSelectState" ng-click="vm.setStatus(vm.rejectedStatus)">
+                          <div class="subContentSelectState" ng-click="vm.setStatus('rechazada')">
                               <div class="itemsSelectState rechazada2">
                                 <div class="itemState">RECHAZADA</div>
                               </div>
                           </div>
-                          <div class="subContentSelectState" ng-click="vm.setStatus(vm.closeStatus)">
+                          <div class="subContentSelectState" ng-click="vm.setStatus('cerrada')">
                               <div class="itemsSelectState cerrada2">
                                 <div class="itemState">CERRADA</div>
                               </div>
@@ -76,7 +76,7 @@
                   </div>
                   <!-- ---- Cambiar la prioridad del pedido ---- -->
                   <div class="itemPriority">
-                      <div class="contentSelectPriority {{vm.getPriority(vm.model.selectedIssue)}}" ng-click="vm.selectPriotity()">
+                      <div class="contentSelectPriority {{vm.issuePriority()}}" ng-click="vm.selectPriority()">
                           <!-- ---- VARIABLES: baja, normal, alta ---- -->
                           <div class="textPriority">Prioridad</div>
                           <div class="priorityB">BAJA <i class="fa fa-caret-down"></i></div>
@@ -85,17 +85,17 @@
                       </div>
 
                       <div class="contentSelectPriority2">
-                          <div class="subContentSelectPriority" ng-click="vm.setPriority(vm.model.selectedIssue, vm.lowPriority)">
+                          <div class="subContentSelectPriority" ng-click="vm.setPriority('baja')">
                               <div class="itemsSelectState prioridadBaja">
                                 <div class="itemState">BAJA</div>
                               </div>
                           </div>
-                          <div class="subContentSelectPriority" ng-click="vm.setPriority(vm.model.selectedIssue, vm.normalPriority)">
+                          <div class="subContentSelectPriority" ng-click="vm.setPriority('normal')">
                               <div class="itemsSelectState prioridadNormal">
                                 <div class="itemState">NORMAL</div>
                               </div>
                           </div>
-                          <div class="subContentSelectPriority" ng-click="vm.setPriority(vm.model.selectedIssue, vm.highPriority)">
+                          <div class="subContentSelectPriority" ng-click="vm.setPriority('alta')">
                               <div class="itemsSelectState prioridadAlta">
                                 <div class="itemState">ALTA</div>
                               </div>
@@ -116,11 +116,11 @@
     <div class="infoOrder">
         <div class="contentUser">
             <div class="photo">
-                <img class="avatar"  src="/systems/pedidos/img/avatarWoman.jpg">
+                <img class="avatar" src="{{vm.model.issue.user.photoSrc}}">
             </div>
             <div class="nameUser">
-              Betiana </br>
-              Galle
+              {{vm.model.issue.user.name}} </br>
+              {{vm.model.issue.user.lastname}}
             </div>
         </div>
         <!-- <div class="contentArrow">
@@ -129,200 +129,68 @@
         <div class="contentInfo ">
             <!-- VARIABLES: conAdjunto, sinAdjunto -->
             <div class="textDateDetailOrders">
-                Hoy - 25 May. 2016 - 09:25 hs
+              {{vm.model.issue.start | date:"dd/MM/yyyy h:mma"}}
+
             </div>
             <div>
-                La impresora no se enciende o no responde cuando se presiona el botón de encendido.
-                No se observan indicadores luminosos ni mensajes de error, y no hay ruidos ni movimiento
-                en la impresora.
+              {{vm.model.issue.description}}
             </div>
 
-            <div class="contentAddInfo"><i class="fa fa-paperclip"></i> <a class="archiveAdd" href=""> ArchivoAdjunto.jpg</a></div>
-        </div>
-
-    </div>
-
-    <div class="contentTotalReplys">
-
-        <div class="reply miRespuesta">
-            <!-- VARIABLES: miRespuesta, respuestaDeAutor -->
-            <div class="contentReplys">
-
-                <div class="subcontentReply">
-                  <div class="contentArrowLeft">
-                    <i class="fa fa-caret-left" aria-hidden="true"></i>
-                  </div>
-
-                  <div class="textReply ">
-                      <!-- VARIABLES: sinAdjunto, conAdjunto -->
-                      <div class="textDateDetailOrders">
-                          Hoy - 25 May. 2016 - 10:26 hs
-                      </div>
-                      <div>
-                            presiona el botón de encendido. presiona el botón de encendido. presiona el botón de encendido. presiona el botón de encendido. presiona el botón de encendido.
-                      </div>
-                      <div class="contentAddInfo"><i class="fa fa-paperclip"></i> <a class="archiveAdd" href=""> ArchivoAdjunto.jpg</a></div>
-                  </div>
-
-                  <div class="contentArrowRight">
-                    <i class="fa fa-caret-right" aria-hidden="true"></i>
-                  </div>
-                </div>
-
-                <div class="contentUser">
-                  <div class="photo">
-                      <img class="avatar"  src="/systems/pedidos/img/walter.jpg">
-                  </div>
-                  <div class="nameUser">
-                    Walter </br>
-                    Blanco
-                  </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="reply respuestaDeAutor">
-            <!-- VARIABLES: miRespuesta, respuestaDeAutor -->
-            <div class="contentReplys">
-
-                <div class="subcontentReply">
-                  <div class="contentArrowLeft">
-                    <i class="fa fa-caret-left" aria-hidden="true"></i>
-                  </div>
-
-                  <div class="textReply">
-                      <div class="textDateDetailOrders">
-                          Hoy - 25 May. 2016 - 10:26 hs
-                      </div>
-                      <div>
-                            La impresora no se enciende o no responde cuando La impresora no se enciende o no responde cuando
-                      </div>
-                  </div>
-
-                  <div class="contentArrowRight">
-                    <i class="fa fa-caret-right" aria-hidden="true"></i>
-                  </div>
-                </div>
-
-                <div class="contentUser">
-                  <div class="photo">
-                      <img class="avatar"  src="/systems/pedidos/img/walter.jpg">
-                  </div>
-                  <div class="nameUser">
-                    Walter </br>
-                    Blanco
-                  </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="reply miRespuesta">
-            <!-- VARIABLES: miRespuesta, respuestaDeAutor -->
-            <div class="contentReplys">
-
-                <div class="subcontentReply">
-                  <div class="contentArrowLeft">
-                    <i class="fa fa-caret-left" aria-hidden="true"></i>
-                  </div>
-
-                  <div class="textReply">
-                      <div class="textDateDetailOrders">
-                          Hoy - 25 May. 2016 - 10:26 hs
-                      </div>
-                      <div>
-                        Ok
-                      </div>
-                  </div>
-
-                  <div class="contentArrowRight">
-                    <i class="fa fa-caret-right" aria-hidden="true"></i>
-                  </div>
-                </div>
-
-                <div class="contentUser">
-                  <div class="photo">
-                      <img class="avatar"  src="/systems/pedidos/img/walter.jpg">
-                  </div>
-                  <div class="nameUser">
-                    Walter </br>
-                    Blanco
-                  </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="reply respuestaDeAutor">
-            <!-- VARIABLES: miRespuesta, respuestaDeAutor -->
-            <div class="contentReplys">
-
-                <div class="subcontentReply">
-                  <div class="contentArrowLeft">
-                    <i class="fa fa-caret-left" aria-hidden="true"></i>
-                  </div>
-
-                  <div class="textReply">
-                      <div class="textDateDetailOrders">
-                          Hoy - 25 May. 2016 - 10:26 hs
-                      </div>
-                      <div>
-                            La impresora no se enciende o no responde cuando se presiona el botón de encendido. No se observan indicadores luminosos ni mensajes de error, y no hay ruidos ni movimiento en la impresora.
-                      </div>
-                  </div>
-
-                  <div class="contentArrowRight">
-                    <i class="fa fa-caret-right" aria-hidden="true"></i>
-                  </div>
-                </div>
-
-                <div class="contentUser">
-                  <div class="photo">
-                      <img class="avatar"  src="/systems/pedidos/img/walter.jpg">
-                  </div>
-                  <div class="nameUser">
-                    Walter </br>
-                    Blanco
-                  </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="reply respuestaDeAutor">
-            <!-- VARIABLES: miRespuesta, respuestaDeAutor -->
-            <div class="contentReplys">
-
-                <div class="subcontentReply">
-                  <div class="contentArrowLeft">
-                    <i class="fa fa-caret-left" aria-hidden="true"></i>
-                  </div>
-
-                  <div class="textReply">
-                      <div class="textDateDetailOrders">
-                          Hoy - 25 May. 2016 - 10:26 hs
-                      </div>
-                      <div>
-                            La impresora no se enciende o no responde cuando se presiona el botón de encendido. No se observan indicadores luminosos ni mensajes de error, y no hay ruidos ni movimiento en la impresora.
-                      </div>
-                  </div>
-
-                  <div class="contentArrowRight">
-                    <i class="fa fa-caret-right" aria-hidden="true"></i>
-                  </div>
-                </div>
-
-                <div class="contentUser">
-                  <div class="photo">
-                      <img class="avatar"  src="/systems/pedidos/img/walter.jpg">
-                  </div>
-                  <div class="nameUser">
-                    Walter </br>
-                    Blanco
-                  </div>
-                </div>
+            <div ng-repeat="file in vm.model.issue.files">
+              <div class="contentAddInfo">
+                <i class="fa fa-paperclip"></i> <a class="archiveAdd" ng-href="{{file.url}}">{{file.name}}</a>
+              </div>
             </div>
         </div>
 
     </div>
+
+    <div class="contentTotalReplys" >
+    <div ng-repeat="child in vm.model.issue.children">
+      <div class="reply" ng-class="{true: 'miRespuesta' , false: 'respuestaDeAutor'}[vm.model.issue.userId != child.userId]">
+        <div class="contentReplys">
+          <div class="subcontentReply">
+            <div class="contentArrowLeft">
+              <i class="fa fa-caret-left" aria-hidden="true"></i>
+            </div>
+
+            <div class="textReply ">
+                <!-- VARIABLES: sinAdjunto, conAdjunto -->
+                <div class="textDateDetailOrders">
+                  {{child.start | date:"dd/MM/yyyy h:mma"}}
+
+                </div>
+                <div>
+                      {{child.description}}
+                </div>
+                <div ng-repeat="file in child.files">
+                  <div class="contentAddInfo">
+                    <i class="fa fa-paperclip"></i> <a class="archiveAdd" ng-href="{{file.url}}">{{file.name}}</a>
+                  </div>
+                </div>
+
+            </div>
+
+            <div class="contentArrowRight">
+              <i class="fa fa-caret-right" aria-hidden="true"></i>
+            </div>
+          </div>
+
+          <div class="contentUser">
+            <div class="photo">
+                <img class="avatar"  src="{{child.user.photoSrc}}">
+            </div>
+            <div class="nameUser">
+              {{child.user.name}} </br>
+              {{child.user.lastname}}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    </div>
+
+
 
 </div>
-
 </div>
