@@ -22,17 +22,17 @@
                       <div>Oficina</div>
                   </div>
                   <div class="subContentOrderRight">
-                    <div class="userOrder">{{vm.model.user}}</div>
+                    <div class="userOrder">{{vm.model.user.name}} {{vm.model.user.lastname}}</div>
                     <!-- ---- buscar el usuario ---- -->
                     <div class="contentSearchUser">
                         <div class="titleListRequest">
                             <span class="icoInputSearch"><i class="fa fa-search"></i></span>
-                            <input class="inputSearch3" type="text" placeholder="Buscar personal...">
+                            <input class="inputSearch3" ng-click="vm.model.search = ''" ng-model="vm.model.search" type="text" placeholder="Buscar personal..." ng-disabled="vm.view.searching" ng-model-options="{ debounce: 1000 }" ng-change="vm.searchUsers()">
                         </div>
                         <div class="contentListPerson">
-                            <div class="btnItemPerson" ng-click="vm.view.style2 = ''" ng-repeat="user in vm.model.users">
+                            <div class="btnItemPerson" ng-click="vm.selectUser(user)" ng-repeat="user in vm.model.users">
                                 <div class="contentImgUser">
-                                    <img class="imgUser" src="./img/walter.jpg" alt="foto de perfil">
+                                    <img class="imgUser" ng-src='{{vm.getUserPhoto(user)}}' alt="foto de perfil"/>
                                 </div>
                                 <div class="contentNameUser">
                                   <div class="">{{user.name}} {{user.lastname}}</div>
