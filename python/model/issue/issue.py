@@ -8,6 +8,7 @@ import base64
 import logging
 import datetime
 import uuid
+import re
 from model.assistance.utils import Utils
 
 
@@ -307,6 +308,7 @@ class RedmineAPI:
 class IssueModel():
     TRACKER_ERROR = RedmineAPI.TRACKER_ERROR
     TRACKER_COMMENT = RedmineAPI.TRACKER_COMMENT
+    cache = {}
 
     @classmethod
     def getOffices(cls, con):
@@ -346,3 +348,51 @@ class IssueModel():
             issue.files.append({'path':path, 'filename':file['name'], 'content_type': file['type']})
 
         return issue.create(con)
+
+    @classmethod
+    def searchUsers(cls, con, regex):
+        assert regex is not None
+
+        if regex == '':
+            return []
+
+        userIds = User.findAll(con)
+
+        users = []
+        for u in userIds:
+            (uid, version) = u
+            if uid not in cls.cache.keys():
+                print(uid)
+                user = User.findById(con, [uid])[0]
+                cls.cache[uid] = user
+            users.append(cls.cache[uid])
+
+        m = re.compile(".*{}.*".format(regex), re.I)
+        matched = []
+
+        digits = re.compile('^\d+$')
+        if digits.match(regex):
+            ''' busco por dni '''
+            matched = [ cls._getUserData(con, u) for u in users if m.search(u.dni) ]
+            return matched
+
+        ''' busco por nombre y apellido '''
+        matched = [ cls._getUserData(con, u) for u in users if m.search(u.name) or m.search(u.lastname) ]
+        return matched
+
+    @classmethod
+    def _getUserData(cls, con, user):
+        u = UserIssueData()
+        u.name = user.name
+        u.lastname = user.lastname
+        u.dni = user.dni
+        u.photo = [User.findPhoto(con, user.photo) if 'photo' in dir(user) and user.photo is not None and user.photo != '' else None][0]
+        return u
+
+class UserIssueData(JSONSerializable):
+
+    def __init__(self):
+        self.name = ''
+        self.lastname = ''
+        self.dni = ''
+        self.photo = ''

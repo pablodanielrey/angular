@@ -22,7 +22,7 @@
                       <div>Oficina</div>
                   </div>
                   <div class="subContentOrderRight">
-                    <div class="userOrder">Walter Roberto Blanco</div>
+                    <div class="userOrder">{{vm.model.user}}</div>
                     <!-- ---- buscar el usuario ---- -->
                     <div class="contentSearchUser">
                         <div class="titleListRequest">
@@ -30,13 +30,13 @@
                             <input class="inputSearch3" type="text" placeholder="Buscar personal...">
                         </div>
                         <div class="contentListPerson">
-                            <div class="btnItemPerson" ng-click="view.style2 = ''">
+                            <div class="btnItemPerson" ng-click="vm.view.style2 = ''" ng-repeat="user in vm.model.users">
                                 <div class="contentImgUser">
                                     <img class="imgUser" src="./img/walter.jpg" alt="foto de perfil">
                                 </div>
                                 <div class="contentNameUser">
-                                  <div class="">Walter Blanco</div>
-                                  <div class="dniUser">29694757</div>
+                                  <div class="">{{user.name}} {{user.lastname}}</div>
+                                  <div class="dniUser">{{user.dni}}</div>
                                 </div>
                             </div>
                         </div>
@@ -50,7 +50,7 @@
                             <input class="inputSearch3" type="text" placeholder="Seleccionar Oficina">
                         </div>
                         <div class="contentListOffice">
-                            <div class="btnItemOffice" ng-click="view.style2 = ''">
+                            <div class="btnItemOffice" ng-click="vm.view.style2 = ''">
                                 <div class="contentImgOffice">
                                     <img class="imgOffice" src="./img/empresa.jpg" alt="foto de perfil">
                                 </div>
@@ -63,21 +63,21 @@
                     </div>
                   </div>
                   <div>
-                    <div class="arrowOpen" ng-click="view.style2 = 'buscarUsuario'"><i class="fa fa-caret-down" aria-hidden="true"></i></div>
-                    <div class="arrowOpen2" ng-click="view.style2 = 'buscarOficinaDeUsuario'"><i class="fa fa-caret-down" aria-hidden="true"></i></div>
+                    <div class="arrowOpen" ng-click="vm.view.style2 = 'buscarUsuario'"><i class="fa fa-caret-down" aria-hidden="true"></i></div>
+                    <div class="arrowOpen2" ng-click="vm.view.style2 = 'buscarOficinaDeUsuario'"><i class="fa fa-caret-down" aria-hidden="true"></i></div>
                   </div>
               </div>
 
               <div>
-                  <button class="btnApply" ng-click="view.style = 'buscarUsuario'">SOLICITAR</button>
-                  <button class="btnApply2" ng-click="view.style = 'buscarUsuario'"><i class="fa fa-paper-plane"></i></button>
+                  <button class="btnApply" ng-click="vm.view.style = 'buscarUsuario'">SOLICITAR</button>
+                  <button class="btnApply2" ng-click="vm.view.style = 'buscarUsuario'"><i class="fa fa-paper-plane"></i></button>
               </div>
           </div>
           <!-- ---- CAMPOS PARA LLENAR EN UN NUEVO PEDIDO ---- -->
           <div class="contentOrder">
               <div class="contentOrientation">
                   <div class="subtitleNewOrder">OFICINA</div>
-                  <div><input type="text" class="inputNewOrder" placeholder="Buscar..." ng-click="view.style2 = 'buscarOficina'"></input></div>
+                  <div><input type="text" class="inputNewOrder" placeholder="Buscar..." ng-click="vm.view.style2 = 'buscarOficina'"></input></div>
               </div>
               <!-- ---- LISTADO DE OFICINAS ---- -->
               <div class="offices">

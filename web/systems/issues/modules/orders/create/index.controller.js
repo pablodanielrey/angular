@@ -5,15 +5,16 @@
         .module('issues')
         .controller('OrdersCreateCtrl', OrdersCreateCtrl);
 
-    OrdersCreateCtrl.$inject = ['$scope', '$timeout', '$filter', 'Login', 'Issues', 'Users'];
+    OrdersCreateCtrl.$inject = ['$scope', '$location', 'Login', 'Issues'];
 
     /* @ngInject */
-    function OrdersCreateCtrl($scope, $timeout, $filter,  Login, Issues, Users) {
+    function OrdersCreateCtrl($scope, $location,  Login, Issues) {
         var vm = this;
 
         // variables del modelo
         vm.model = {
-
+          user: null,
+          users: []
         }
 
 
@@ -27,23 +28,28 @@
 
 
         activate();
+        vm.cancel = cancel;
+        vm.searchUsers = searchUsers;
+
+        function searchUsers(regex) {
+
+          Issues.searchUsers(regex).then(
+            function(users) {
+              vm.model.users = users;              
+            }, function(error) {
+              console.log(error);
+            }
+          );
+        }
+
 
         function activate() {
-          vm.model.userId = Login.getCredentials()['userId']
-
-
+          vm.model.userId = Login.getCredentials()['userId'];
+          searchUsers('walt');
         }
 
-/* ************************************************************************ */
-/* ********************** INICIALIZACION ********************************** */
-/* ************************************************************************ */
-
-        function initializeView() {
-
-        }
-
-        function initializeModel() {
-
+        function cancel() {
+          $location.path('/orders');
         }
 
 

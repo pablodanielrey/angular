@@ -116,6 +116,14 @@ class Issues(wamp.SystemComponentSession):
         finally:
             self.conn.put(con)
 
+    @autobahn.wamp.register('issues.search_users')
+    def searchUsers(self, regex, details):
+        con = self.conn.get()
+        try:
+            return IssueModel.searchUsers(con, regex)
+        finally:
+            self.conn.put(con)
+
     @autobahn.wamp.register('issues.get_office_subjects')
     def getOfficeSubjects(self, officeId, details):
         return ['Wifi','Otro']
