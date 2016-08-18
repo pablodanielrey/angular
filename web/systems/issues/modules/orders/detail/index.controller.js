@@ -5,65 +5,77 @@
         .module('issues')
         .controller('OrdersDetailCtrl', OrdersDetailCtrl);
 
-    OrdersDetailCtrl.$inject = ['$scope', '$routeParams', '$location', 'Login', 'Issues', 'Users'];
+    OrdersDetailCtrl.$inject = ['$scope', '$routeParams', '$location', 'Login', 'Issues', 'Users', 'IssuesDD'];
 
     /* @ngInject */
-    function OrdersDetailCtrl($scope, $routeParams, $location, Login, Issues, Users) {
+    function OrdersDetailCtrl($scope, $routeParams, $location, Login, Issues, Users, IssuesDD) {
         var vm = this;
 
         // variables del modelo
         vm.model = {
           issue: null, //issue inicial
-          users: [], //lista de usuarios participantes de issue y sus hijos
         }
-
-
 
         // variables de la vista
         vm.view = {
-
+          style2: '',
+          styles2: ['', 'buscarOficina', 'buscarArea', 'buscarConsulta', 'buscarUsuario', 'buscarOficinaDeUsuario', 'seleccionarEstado', 'seleccionarPrioridad'],
+          style3: '',
+          styles3: ['','pantallaMensajeAlUsuario'],
+          style4: '',
+          styles4: ['', 'mensajeCargando', 'mensajeError', 'mensajeEnviado', 'mensajePedidoCreado'],
+          status: ['','abierta', 'enProgreso', 'cerrada', 'comentarios', 'cerrada', 'rechazada', 'pausada'],
         }
 
+        vm.openStatus = 1;
+        vm.workingStatus = 2;
+        vm.closeStatus = 5;
+        vm.pausedStatus = 7;
+        vm.rejectedStatus = 6;
+
+        vm.lowPriority = 1;
+        vm.normalPriority = 2;
+        vm.highPriority = 3;
+
+        
+
         // métodos
+        vm.issueStatus = issueStatus; //estado del issue
+        vm.selectStatus = selectStatus; //seleccion de estado
+        vm.setStatus = setStatus; //cambio de estado
+
         activate();
 
         function activate() {
           vm.model.userId = Login.getCredentials()['userId'];
           var params = $routeParams;
-          vm.model.issue = loadIssue(params.issueId);
+          IssuesDD.issueDetail(params.issueId).then(
+            function(issue){ vm.model.issue = issue; },
+            function(error){ console.log(error); }
+          )
 
+          vm.view.style2 = vm.view.styles2[0];
+          vm.view.style3 = vm.view.styles3[0];
+          vm.view.style4 = vm.view.styles4[0];
+        };
+
+
+        function issueStatus() {
+          if (vm.model.issue && "statusId" in vm.model.issue) return vm.view.status[vm.model.issue.statusId];
         }
 
-        //***** Carga de issue *****
-        function loadIssue(id) {
-          Issues.findById(id).then(
-            function(issue) {
-              vm.model.issue = issue;
-              var size = (issue.children.length) ? issue.children.length : 0;
-
-              for (var i = 0; i < size; i++) {
-                  var child = issue.children[i];
-                  loadUser(child.userId); //los usuarios se mantienen en una lista interna
-              }
-            }, function(error) {
-              console.log("Error loadIssue " + error);
-            }
-          );
+        function selectStatus() {
+          vm.view.style2 = (vm.view.style2 == vm.view.styles2[6]) ?  vm.view.styles2[0] : vm.view.styles2[6];
         }
 
-        //***** Carga de usuarios *****
-        function loadUser(userId) {
-          if(!(userId in vm.model.users)) vm.model.users[userId] = null;
-          if (!vm.model.users[userId]) {
-            Users.findById([userId]).then(
-              function(users) { vm.model.users[userId] = users[0];
-                console.log(vm.model.users);
-              },
-              function(error) { console.log("Error loadUser " + error); }
-            );
-          }
+        function setStatus(status) {
+          vm.view.style2 = vm.view.styles2[0];
+          vm.model.issue.statusId = status;
+          Issues.changeStatus(vm.model.issue, status).then(
+            function(data) { console.log(data); },
+            function(error) { console.log(error); }
+          )
         }
-
 
     }
 })();

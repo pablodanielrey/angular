@@ -1,6 +1,5 @@
 
-asdfasdfasdf
-<div class="orders pantallaDetallePedido">
+<div class="orders pantallaDetallePedido {{vm.view.style2}} {{vm.view.style3}} {{vm.view.style4}}">
 <div class="contentOrderDetail">
 
     <div class="headerDetail">
@@ -14,20 +13,20 @@ asdfasdfasdf
                   <div class="textNumerOrders2">Nº {{vm.model.issue.id}}</div>
               </div>
               <div class="itemsType">
-                    <div class="textType">{{vm.getFromOffice(vm.model.selectedIssue)}}</div>
-                    <div class="textType2">{{vm.getFromArea(vm.model.selectedIssue)}}</div>
-                    <div class="textSubType">{{vm.model.selectedIssue.subject}}</div>
+                    <div class="textType">{{vm.model.issue.fromOffice.name}}</div>
+                    <div class="textType2">{{vm.model.issue.area.name}}</div>
+                    <div class="textSubType">{{vm.model.issue.subject}}</div>
               </div>
 
               <!-- ---- Usuarios de la carga del pedido ---- -->
-              <div class="contentOffice"   ng-class="{true: 'solicitadoPorEl', false: 'solicitadoPorOtro'}[vm.model.selectedIssue.creatorId == null || vm.model.selectedIssue.creatorId == '']">
+              <div class="contentOffice"   ng-class="{true: 'solicitadoPorEl', false: 'solicitadoPorOtro'}[!vm.model.issue.creatorId]">
                   <div>
                     <div class="textMini">Solicitado por:</div>
-                    <div class="textName"><b>{{vm.getFullName(vm.model.selectedIssue)}}</b></div> <!-- Usuario que pide el pedido -->
+                    <div class="textName"><b>{{vm.model.issue.user.name}} {{vm.model.issue.user.lastname}}</b></div> <!-- Usuario que pide el pedido -->
                   </div>
                   <div class="userUpload">
                     <div class="textMini">Cargado por:</div>
-                    <div class="textName">{{vm.getCreator(vm.model.selectedIssue)}}</div> <!-- Usuario que cargo el pedido -->
+                    <div class="textName">{{vm.model.issue.creator.name}}  {{vm.model.issue.creator.lastname}}</div> <!-- Usuario que cargo el pedido -->
                   </div>
               </div>
 
@@ -35,7 +34,7 @@ asdfasdfasdf
               <div class="contentActions">
                   <!-- ---- Cambiar estado del pedido ---- -->
                   <div class="itemStatus2">
-                      <div class="status2 {{vm.getStatus(vm.model.selectedIssue)}}" ng-click="vm.selectStatus()">
+                      <div class="status2 {{vm.issueStatus()}}" ng-click="vm.selectStatus()">
                           <div class="textA1">ABIERTA <i class="fa fa-caret-down"></i></div>
                           <div class="textA2" title="Abierta">A <i class="fa fa-caret-down"></i></div>
                           <div class="textEC1">EN CURSO <i class="fa fa-caret-down"></i></div>
@@ -48,27 +47,27 @@ asdfasdfasdf
                           <div class="textR2" title="Rechazada">R <i class="fa fa-caret-down"></i></div>
                       </div>
                       <div class="contentSelectState">
-                          <div class="subContentSelectState"  ng-click="vm.setStatus(vm.model.selectedIssue, vm.openStatus)">
+                          <div class="subContentSelectState"  ng-click="vm.setStatus(vm.openStatus)">
                               <div class="itemsSelectState abierta2">
                                 <div class="itemState">ABIERTA</div>
                               </div>
                           </div>
-                          <div class="subContentSelectState"  ng-click="vm.setStatus(vm.model.selectedIssue, vm.workingStatus)">
+                          <div class="subContentSelectState"  ng-click="vm.setStatus(vm.workingStatus)">
                               <div class="itemsSelectState enProgreso2">
                                 <div class="itemState">EN CURSO</div>
                               </div>
                           </div>
-                          <div class="subContentSelectState" ng-click="vm.setStatus(vm.model.selectedIssue, vm.pausedStatus)">
+                          <div class="subContentSelectState" ng-click="vm.setStatus(vm.pausedStatus)">
                               <div class="itemsSelectState pausada2">
                                 <div class="itemState">PAUSADA</div>
                               </div>
                           </div>
-                          <div class="subContentSelectState" ng-click="vm.setStatus(vm.model.selectedIssue, vm.rejectedStatus)">
+                          <div class="subContentSelectState" ng-click="vm.setStatus(vm.rejectedStatus)">
                               <div class="itemsSelectState rechazada2">
                                 <div class="itemState">RECHAZADA</div>
                               </div>
                           </div>
-                          <div class="subContentSelectState" ng-click="vm.setStatus(vm.model.selectedIssue, vm.closeStatus)">
+                          <div class="subContentSelectState" ng-click="vm.setStatus(vm.closeStatus)">
                               <div class="itemsSelectState cerrada2">
                                 <div class="itemState">CERRADA</div>
                               </div>
