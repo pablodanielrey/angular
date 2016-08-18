@@ -20,10 +20,15 @@
 			this.getAreas = getAreas;
 			this.getOfficeSubjects = getOfficeSubjects;
 			this.subscribe = subscribe;
+			this.searchUsers = searchUsers;
 			this.$wamp = Login.getTransport().private;
 
 			function subscribe(event, func) {
 				this.$wamp.subscribe(event, func);
+			}
+
+		  function searchUsers(regex) {
+				return this.$wamp.call('issues.search_users', [regex]);
 			}
 
 		  function getMyIssues() {

@@ -17,6 +17,12 @@
          controllerAs: 'vm'
       })
 
+      .when('/ordersCreate', {
+         templateUrl: 'modules/orders/create/index.html',
+         controller: 'OrdersCreateCtrl',
+         controllerAs: 'vm'
+      })
+
       .when('/myOrders', {
          templateUrl: 'modules/myOrders/list/index.html',
          controller: 'MyOrdersListCtrl',
