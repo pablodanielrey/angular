@@ -104,8 +104,8 @@
                   </div>
 
                   <div class="contentBtnReply">
-                      <button class="btnReply" ng-click="view.style2 = 'pantallaMensaje'">RESPONDER</button>
-                      <button class="btnReply2" ng-click="view.style2 = 'pantallaMensaje'" title="Responder"><i class="fa fa-comment-o fa-2x"></i></button>
+                      <a class="btnReply" ng-href="#/ordersComment/{{vm.model.issue.id}}">RESPONDER</a>
+                      <a class="btnReply2" ng-href="#/ordersComment/{{vm.model.issue.id}}" title="Responder"><i class="fa fa-comment-o fa-2x"></i></a>
                   </div>
               </div>
 
@@ -116,7 +116,7 @@
     <div class="infoOrder">
         <div class="contentUser">
             <div class="photo">
-                <img class="avatar" src="{{vm.model.issue.user.photoSrc}}">
+                <img class="avatar" ng-src="{{vm.model.issue.user.photoSrc}}">
             </div>
             <div class="nameUser">
               {{vm.model.issue.user.name}} </br>
@@ -178,7 +178,7 @@
 
           <div class="contentUser">
             <div class="photo">
-                <img class="avatar"  src="{{child.user.photoSrc}}">
+                <img class="avatar" ng-src="{{child.user.photoSrc}}">
             </div>
             <div class="nameUser">
               {{child.user.name}} </br>

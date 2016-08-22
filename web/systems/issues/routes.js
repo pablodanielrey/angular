@@ -23,6 +23,12 @@
          controllerAs: 'vm'
       })
 
+      .when('/ordersComment/:issueId', {
+         templateUrl: 'modules/orders/comment/index.html',
+         controller: 'OrdersCommentCtrl',
+         controllerAs: 'vm'
+      })
+
       .when('/myOrders', {
          templateUrl: 'modules/myOrders/list/index.html',
          controller: 'MyOrdersListCtrl',
