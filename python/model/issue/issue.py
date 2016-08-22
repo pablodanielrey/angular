@@ -386,6 +386,7 @@ class IssueModel():
         u.name = user.name
         u.lastname = user.lastname
         u.dni = user.dni
+        u.id = user.id
         u.photo = [User.findPhoto(con, user.photo) if 'photo' in dir(user) and user.photo is not None and user.photo != '' else None][0]
         return u
 
@@ -396,3 +397,4 @@ class UserIssueData(JSONSerializable):
         self.lastname = ''
         self.dni = ''
         self.photo = ''
+        self.id = ''
