@@ -220,7 +220,7 @@
           if ((subject == null || subject == '') || (office == null || office.id == undefined) || (author == null || author.id == undefined)) {
             window.alert("Debe completar los campos");
           }
-
+          messageLoading();
           Issues.create(subject, description, parentId, office.id, fromOfficeId, author.id, vm.model.files).then(
             function(data) {
               messageCreated();

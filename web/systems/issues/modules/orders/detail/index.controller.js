@@ -42,15 +42,20 @@
 
         function activate() {
           vm.model.userId = Login.getCredentials()['userId'];
-          var params = $routeParams;
-          IssuesDD.issueDetail(params.issueId).then(
-            function(issue){ vm.model.issue = issue; console.log(vm.model.issue)},
-            function(error){ console.log(error); }
-          )
-
           vm.view.style2 = vm.view.styles2[0];
           vm.view.style3 = vm.view.styles3[0];
           vm.view.style4 = vm.view.styles4[0];
+          var params = $routeParams;
+          messageLoading();
+          IssuesDD.issueDetail(params.issueId).then(
+            function(issue) {
+              vm.model.issue = issue;
+              closeMessage();
+            },
+            function(error) {
+              messageError(error);
+            }
+          )
         };
 
 
@@ -67,9 +72,14 @@
           var statusId = vm.view.status.indexOf(status);
           vm.model.issue.statusId = statusId;
 
+          // messageLoading();
           Issues.changeStatus(vm.model.issue, statusId).then(
-            function(data) { console.log(data); },
-            function(error) { console.log(error); }
+            function(data) {
+              // closeMessage();
+            },
+            function(error) {
+              messageError(error);
+            }
           )
         }
 
@@ -87,12 +97,46 @@
           var priorityId = vm.view.priorities.indexOf(priority);
           vm.model.issue.priority = priorityId;
 
+          // messageLoading();
           Issues.changePriority(vm.model.issue, priorityId).then(
-            function(data) { console.log(data); },
-            function(error) { console.log(error); }
+            function(data) {
+              // closeMessage();
+            },
+            function(error) {
+              messageError(error);
+            }
           )
         }
 
+        /* ************************************************************************ */
+        /* ************************** MENSAJES ************************************ */
+        /* ************************************************************************ */
+          function messageError(error) {
+            vm.view.style3 = vm.view.styles3[1];
+            vm.view.style4 = vm.view.styles4[2];
+            $timeout(function() {
+              closeMessage();
+            }, 3000);
+          }
 
+          function closeMessage() {
+            vm.view.style3 = vm.view.styles3[0];
+            vm.view.style4 = vm.view.styles4[0];
+          }
+
+          function messageLoading() {
+            vm.view.style3 = vm.view.styles3[1];
+            vm.view.style4 = vm.view.styles4[1];
+          }
+
+          function messageSending() {
+            vm.view.style3 = vm.view.styles3[1];
+            vm.view.style4 = vm.view.styles4[3];
+          }
+
+          function messageCreated() {
+            vm.view.style3 = vm.view.styles3[1];
+            vm.view.style4 = vm.view.styles4[4];
+          }
     }
 })();

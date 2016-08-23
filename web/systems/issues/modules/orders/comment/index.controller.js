@@ -37,7 +37,7 @@
             function(issue) {
               vm.model.issue = issue;
               closeMessage();
-            }, function(error) { messageError(error); s}
+            }, function(error) { messageError(error); }
           );
         }
 

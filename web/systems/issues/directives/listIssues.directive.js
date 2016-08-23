@@ -90,7 +90,15 @@
             return;
           }
           var user = vm.users[issue.userId];
-          return (user == null) ? 'No tiene nombre' : user.name + ' ' + user.lastname;
+          return (user == null ) ? 'No tiene nombre' : getName(user) + ' ' + getLastname(user);
+        }
+
+        function getName(user) {
+          return (user.name == undefined) ? '' : user.name;
+        }
+
+        function getLastname(user) {
+          return (user.lastname == undefined) ? '' : user.lastname;
         }
 
         function getStatus(issue) {
@@ -106,11 +114,11 @@
           }
 
           var user = vm.users[issue.creatorId];
-          return user.name + ' ' + user.lastname ;
+          return (user == null ) ? 'No tiene nombre' : getName(user) + ' ' + getLastname(user);
         }
 
         function getPriority(issue) {
-          if (issue == null) {
+          if (issue == null || issue.priority == undefined) {
             return '';
           }
           var p = (issue.priority > 2) ? 2 : issue.priority - 1;
