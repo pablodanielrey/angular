@@ -20,7 +20,9 @@
 							//retornar issue si no hay datos definidos de la foto
 							if (!users[i].photo) {
 								var deferred = $q.defer();
-								deferred.resolve("img/avatarWoman.jpg");
+								console.log(users[i]);
+								var img = (users[i].genre == undefined || users[i].genre == 'Masculino' || users[i].genre == 'Hombre') ? "img/avatarMan.jpg" : "img/avatarWoman.jpg";
+								deferred.resolve(img);
 								var p = deferred.promise;
 							} else {
 								var p = Users.findPhoto(users[i].photo).then(

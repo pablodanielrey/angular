@@ -92,7 +92,8 @@
 
         function getUserPhoto(user) {
           if (user == null || user.photo == null) {
-            return '/systems/login/modules/img/imgUser.jpg';
+            var img = (users[i].genre == undefined || users[i].genre == 'Masculino' || users[i].genre == 'Hombre') ? "img/avatarMan.jpg" : "img/avatarWoman.jpg";
+            return img;
           } else {
             return Files.toDataUri(user.photo);
           }

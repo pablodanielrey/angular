@@ -150,7 +150,8 @@
         function getUserPhoto(issue) {
           var user = (issue == null) ? null : vm.model.users[issue.userId];
           if (user == null || user.photo == null || user.photoSrc == '') {
-            return '/systems/login/modules/img/imgUser.jpg';
+            var img = (users[i].genre == undefined || users[i].genre == 'Masculino' || users[i].genre == 'Hombre') ? "img/avatarMan.jpg" : "img/avatarWoman.jpg";
+            return img;
           } else {
             return user.photoSrc;
           }
