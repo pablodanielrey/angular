@@ -3,8 +3,8 @@
 
   angular
       .module('login',['ngRoute','ngCookies','vxWamp'])
-      .provider('$wampPublic, $location', function ($wampProvider, $location) {
-          var host = $location.host();
+      .provider('$wampPublic', function ($wampProvider) {
+          var host = location.hostname;
           var options = {
               url: 'ws://' + host + ':8080',
               realm: 'public',
@@ -17,8 +17,8 @@
               return $injector.invoke($wampProvider.$get);
           };
       })
-      .provider('$wampCore, $location', function ($wampProvider, $location) {
-        var host = $location.host();
+      .provider('$wampCore', function ($wampProvider) {
+        var host = location.hostname;
         var options = {
             url: 'ws://' + host + ':8080',
               realm: 'core',
