@@ -3,9 +3,10 @@
 
   angular
       .module('login',['ngRoute','ngCookies','vxWamp'])
-      .provider('$wampPublic', function ($wampProvider) {
+      .provider('$wampPublic, $location', function ($wampProvider, $location) {
+          var host = $location.host();
           var options = {
-              url: 'ws://127.0.0.1:8080',
+              url: 'ws://' + host + ':8080',
               realm: 'public',
               prefix: '$wampPublic',
               authmethods: ['anonymous']
@@ -16,9 +17,10 @@
               return $injector.invoke($wampProvider.$get);
           };
       })
-      .provider('$wampCore', function ($wampProvider) {
-          var options = {
-              url: 'ws://127.0.0.1:8080',
+      .provider('$wampCore, $location', function ($wampProvider, $location) {
+        var host = $location.host();
+        var options = {
+            url: 'ws://' + host + ':8080',
               realm: 'core',
               prefix: '$wampCore',
               authmethods: ['ticket']
