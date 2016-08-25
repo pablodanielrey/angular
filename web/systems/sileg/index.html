@@ -13,7 +13,7 @@
   <link rel="stylesheet" type="text/css" href="./index.css" />
 
   
-  
+
   <script src="/libs/bower_components/angularjs/angular.js"></script>
   <script src="/libs/bower_components/angular-route/angular-route.js"></script>
   <script src="/libs/bower_components/autobahn/autobahn.js"></script>
@@ -22,14 +22,11 @@
   <script type="text/javascript" src="/config-sileg.json"></script>
 
   <script type="text/javascript" src="./index.module.js"></script>
-  
-  
-  <script src="./js/prototype/Date.js"></script>
-  
-  <script type="text/javascript" src="./services/systems/sileg/Sileg.js"></script>
-  <script type="text/javascript" src="./services/systems/sileg/UserFormat.js"></script>
-  <script type="text/javascript" src="./services/systems/sileg/PlaceFormat.js"></script>
 
+
+  <script src="./js/prototype/Date.js"></script>
+
+  <script type="text/javascript" src="./services/systems/sileg/Sileg.js"></script>
 
 
   <script type="text/javascript" src="./index.controller.js"></script>
@@ -49,7 +46,7 @@
     <!-- VARIABLES 1: busquedaPorDocente, busquedaPorCatedra -->
     <!-- VARIABLES 2: verInfoDocente, verInfoCatedra -->
     <i class="fa fa-search" aria-hidden="true"></i> Buscar por
-    
+
     <div class="contentMain">
       <div class="contentLeft">
         <div class="btnsSearch">
@@ -60,11 +57,11 @@
               CÁTEDRA
             </button>
         </div>
-        
+
         <div class="searchDocente" ng-include="'./modules/teacher/teacher.html?r='+nocache" ></div>
         <div class="searchCatedra" ng-include="'./modules/teacher/cathedra.html?r='+nocache" ></div>
       </div>
-      
+
       <div class="contentRight">
         <div  class="contentDocente" ng-include="'./modules/teacher/showTeacher.html?r='+nocache" ></div>
         <div  class="contentCatedra" ng-include="'./modules/teacher/showCathedra.html?r='+nocache" ></div>

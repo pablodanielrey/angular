@@ -4,10 +4,10 @@ angular
 
 TeachersCtrl.inject = []
 
-function TeachersCtrl($rootScope, $scope, $timeout, $wamp, Sileg, UserFormat) {
+function TeachersCtrl($rootScope, $scope, $timeout, $wamp, Sileg) {
 
     $scope.user = null;
     $scope.cathedra = null;
 
- 
+
 }

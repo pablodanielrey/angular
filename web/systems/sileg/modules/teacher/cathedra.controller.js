@@ -2,19 +2,19 @@ angular
   .module('mainApp')
   .controller('CathedraCtrl', TeacherCtrl);
 
-CathedraCtrl.inject = ['$rootScope', '$scope', '$timeout', '$wamp', 'Sileg', 'UserFormat']
+CathedraCtrl.inject = ['$rootScope', '$scope', '$timeout', '$wamp', 'Sileg']
 
-function CathedraCtrl($rootScope, $scope, $timeout, $wamp, Sileg, UserFormat) {
+function CathedraCtrl($rootScope, $scope, $timeout, $wamp, Sileg) {
 
     $scope.cathedras = [];
-    
 
-    
+
+
     $scope.selectCathedra = function(user){
         $scope.data = [];
         $scope.user = user;
         $scope.view.style2 = 'verInfoDocente';
-        
+
 
         Sileg.getEconoPageDataUser($scope.user.id).then(
             function(response){
@@ -23,21 +23,20 @@ function CathedraCtrl($rootScope, $scope, $timeout, $wamp, Sileg, UserFormat) {
             function(error){ console.log(error); }
         );
     };
-            
-           
+
+
     //***** inicializar (probe con $viewContentLoaded pero no funciono) *****
     $timeout(function() {
         Sileg.getUsers().then(
             function(response){
                 for(i in response){
-                    var user = UserFormat.basic(response[i]);
-                    $scope.users.push(user);
+                    $scope.users.push(response[i]);
                 }
             },
             function(error){ console.log(error); }
         );
     },0);
-  
-    
+
+
 
 }
