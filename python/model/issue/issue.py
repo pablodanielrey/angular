@@ -72,7 +72,7 @@ class Attachment(JSONSerializable):
 
 class RedmineAPI:
 
-    REDMINE_URL = 'http://163.10.56.57:3000'
+    REDMINE_URL = 'http://163.10.56.19:3000'
     KEY = 'd9834b4adde478b3d72378c039f5b019c0bbec96'
     TRACKER_ERROR = 1
     TRACKER_COMMENT = 4
