@@ -182,13 +182,11 @@ class RedmineAPI:
     def _getUserRedmine(cls, up, uid, con):
         redmine = cls._getRedmineInstance(cls, con)
         user = up.username
-        try:
-            userRedmine = redmine.user.get(user)
-        except:
-            userRedmine = None
-        if userRedmine is None:
-            userRedmine = cls._createUserRedmine(uid, up, con, redmine)
-        return userRedmine.login
+        print(user)
+        usersRedmine = redmine.user.filter(name=user)
+        if len(usersRedmine) <= 0:
+            usersRedmine = [cls._createUserRedmine(uid, up, con, redmine)]
+        return usersRedmine[0].login
 
     @classmethod
     def _createUserRedmine(cls, uid, up, con, redmine):
