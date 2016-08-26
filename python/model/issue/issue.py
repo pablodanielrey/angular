@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from redmine import Redmine
-from model.users.users  import UserPassword, User
+from model.users.users  import UserPassword, User, Mail
 from model.offices.offices import Office
 from model.serializer import JSONSerializable
 from model.registry import Registry
@@ -175,7 +175,36 @@ class RedmineAPI:
             if len(ups) <= 0:
                 return None
             up = ups[0]
-            return Redmine(cls.REDMINE_URL, key = cls.KEY, impersonate = up.username, version='3.3', requests={'verify': False})
+            userRedmine = cls._getUserRedmine(up, userId, con)
+            return Redmine(cls.REDMINE_URL, key = cls.KEY, impersonate = userRedmine, version='3.3', requests={'verify': False})
+
+    @classmethod
+    def _getUserRedmine(cls, up, uid, con):
+        redmine = cls._getRedmineInstance(cls, con)
+        user = up.username
+        try:
+            userRedmine = redmine.user.get(user)
+        except:
+            userRedmine = None
+        if userRedmine is None:
+            userRedmine = cls._createUserRedmine(uid, up, con, redmine)
+        return userRedmine.login
+
+    @classmethod
+    def _createUserRedmine(cls, uid, up, con, redmine):
+        u = User.findById(con, [uid])[0]
+        mails = Mail.findByUserId(con, uid)
+        mailsEcono = [ mail for mail in mails if '@econo.unlp.edu.ar' in mail.email]
+        mail = mailsEcono[0].email if len(mailsEcono) > 0 else (mails[0].email if len(mails) > 0 else None)
+
+        user = redmine.user.new()
+        user.login = u.dni
+        user.password = up.password
+        user.firstname = u.name
+        user.lastname = u.lastname
+        user.mail = mail
+        user.save()
+        return user
 
     @classmethod
     def _loadUserByUIdRedmine(cls, con, uid, redmine):
