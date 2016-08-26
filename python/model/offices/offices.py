@@ -95,6 +95,7 @@ class OfficeDAO(DAO):
         o.name = r['name']
         o.telephone = r['telephone']
         o.email = r['email']
+        o.assistance = r['assistance']
         return o
 
     @staticmethod
