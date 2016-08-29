@@ -6,7 +6,7 @@
       .provider('$wampPublic', function ($wampProvider) {
           var host = location.hostname;
           var options = {
-              url: 'ws://' + host + ':80',
+              url: 'ws://' + host + ':80/ws',
               realm: 'public',
               prefix: '$wampPublic',
               authmethods: ['anonymous']
@@ -20,7 +20,7 @@
       .provider('$wampCore', function ($wampProvider) {
         var host = location.hostname;
         var options = {
-            url: 'ws://' + host + ':80',
+            url: 'ws://' + host + ':80/ws',
               realm: 'core',
               prefix: '$wampCore',
               authmethods: ['ticket']
