@@ -4,9 +4,9 @@
   angular
       .module('login',['ngRoute','ngCookies','vxWamp'])
       .provider('$wampPublic', function ($wampProvider) {
-          var host = location.hostname;          
+          var host = location.hostname;
           var options = {
-              url: 'ws://' + host + ':8080',
+              url: 'ws://' + host + ':80',
               realm: 'public',
               prefix: '$wampPublic',
               authmethods: ['anonymous']
@@ -20,7 +20,7 @@
       .provider('$wampCore', function ($wampProvider) {
         var host = location.hostname;
         var options = {
-            url: 'ws://' + host + ':8080',
+            url: 'ws://' + host + ':80',
               realm: 'core',
               prefix: '$wampCore',
               authmethods: ['ticket']
