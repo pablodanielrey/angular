@@ -40,6 +40,11 @@ class LoginSession(SystemComponentSession):
                     'ticket': 'fnfwfewfewfmewfklemflfdlskmfsd'
                 },
                 {
+                    'domain': 'issues.econo.unlp.edu.ar',
+                    'relative': '/systems/issues/',
+                    'ticket': 'fnfwfewfewfmewfklemflfdlskmfsd'
+                },
+                {
                     'domain': 'pedidos',
                     'relative': '/systems/issues/',
                     'ticket': 'fnfwfewfewfmewfklemflfdlskmfsd'
