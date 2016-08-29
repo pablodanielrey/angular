@@ -166,7 +166,7 @@
                     "endpoint": {
                         "type": "tcp",
                         "version": 4,
-                        "port": 8080
+                        "port": 8081
                     },
                     "auth": {
                         "anonymous": {
