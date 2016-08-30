@@ -72,7 +72,9 @@ class Attachment(JSONSerializable):
 
 class RedmineAPI:
 
-    REDMINE_URL = 'http://163.10.17.8:3000'
+    import os
+    #REDMINE_URL = 'http://163.10.17.8:3000'
+    REDMINE_URL = os.environ['ISSUES_REDMINE']
     KEY = 'd9834b4adde478b3d72378c039f5b019c0bbec96'
     TRACKER_ERROR = 1
     TRACKER_COMMENT = 4
