@@ -297,7 +297,7 @@ class RedmineAPI:
         issue.subject = iss.subject
         issue.description = iss.description
         issue.status_id = iss.statusId
-        issue.parent_issue_id = iss.parentId
+        issue.parent_issue_id = str(iss.parentId)
         issue.start_date = iss.start
         issue.tracker_id = iss.tracker
         issue.priority_id = iss.priority
@@ -306,6 +306,9 @@ class RedmineAPI:
             issue.custom_fields = cfields
 
         issue.uploads = iss.files
+
+        print(issue.__dict__)
+
         issue.save()
 
         return issue.id
@@ -416,6 +419,7 @@ class IssueModel():
         u.lastname = user.lastname
         u.dni = user.dni
         u.id = user.id
+        u.genre = user.genre
         u.photo = [User.findPhoto(con, user.photo) if 'photo' in dir(user) and user.photo is not None and user.photo != '' else None][0]
         return u
 
