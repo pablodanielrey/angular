@@ -9,7 +9,6 @@
   width: 100%;
   background: #DBE2E5;
   color: #5C5F69;
-
 }
 
 .myOrders .contentHeader {
@@ -183,9 +182,8 @@
 *******************************************************/
 
 .myOrders .contentOrders {
-  background-color: #F1F1F1;
   width: 100%;
-  max-height: 75%;
+  height: 100%;
   overflow-y: auto;
 }
 
@@ -1589,11 +1587,7 @@ transition: all 500ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
 
   }
 
-  .myOrders .contentOrders {
-    /*background-color: red;*/
-    background-color: #F1F1F1;
-    height: 68%;
-  }
+
 
   .myOrders .contentOrder {
       padding: 10px;

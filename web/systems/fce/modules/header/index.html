@@ -1,31 +1,217 @@
-<div class="header">
+<div class="headerFce {{viewStyle}}">
+    <!-- VARIABLE: serverDesconectado, verNotificaciones, verChat, verPerfil -->
     <div class="logo">
-      <!-- <button class="icoLogo">
-        <i class="fa fa-bars fa-2x"></i>
-      </button> -->
       <div class="imgLogo">
           <img src="/systems/fce/img/DitesiLogo.png" width="104px" height="25px">
       </div>
     </div>
+
     <div class="access">
-        <!-- <button class="myProfile" title="Mi Perfil">
-          <img class="imgUserRecent" src="/systems/fce/img//walter.jpg"></img> <div class="textUser"> Walter Blanco</div>
-          <button class="notification">3</button>
-        </button> -->
-        <!-- <button title="Chat">
-            <i class="fa fa-comments-o"></i>
-            <button class="notification">1</button>
-        </button>
-        <button title="Notificaciones">
-            <i class="fa fa-bell-o"></i>
-            <button class="notification2"><i class="fa fa-exclamation-triangle"></i></button>
-        </button>
-        <button title="Salir">
-          <i class="fa fa-server"></i>
-        </button> -->
-        <button title="Salir" ng-click="logout()">
-          <i class="fa fa-power-off"></i>
-        </button>
+        <div class="myProfile" ng-click="viewStyle = 'verPerfil'" title="Mi Perfil">
+            <img class="imgUserRecent" src="/systems/fce/img/walter.jpg"></img>
+            <div class="textUser">
+                Walter Roberto Blanco
+            </div>
+            <div class="arrawPerfil"><i class="fa fa-caret-down"></i></div>
+        </div>
+        <div class="myProfileOpen">
+          <div class="arrowProfile">
+            <i class="fa fa-sort-asc"></i>
+          </div>
+          <div class="contentProfile">
+              <a class="links" href="http://www.fce.econo.unlp.edu.ar/systems/fce/index.html#/profile" target="_blank"><div class="itemProfile0"><i class="fa fa-user"></i>&nbsp; Mi Perfil</div></a>
+              <a class="links" href="http://www.fce.econo.unlp.edu.ar/systems/fce/index.html#/password" target="_blank"><div class="itemProfile"><i class="fa fa-key"></i> Cambiar Contraseña</div></a>
+              <div class="itemProfile" ng-click="viewStyle = ''"><i class="fa fa-times"></i>&nbsp; Cerrar</div>
+          </div>
+        </div>
+
+
+
+        <div class="myAccess">
+
+            <!-- CHAT -->
+            <button class="btnChat sinNoti" ng-click="viewStyle = 'verChat'" title="Chat">
+                <!-- VARIABLE: sinNoti -->
+                <i class="fa fa-comments-o"></i>
+                <div class="notiCantChat">7</div>
+            </button>
+
+            <div class="contentChat">
+              <div class="arrowChat">
+                <i class="fa fa-sort-asc fa-2x"></i>
+              </div>
+              <div class="headerChat">
+                  <div><i class="fa fa-comments-o"></i> Chat<b>FCE</b> </div>
+                  <div class="closeNoti" ng-click="viewStyle = ''"><i class="fa fa-times" aria-hidden="true"></i> cerrar</div>
+              </div>
+              <div class="contentChats">
+
+                  <div class="itemChat chatNoLeido">
+                      <!-- VARIABLES: chatLeido, chatNoLeido -->
+                      <div class="chat">
+                            <div class="infoUser">
+                                <div class="myProfile">
+                                    <img class="imgUserRecent" src="/systems/tutorias/img/pablo.jpg"></img>
+                                    <div class="textUser">
+                                        <div>Pablo Daniel Rey</div>
+                                        <div class="textNewMessage"><i class="fa fa-comment-o"></i> 5 Mensajes</div>
+                                        <div class="textViewChat"><i class="fa fa-comments-o"></i> Ir al chat</div>
+                                    </div>
+                                </div>
+                                <div class="btnTrash"><i class="fa fa-trash-o"></i></div>
+                            </div>
+                      </div>
+                  </div>
+
+                  <div class="itemChat chatNoLeido">
+                      <!-- VARIABLES: chatLeido, chatNoLeido -->
+                      <div class="chat">
+                            <div class="infoUser">
+                                <div class="myProfile">
+                                    <img class="imgUserRecent" src="/systems/tutorias/img/alejandro.jpg"></img>
+                                    <div class="textUser">
+                                        <div>Alejandro Agustin Oporto</div>
+                                        <div class="textNewMessage"><i class="fa fa-comment-o"></i> 2 Mensajes</div>
+                                        <div class="textViewChat"><i class="fa fa-comments-o"></i> Ir al chat</div>
+                                    </div>
+                                </div>
+                                <div class="btnTrash"><i class="fa fa-trash-o"></i></div>
+                            </div>
+                      </div>
+                  </div>
+
+                  <div class="itemChat chatLeido">
+                      <!-- VARIABLES: chatLeido, chatNoLeido -->
+                      <div class="chat">
+                            <div class="infoUser">
+                                <div class="myProfile">
+                                    <img class="imgUserRecent" src="/systems/tutorias/img/emanuel.jpg"></img>
+                                    <div class="textUser">
+                                        <div>Emanuel Joaquin Pais</div>
+                                        <div class="textNewMessage"><i class="fa fa-comment-o"></i> 1 Mensaje</div>
+                                        <div class="textViewChat"><i class="fa fa-comments-o"></i> Ir al chat</div>
+                                    </div>
+                                </div>
+                                <div class="btnTrash"><i class="fa fa-trash-o"></i></div>
+                            </div>
+                      </div>
+                  </div>
+
+                  <div class="itemChat chatLeido">
+                      <!-- VARIABLES: chatLeido, chatNoLeido -->
+                      <div class="chat">
+                            <div class="infoUser">
+                                <div class="myProfile">
+                                    <img class="imgUserRecent" src="/systems/tutorias/img/maxi.jpg"></img>
+                                    <div class="textUser">
+                                        <div>Maximiliano Saucedo</div>
+                                        <div class="textNewMessage"><i class="fa fa-comment-o"></i> 1 Mensaje</div>
+                                        <div class="textViewChat"><i class="fa fa-comments-o"></i> Ir al chat</div>
+                                    </div>
+                                </div>
+                                <div class="btnTrash"><i class="fa fa-trash-o"></i></div>
+                            </div>
+                      </div>
+                  </div>
+
+
+              </div>
+            </div>
+
+            <!-- NOTIFICACIONES -->
+            <button class="btnNotifications" ng-click="viewStyle = 'verNotificaciones'" title="Notificaciones">
+                <!-- VARIABLE: sinNoti -->
+                <i class="fa fa-bell-o"></i>
+                <div class="notiCantMessage">2</div>
+            </button>
+
+            <div class="notificaciones">
+              <div class="arrowNoti">
+                <i class="fa fa-sort-asc fa-2x"></i>
+              </div>
+              <div class="headerNoti">
+                  <div><i class="fa fa-bell-o "></i> Notificaciones </div>
+                  <div class="closeNoti" ng-click="viewStyle = ''"><i class="fa fa-times" aria-hidden="true"></i> cerrar</div>
+              </div>
+              <div class="contentNoti">
+
+                  <div class="notification notiSinLeer">
+                  <!-- VARIABLES: notiSinLeer, notiLeida -->
+                      <div class="noti">
+                          <div class="textNoti">
+                            Tu cotraseña esta próxima a expirar. <br>
+                            Restan 14 días. <br>
+                            <b>CAMBIAR AHORA</b>
+                          </div>
+                      </div>
+                  </div>
+
+                  <div class="notification notiLeida">
+                  <!-- VARIABLES: notiSinLeer, notiLeida -->
+                      <div class="noti">
+                          <div class="textNoti">
+                            Tu cotraseña esta próxima a expirar. <br>
+                            Restan 14 días. <br>
+                            <b>CAMBIAR AHORA</b>
+                          </div>
+                      </div>
+                  </div>
+
+                  <div class="notification notiLeida">
+                  <!-- VARIABLES: notiSinLeer, notiLeida -->
+                      <div class="noti">
+                          <div class="textNoti">
+                            Tu cotraseña esta próxima a expirar. <br>
+                            Restan 14 días. <br>
+                            <b>CAMBIAR AHORA</b>
+                          </div>
+                      </div>
+                  </div>
+
+                  <div class="notification notiLeida">
+                  <!-- VARIABLES: notiSinLeer, notiLeida -->
+                      <div class="noti">
+                          <div class="textNoti">
+                            Tu cotraseña esta próxima a expirar. <br>
+                            Restan 14 días. <br>
+                            <b>CAMBIAR AHORA</b>
+                          </div>
+                      </div>
+                  </div>
+
+              </div>
+
+            </div>
+
+            <!-- ESTADO DEL SERVIDOR -->
+            <button class="btnServer" title="Server">
+              <i class="fa fa-server"></i>
+            </button>
+            <div class="contentServerDisconnected">
+              <div class="arrowServer">
+                <i class="fa fa-sort-asc fa-2x"></i>
+              </div>
+              <div class="headerServer">
+                <i class="fa fa-server"></i> &nbsp; Estado del servidor
+              </div>
+              <div class="contentServer">
+                <div><i class="fa fa-cog fa-spin fa-2x"></i></div>
+                <div>Servidor desconectado</div>
+                <div class="textReconectando">Reconectando, por favor espere...</div>
+              </div>
+            </div>
+
+            <button class="btnMySystems" title="Mis Sistemas">
+              <i class="fa fa-th-large"></i>
+            </button>
+            <button class="btnOut" title="Salir" ng-click="logout()">
+              <i class="fa fa-power-off"></i>
+            </button>
+        </div>
     </div>
+
+    <!-- <div class="systemas">
+      sistemas
+    </div> -->
 
 </div>
