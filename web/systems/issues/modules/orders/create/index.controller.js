@@ -92,7 +92,7 @@
 
         function getUserPhoto(user) {
           if (user == null || user.photo == null) {
-            var img = (users[i].genre == undefined || users[i].genre == 'Masculino' || users[i].genre == 'Hombre') ? "img/avatarMan.jpg" : "img/avatarWoman.jpg";
+            var img = user != null && "genre" in user && user.genre != null && (user.genre.toLowerCase() == 'femenino' || user.genre.toLowerCase() == 'mujer') ? "img/avatarWoman.jpg" : "img/avatarMan.jpg";
             return img;
           } else {
             return Files.toDataUri(user.photo);

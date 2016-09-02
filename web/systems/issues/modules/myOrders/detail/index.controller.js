@@ -150,7 +150,7 @@
         function getUserPhoto(issue) {
           var user = (issue == null) ? null : vm.model.users[issue.userId];
           if (user == null || user.photo == null || user.photoSrc == '') {
-            var img = (users[i].genre == undefined || users[i].genre == 'Masculino' || users[i].genre == 'Hombre') ? "img/avatarMan.jpg" : "img/avatarWoman.jpg";
+            var img = (user == null || vm.model.users[issue.userId].genre == undefined || vm.model.users[issue.userId].genre == 'Masculino' || vm.model.users[issue.userId].genre == 'Hombre') ? "img/avatarMan.jpg" : "img/avatarWoman.jpg";
             return img;
           } else {
             return user.photoSrc;
