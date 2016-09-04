@@ -18,7 +18,7 @@ def getUsersToSync(duser, dpassword):
         cur = con.cursor()
         try:
             cur.execute(
-                    "select username, password from credentials.user_password where updated >= NOW() - INTERVAL '5 days'"
+                    "select username, password from credentials.user_password where updated >= NOW() - INTERVAL '1 days'"
                     " and "
                     "user_id in (select pu.id from profile.users pu, profile.mails pm where pu.id = pm.user_id and pm.email like '%econo.unlp.edu.ar%' and pm.confirmed)"
                 )
