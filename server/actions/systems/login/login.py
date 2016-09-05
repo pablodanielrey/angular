@@ -45,7 +45,22 @@ class LoginSession(SystemComponentSession):
                     'ticket': 'fnfwfewfewfmewfklemflfdlskmfsd'
                 },
                 {
+                    'domain': 'www.issues.econo.unlp.edu.ar',
+                    'relative': '/systems/issues/',
+                    'ticket': 'fnfwfewfewfmewfklemflfdlskmfsd'
+                },
+                {
                     'domain': 'pedidos',
+                    'relative': '/systems/issues/',
+                    'ticket': 'fnfwfewfewfmewfklemflfdlskmfsd'
+                },
+                {
+                    'domain': 'pedidos.econo.unlp.edu.ar',
+                    'relative': '/systems/issues/',
+                    'ticket': 'fnfwfewfewfmewfklemflfdlskmfsd'
+                },
+                {
+                    'domain': 'www.pedidos.econo.unlp.edu.ar',
                     'relative': '/systems/issues/',
                     'ticket': 'fnfwfewfewfmewfklemflfdlskmfsd'
                 },
