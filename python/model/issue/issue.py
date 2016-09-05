@@ -74,7 +74,7 @@ class RedmineAPI:
 
     import os
     REDMINE_URL = os.environ['ISSUES_REDMINE']
-    KEY = 'd9834b4adde478b3d72378c039f5b019c0bbec96'
+    KEY = os.environ['ISSUES_REDMINE_KEY']
     TRACKER_ERROR = 1
     TRACKER_COMMENT = 4
     STATUS_NEW = 1
