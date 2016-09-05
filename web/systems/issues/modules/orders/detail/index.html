@@ -5,8 +5,8 @@
     <div class="headerDetail">
 
           <div class="detail">
-              <div class="contentBtnReturn">
-                  <a href="#/orders" class="btnReturn"><i class=" fa fa-angle-left" aria-hidden="true"></i></a>
+              <div class="contentBtnReturn" title="Volver">
+                  <a href="#/orders"><div class="btnReturn"><i class=" fa fa-angle-left fa-2x" aria-hidden="true"></i></div></a>
               </div>
               <div class="itemDate2">
                   <div class="textDaysOrders">Consulta</div>
@@ -33,7 +33,7 @@
               <!-- ---- Contenedor de Acciones del pedido ---- -->
               <div class="contentActions">
                   <!-- ---- Cambiar estado del pedido ---- -->
-                  <div class="itemStatus2">
+                  <div class="itemStatus2" title="Seleccionar Estado">
                       <div class="status2 {{vm.issueStatus()}}" ng-click="vm.selectStatus()">
                           <div class="textA1">ABIERTA <i class="fa fa-caret-down"></i></div>
                           <div class="textA2" title="Abierta">A <i class="fa fa-caret-down"></i></div>
@@ -76,9 +76,8 @@
                   </div>
                   <!-- ---- Cambiar la prioridad del pedido ---- -->
                   <div class="itemPriority">
-                      <div class="contentSelectPriority {{vm.issuePriority()}}" ng-click="vm.selectPriority()">
+                      <div class="contentSelectPriority {{vm.issuePriority()}}" ng-click="vm.selectPriority()" title="Seleccionar Prioridad">
                           <!-- ---- VARIABLES: baja, normal, alta ---- -->
-                          <div class="textPriority">Prioridad</div>
                           <div class="priorityB">BAJA <i class="fa fa-caret-down"></i></div>
                           <div class="priorityN">NORMAL <i class="fa fa-caret-down"></i></div>
                           <div class="priorityA">ALTA <i class="fa fa-caret-down"></i></div>
