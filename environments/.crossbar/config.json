@@ -166,7 +166,7 @@
                     "endpoint": {
                         "type": "tcp",
                         "version": 4,
-                        "port": 8081
+                        "port": 8080
                     },
                     "auth": {
                         "anonymous": {
@@ -246,9 +246,9 @@
                         "endpoint": {
                             "type": "tcp",
                             "host": "127.0.0.1",
-                            "port": 8081
+                            "port": 8080
                         },
-                        "url": "ws://localhost:8081"
+                        "url": "ws://localhost:8080"
                     }
                 },
                 {
@@ -264,9 +264,9 @@
                         "endpoint": {
                             "type": "tcp",
                             "host": "127.0.0.1",
-                            "port": 8081
+                            "port": 8080
                         },
-                        "url": "ws://localhost:8081"
+                        "url": "ws://localhost:8080"
                     }
                 },
                 {
@@ -279,9 +279,9 @@
                         "endpoint": {
                             "type": "tcp",
                             "host": "127.0.0.1",
-                            "port": 8081
+                            "port": 8080
                         },
-                        "url": "ws://localhost:8081"
+                        "url": "ws://localhost:8080"
                     }
                 },
 
@@ -298,9 +298,9 @@
                         "endpoint": {
                             "type": "tcp",
                             "host": "127.0.0.1",
-                            "port": 8081
+                            "port": 8080
                         },
-                        "url": "ws://localhost:8081"
+                        "url": "ws://localhost:8080"
                     }
                 },
                 {
@@ -313,9 +313,9 @@
                         "endpoint": {
                             "type": "tcp",
                             "host": "127.0.0.1",
-                            "port": 8081
+                            "port": 8080
                         },
-                        "url": "ws://localhost:8081"
+                        "url": "ws://localhost:8080"
                     }
                 },
                 {
@@ -328,9 +328,9 @@
                         "endpoint": {
                             "type": "tcp",
                             "host": "127.0.0.1",
-                            "port": 8081
+                            "port": 8080
                         },
-                        "url": "ws://localhost:8081"
+                        "url": "ws://localhost:8080"
                     }
                 },
 
@@ -344,9 +344,9 @@
                         "endpoint": {
                             "type": "tcp",
                             "host": "127.0.0.1",
-                            "port": 8081
+                            "port": 8080
                         },
-                        "url": "ws://localhost:8081"
+                        "url": "ws://localhost:8080"
                     }
                 },
 
@@ -360,9 +360,9 @@
                         "endpoint": {
                             "type": "tcp",
                             "host": "127.0.0.1",
-                            "port": 8081
+                            "port": 8080
                         },
-                        "url": "ws://localhost:8081"
+                        "url": "ws://localhost:8080"
                     }
                 },
 
@@ -376,9 +376,9 @@
                         "endpoint": {
                             "type": "tcp",
                             "host": "127.0.0.1",
-                            "port": 8081
+                            "port": 8080
                         },
-                        "url": "ws://localhost:8081"
+                        "url": "ws://localhost:8080"
                     }
                 }
             ]
