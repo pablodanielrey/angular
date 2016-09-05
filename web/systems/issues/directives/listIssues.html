@@ -35,20 +35,23 @@
 
               <!-- ---- Info oficina y solicitud ---- -->
               <div class="itemsType">
-                <div class="textType">{{issue.office.name}}</div>
-                <div class="textType2">{{issue.area.name}}</div>
-                <div class="textSubType">{{issue.subject}}</div>
+                <div class="textMini">Para:</div>
+                <div class="textDateOrders">{{issue.office.name}}</div>
+                <div class="textDaysOrders">Soporte tecnico</div>
+                <div class="textDateOrders">{{issue.area.name}}</div>
+                <div class="textName">{{issue.subject}}</div>
               </div>
 
               <!-- ---- Usuarios de la carga del pedido ---- -->
               <div class="itemsOffice" ng-class="{true: 'solicitadoPorEl', false: 'solicitadoPorOtro'}[issue.creatorId == null || issue.creatorId == '']">
                 <div>
-                  <div><span class="textMini">Solicitado por: </span> <span classs="textName">{{vm.getFullName(issue)}}</span></div>
-                  <div><span class="textMini">Oficina: </span> <span class="textOffice">{{issue.fromOffice.name}}</span> </div>
+                  <div class="textMini">Solicitado por:</div>
+                  <div class="textUser">{{vm.getFullName(issue)}}</div>
+                  <div class="textDaysOrders">{{issue.fromOffice.name}} </div>
                 </div>
                 <div class="userUpload">
-                  <span class="textMini">Cargado por: </span>
-                  <span class="textName">{{vm.getCreator(issue)}}</span>
+                  <div class="textMini">Cargado por:&nbsp;  </div>
+                  <div class="textName">{{vm.getCreator(issue)}}</div>
                 </div>
               </div>
 

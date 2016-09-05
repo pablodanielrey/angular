@@ -9,6 +9,13 @@
   width: 100%;
   background: #DBE2E5;
   color: #5C5F69;
+  color: #5C5F69;
+  display: flex;
+  display: -webkit-flex; /* Safari */
+  display: -moz-flex; /* mozilla */
+  align-items: center;
+  -webkit-align-items:center; /* Safari */
+  -moz-align-items:center; /* mozilla */
 }
 
 .myOrders .contentHeader {
@@ -25,11 +32,18 @@
   justify-content: space-between;
   -webkit-justify-content: space-between;
   -moz-justify-content: space-between;
+  margin-left: 20px;
+
 }
 
 .myOrders .textMisPedidos {
-  margin-left: 20px;
-  font-size: 20px;
+  font-size: 12px;
+  color: #28292D !important;
+}
+
+.orders .textMisPedidos2 {
+  margin-top: -3px;
+  font-size: 18px;
 }
 
 .myOrders .contentFilters {
@@ -55,6 +69,9 @@
   font-size: 13px !important;
   padding: 5px;
   color: #5C5F69 !important;
+  border:none;
+  margin-right: 10px;
+  cursor: pointer;
 }
 
 .myOrders .btnFilter:hover {
@@ -495,12 +512,13 @@
 
 .myOrders .textDateorders,
 .myOrders .textDaysOrders {
+  font-size: 12px;
   color:#848484;
 }
 
 .myOrders .textSubType,
 .myOrders .textName {
-  font-size: 13px;
+  font-size: 12px;
     color:#434343;
 }
 
