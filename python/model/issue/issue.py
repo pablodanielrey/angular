@@ -296,7 +296,7 @@ class RedmineAPI:
         issue.subject = iss.subject
         issue.description = iss.description
         issue.status_id = iss.statusId
-        issue.parent_issue_id = str(iss.parentId)
+        issue.parent_issue_id = iss.parentId
         issue.start_date = iss.start
         issue.tracker_id = iss.tracker
         issue.priority_id = iss.priority
