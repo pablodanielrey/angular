@@ -161,6 +161,25 @@ class Login:
     reg = inject.attr(Registry)
 
     @classmethod
+    def getPublicData(cls, con, dni):
+        print(dni)
+        (userId, version) = User.findByDni(con, dni)
+        if userId is None:
+            return None
+
+        users = User.findById(con, [userId])
+        if users is None or len(users) <= 0:
+            return None
+
+        photo = [User.findPhoto(con, users[0].photo) if 'photo' in dir(users[0]) and users[0].photo is not None and users[0].photo != '' else None][0]
+
+        return {
+            'name':users[0].name,
+            'lastname':users[0].lastname,
+            'photo': photo
+        }
+
+    @classmethod
     def getUserIdByUsername(cls, con, username):
         up = UserPassword.findByUsername(con, username)
         if len(up) > 0:

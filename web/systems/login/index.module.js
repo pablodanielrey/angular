@@ -2,7 +2,7 @@
   'use strict';
 
   angular
-      .module('login',['ngRoute','ngCookies','vxWamp'])
+      .module('login',['ngRoute','ngCookies','vxWamp', 'files'])
       .provider('$wampPublic', function ($wampProvider) {
           var host = location.hostname;
           var options = {

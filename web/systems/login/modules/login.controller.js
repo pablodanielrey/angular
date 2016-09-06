@@ -22,9 +22,9 @@
     });
 
 
-  LoginCtrl.$inject = ['$scope','$window', '$interval', '$location', 'Login'];
+  LoginCtrl.$inject = ['$scope','$window', '$interval', '$location', 'Login', 'Files'];
 
-  function LoginCtrl($scope, $window, $interval, $location, Login) {
+  function LoginCtrl($scope, $window, $interval, $location, Login, Files) {
 
     /* ---------------------------------------------------
      * --------------------- VARIABLES -------------------
@@ -117,7 +117,7 @@
        }
 
        function sendUsername() {
-         Login.getPublicData($scope.username).then(
+         Login.getPublicData($scope.model.username).then(
            function(publicData) {
              $scope.model.user = publicData;
              $scope.view.focus = 'inputPassword';
@@ -132,7 +132,7 @@
          if ($scope.model.user == null || $scope.model.user.photo == null || $scope.model.user.photo == '') {
            return "modules/img/imgUser.jpg";
          } else {
-           return $scope.model.user.photo;
+           return Files.toDataUri($scope.model.user.photo);
          }
        }
 
