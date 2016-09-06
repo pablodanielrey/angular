@@ -352,6 +352,7 @@
 
 .orders .contentOffice {
   width: 210px;
+  font-size: 12px;
 }
 
 .orders .status.abierta .textEC1,
@@ -518,8 +519,8 @@
 .orders .itemDate2 {
   font-size: 12px;
   /*background: red;*/
-  width: 130px;
-  margin-left: 20px;
+  width: 80px;
+  margin-left: 0px;
 }
 
 
@@ -543,8 +544,12 @@
   font-size: 12px;
 }
 
-.orders .textDateorders,
 .orders .textDaysOrders {
+  font-size: 12px;
+  color:#848484;
+}
+
+.orders .textDateorders {
   font-size: 12px;
   color:#848484;
 }
@@ -655,7 +660,7 @@
 }
 
 .orders .headerDetail {
-  height: 85px;
+  height: 102px;
   display: flex;
   display: -webkit-flex; /* Safari */
   display: -moz-flex; /* mozilla */
@@ -673,7 +678,7 @@
 
 .orders .contentTotalReplys {
   overflow-y: auto;
-  max-height: 370px;
+  height: calc(100% - 248px);
   /*background-color: red;*/
 }
 
@@ -711,6 +716,15 @@
 .orders .btnReturn:hover{
   background-color: #DBE2E5;
   cursor: pointer;
+}
+
+.orders .contentAsunto {
+  display: flex;
+  display: -webkit-flex; /* Safari */
+  display: -moz-flex; /* mozilla */
+  flex-direction:row;
+  -webkit-flex-direction:row; /* Safari */
+  -moz-flex-direction:row; /* mozilla */
 }
 
 .orders .actionDetail {
@@ -981,7 +995,7 @@
   flex-direction:row;
   -webkit-flex-direction:row; /* Safari */
   -moz-flex-direction:row; /* mozilla */
-  max-width: 70%;
+  max-width: 65%;
   min-width: 30%
 }
 
@@ -1002,7 +1016,7 @@
   background-color: #dbe2e5;
   width: 100%;
   min-height: 30px;
-  max-height: 90px;
+  /*max-height: 90px;*/
   border-radius: 3px;
   -moz-border-radius: 3px;
   -webkit-border-radius: 3px;
@@ -2290,15 +2304,28 @@ transition: all 500ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
 
   .orders .btnReply2 {
     display: block;
-    width: 50px;
     font-size: 14px;
     background-color: #92AD17;
     color:white;
-    padding: 15px 0px 5px 15px;
     border:none;
     border-radius: 3px;
     -moz-border-radius: 3px;
     -webkit-border-radius: 3px;
+    width: 48px;
+    height: 48px;
+    margin-top: 2px;
+    display: flex;
+    display: -webkit-flex; /* Safari */
+    display: -moz-flex; /* mozilla */
+    flex-direction:row;
+    -webkit-flex-direction:row; /* Safari */
+    -moz-flex-direction:row; /* mozilla */
+    align-items:center;
+    -webkit-align-items:center; /* Safari */
+    -moz-align-items:center; /* mozilla */
+    justify-content: center;
+    -webkit-justify-content: center;
+    -moz-justify-content: center;
   }
 
   .orders .infoOrder {
@@ -2350,13 +2377,14 @@ transition: all 500ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
   .orders .textReply {
     width: 100%;
     min-height: 30px;
-    max-height: 100px;
+    /*max-height: 100px;*/
     padding: 5px 10px 5px 10px;
   }
 
+
   .orders .contentTotalReplys {
     overflow-y: auto;
-    height: 195px;
+    height: calc(100% - 248px);
     /*background-color: red;*/
   }
 
@@ -2466,6 +2494,22 @@ transition: all 500ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
     height: 17px;
   }
 
+  .orders .textMisPedidos {
+    display: none;
+  }
+
+  .orders .textMisPedidos2 {
+    margin-top: 0px;
+    font-size: 12px !important;
+  }
+
+  .orders .headerDetail {
+    height: 72px;
+  }
+
+  .orders .userUpload {
+    display: none;
+  }
 
 
 }
