@@ -56,6 +56,8 @@
       return service._login(username, password);
     }
 
+
+
     service._login = function(username, password) {
 
       // armo la promesa que tiene en cuenta toda la cadena de eventos posibles.
@@ -130,6 +132,11 @@
       for (var i = 0; i < events.length; i++) {
         events[i]();
       }
+    }
+
+    service.logout = function() {
+      $cookies.remove('authlogin');
+      service.check();
     }
 
     service._setAuthCookie = function(info) {
