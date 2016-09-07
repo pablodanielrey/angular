@@ -1,7 +1,6 @@
 .orders {
   height: 100%;
   width: 100%;
-  overflow-y: auto;
 }
 
 .orders .header {
@@ -212,7 +211,7 @@
 
 .orders .contentOrders {
   width: 100%;
-  height: 100%;
+  height: calc(100% - 102px);
   overflow-y: auto;
 }
 
@@ -1373,6 +1372,8 @@ transition: all 500ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
 .orders .contentOrder {
   margin-left: 40px;
   padding: 10px;
+  height: calc(100% - 127px);
+  overflow-y: auto;
 }
 
 .orders .subtitleNewOrder {
@@ -1807,6 +1808,7 @@ transition: all 500ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
   margin-bottom: 5px;
   color: #434343;
   font-weight: bold;
+  width: 210px;
 }
 
 .orders .officeOrder {
@@ -1896,6 +1898,7 @@ transition: all 500ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
     -moz-border-radius: 2px 0 0 2px;
     -webkit-border-radius: 2px 0 0 2px;
     font-size: 17px;
+    border: none;
 }
 
 .orders .inputSearch {
@@ -1992,6 +1995,27 @@ transition: all 500ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
 }
 
 .orders .contentOffice.solicitadoPorEl .userUpload {
+  display: none;
+}
+
+
+.orders .contentSearchUser.loadingUsers .contentListPerson {
+  display: none;
+}
+
+.orders .contentSearchUser.loadingUsers .contentLoadingUsers {
+  display: block;
+  height: 200px;
+  width: 100%;
+  display: flex;
+  display: -webkit-flex; /* Safari */
+  display: -moz-flex; /* mozilla */
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.orders .contentLoadingUsers {
   display: none;
 }
 
@@ -2474,6 +2498,7 @@ transition: all 500ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
     color: #434343;
     font-weight: bold;
     font-size: 12px;
+    width: 150px;
   }
 
 

@@ -8,7 +8,7 @@
 
               <div class="contentBackNewOrder">
                   <div class="contentBtnReturn">
-                      <button class="btnReturn" ng-click="vm.cancel()"><i class=" fa fa-angle-left" aria-hidden="true"></i></button>
+                      <button class="btnReturn" ng-click="vm.cancel()"><i class=" fa fa-angle-left fa-2x" aria-hidden="true"></i></button>
                   </div>
                   <div class="titleNewOrder">
                     NUEVO PEDIDO
@@ -24,7 +24,8 @@
                   <div class="subContentOrderRight">
                     <div class="userOrder">{{vm.model.user.name}} {{vm.model.user.lastname}}</div>
                     <!-- ---- buscar el usuario ---- -->
-                    <div class="contentSearchUser">
+                    <div class="contentSearchUser loadingUsers">
+                        <!-- VARIABLE: loadingUsers -->
                         <div class="titleListRequest">
                             <span class="icoInputSearch"><i class="fa fa-search"></i></span>
                             <input class="inputSearch3" ng-click="vm.model.search = ''" ng-model="vm.model.search" type="text" placeholder="Buscar personal..." ng-disabled="vm.view.searching" ng-model-options="{ debounce: 1000 }" ng-change="vm.searchUsers()">
@@ -39,6 +40,11 @@
                                   <div class="dniUser">{{user.dni}}</div>
                                 </div>
                             </div>
+                        </div>
+                        <div class="contentLoadingUsers">
+                          <div class="circle"><i class="fa fa-circle-o-notch fa-spin fa-3x fa-fw"></i></div>
+                          <div><b>Cargando...</b></div>
+                          <div>Por favor espere</div>
                         </div>
                     </div>
 
