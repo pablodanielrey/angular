@@ -5,16 +5,17 @@
         .module('issues')
         .controller('OrdersListCtrl', OrdersListCtrl);
 
-    OrdersListCtrl.$inject = ['$scope', '$location', 'Issues', 'Users', '$filter', 'Login'];
+    OrdersListCtrl.$inject = ['$scope', '$location', 'Issues', 'Users', '$filter', 'Login', 'Offices'];
 
     /* @ngInject */
-    function OrdersListCtrl($scope, $location, Issues, Users, $filter, Login) {
+    function OrdersListCtrl($scope, $location, Issues, Users, $filter, Login, Offices) {
         var vm = this;
 
         vm.model = {
           userId: null, //usuario logueado
           users: [],
-          issues: []
+          issues: [],
+          userOffices: []
         }
 
         vm.view = {
@@ -41,16 +42,19 @@
         vm.messageError = messageError;
 
         vm.viewDetail = viewDetail;
+        vm.loadUserOffices = loadUserOffices;
 
 
         activate();
 
         function activate() {
           vm.model.userId = Login.getCredentials().userId;
+          vm.loadUserOffices(vm.model.userId);
           vm.view.reverseSortDate = false;
           vm.view.reverseSortStatus = false;
           vm.view.reverseSortDate = false;
           vm.view.reverseSortPriority = true;
+          registerEventManagers();
           loadIssues();
         }
 
@@ -135,6 +139,63 @@
 
         function viewDetail(issueId) {
           $location.path('/ordersDetail/' + issueId);
+        }
+
+
+        function registerEventManagers() {
+          Issues.subscribe('issues.issue_created_event', function(params) {
+            var issueId = params[0];
+            var authorId = params[1];
+            var fromOfficeId = params[2];
+            var officeId = params[3];
+            if (vm.model.userOffices[officeId] != null) {
+                Issues.findById(issueId).then(
+                  function(issue) {
+                    if (issue != null) {
+                      var dateStr = issue.start;
+                      issue.date = new Date(dateStr);
+
+                      // obtengo la posicion de ordenacion del estado
+                      var item = vm.view.status[issue.statusId];
+                      issue.statusPosition = vm.view.statusSort.indexOf(item);
+
+                      loadUser(issue.userId);
+                      loadUser(issue.creatorId);
+                      vm.model.issues.push(issue);
+                    }
+                  },
+                  function(error) {
+                    messageError()
+                  }
+                )
+            }
+          });
+        }
+
+        function loadUserOffices(userId) {
+          vm.model.userOffices = [];
+          Offices.getOfficesByUser(userId, false).then(
+            function(ids) {
+              if (ids == null || ids.length <= 0) {
+                return;
+              }
+              Offices.findById(ids).then(
+                function(offices) {
+                  vm.model.userOffices = [];
+                  if (offices == null || offices.length <= 0) {
+                      return;
+                  }
+                  for (var i = 0; i < offices.length; i++) {
+                    vm.model.userOffices[offices[i].id] = offices[i];
+                  }
+                }, function(error) {
+                  vm.messageError(error);
+                }
+              )
+            }, function(error) {
+              vm.messageError(error);
+            }
+          );
         }
 
     }

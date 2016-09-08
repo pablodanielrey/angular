@@ -14,7 +14,8 @@
         vm.model = {
           userId: null, //usuario logueado
           users: [],
-          issues: []
+          issues: [],
+          userOffices: []
         }
 
         vm.view = {
@@ -32,6 +33,7 @@
         vm.sortStatus = sortStatus;
         vm.sortDate = sortDate;
         vm.viewDetail = viewDetail;
+        vm.loadUserOffices = loadUserOffices;
 
         function messageLoading() {
           vm.view.style1 = vm.view.styles1[1];
@@ -57,12 +59,14 @@
 
         function activate() {
           vm.model.userId = Login.getCredentials().userId;
+          vm.loadUserOffices(vm.model.userId);
           vm.model.issues = [];
           vm.model.users = [];
           vm.model.files = [];
 
           vm.view.reverseSortDate = false;
           vm.view.reverseSortStatus = false;
+          registerEventManagers();
 
           getMyIssues();
         }
@@ -128,34 +132,60 @@
 
 
 
-        function registerEventManagers() {
-          Issues.subscribe('issues.issue_created_event', function(params) {
-            var issueId = params[0];
-            var authorId = params[1];
-            var fromOfficeId = params[2];
-            var officeId = params[3];
-            if (authorId == vm.model.userId || vm.model.userOffices.indexOf(officeId) > -1) {
-                Issues.findById(issueId).then(
-                  function(issue) {
-                    if (issue != null) {
-                      var dateStr = issue.start;
-                      issue.date = new Date(dateStr);
+      function registerEventManagers() {
+        Issues.subscribe('issues.issue_created_event', function(params) {
+          var issueId = params[0];
+          var authorId = params[1];
+          var fromOfficeId = params[2];
+          var officeId = params[3];
+          if (authorId == vm.model.userId || vm.model.userOffices[fromOfficeId] != null) {
+              Issues.findById(issueId).then(
+                function(issue) {
+                  if (issue != null) {
+                    var dateStr = issue.start;
+                    issue.date = new Date(dateStr);
 
-                      // obtengo la posicion de ordenacion del estado
-                      var item = vm.view.status[issue.statusId];
-                      issue.statusPosition = vm.view.statusSort.indexOf(item);
+                    // obtengo la posicion de ordenacion del estado
+                    var item = vm.view.status[issue.statusId];
+                    issue.statusPosition = vm.view.statusSort.indexOf(item);
 
-                      loadUser(issue.userId);
-                      loadUser(issue.creatorId);
-                      vm.model.issues.push(issue);
-                    }
-                  },
-                  function(error) {
-                    messageError()
+                    loadUser(issue.userId);
+                    loadUser(issue.creatorId);
+                    vm.model.issues.push(issue);
                   }
-                )
+                },
+                function(error) {
+                  messageError()
+                }
+              )
+          }
+        });
+      }
+
+    function loadUserOffices(userId) {
+      vm.model.userOffices = [];
+      Offices.getOfficesByUser(userId, false).then(
+        function(ids) {
+          if (ids == null || ids.length <= 0) {
+            return;
+          }
+          Offices.findById(ids).then(
+            function(offices) {
+              vm.model.userOffices = [];
+              if (offices == null || offices.length <= 0) {
+                  return;
+              }
+              for (var i = 0; i < offices.length; i++) {
+                vm.model.userOffices[offices[i].id] = offices[i];
+              }
+            }, function(error) {
+              vm.messageError(error);
             }
-          });
+          )
+        }, function(error) {
+          vm.messageError(error);
         }
+      );
     }
+  }
 })();
