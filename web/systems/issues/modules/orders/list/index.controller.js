@@ -27,9 +27,10 @@
           status: ['','abierta', 'enProgreso', 'cerrada', 'comentarios', 'cerrada', 'rechazada', 'pausada'],
           statusSort: ['','abierta', 'enProgreso', 'pausada', 'rechazada', 'cerrada'],
           priorities: ['baja', 'normal', 'alta', 'alta', 'alta'], //solo se maneja el estilo alta, si esta como urgente o inmediata se lo toma solo como alta
-          reverseSortDate: false,
-          reverseSortStatus: false,
-          reverseSortPriority: true
+          reverseSortDate: true,
+          reverseSortStatus: true,
+          reverseSortPriority: false,
+          sortedBy: 'status'
         }
 
         vm.sortDate = sortDate;
@@ -50,10 +51,9 @@
         function activate() {
           vm.model.userId = Login.getCredentials().userId;
           vm.loadUserOffices(vm.model.userId);
-          vm.view.reverseSortDate = false;
-          vm.view.reverseSortStatus = false;
-          vm.view.reverseSortDate = false;
-          vm.view.reverseSortPriority = true;
+          vm.view.reverseSortDate = true;
+          vm.view.reverseSortStatus = true;
+          vm.view.reverseSortPriority = false;
           registerEventManagers();
           loadIssues();
         }
@@ -116,24 +116,52 @@
         }
 
         function sortDate() {
-          vm.view.reverseSortStatus = false;
-          vm.view.reverseSortPriority = true;
-          vm.model.issues = $filter('orderBy')(vm.model.issues, ['start', '-priority', 'statusPosition'], vm.view.reverseSortDate);
+          vm.view.sortedBy = 'date';
           vm.view.reverseSortDate = !vm.view.reverseSortDate;
+          vm.view.reverseSortStatus = true;
+          vm.view.reverseSortPriority = false;
+          orderByDate();
+        }
+
+        function orderByDate() {
+          if (vm.view.reverseSortDate) {
+            vm.model.issues = $filter('orderBy')(vm.model.issues, ['start', '-priority', 'statusPosition'], false);
+          } else {
+            vm.model.issues = $filter('orderBy')(vm.model.issues, ['-start', '-priority', 'statusPosition'], false);
+          }
+
         }
 
         function sortStatus() {
-          vm.view.reverseSortDate = false;
-          vm.view.reverseSortPriority = true;
-          vm.model.issues = $filter('orderBy')(vm.model.issues, ['statusPosition', '-priority', 'start'], vm.view.reverseSortStatus);
+          vm.view.sortedBy = 'status';
           vm.view.reverseSortStatus = !vm.view.reverseSortStatus;
+          vm.view.reverseSortDate = true;
+          vm.view.reverseSortPriority = false;
+          orderByStatus();
+        }
+
+        function orderByStatus() {
+          if (vm.view.reverseSortStatus) {
+            vm.model.issues = $filter('orderBy')(vm.model.issues, ['-statusPosition', '-priority', '-start'], false);
+          } else {
+            vm.model.issues = $filter('orderBy')(vm.model.issues, ['statusPosition', '-priority', '-start'], false);
+          }
         }
 
         function sortPriority() {
-          vm.view.reverseSortDate = false;
-          vm.view.reverseSortStatus = false;
-          vm.model.issues = $filter('orderBy')(vm.model.issues, ['priority', 'start', 'statusPosition'], vm.view.reverseSortPriority);
+          vm.view.sortedBy = 'priority';
           vm.view.reverseSortPriority = !vm.view.reverseSortPriority;
+          vm.view.reverseSortDate = true;
+          vm.view.reverseSortStatus = true;
+          orderByPriority();
+        }
+
+        function orderByPriority() {
+          if (vm.view.reverseSortPriority) {
+            vm.model.issues = $filter('orderBy')(vm.model.issues, ['-priority', '-start', 'statusPosition'], false);
+          } else {
+            vm.model.issues = $filter('orderBy')(vm.model.issues, ['priority', '-start', 'statusPosition'], false);
+          }
         }
 
 
@@ -162,6 +190,11 @@
                       loadUser(issue.userId);
                       loadUser(issue.creatorId);
                       vm.model.issues.push(issue);
+                      switch (vm.view.sortedBy) {
+                        case 'status': orderByStatus(); break;
+                        case 'date': orderByDate(); break;
+                        default: orderByPriority();
+                      }
                     }
                   },
                   function(error) {

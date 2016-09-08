@@ -26,8 +26,9 @@
 
           status: ['','abierta', 'enProgreso', 'cerrada', 'comentarios', 'rechazada', 'pausada'],
           statusSort: ['','abierta', 'enProgreso', 'pausada', 'rechazada', 'cerrada'],
-          reverseSortDate: false,
-          reverseSortStatus: false
+          reverseSortDate: true,
+          reverseSortStatus: true,
+          sortedBy: 'status'
         }
 
         vm.sortStatus = sortStatus;
@@ -64,8 +65,8 @@
           vm.model.users = [];
           vm.model.files = [];
 
-          vm.view.reverseSortDate = false;
-          vm.view.reverseSortStatus = false;
+          vm.view.reverseSortDate = true;
+          vm.view.reverseSortStatus = true;
           registerEventManagers();
 
           getMyIssues();
@@ -101,15 +102,34 @@
 
 
         function sortStatus() {
-          vm.view.reverseSortDate = false;
-          vm.model.issues = $filter('orderBy')(vm.model.issues, ['statusPosition', 'start'], vm.view.reverseSortStatus);
           vm.view.reverseSortStatus = !vm.view.reverseSortStatus;
+          vm.view.sortedBy = 'status';
+          vm.view.reverseSortDate = true;
+          orderByStatus();
+        }
+
+        function orderByStatus() {
+          if (vm.view.reverseSortStatus) {
+            vm.model.issues = $filter('orderBy')(vm.model.issues, ['-statusPosition', '-start'], false);
+          } else {
+            vm.model.issues = $filter('orderBy')(vm.model.issues, ['statusPosition', '-start'], false);
+          }
+
         }
 
         function sortDate() {
-          vm.view.reverseSortStatus = false;
-          vm.model.issues = $filter('orderBy')(vm.model.issues, ['start', 'statusPosition'], vm.view.reverseSortDate);
           vm.view.reverseSortDate = !vm.view.reverseSortDate;
+          vm.view.sortedBy = 'date';
+          vm.view.reverseSortStatus = true;
+          orderByDate();
+        }
+
+        function orderByDate() {
+          if (vm.view.reverseSortDate) {
+            vm.model.issues = $filter('orderBy')(vm.model.issues, ['start', 'statusPosition'], false);
+          } else {
+            vm.model.issues = $filter('orderBy')(vm.model.issues, ['-start', 'statusPosition'], false);
+          }
         }
 
 
@@ -152,6 +172,11 @@
                     loadUser(issue.userId);
                     loadUser(issue.creatorId);
                     vm.model.issues.push(issue);
+                    if (vm.view.sortedBy == 'status') {
+                      orderByStatus();
+                    } else {
+                      orderByDate();
+                    }
                   }
                 },
                 function(error) {
