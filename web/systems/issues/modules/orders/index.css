@@ -1374,6 +1374,7 @@ transition: all 500ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
   padding: 10px;
   height: calc(100% - 127px);
   overflow-y: auto;
+
 }
 
 .orders .subtitleNewOrder {
@@ -1892,7 +1893,7 @@ transition: all 500ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
 
 .orders .icoInputSearch {
     background-color: #DBE2E5;
-    padding: 10px 15px 10px 15px;
+    padding: 8px 15px 8px 15px;
     border: 1px solid #DBE2E5;
     border-radius: 2px 0 0 2px;
     -moz-border-radius: 2px 0 0 2px;
@@ -2556,5 +2557,40 @@ transition: all 500ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
 
   .orders.pantallaDetallePedido .contentOffice {
     display: none;
+  }
+}
+
+
+@media (min-width:1800px) {
+  .orders .itemDate {
+    width: 230px;
+  }
+  .orders .itemStatus {
+    width: 180px;
+  }
+  .orders .itemsType {
+    width: 250px;
+  }
+  .orders .itemOrders {
+    zoom:1.4;
+  }
+  .orders .contentFilters {
+    zoom:1.4
+  }
+  .orders .contentTextHeader {
+    zoom:1.4;
+    margin-left: 10px;
+  }
+  .orders .contentBtnHeader {
+    zoom:1.2;
+  }
+  .orders .contentOrderDetail {
+    zoom:1.3;
+  }
+  .orders .contentMessage {
+    zoom:1.4;
+  }
+  .orders .newOrder {
+    zoom: 1.4;
   }
 }
