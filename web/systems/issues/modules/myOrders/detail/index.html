@@ -7,8 +7,8 @@
         <div class="headerDetail">
 
               <div class="detail">
-                  <div class="contentBtnReturn">
-                      <a class="btnReturn" href="#/myOrders"><i class=" fa fa-angle-left" aria-hidden="true"></i></a>
+                  <div class="contentBtnReturn" title="Volver">
+                      <a href="#/myOrders"><div class="btnReturn"><i class=" fa fa-angle-left fa-2x" aria-hidden="true"></i></div></a>
                   </div>
                   <div class="itemDate2">
                       <div class="textDaysOrders">Consulta</div>
@@ -17,8 +17,12 @@
                       <div class="textDaysOrders">Hoy</div> -->
                   </div>
                   <div class="itemsType">
-                        <div class="textType">{{vm.model.issue.projectName}}:</div>
-                        <div class="textSubType">{{vm.model.issue.subject}}</div>
+                         <div class="textMini">Para:</div>
+                        <div class="textType">{{vm.model.issue.projectName}}</div>
+                        <div class="contentAsunto">
+                            <div class="textMini">Asunto:&nbsp; </div>
+                            <div class="textSubType">{{vm.model.issue.subject}}</div>
+                        </div>
                   </div>
 
                   <div class="contentOffice">

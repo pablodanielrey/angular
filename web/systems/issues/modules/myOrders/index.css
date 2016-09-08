@@ -1,7 +1,6 @@
 .myOrders {
   height: 100%;
   width: 100%;
-  overflow-y: auto;
 }
 
 .myOrders .header {
@@ -174,6 +173,18 @@
   background-color: white;
 }
 
+.myOrders .inputSearch3 {
+  border-radius: 2px;
+  -moz-border-radius: 2px;
+  -webkit-border-radius: 2px;
+  font-size: 16px;
+  padding: 7px;
+  border: 1px solid #DBE2E5;
+  margin-bottom: 5px;
+  margin-top: 2px;
+  background-color: white;
+}
+
 .myOrders .textSearch1 {
   color: #5C5F69;
 }
@@ -200,7 +211,7 @@
 
 .myOrders .contentOrders {
   width: 100%;
-  height: 100%;
+  height: calc(100% - 102px);
   overflow-y: auto;
 }
 
@@ -313,12 +324,15 @@
 
 
 .myOrders .itemsType {
-  width: 210px;
+  width: 350px;
   /*background-color: blue;*/
+  font-size: 12px;
 }
 
 .myOrders .contentOffice {
   width: 210px;
+  font-size: 12px;
+
 }
 
 .myOrders .status.abierta .textEC1,
@@ -432,6 +446,10 @@
   display: none;
 }
 
+.myOrders .status.rechazada .textR1 {
+  font-size: 13px;
+}
+
 .myOrders .contentActions {
   display: flex;
   display: -webkit-flex; /* Safari */
@@ -485,8 +503,8 @@
 .myOrders .itemDate2 {
   font-size: 12px;
   /*background: red;*/
-  width: 130px;
-  margin-left: 20px;
+  width: 80px;
+  margin-left: 0px;
 }
 
 
@@ -523,7 +541,7 @@
 }
 
 .myOrders .textMini {
-  font-size: 12px;
+  font-size: 11px;
   color:#92AD17;
 }
 
@@ -562,7 +580,7 @@
 }
 
 .myOrders .headerDetail {
-  height: 85px;
+  height: 102px;
   display: flex;
   display: -webkit-flex; /* Safari */
   display: -moz-flex; /* mozilla */
@@ -580,7 +598,7 @@
 
 .myOrders .contentTotalReplys {
   overflow-y: auto;
-  max-height: 370px;
+  height: calc(100% - 248px);
   /*background-color: red;*/
 }
 
@@ -606,18 +624,26 @@
 
 .myOrders .btnReturn {
   background-color: #BFC0C5;
-  font-size: 40px;
   color: white;
   border: none;
   border-radius: 3px;
   -moz-border-radius: 3px;
   -webkit-border-radius: 3px;
-  padding: 5px 20px 5px 20px;
+  padding: 8px 20px 8px 20px;
 }
 
 .myOrders .btnReturn:hover{
   background-color: #DBE2E5;
   cursor: pointer;
+}
+
+.myOrders .contentAsunto {
+  display: flex;
+  display: -webkit-flex; /* Safari */
+  display: -moz-flex; /* mozilla */
+  flex-direction:row;
+  -webkit-flex-direction:row; /* Safari */
+  -moz-flex-direction:row; /* mozilla */
 }
 
 .myOrders .actionDetail {
@@ -735,6 +761,7 @@
 
 .myOrders .contentBtnReply {
   margin-right: 25px;
+
 }
 
 .myOrders .btnReply {
@@ -743,11 +770,13 @@
   font-size: 14px;
   background-color: #92AD17;
   color:white;
-  padding: 5px 10px 5px 10px;
+  padding: 15px 10px 15px 10px;
   border:none;
   border-radius: 3px;
   -moz-border-radius: 3px;
   -webkit-border-radius: 3px;
+  font-weight: bold;
+
 }
 
 .myOrders .btnReply2 {
@@ -774,13 +803,27 @@
 
 }
 
+.myOrders .btnApply2 {
+  display: none;
+  width: 50px;
+  height: 50px;
+  font-size: 14px;
+  background-color: #92AD17 !important;
+  color:white;
+  padding: 5px 10px 5px 10px;
+  border:none;
+  border-radius: 3px;
+  -moz-border-radius: 3px;
+  -webkit-border-radius: 3px;
+}
+
 .myOrders .btnNew {
   width: 170px;
   height: 50px;
   font-size: 14px !important;
   background-color: #92AD17 !important;
   color:white;
-  padding: 7px 10px 7px 10px;
+  padding: 5px 10px 5px 10px;
   border:none;
   border-radius: 3px;
   -moz-border-radius: 3px;
@@ -872,7 +915,7 @@
   flex-direction:row;
   -webkit-flex-direction:row; /* Safari */
   -moz-flex-direction:row; /* mozilla */
-  max-width: 70%;
+  max-width: 65%;
   min-width: 30%
 }
 
@@ -893,7 +936,7 @@
   background-color: #dbe2e5;
   width: 100%;
   min-height: 30px;
-  max-height: 90px;
+  /*max-height: 90px;*/
   border-radius: 3px;
   -moz-border-radius: 3px;
   -webkit-border-radius: 3px;
@@ -1250,6 +1293,8 @@ transition: all 500ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
 .myOrders .contentOrder {
   margin-left: 40px;
   padding: 10px;
+  height: calc(100% - 127px);
+  overflow-y: auto;
 }
 
 .myOrders .subtitleNewOrder {
@@ -1571,6 +1616,11 @@ transition: all 500ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
   display: block;
 }
 
+.myOrders .itemsOffice {
+  font-size: 12px;
+  /*background-color: red;*/
+}
+
 /******************** MEDIA QUERIS ***************************/
 
 @media (max-width: 719px){
@@ -1680,11 +1730,12 @@ transition: all 500ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
   }
 
   .myOrders .itemsType {
-    width: 145px;
+    width: 300px;
     /*background-color: blue;*/
   }
 
   .myOrders .itemsOffice {
+    font-size: 12px;
     width: 145px;
     /*background-color: red;*/
   }
@@ -1807,13 +1858,12 @@ transition: all 500ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
 
 
   .myOrders .btnReturn {
-    font-size: 35px;
     color: white;
     border: none;
     border-radius: 3px;
     -moz-border-radius: 3px;
     -webkit-border-radius: 3px;
-    padding: 5px 20px 5px 20px;
+    padding: 8px 20px 8px 20px;
   }
 
 
@@ -1875,16 +1925,28 @@ transition: all 500ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
 
   .myOrders .btnReply2 {
     display: block;
-    width: 50px;
-    height: 50px;
     font-size: 14px;
     background-color: #92AD17;
     color:white;
-    padding: 5px 10px 5px 10px;
     border:none;
     border-radius: 3px;
     -moz-border-radius: 3px;
     -webkit-border-radius: 3px;
+    width: 48px;
+    height: 48px;
+    margin-top: 2px;
+    display: flex;
+    display: -webkit-flex; /* Safari */
+    display: -moz-flex; /* mozilla */
+    flex-direction:row;
+    -webkit-flex-direction:row; /* Safari */
+    -moz-flex-direction:row; /* mozilla */
+    align-items:center;
+    -webkit-align-items:center; /* Safari */
+    -moz-align-items:center; /* mozilla */
+    justify-content: center;
+    -webkit-justify-content: center;
+    -moz-justify-content: center;
   }
 
   .myOrders .infoOrder {
@@ -1936,13 +1998,13 @@ transition: all 500ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
   .myOrders .textReply {
     width: 100%;
     min-height: 30px;
-    max-height: 100px;
+    /*max-height: 100px;*/
     padding: 5px 10px 5px 10px;
   }
 
   .myOrders .contentTotalReplys {
     overflow-y: auto;
-    height: 195px;
+    height: calc(100% - 248px);
     /*background-color: red;*/
   }
 
@@ -1955,6 +2017,54 @@ transition: all 500ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
   }
 
   .myOrders .btnApply {
+    display: none;
+  }
+
+  .myOrders .subContentOrderLeft {
+    display: none;
+  }
+
+  .myOrders .titleNewOrder {
+    display: none;
+  }
+
+  .myOrders .userOrder {
+    margin-bottom: 5px;
+    color: #434343;
+    font-weight: bold;
+    font-size: 12px;
+    width: 150px;
+  }
+
+  .myOrders .officeOrder {
+    margin-bottom: 5px;
+    color: #434343;
+    font-weight: bold;
+    font-size: 12px;
+  }
+
+  .myOrders .arrowOpen2 {
+    height: 17px;
+  }
+
+  .myOrders .arrowOpen {
+    height: 17px;
+  }
+
+  .myOrders .textMisPedidos {
+    display: none;
+  }
+
+  .myOrders .textMisPedidos2 {
+    margin-top: 0px;
+    font-size: 12px !important;
+  }
+
+  .myOrders .headerDetail {
+    height: 72px;
+  }
+
+  .myOrders .userUpload {
     display: none;
   }
 
@@ -1973,12 +2083,47 @@ transition: all 500ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
   }
 }
 
-@media (max-width: 1024px){
+@media (max-width: 1280px){
   .myOrders.pantallaDetallePedido .itemDate2 {
     display: none;
   }
 
   .myOrders.pantallaDetallePedido .contentOffice {
     display: none;
+  }
+}
+
+
+@media (min-width:1800px) {
+  .myOrders .itemDate {
+    width: 230px;
+  }
+  .myOrders .itemStatus {
+    width: 180px;
+  }
+  .myOrders .itemsType {
+    width: 350px;
+  }
+  .myOrders .itemOrders {
+    zoom:1.4;
+  }
+  .myOrders .contentFilters {
+    zoom:1.4
+  }
+  .myOrders .contentTextHeader {
+    zoom:1.4;
+    margin-left: 10px;
+  }
+  .myOrders .contentBtnHeader {
+    zoom:1.2;
+  }
+  .myOrders .contentOrderDetail {
+    zoom:1.3;
+  }
+  .myOrders .contentMessage {
+    zoom:1.4;
+  }
+  .myOrders .newOrder {
+    zoom: 1.4;
   }
 }
