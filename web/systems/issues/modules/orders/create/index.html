@@ -24,7 +24,7 @@
                   <div class="subContentOrderRight">
                     <div class="userOrder">{{vm.model.user.name}} {{vm.model.user.lastname}}</div>
                     <!-- ---- buscar el usuario ---- -->
-                    <div class="contentSearchUser ">
+                    <div class="contentSearchUser" ng-class="{true: 'loadingUsers'}[vm.view.searching]">
                         <!-- VARIABLE: loadingUsers -->
                         <div class="titleListRequest">
                             <span class="icoInputSearch"><i class="fa fa-search"></i></span>
