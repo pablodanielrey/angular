@@ -47,6 +47,8 @@
           vm.view.style4 = vm.view.styles4[0];
           var params = $routeParams;
           messageLoading();
+          registerEventManagers();
+
           IssuesDD.issueDetail(params.issueId).then(
             function(issue) {
               vm.model.issue = issue;
@@ -57,6 +59,24 @@
             }
           )
         };
+
+
+        // TODO: manejador de eventos
+        function registerEventManagers() {
+          Issues.subscribe('issues.comment_created_event', function(params) {
+            var parentId = params[0];
+            var commentId = params[1];
+            if (vm.model.issue.id == parentId) {
+              IssuesDD.issueDetail(commentId).then(
+                function(issue) {                
+                    vm.model.issue.children.push(issue);
+                },
+                function(error) {
+                    vm.messageError(error);
+                });
+            }
+          });
+        }
 
 
         function issueStatus() {

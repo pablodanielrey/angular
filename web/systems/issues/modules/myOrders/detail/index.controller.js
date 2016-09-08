@@ -81,8 +81,10 @@
             if (vm.model.issue.id == parentId) {
               Issues.findById(commentId).then(
                 function(comment) {
-
                     vm.model.issue.children.push(comment);
+                    if (comment.user == undefined) {
+                      loadUser(comment.userId);
+                    }
                 },
                 function(error) {
                     vm.messageError(error);
