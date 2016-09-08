@@ -135,7 +135,7 @@
     }
 
     service.logout = function() {
-      $cookies.remove('authlogin');
+      $cookies.remove('authlogin', {path:'/'});
       service.check();
     }
 

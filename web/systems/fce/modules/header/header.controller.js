@@ -1,10 +1,12 @@
 angular
-  .module('mainApp')
+  .module('fce')
   .controller('HeaderCtrl', HeaderCtrl)
 
 HeaderCtrl.$inject = ['$rootScope', '$scope', '$window', 'Login'];
 
 function HeaderCtrl($rootScope, $scope, $window, Login) {
+
+  console.log("Header");
 
   $rootScope.$on("$wamp.open", function (event, session) {
     // TODO: aca debe actualizar el ícono para que diga que esta conectado
@@ -19,12 +21,7 @@ function HeaderCtrl($rootScope, $scope, $window, Login) {
   });
 
   $scope.logout = function() {
-    Login.logout()
-    .then(function(ok) {
-      $window.location.href = "/systems/login/index.html";
-    }, function(err) {
-      console.log(err);
-    });
+    Login.logout();
   }
 
 }
