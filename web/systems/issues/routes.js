@@ -59,9 +59,9 @@
          controller: 'LogoutCtrl'
       })
 
-      /*.otherwise({
+      .otherwise({
         redirectTo: '/orders'
-      });*/
+      });
 
     }]);
 
