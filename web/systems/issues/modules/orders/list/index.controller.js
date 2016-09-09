@@ -5,10 +5,10 @@
         .module('issues')
         .controller('OrdersListCtrl', OrdersListCtrl);
 
-    OrdersListCtrl.$inject = ['$scope', '$location', 'Issues', 'Users', '$filter', 'Login', 'Offices'];
+    OrdersListCtrl.$inject = ['$scope', '$location', 'Issues', 'Users', '$filter', 'Login', 'Offices', '$timeout'];
 
     /* @ngInject */
-    function OrdersListCtrl($scope, $location, Issues, Users, $filter, Login, Offices) {
+    function OrdersListCtrl($scope, $location, Issues, Users, $filter, Login, Offices, $timeout) {
         var vm = this;
 
         vm.model = {

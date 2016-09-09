@@ -5,10 +5,10 @@
         .module('issues')
         .controller('OrdersDetailCtrl', OrdersDetailCtrl);
 
-    OrdersDetailCtrl.$inject = ['$scope', '$routeParams', '$location', 'Login', 'Issues', 'Users', 'IssuesDD'];
+    OrdersDetailCtrl.$inject = ['$scope', '$routeParams', '$location', 'Login', 'Issues', 'Users', 'IssuesDD', '$timeout'];
 
     /* @ngInject */
-    function OrdersDetailCtrl($scope, $routeParams, $location, Login, Issues, Users, IssuesDD) {
+    function OrdersDetailCtrl($scope, $routeParams, $location, Login, Issues, Users, IssuesDD, $timeout) {
         var vm = this;
 
         // variables del modelo
@@ -68,7 +68,7 @@
             var commentId = params[1];
             if (vm.model.issue.id == parentId) {
               IssuesDD.issueDetail(commentId).then(
-                function(issue) {                
+                function(issue) {
                     vm.model.issue.children.push(issue);
                 },
                 function(error) {
