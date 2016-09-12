@@ -204,11 +204,11 @@
                 vm.model.userOffices[offices[i].id] = offices[i];
               }
             }, function(error) {
-              vm.messageError(error);
+              messageError(error);
             }
           )
         }, function(error) {
-          vm.messageError(error);
+          messageError(error);
         }
       );
     }
