@@ -57,6 +57,17 @@
     }
 
 
+    // retorno la cookie de ticket si es que existe para las reconexiones.
+    service.autoreconnectauth = function(event, info)  {
+      var creds = service._getAuthCookie();
+      if (creds == null) {
+        $window.location.href = '/';
+        return;
+      }
+
+      console.log(creds);
+    }
+
 
     service._login = function(username, password) {
 
@@ -74,6 +85,8 @@
         //ie. wamp-cra
         console.log('retornando clave challenge');
         return info.promise.resolve(password);
+
+        $rootScope.$on("$wampCore.onchallenge", service.autoreconnectauth);
       }));
 
       events.push($rootScope.$on("$wampCore.open", function(event, info) {
