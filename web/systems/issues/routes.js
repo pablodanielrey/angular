@@ -60,7 +60,8 @@
       })
 
       .otherwise({
-        redirectTo: '/orders'
+        redirectTo: '/home',
+        templateUrl: 'modules/home/index.html'
       });
 
     }]);
