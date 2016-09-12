@@ -66,6 +66,7 @@
       }
 
       console.log(creds);
+      return info.promise.resolve(creds.ticket);
     }
 
 
