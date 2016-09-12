@@ -124,6 +124,8 @@ class EmailToSend:
 
     def sendMail(self, con):
 
+        From = self.reg.get('mailFrom')
+
         ''' cargo los datos basicos de la base '''
         self._loadInscriptions(con)
         self._loadUsers(con)
@@ -142,10 +144,10 @@ class EmailToSend:
 
         ''' envío un mail a cada uno de los mails listados con el mensaje completo '''
         for mail in self.mails:
-            m = self.mailModel.createMail('insercionlaboral@econo.unlp.edu.ar', mail, 'Bolsa de trabajo FCE')
+            m = self.mailModel.createMail(From, mail, 'Bolsa de trabajo FCE')
             for p in parts:
                 m.attach(p)
-            self.mailModel._sendMail('insercionlaboral@econo.unlp.edu.ar', mail, m)
+            self.mailModel._sendMail(From, mail, m)
 
         return [ u['email'].email for u in self.users.values() ]
 
