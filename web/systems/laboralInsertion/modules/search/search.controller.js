@@ -20,7 +20,7 @@ function SearchCtrl($rootScope, $scope, $location, $window, Notifications, Labor
     emails: [],
     filtersData:[],
     searching: false,
-    inscriptionsPerMail: 5
+    inscriptionsPerMail: 100
   };
 
   $scope.view = {

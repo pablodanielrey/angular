@@ -212,18 +212,21 @@ class LaboralInsertionWamp(ApplicationSession):
     def sendMailToCompany(self, inscriptions, emails, inscriptionsPerMail):
         con = self.conn.get()
         try:
-            inscriptionIds = [ i['id'] for i in inscriptions ]
-            inscriptionsToSend = [ inscriptionIds.pop() for i in range(inscriptionsPerMail) if len(inscriptionIds) > 0 ]
             data = []
-            while len(inscriptionsToSend) > 0:
-
-                logging.debug('------- enviando correo --------')
-                for ins in inscriptionsToSend:
-                    logging.debug(ins)
-                logging.debug('---------------------------------')
-
-                data.extend(self.laboralInsertion.sendMailToCompany(con, inscriptionsToSend, emails))
+            if inscriptionsPerMail >= inscriptions:
+                data = self.laboralInsertion.sendMailToCompany(con, inscriptions, emails)
+            else:
+                inscriptionIds = [ i['id'] for i in inscriptions ]
                 inscriptionsToSend = [ inscriptionIds.pop() for i in range(inscriptionsPerMail) if len(inscriptionIds) > 0 ]
+                while len(inscriptionsToSend) > 0:
+
+                    logging.debug('------- enviando correo --------')
+                    for ins in inscriptionsToSend:
+                        logging.debug(ins)
+                    logging.debug('---------------------------------')
+
+                    data.extend(self.laboralInsertion.sendMailToCompany(con, inscriptionsToSend, emails))
+                    inscriptionsToSend = [ inscriptionIds.pop() for i in range(inscriptionsPerMail) if len(inscriptionIds) > 0 ]
 
             self.publish('system.laboralInsertion.COMPANYSENDED', data)
             return True
