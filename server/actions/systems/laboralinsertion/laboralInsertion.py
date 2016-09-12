@@ -214,7 +214,8 @@ class LaboralInsertionWamp(ApplicationSession):
         try:
             data = []
             if inscriptionsPerMail >= len(inscriptions):
-                data = self.laboralInsertion.sendMailToCompany(con, inscriptions, emails)
+                inscriptionIds = [ i['id'] for i in inscriptions ]
+                data = self.laboralInsertion.sendMailToCompany(con, inscriptionIds, emails)
             else:
                 inscriptionIds = [ i['id'] for i in inscriptions ]
                 inscriptionsToSend = [ inscriptionIds.pop() for i in range(inscriptionsPerMail) if len(inscriptionIds) > 0 ]
