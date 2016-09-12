@@ -83,10 +83,10 @@
         // info.method: auth method,
         // info.extra: extra
         //ie. wamp-cra
+        $rootScope.$on("$wampCore.onchallenge", service.autoreconnectauth);
+
         console.log('retornando clave challenge');
         return info.promise.resolve(password);
-
-        $rootScope.$on("$wampCore.onchallenge", service.autoreconnectauth);
       }));
 
       events.push($rootScope.$on("$wampCore.open", function(event, info) {
