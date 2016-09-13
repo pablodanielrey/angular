@@ -41,6 +41,7 @@
 
     // inicializamos la conexión pública
 
+    var host = '127.0.0.1';
     var options = {
         url: 'ws://' + host + ':80/ws',
         realm: 'public',
