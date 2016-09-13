@@ -2,6 +2,10 @@
   'use strict';
 
   angular
+      .module('login',['ngRoute','ngCookies','files'])
+
+/*
+  angular
       .module('login',['ngRoute','ngCookies','vxWamp', 'files'])
       .provider('$wampPublic', function ($wampProvider) {
           var host = location.hostname;
@@ -31,5 +35,5 @@
               return $injector.invoke($wampProvider.$get);
           };
       })
-
+*/
 })();

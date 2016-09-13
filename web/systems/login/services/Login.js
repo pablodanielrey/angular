@@ -7,8 +7,78 @@
 
   Login.$inject = ['$rootScope', '$window', '$q', '$cookies', '$wampPublic', '$wampCore'];
 
+  function wamp(conn) {
+    return {
+      connection = conn,
+      subscribe: function (topic, handler) {
+        connection.session.subscribe(topic, handler);
+      },
+      call: function (procedure, args) {
+        return connection.session.call(procedure, args);
+      }
+    };
+  }
+
   function Login($rootScope, $window, $q, $cookies, $wampPublic, $wampCore) {
     var service = this;
+
+    service.username = null;
+    service.password = null;
+    service.ticket = null;
+
+    service.privateConnection = null;
+    service.publicConnection = null;
+
+
+    service.getPublicTransport = function() {
+      return wamp(service.publicConnection);
+    }
+
+    service.getPrivateTransport = function() {
+      return wamp(service.privateConnection);
+    }
+
+
+    // inicializamos la conexión pública
+
+    var options = {
+        url: 'ws://' + host + ':80/ws',
+        realm: 'public',
+        authmethods: ['anonymous']
+    };
+    service.publicConnection = new autobahn.Connection(options);
+    service.publicConnection.onopen = function(session, details) {
+      // aca esta abierta la sesión.
+      console.log(details);
+    }
+    service.publicConnection.onclose = function(reason, details) {
+      console.log(reason);
+      console.log(details);
+
+      if (reason == 'lost') {
+        return true;
+      }
+
+      /*
+      case 'closed':
+          // doc
+          break;
+
+      case 'lost':
+          return true;
+
+      case 'unreachable':
+          // doc
+          break;
+
+      case 'unsupported':
+          // doc
+          break;
+          */
+    }
+
+
+
 
     /*
       Implementa el chequeo y reconexion para todos los sistemas.
@@ -21,7 +91,7 @@
       }
 
       // debo reconectarme con las nuevas credenciales en caso de no estar conectado
-      if (!$wampCore.connection.isOpen) {
+      if (!service.privateConnection.isOpen) {
         service._login(creds.username, creds.ticket).then(
           function(systems) {
             // nada
@@ -34,19 +104,14 @@
       }
     }
 
-    service.getTransport = function() {
-      return {
-          public: $wampPublic,
-          private: $wampCore
-      }
-    }
+
 
     service.getCredentials = function() {
       return service._getAuthCookie();
     }
 
     service.getPublicData = function(username) {
-      return $wampPublic.call('login.get_public_data', [username]);
+      return service.publicConnection.session.call('login.get_public_data', [username]);
     }
 
     service.login = function(username, password) {
@@ -57,6 +122,7 @@
     }
 
 
+    /*
     // retorno la cookie de ticket si es que existe para las reconexiones.
     service.autoreconnectauth = function(event, info)  {
       var creds = service._getAuthCookie();
@@ -68,8 +134,9 @@
       console.log(creds);
       return info.promise.resolve(creds.ticket);
     }
+*/
 
-
+/*
     service._login = function(username, password) {
 
       // armo la promesa que tiene en cuenta toda la cadena de eventos posibles.
@@ -125,6 +192,7 @@
 
       return defer.promise;
     }
+*/
 
     service.hasOneRole = function(roles) {
       return new Promise(function(cok, cerr) {
