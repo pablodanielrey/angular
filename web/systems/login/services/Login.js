@@ -19,7 +19,7 @@
     };
   }
 
-  function Login($rootScope, $window, $q, $cookies, $wampPublic, $wampCore) {
+  function Login($rootScope, $window, $q, $cookies) {
     var service = this;
 
     service.username = null;
@@ -57,8 +57,9 @@
       console.log(details);
 
       if (reason == 'lost') {
-        return true;
+        return false;
       }
+
 
       /*
       case 'closed':
@@ -77,6 +78,10 @@
           break;
           */
     }
+    service.publicConnection.open();
+
+
+
 
 
 
@@ -115,11 +120,53 @@
       return service.publicConnection.session.call('login.get_public_data', [username]);
     }
 
-    service.login = function(username, password) {
-      if ($wampCore.connection != undefined && $wampCore.connection != null && $wampCore.connection.isOpen) {
-        $wampCore.close();
+
+    service.getPrivateConnection = function(username, password) {
+      var d = $q.defer();
+
+      var host = '127.0.0.1';
+      var options = {
+          url: 'ws://' + host + ':80/ws',
+          realm: 'core',
+          authid: username,
+          authmethods: ['ticket'],
+          onchallenge: function(session, method, extra) {
+            console.log('onchallenge');
+            console.log(session);
+            console.log(method);
+            console.log(extra);
+            return password;
+          }
       }
-      return service._login(username, password);
+      var conn = new autobahn.Connection(options);
+      conn.onopen = function(session, details) {
+        // aca esta abierta la sesión.
+        service._setAuthCookie(details.authextra);
+        console.log(details);
+        d.resolve(conn);
+      }
+      conn.onclose = function(reason, details) {
+        console.log(reason);
+        console.log(details);
+        if (reason == 'lost') {
+          return false;
+        }
+        d.reject(new Error(reason));
+      }
+      conn.open();
+      return d
+    }
+
+
+    service.login = function(username, password) {
+      var d = $q.defer();
+      service.getPrivateConnection(username, password).then(function(conn) {
+        service.privateConnection = conn;
+        d.resolve('logueado');
+      }, function(err) {
+        d.reject(err);
+      });
+      return d.promise;
     }
 
 
