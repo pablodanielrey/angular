@@ -5,7 +5,7 @@
     .module('login')
     .service('Login', Login);
 
-  Login.$inject = ['$rootScope', '$window', '$q', '$cookies', '$wampPublic', '$wampCore'];
+  Login.$inject = ['$rootScope', '$window', '$q', '$cookies'];
 
   function wamp(conn) {
     return {
