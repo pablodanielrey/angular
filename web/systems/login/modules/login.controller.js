@@ -22,9 +22,9 @@
     });
 
 
-  LoginCtrl.$inject = ['$scope','$window', '$interval', '$location', 'Login', 'Files'];
+  LoginCtrl.$inject = ['$scope','$window', '$interval', '$location', 'Login', 'Files', '$q'];
 
-  function LoginCtrl($scope, $window, $interval, $location, Login, Files) {
+  function LoginCtrl($scope, $window, $interval, $location, Login, Files, $q) {
 
     /* ---------------------------------------------------
      * --------------------- VARIABLES -------------------
@@ -137,7 +137,7 @@
        }
 
        function sendPassword() {
-         Login.login($scope.model.username, $scope.model.password).then(
+         Login.login($scope.model.username, $scope.model.password).then(Login.getRegisteredSystems()).then(
            function(systems) {
              console.log(systems);
              for (var i = 0; i < systems['registered'].length; i++) {

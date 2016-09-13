@@ -49,7 +49,6 @@
     };
     service.publicConnection = new autobahn.Connection(options);
     service.publicConnection.onopen = function(session, details) {
-      // aca esta abierta la sesión.
       console.log(details);
     }
     service.publicConnection.onclose = function(reason, details) {
@@ -59,36 +58,10 @@
       if (reason == 'lost') {
         return false;
       }
-
-
-      /*
-      case 'closed':
-          // doc
-          break;
-
-      case 'lost':
-          return true;
-
-      case 'unreachable':
-          // doc
-          break;
-
-      case 'unsupported':
-          // doc
-          break;
-          */
     }
     service.publicConnection.open();
 
 
-
-
-
-
-
-    /*
-      Implementa el chequeo y reconexion para todos los sistemas.
-    */
     service.check = function() {
       var creds = service._getAuthCookie();
       if (creds == null) {
@@ -141,6 +114,8 @@
       var conn = new autobahn.Connection(options);
       conn.onopen = function(session, details) {
         // aca esta abierta la sesión.
+        $rootScope.$broadcast('wamp.open');
+
         service._setAuthCookie(details.authextra);
         console.log(details);
         d.resolve(conn);
@@ -148,13 +123,16 @@
       conn.onclose = function(reason, details) {
         console.log(reason);
         console.log(details);
+
+        $rootScope.$broadcast('wamp.close');
+
         if (reason == 'lost') {
           return false;
         }
         d.reject(new Error(reason));
       }
       conn.open();
-      return d
+      return d.promise;
     }
 
 
@@ -162,85 +140,16 @@
       var d = $q.defer();
       service.getPrivateConnection(username, password).then(function(conn) {
         service.privateConnection = conn;
-        d.resolve('logueado');
+        d.resolve(conn);
       }, function(err) {
         d.reject(err);
       });
       return d.promise;
     }
 
-
-    /*
-    // retorno la cookie de ticket si es que existe para las reconexiones.
-    service.autoreconnectauth = function(event, info)  {
-      var creds = service._getAuthCookie();
-      if (creds == null) {
-        $window.location.href = '/';
-        return;
-      }
-
-      console.log(creds);
-      return info.promise.resolve(creds.ticket);
+    service.getRegisteredSystems = function(conn) {
+      return conn.session.call('login.get_registered_systems');
     }
-*/
-
-/*
-    service._login = function(username, password) {
-
-      // armo la promesa que tiene en cuenta toda la cadena de eventos posibles.
-      var defer = $q.defer();
-
-      var events = [];
-
-      // challege del wamp que se autentifica
-      events.push($rootScope.$on("$wampCore.onchallenge", function(event, info) {
-        // info.promise: promise to return to wamp,
-        // info.session: wamp session,
-        // info.method: auth method,
-        // info.extra: extra
-        //ie. wamp-cra
-        $rootScope.$on("$wampCore.onchallenge", service.autoreconnectauth);
-
-        console.log('retornando clave challenge');
-        return info.promise.resolve(password);
-      }));
-
-      events.push($rootScope.$on("$wampCore.open", function(event, info) {
-        console.log(info);
-
-        // seteo la cookie de autentificacion para ese usuario con la info retornada por el autenticador de crossbar.
-        service._setAuthCookie(info.details.authextra);
-
-        console.log('obteniendo los sistemas registrados');
-        $wampCore.call('login.get_registered_systems').then(
-          function(systems) {
-            service._deregisterEvents(events);
-            defer.resolve(systems);
-          },
-          function(err) {
-            service._deregisterEvents(events);
-            defer.reject(err);
-          });
-      }));
-
-      events.push($rootScope.$on("$wampCore.close", function(event, info) {
-        console.log(info);
-        service._deregisterEvents(events);
-        defer.reject(info);
-      }));
-
-      events.push($rootScope.$on("$wampCore.error", function(event, info) {
-        console.log(info);
-        service._deregisterEvents(events);
-        defer.reject(info);
-      }));
-
-      $wampCore.setAuthId(username);
-      $wampCore.open();
-
-      return defer.promise;
-    }
-*/
 
     service.hasOneRole = function(roles) {
       return new Promise(function(cok, cerr) {
@@ -255,15 +164,6 @@
     };
 
 
-    /*
-      usado para desregistrar los eventos registrados en login() en rootScope para el manejo de wamp.
-    */
-    service._deregisterEvents = function(events) {
-      for (var i = 0; i < events.length; i++) {
-        events[i]();
-      }
-    }
-
     service.logout = function() {
       $cookies.remove('authlogin', {path:'/'});
       service.check();
@@ -277,30 +177,5 @@
     service._getAuthCookie = function() {
       return $cookies.getObject('authlogin');
     }
-
-    service.connected = 0;
-
-    service._open = function() {
-      service.connecetd = service.conected + 1;
-      $rootScope.$broadcast('wamp.open');
-    }
-
-    service._close = function() {
-      service.connected = service.connected - 1;
-      if (service.connected <= 0) {
-        $rootScope.$broadcast('wamp.close');
-      }
-    }
-
-    $rootScope.$on('$wampPublic.open', function(event) {
-      service._open();
-    });
-
-    $rootScope.$on('$wampPublic.close', function(event) {
-      service._close();
-    });
-
-
-  };
-
+  }
 })();
