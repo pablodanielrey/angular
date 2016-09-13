@@ -9,7 +9,7 @@
 
   function wamp(conn) {
     return {
-      connection = conn,
+      connection: conn,
       subscribe: function (topic, handler) {
         connection.session.subscribe(topic, handler);
       },
