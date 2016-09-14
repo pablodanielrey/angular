@@ -60,7 +60,8 @@ class Mail:
 
     def _sendMail(self, ffrom, tos, body):
         host = self.registry.get('host')
-        s = smtplib.SMTP(host)
+        port = int(self.registry.get('port'))
+        s = smtplib.SMTP(host=host, port=port)
         try:
             if s == None:
               raise MailServerNotFound()
