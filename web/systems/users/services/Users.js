@@ -13,7 +13,7 @@
       this.findById = findById;
       this.findPhoto = findPhoto;
 
-      this.$wamp = Login.getTransport().private;
+      this.$wamp = Login.getPrivateTransport();
 
       function findById(ids) {
         return this.$wamp.call('users.find_by_id', [ids]);

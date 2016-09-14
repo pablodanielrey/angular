@@ -8,7 +8,7 @@
 
 		function Offices(Login) {
 
-			this.$wamp = Login.getTransport().private;
+			this.$wamp = Login.getPrivateTransport()
 
 			this.getOfficesByUser = function (userId, tree) {
 				return this.$wamp.call('offices.find_offices_by_user', [userId, tree]);

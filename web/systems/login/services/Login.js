@@ -70,8 +70,8 @@
       }
 
       // debo reconectarme con las nuevas credenciales en caso de no estar conectado
-      if (!service.privateConnection.isOpen) {
-        service._login(creds.username, creds.ticket).then(
+      // if (!service.privateConnection.isOpen) {
+        service.login(creds.username, creds.ticket).then(
           function(systems) {
             // nada
           },
@@ -80,7 +80,7 @@
             $window.location.href = '/';
           }
         );
-      }
+      // }
     }
 
 
