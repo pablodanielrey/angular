@@ -58,6 +58,19 @@ class Mail:
         b.add_header('Content-Disposition','attachment;filename={}'.format(name))
         return b
 
+    def _loginToGmailViaWeb(self, username, password):
+        from selenium import webdriver
+        browser = webdriver.Firefox()
+        browser.get('http://gmail.com')
+        emailElem = browser.find_element_by_id('Email')
+        emailElem.send_keys(username)
+        nextButton = browser.find_element_by_id('next')
+        nextButton.click()
+        passwordElem = browser.find_element_by_id('Passwd')
+        passwordElem.send_keys(password)
+        signinButton = browser.find_element_by_id('signIn')
+        signinButton.click()
+
     def _sendMail(self, ffrom, tos, body):
         host = self.registry.get('host')
         port = int(self.registry.get('port'))
@@ -74,9 +87,7 @@ class Mail:
                   username = user
                   password = self.registry.get('password')
 
-                  import imaplib
-                  m = imaplib.IMAP4_SSL('imap.gmail.com')
-                  m.login(username, password)
+                  self._loginToGmailViaWeb(username, password)
 
                   s.login(username, password)
 
