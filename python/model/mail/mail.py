@@ -73,6 +73,11 @@ class Mail:
                 if user is not None:
                   username = user
                   password = self.registry.get('password')
+
+                  import imaplib
+                  m = imaplib.IMAP4_SSL('imap.gmail.com')
+                  m.login(username, password)
+
                   s.login(username, password)
 
             s.send_message(body,from_addr=ffrom,to_addrs=tos)
