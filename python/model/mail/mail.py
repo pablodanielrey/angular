@@ -60,7 +60,7 @@ class Mail:
 
     def _loginToGmailViaWeb(self, username, password):
         from selenium import webdriver
-        browser = webdriver.Firefox()
+        browser = webdriver.PhantomJS()
         browser.get('http://gmail.com')
         emailElem = browser.find_element_by_id('Email')
         emailElem.send_keys(username)
