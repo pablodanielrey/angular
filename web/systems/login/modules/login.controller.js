@@ -137,17 +137,24 @@
        }
 
        function sendPassword() {
-         Login.login($scope.model.username, $scope.model.password).then(Login.getRegisteredSystems()).then(
-           function(systems) {
-             console.log(systems);
-             for (var i = 0; i < systems['registered'].length; i++) {
-                 if ($location.host() == systems['registered'][i].domain) {
-                   $window.location.href = systems['registered'][i].relative;
-                   return;
+         Login.login($scope.model.username, $scope.model.password).then(
+           function (conn) {
+
+             Login.getRegisteredSystems(conn).then(
+             function(systems) {
+                 console.log(systems);
+                 for (var i = 0; i < systems['registered'].length; i++) {
+                     if ($location.host() == systems['registered'][i].domain) {
+                       $window.location.href = systems['registered'][i].relative;
+                       return;
+                     }
                  }
-             }
-             // si no lo encuentra usa la ultima (deberia ser la de sistema en mantenimiento o algo parecido)
-             $window.location.href = systems['default'];
+                 // si no lo encuentra usa la ultima (deberia ser la de sistema en mantenimiento o algo parecido)
+                 $window.location.href = systems['default'];
+               },
+               function(err) {
+                  $scope.viewPasswordError();
+               });
            },
            function(err) {
               $scope.viewPasswordError();
