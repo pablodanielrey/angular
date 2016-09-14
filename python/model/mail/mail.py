@@ -61,7 +61,8 @@ class Mail:
     def _sendMail(self, ffrom, tos, body):
         host = self.registry.get('host')
         port = int(self.registry.get('port'))
-        s = smtplib.SMTP(host=host, port=port)
+        s = smtplib.SMTP_SSL(host=host, port=port)
+        s.set_debuglevel(True)
         try:
             if s == None:
               raise MailServerNotFound()
