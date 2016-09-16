@@ -111,7 +111,7 @@
       var creds = service._getAuthCookie();
       if (creds == null) {
         d.reject("creds == null");
-        return;
+        return d.promise;
       }
 
       // debo reconectarme con las nuevas credenciales en caso de no estar conectado
@@ -211,7 +211,8 @@
 
     service.logout = function() {
       $cookies.remove('authlogin', {path:'/'});
-      service.check();
+      service.privateConnection.close();
+      $window.location.href = '/';
     }
 
     service._setAuthCookie = function(info) {

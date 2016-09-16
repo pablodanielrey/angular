@@ -199,8 +199,10 @@
         }
 
         function viewPassword() {
-          $scope.view.classScreen = classNameViewPassword;
-          $scope.view.classError = classNameNoError;
+          $scope.$apply(function() {
+            $scope.view.classScreen = classNameViewPassword;
+            $scope.view.classError = classNameNoError;
+          });
         }
 
         function viewPasswordError() {

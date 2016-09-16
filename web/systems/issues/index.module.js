@@ -2,7 +2,7 @@
   'user strict'
   angular
       .module('issues',['ngRoute','login','users','offices','files','fce'])
-      .run(function(Login) {
+      .run(function(Login, $window) {
         Login.check().then(
           function(conn) {
             console.log("Conexion establecida");
