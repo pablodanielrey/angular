@@ -9,17 +9,7 @@
 
     function wamp()  {
         var factory  =   {};
-        var data  =   {};
         var connection = null;
-        data.year = 1975;
-
-        factory.getData =   function ()  {
-            return data;
-        };
-
-        factory.setData = function(d) {
-          data = d;
-        };
 
         factory.init = function(conn) {
           connection = conn;
@@ -33,31 +23,8 @@
           return connection.session.call(procedure, args);
         };
 
-        factory.calculaEdad = function(edad){
-            return 2014 - edad;
-        }
-
         return factory;
     };
-
-    /*
-    function wamp() {
-
-      return {
-        connection: 'hola',
-        Hello: function() {
-          return "Hello, World!"
-       },
-        subscribe: function (topic, handler) {
-          connection.session.subscribe(topic, handler);
-        },
-        call: function (procedure, args) {
-          return connection.session.call(procedure, args);
-        }
-      };
-
-    };
-    */
 
   Login.$inject = ['$rootScope', '$window', '$q', '$cookies', 'wamp'];
 
@@ -124,6 +91,8 @@
             d.reject(err);
           }
         );
+      } else {
+        d.resolve(service.privateConnection);
       }
       return d.promise;
     }

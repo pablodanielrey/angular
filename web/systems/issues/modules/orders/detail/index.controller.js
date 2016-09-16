@@ -51,8 +51,10 @@
 
           IssuesDD.issueDetail(params.issueId).then(
             function(issue) {
-              vm.model.issue = issue;
-              closeMessage();
+              $scope.$apply(function() {
+                vm.model.issue = issue;
+                closeMessage();
+              });
             },
             function(error) {
               messageError(error);

@@ -83,9 +83,12 @@
                 vm.loadUser(issues[i].userId);
                 vm.loadUser(issues[i].creatorId);
               }
-              vm.model.issues = issues;
-              vm.sortStatus();
-              vm.closeMessage();
+              $scope.$apply(function() {
+                vm.model.issues = issues;
+                vm.sortStatus();
+                vm.closeMessage();
+              })
+
             },
             function(error) {
               vm.messageError(error);

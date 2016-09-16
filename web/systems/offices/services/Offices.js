@@ -4,11 +4,11 @@
 			.module('offices')
 			.service('Offices',Offices);
 
-		Offices.inject = ['Login', 'wamp'];
+		Offices.inject = ['Login'];
 
 		function Offices(Login) {
 
-			this.$wamp = null;
+			this.$wamp = Login.getPrivateTransport();
 
 			this.setTransport = function(wamp) {
 				this.$wamp = wamp;

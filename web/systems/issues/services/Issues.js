@@ -21,7 +21,8 @@
 			this.getOfficeSubjects = getOfficeSubjects;
 			this.subscribe = subscribe;
 			this.searchUsers = searchUsers;
-			this.$wamp = null;
+			this.$wamp = Login.getPrivateTransport();
+
 
 			this.setTransport = function(wamp) {
 				this.$wamp = (this.$wamp== null) ? wamp : this.$wamp;
