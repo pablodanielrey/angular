@@ -3,23 +3,65 @@
 
   angular
     .module('login')
+    .factory('wamp', wamp)
     .service('Login', Login);
 
-  Login.$inject = ['$rootScope', '$window', '$q', '$cookies'];
 
-  function wamp(conn) {
-    return {
-      connection: conn,
-      subscribe: function (topic, handler) {
-        connection.session.subscribe(topic, handler);
-      },
-      call: function (procedure, args) {
-        return connection.session.call(procedure, args);
-      }
+    function wamp()  {
+        var factory  =   {};
+        var data  =   {};
+        var connection = null;
+        data.year = 1975;
+
+        factory.getData =   function ()  {
+            return data;
+        };
+
+        factory.setData = function(d) {
+          data = d;
+        };
+
+        factory.init = function(conn) {
+          connection = conn;
+        };
+
+        factory.subscribe = function(topic, handler) {
+          connection.session.subscribe(topic, handler);
+        };
+
+        factory.call = function (procedure, args) {
+          return connection.session.call(procedure, args);
+        };
+
+        factory.calculaEdad = function(edad){
+            return 2014 - edad;
+        }
+
+        return factory;
     };
-  }
 
-  function Login($rootScope, $window, $q, $cookies) {
+    /*
+    function wamp() {
+
+      return {
+        connection: 'hola',
+        Hello: function() {
+          return "Hello, World!"
+       },
+        subscribe: function (topic, handler) {
+          connection.session.subscribe(topic, handler);
+        },
+        call: function (procedure, args) {
+          return connection.session.call(procedure, args);
+        }
+      };
+
+    };
+    */
+
+  Login.$inject = ['$rootScope', '$window', '$q', '$cookies', 'wamp'];
+
+  function Login($rootScope, $window, $q, $cookies, wamp) {
     var service = this;
 
     service.username = null;
@@ -31,11 +73,13 @@
 
 
     service.getPublicTransport = function() {
-      return wamp(service.publicConnection);
+      wamp.init(service.publicConnection);
+      return wamp;
     }
 
     service.getPrivateTransport = function() {
-      return wamp(service.privateConnection);
+      wamp.init(service.privateConnection);
+      return wamp;
     }
 
 
@@ -63,24 +107,25 @@
 
 
     service.check = function() {
+      var d = $q.defer();
       var creds = service._getAuthCookie();
       if (creds == null) {
-        $window.location.href = '/';
+        d.reject("creds == null");
         return;
       }
 
       // debo reconectarme con las nuevas credenciales en caso de no estar conectado
-      // if (!service.privateConnection.isOpen) {
+      if (service.privateConnection == null || !service.privateConnection.isOpen) {
         service.login(creds.username, creds.ticket).then(
-          function(systems) {
-            // nada
+          function(conn) {
+            d.resolve(conn);
           },
           function(err) {
-            console.log(err);
-            $window.location.href = '/';
+            d.reject(err);
           }
         );
-      // }
+      }
+      return d.promise;
     }
 
 

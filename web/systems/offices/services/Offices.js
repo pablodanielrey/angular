@@ -4,11 +4,15 @@
 			.module('offices')
 			.service('Offices',Offices);
 
-		Offices.inject = ['Login'];
+		Offices.inject = ['Login', 'wamp'];
 
 		function Offices(Login) {
 
-			this.$wamp = Login.getPrivateTransport()
+			this.$wamp = null;
+
+			this.setTransport = function(wamp) {
+				this.$wamp = wamp;
+			}
 
 			this.getOfficesByUser = function (userId, tree) {
 				return this.$wamp.call('offices.find_offices_by_user', [userId, tree]);

@@ -49,13 +49,22 @@
         activate();
 
         function activate() {
-          vm.model.userId = Login.getCredentials().userId;
-          vm.loadUserOffices(vm.model.userId);
-          vm.view.reverseSortDate = true;
-          vm.view.reverseSortStatus = true;
-          vm.view.reverseSortPriority = false;
-          registerEventManagers();
-          loadIssues();
+          Login.check().then(
+              function(conn) {
+                Offices.setTransport(Login.getPrivateTransport());
+                Issues.setTransport(Login.getPrivateTransport());
+                vm.model.userId = Login.getCredentials().userId;
+                vm.loadUserOffices(vm.model.userId);
+                vm.view.reverseSortDate = true;
+                vm.view.reverseSortStatus = true;
+                vm.view.reverseSortPriority = false;
+                registerEventManagers();
+                loadIssues();
+              },
+              function(error) {
+                console.log(error);
+              }
+          )
         }
 
         function  loadIssues() {
