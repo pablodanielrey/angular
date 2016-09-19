@@ -116,13 +116,6 @@ function IngresantesCtrl($rootScope, $scope, $window, Notifications, Users, Stud
           $wamp.call('ingreso.user.findMails', [user.id]).then(
             function(mails) {
 
-              // elimino los mails que sean de dominios econo.
-              for (var i = 0; i < mails.lenght; i = i + 1) {
-                if (mails[i].email.indexOf("econo.unlp.edu.ar") !== -1) {
-
-                }
-              }
-
               if (mails == null || mails.length <= 0) {
                 // no tiene emails. por lo que esta perfecto. paso de pantalla
                 $scope.changeScreen();
