@@ -74,7 +74,8 @@ class Mail:
     def _sendMail(self, ffrom, tos, body):
         host = self.registry.get('host')
         port = int(self.registry.get('port'))
-        s = smtplib.SMTP_SSL(host=host, port=port)
+        #s = smtplib.SMTP_SSL(host=host, port=port)
+        s = smtplib.SMTP(host=host, port=port)
         s.set_debuglevel(True)
         try:
             if s == None:
@@ -87,7 +88,7 @@ class Mail:
                   username = user
                   password = self.registry.get('password')
 
-                  self._loginToGmailViaWeb(username, password)
+                  #self._loginToGmailViaWeb(username, password)
 
                   s.login(username, password)
 
