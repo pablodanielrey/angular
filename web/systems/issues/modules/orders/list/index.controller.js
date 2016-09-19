@@ -15,7 +15,8 @@
           userId: null, //usuario logueado
           users: [],
           issues: [],
-          userOffices: []
+          userOffices: [],
+          privateTransport: null,
         }
 
         vm.view = {
@@ -46,25 +47,26 @@
         vm.loadUserOffices = loadUserOffices;
 
 
+        $scope.$on('openPrivateConnection', function(event, args) {
+          vm.model.privateTransport = Login.getPrivateTransport();
+          activate();
+        });
+
         activate();
 
+
         function activate() {
-          Login.check().then(
-              function(conn) {
-                Offices.setTransport(Login.getPrivateTransport());
-                Issues.setTransport(Login.getPrivateTransport());
-                vm.model.userId = Login.getCredentials().userId;
-                vm.loadUserOffices(vm.model.userId);
-                vm.view.reverseSortDate = true;
-                vm.view.reverseSortStatus = true;
-                vm.view.reverseSortPriority = false;
-                registerEventManagers();
-                loadIssues();
-              },
-              function(error) {
-                console.log(error);
-              }
-          )
+          if (Login.getPrivateTransport().getConnection() == null) {
+            return;
+          }
+
+          vm.model.userId = Login.getCredentials().userId;
+          vm.loadUserOffices(vm.model.userId);
+          vm.view.reverseSortDate = true;
+          vm.view.reverseSortStatus = true;
+          vm.view.reverseSortPriority = false;
+          registerEventManagers();
+          loadIssues();
         }
 
         function  loadIssues() {

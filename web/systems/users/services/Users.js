@@ -13,14 +13,12 @@
       this.findById = findById;
       this.findPhoto = findPhoto;
 
-      this.$wamp = Login.getPrivateTransport();
-
       function findById(ids) {
-        return this.$wamp.call('users.find_by_id', [ids]);
+        return Login.getPrivateTransport().call('users.find_by_id', [ids]);
       }
 
       function findPhoto(photoId) {
-        return this.$wamp.call('users.find_photo', [photoId]);
+        return Login.getPrivateTransport().call('users.find_photo', [photoId]);
       };
 
       this.normalizeUser = function(user) {
@@ -59,7 +57,7 @@
 
       this.findByDni = function(dni) {
         return new Promise(function(cok, cerr) {
-          $wamp.call('users.findByDni', [dni])
+          Login.getPrivateTransport().call('users.findByDni', [dni])
           .then(function(data) {
             if (data == null) {
               cerr(Error('No existe ese usuario'));
@@ -67,7 +65,7 @@
             };
             var id = data[0];
             var version = data[1];
-            $wamp.call('users.findById', [[id]])
+            Login.getPrivateTransport().call('users.findById', [[id]])
             .then(function(users) {
               cok(users);
             }, function(err) {
@@ -87,7 +85,7 @@
       });
 
         this.deleteMail = function(id, callbackOk, callbackError) {
-          $wamp.call('users.mails.deleteMail', [id])
+          Login.getPrivateTransport().call('users.mails.deleteMail', [id])
             .then(function(res) {
               if (res != null) {
                 callbackOk(res);
@@ -100,7 +98,7 @@
         }
 
       this.confirmMail = function(hash, callbackOk, callbackError) {
-        $wamp.call('users.mails.confirmEmail', [hash])
+        Login.getPrivateTransport().call('users.mails.confirmEmail', [hash])
           .then(function(res) {
             if (res != null) {
               callbackOk(res);
@@ -116,7 +114,7 @@
         Envía un mail de confirmación al email dado por mail_id
       */
       this.sendConfirmMail = function(id, callbackOk, callbackError) {
-        $wamp.call('users.mails.sendEmailConfirmation', [id])
+        Login.getPrivateTransport().call('users.mails.sendEmailConfirmation', [id])
           .then(function(res) {
             if (res != null) {
               callbackOk(res);
@@ -129,7 +127,7 @@
       }
 
       this.addMail = function(userId, email, callbackOk, callbackError) {
-        $wamp.call('users.mails.persistMail', [userId, email])
+        Login.getPrivateTransport().call('users.mails.persistMail', [userId, email])
           .then(function(res) {
             if (res != null) {
               callbackOk(res);
@@ -142,7 +140,7 @@
       }
 
       this.findMails = function(userId, callbackOk, callbackError) {
-        $wamp.call('users.mails.findMails', [userId])
+        Login.getPrivateTransport().call('users.mails.findMails', [userId])
           .then(function(res) {
             if (res != null) {
               callbackOk(res);
@@ -165,7 +163,7 @@
         //  return;
         //}
 
-        $wamp.call('users.findById', [id])
+        Login.getPrivateTransport().call('users.findById', [id])
           .then(function(user) {
             if (user != null) {
               user = this.normalizeUser(user);
@@ -188,7 +186,7 @@
 
         user = this.normalizeUser(user);
 
-        $wamp.call('users.persistUser', [user])
+        Login.getPrivateTransport().call('users.persistUser', [user])
           .then(function(res) {
             if (res != null) {
               callbackOk(res);
@@ -202,7 +200,7 @@
 
 
       this.listUsers = function(search, callbackOk, callbackError) {
-        $wamp.call('users.findUsersIds')
+        Login.getPrivateTransport().call('users.findUsersIds')
           .then(function(ids) {
             if (ids != null) {
 
@@ -225,7 +223,7 @@
                 return;
               }
 
-              $wamp.call('users.findUsersByIds', [remainingIds])
+              Login.getPrivateTransport().call('users.findUsersByIds', [remainingIds])
                 .then(function(users) {
                   if (users != null) {
 
@@ -257,15 +255,15 @@
       */
 
       this.findAllMails = function(userId) {
-        return $wamp.call('users.mails.findMails', [userId]);
+        return Login.getPrivateTransport().call('users.mails.findMails', [userId]);
       }
 
       this.persistMail = function(email) {
-        return $wamp.call('users.mails.persistMail', [email]);
+        return Login.getPrivateTransport().call('users.mails.persistMail', [email]);
       }
 
       this.removeMail = function(id) {
-        return $wamp.call('users.mails.deleteMail', [id]);
+        return Login.getPrivateTransport().call('users.mails.deleteMail', [id]);
       }
 
       // esto lo modifique solo para obtener el usuario por dni, no se como se deberia manejar con la cache

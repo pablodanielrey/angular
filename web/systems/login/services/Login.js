@@ -23,6 +23,10 @@
           return connection.session.call(procedure, args);
         };
 
+        factory.getConnection = function() {
+          return connection;
+        };
+
         return factory;
     };
 
@@ -73,7 +77,7 @@
     service.publicConnection.open();
 
 
-    service.check = function() {
+    /*service.check = function() {
       var d = $q.defer();
       var creds = service._getAuthCookie();
       if (creds == null) {
@@ -86,6 +90,7 @@
         service.login(creds.username, creds.ticket).then(
           function(conn) {
             d.resolve(conn);
+            $rootScope.$broadcast('openPrivateConnection');
           },
           function(err) {
             d.reject(err);
@@ -95,6 +100,28 @@
         d.resolve(service.privateConnection);
       }
       return d.promise;
+    }*/
+
+
+    service.check = function() {
+      var creds = service._getAuthCookie();
+      if (creds == null) {
+        $window.location.href = '/';
+        return;
+      }
+
+      // debo reconectarme con las nuevas credenciales en caso de no estar conectado
+      if (service.privateConnection == null || !service.privateConnection.isOpen) {
+        service.login(creds.username, creds.ticket).then(
+          function(conn) {
+            $rootScope.$broadcast('openPrivateConnection');
+          },
+          function(err) {
+            console.log(err);
+            $window.location.href = '/';
+          }
+        );
+      }
     }
 
 

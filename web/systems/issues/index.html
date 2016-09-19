@@ -78,7 +78,7 @@
 
 <body class="sistema  {{styleMenu}}" ng-controller="IndexCtrl">
 
-    <div ng-include="'../fce/modules/header/index.html'" ng-controller="HeaderCtrl"></div>
+    <div ng-include="'../fce/modules/header/index.html'" ng-controller="HeaderCtrl as vm"></div>
     <div class="main">
       <div class="MenuContent" ng-controller="MenuCtrl" ng-include="'modules/menu/index.html?t=' + time"></div>
       <div class="MenuCel" ng-controller="MenuCelCtrl" ng-include="'modules/menuCel/index.html?t=' + time"></div>

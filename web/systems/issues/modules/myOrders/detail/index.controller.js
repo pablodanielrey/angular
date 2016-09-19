@@ -5,14 +5,15 @@
         .module('issues')
         .controller('MyOrdersDetailCtrl', MyOrdersDetailCtrl);
 
-    MyOrdersDetailCtrl.$inject = ['$scope', '$routeParams', '$location', '$timeout', 'Issues', 'Users', 'Files', 'Offices'];
+    MyOrdersDetailCtrl.$inject = ['$scope', '$routeParams', '$location', '$timeout', 'Issues', 'Users', 'Files', 'Offices', 'Login'];
 
     /* @ngInject */
-    function MyOrdersDetailCtrl($scope, $routeParams, $location, $timeout, Issues, Users, Files, Offices) {
+    function MyOrdersDetailCtrl($scope, $routeParams, $location, $timeout, Issues, Users, Files, Offices, Login) {
         var vm = this;
         vm.model = {
           issue: null,
-          users: []
+          users: [],
+          privateTransport: null
         }
 
         vm.view = {
@@ -38,9 +39,18 @@
         vm.messageError = messageError;
         vm.messageSending = messageSending;
 
+        $scope.$on('openPrivateConnection', function(event, args) {
+          vm.model.privateTransport = Login.getPrivateTransport();
+          activate();
+        });
+
         activate();
 
+
         function activate() {
+          if (Login.getPrivateTransport().getConnection() == null) {
+            return;
+          }
           var params = $routeParams;
           if (params.issueId == undefined) {
             $location.path('/myOrders');

@@ -21,7 +21,8 @@
           selectedFromOffice: null,
           searchOffice: {name: ''},
           subject: '',
-          userOffices: [] //oficinas del usuario logueado (origen)
+          userOffices: [], //oficinas del usuario logueado (origen)
+          privateTransport: null
         };
 
         vm.view = {
@@ -41,10 +42,18 @@
 
 
 
+        $scope.$on('openPrivateConnection', function(event, args) {
+          vm.model.privateTransport = Login.getPrivateTransport();
+          activate();
+        });
+
         activate();
 
 
         function activate() {
+          if (Login.getPrivateTransport().getConnection() == null) {
+            return;
+          }
           vm.model.userId = Login.getCredentials().userId;
           loadOffices();
           loadUserOffices(vm.model.userId);

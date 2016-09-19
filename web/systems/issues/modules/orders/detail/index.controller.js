@@ -13,7 +13,8 @@
 
         // variables del modelo
         vm.model = {
-          issue: null, //issue inicial
+          privateTransport: null,
+          issue: null //issue inicial
         }
 
         // variables de la vista
@@ -38,9 +39,18 @@
         vm.selectPriority = selectPriority; //seleccion de estado
         vm.setPriority = setPriority; //cambio de estado
 
+        $scope.$on('openPrivateConnection', function(event, args) {
+          vm.model.privateTransport = Login.getPrivateTransport();
+          activate();
+        });
+
         activate();
 
+
         function activate() {
+          if (Login.getPrivateTransport().getConnection() == null) {
+            return;
+          }
           vm.model.userId = Login.getCredentials()['userId'];
           vm.view.style2 = vm.view.styles2[0];
           vm.view.style3 = vm.view.styles3[0];

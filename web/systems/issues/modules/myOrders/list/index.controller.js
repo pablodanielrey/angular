@@ -15,7 +15,8 @@
           userId: null, //usuario logueado
           users: [],
           issues: [],
-          userOffices: []
+          userOffices: [],
+          privateTransport: null
         }
 
         vm.view = {
@@ -55,10 +56,18 @@
         }
 
 
+        $scope.$on('openPrivateConnection', function(event, args) {
+          vm.model.privateTransport = Login.getPrivateTransport();
+          activate();
+        });
+
         activate();
 
 
         function activate() {
+          if (Login.getPrivateTransport().getConnection() == null) {
+            return;
+          }
           vm.model.userId = Login.getCredentials().userId;
           vm.loadUserOffices(vm.model.userId);
           vm.model.issues = [];

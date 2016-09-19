@@ -58,7 +58,7 @@
   -webkit-align-items:center; /* Safari */
   -moz-align-items:center; /* mozilla */
   margin-right: 10px;
-  cursor: pointer;
+  /*cursor: pointer;*/
 }
 
 .headerFce .imgUserRecent {

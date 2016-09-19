@@ -27,7 +27,8 @@
           searchArea: {name:''},
           subject: '',
           description: '',
-          files: []
+          files: [],
+          privateTransport: null
         }
 
 
@@ -43,7 +44,6 @@
         }
 
         // métodos
-        activate();
         vm.cancel = cancel;
         vm.searchUsers = searchUsers;
         vm.getUserPhoto = getUserPhoto;
@@ -58,7 +58,18 @@
         vm.selectSubject = selectSubject;
         vm.save = save;
 
+        $scope.$on('openPrivateConnection', function(event, args) {
+          vm.model.privateTransport = Login.getPrivateTransport();
+          activate();
+        });
+
+        activate();
+
+
         function activate() {
+          if (Login.getPrivateTransport().getConnection() == null) {
+            return;
+          }
           vm.model.userId = Login.getCredentials()['userId'];
           vm.model.user = {name:'-'};
           vm.model.search = '';

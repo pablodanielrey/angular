@@ -5,15 +5,16 @@
         .module('issues')
         .controller('OrdersCommentCtrl', OrdersCommentCtrl);
 
-    OrdersCommentCtrl.$inject = ['$scope', '$routeParams', '$location', '$timeout', 'Issues', 'Files'];
+    OrdersCommentCtrl.$inject = ['$scope', '$routeParams', '$location', '$timeout', 'Issues', 'Files', 'Login'];
 
-    function OrdersCommentCtrl($scope, $routeParams, $location, $timeout, Issues, Files) {
+    function OrdersCommentCtrl($scope, $routeParams, $location, $timeout, Issues, Files, Login) {
         var vm = this;
 
         vm.model = {
           issue:{}, //issue padre
           files:[], //archivos del comentario del issue
           replyDescription: '', //descripcion del comentario del issue
+          privateTransport: null
         }
 
         vm.view = {
@@ -27,10 +28,18 @@
         vm.removeFile = removeFile;
         vm.createComment = createComment;
 
+        $scope.$on('openPrivateConnection', function(event, args) {
+          vm.model.privateTransport = Login.getPrivateTransport();
+          activate();
+        });
 
         activate();
 
+
         function activate() {
+          if (Login.getPrivateTransport().getConnection() == null) {
+            return;
+          }
           messageLoading();
           vm.model.files = [];
           Issues.findById($routeParams.issueId).then(
