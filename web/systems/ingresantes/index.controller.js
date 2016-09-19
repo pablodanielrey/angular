@@ -125,7 +125,7 @@ function IngresantesCtrl($rootScope, $scope, $window, Notifications, Users, Stud
               var i = 0;
               for (i = 0; i < mails.length; i++) {
                 var m = mails[i];
-                if ((m.confirmed) && (m.email.indexOf("econo.unlp.edu.ar") !== -1)) {
+                if ((m.confirmed) && (m.email.indexOf("econo.unlp.edu.ar") == -1)) {
                   $scope.model.se = 2;
                   console.log(m);
                   return;
