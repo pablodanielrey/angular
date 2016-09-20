@@ -160,11 +160,7 @@ class RedmineAPI:
             return None
         up = ups[0]
 
-        users = redmine.user.filter(name=up.username)
-        if len(users) <= 0:
-            return None
-
-        user = users[0]
+        user = cls._getUserRedmine(up, userId, con)
         return user.id
 
     @classmethod
@@ -176,18 +172,17 @@ class RedmineAPI:
             if len(ups) <= 0:
                 return None
             up = ups[0]
-            userRedmine = cls._getUserRedmine(up, userId, con)
+            userRedmine = cls._getUserRedmine(up, userId, con).login
             return Redmine(cls.REDMINE_URL, key = cls.KEY, impersonate = userRedmine, version='3.3', requests={'verify': False})
 
     @classmethod
     def _getUserRedmine(cls, up, uid, con):
         redmine = cls._getRedmineInstance(cls, con)
         user = up.username
-        print(user)
         usersRedmine = redmine.user.filter(name=user)
         if len(usersRedmine) <= 0:
             usersRedmine = [cls._createUserRedmine(uid, up, con, redmine)]
-        return usersRedmine[0].login
+        return usersRedmine[0]
 
     @classmethod
     def _createUserRedmine(cls, uid, up, con, redmine):
