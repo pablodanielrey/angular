@@ -89,7 +89,9 @@
           vm.model.offices = [];
           Issues.getOffices().then(
             function(offices) {
-              vm.model.offices = offices;
+              $scope.$apply(function() {
+                vm.model.offices = offices;
+              });
             },
             function(error) {
               messageError(error);
@@ -121,8 +123,10 @@
           vm.view.searching = true;
           Issues.searchUsers(vm.model.search).then(
             function(users) {
-              vm.view.searching = false;
-              vm.model.users = users;
+              $scope.$apply(function() {
+                vm.view.searching = false;
+                vm.model.users = users;
+              });
             }, function(error) {
               messageError(error);
             }
@@ -146,8 +150,10 @@
 
               Offices.findById(ids).then(
                 function(offices) {
-                  vm.model.officesUser = (!offices || offices.length <= 0) ? [] : offices;
-                  vm.model.selectedFromOffice = (offices.length > 0) ? offices[0] : null;
+                  $scope.$apply(function() {
+                    vm.model.officesUser = (!offices || offices.length <= 0) ? [] : offices;
+                    vm.model.selectedFromOffice = (offices.length > 0) ? offices[0] : null;                    
+                  });
                 }, function(error) {
                   messageError(error);
                 }

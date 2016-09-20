@@ -123,7 +123,9 @@
           if (vm.model.users[userId] == null) {
             Users.findById([userId]).then(
               function(users) {
-                vm.model.users[userId] = users[0];
+                $scope.$apply(function() {
+                  vm.model.users[userId] = users[0];
+                });
               }
             );
           }

@@ -81,7 +81,9 @@
             if (vm.model.issue.id == parentId) {
               IssuesDD.issueDetail(commentId).then(
                 function(issue) {
+                  $scope.$apply(function() {
                     vm.model.issue.children.push(issue);
+                  })
                 },
                 function(error) {
                     vm.messageError(error);
