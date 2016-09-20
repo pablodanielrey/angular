@@ -118,7 +118,7 @@ class FileDAO(DAO):
         try:
             cur.execute('select id, name, hash, mimetype, codec, size, created, modified from files.files where id = %s', (id,))
             ins = [ FileDAO._fromResult(x) for x in cur ]
-            return ins[0]
+            return ins[0] if (len(ins) > 0) else None
 
         finally:
             cur.close()

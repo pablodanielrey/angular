@@ -65,7 +65,7 @@ function HeaderCtrl($rootScope, $scope, $window, Login, Users, Files) {
 
           Users.findPhoto(vm.model.user.photo).then(function(photo) {
             $scope.$apply(function() {
-              vm.model.user.photoSrc = Files.toDataUri(photo);
+              vm.model.user.photoSrc = (photo == null) ? '' : Files.toDataUri(photo);
             });
           });
 
