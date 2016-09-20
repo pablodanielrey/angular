@@ -107,7 +107,7 @@
       if (service.privateConnection == null || !service.privateConnection.isOpen) {
         service.login(creds.username, creds.ticket).then(
           function(conn) {
-            $rootScope.$broadcast('openPrivateConnection');
+            $rootScope.$broadcast('wamp.open');
           },
           function(err) {
             console.log(err);
@@ -148,22 +148,27 @@
       var conn = new autobahn.Connection(options);
       conn.onopen = function(session, details) {
         // aca esta abierta la sesión.
-        $rootScope.$broadcast('wamp.open');
-
-        service._setAuthCookie(details.authextra);
-        console.log(details);
-        d.resolve(conn);
+        $rootScope.$apply(function() {
+          $rootScope.$broadcast('wamp.open');
+          service._setAuthCookie(details.authextra);
+          console.log(details);
+          d.resolve(conn);
+        });
       }
       conn.onclose = function(reason, details) {
         console.log(reason);
         console.log(details);
-
-        $rootScope.$broadcast('wamp.close');
-
-        if (reason == 'lost') {
-          return false;
-        }
-        d.reject(new Error(reason));
+        $rootScope.$apply(function() {
+          $rootScope.$broadcast('wamp.close');
+          if (reason == 'lost') {
+            return false;
+          }
+          if (reason == 'closed' && details.reason == 'wamp.error.authentication_failed') {
+            $window.location.href = '/';
+            return;
+          }
+          d.reject(new Error(reason));
+        });
       }
       conn.open();
       return d.promise;

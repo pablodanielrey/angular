@@ -21,11 +21,17 @@ function HeaderCtrl($rootScope, $scope, $window, Login, Users, Files) {
   vm.logout = logout;
   vm.getUserPhoto = getUserPhoto;
 
-  $rootScope.$on("$wamp.open", function (event, session) {
+  $rootScope.$on("wamp.open", function (event, session) {
     // TODO: aca debe actualizar el ícono para que diga que esta conectado
+    vm.view.style = '';
+
+    vm.model.privateTransport = Login.getPrivateTransport();
+    activate();
+
+
   });
 
-  $rootScope.$on("$wamp.close", function (event, session) {
+  $rootScope.$on("wamp.close", function (event, session) {
     // TODO: aca debe actualizar el ícono para que diga que esta desconectado
     vm.view.style = 'serverDesconectado';
   });
@@ -38,13 +44,7 @@ function HeaderCtrl($rootScope, $scope, $window, Login, Users, Files) {
     Login.logout();
   }
 
-  $scope.$on('openPrivateConnection', function(event, args) {
-    vm.model.privateTransport = Login.getPrivateTransport();
-    activate();
-  });
-
   activate();
-
 
   function activate() {
     if (Login.getPrivateTransport() == null) {
