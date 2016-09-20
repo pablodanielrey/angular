@@ -83,7 +83,7 @@
                 function(issue) {
                   $scope.$apply(function() {
                     vm.model.issue.children.push(issue);
-                  })
+                  });
                 },
                 function(error) {
                     vm.messageError(error);

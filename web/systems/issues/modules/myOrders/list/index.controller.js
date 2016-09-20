@@ -97,9 +97,11 @@
                   loadUser(issues[i].userId);
                   loadUser(issues[i].creatorId);
                 }
-                vm.model.issues = issues;
-                sortStatus();
-                closeMessage();
+                $scope.$apply(function() {
+                  vm.model.issues = issues;
+                  sortStatus();
+                  closeMessage();
+                });
             },
             function(err) {
               messageError(error);
@@ -149,7 +151,9 @@
           if (vm.model.users[userId] == null) {
             Users.findById([userId]).then(
               function(users) {
-                vm.model.users[userId] = users[0];
+                $scope.$apply(function() {
+                  vm.model.users[userId] = users[0];
+                });
               }
             );
           }
@@ -180,7 +184,9 @@
 
                     loadUser(issue.userId);
                     loadUser(issue.creatorId);
-                    vm.model.issues.push(issue);
+                    $scope.$apply(function() {
+                      vm.model.issues.push(issue);
+                    });
                     if (vm.view.sortedBy == 'status') {
                       orderByStatus();
                     } else {
@@ -205,13 +211,15 @@
           }
           Offices.findById(ids).then(
             function(offices) {
-              vm.model.userOffices = [];
-              if (offices == null || offices.length <= 0) {
-                  return;
-              }
-              for (var i = 0; i < offices.length; i++) {
-                vm.model.userOffices[offices[i].id] = offices[i];
-              }
+              $scope.$apply(function() {
+                vm.model.userOffices = [];
+                if (offices == null || offices.length <= 0) {
+                    return;
+                }
+                for (var i = 0; i < offices.length; i++) {
+                  vm.model.userOffices[offices[i].id] = offices[i];
+                }
+              });
             }, function(error) {
               messageError(error);
             }

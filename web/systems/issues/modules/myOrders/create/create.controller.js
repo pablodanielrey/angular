@@ -64,7 +64,9 @@
           vm.model.offices = [];
           Issues.getOffices().then(
             function(offices) {
-              vm.model.offices = offices;
+              $scope.$apply(function() {
+                vm.model.offices = offices;
+              });
             },
             function(error) {
               messageError(error);
@@ -80,8 +82,10 @@
 
               Offices.findById(ids).then(
                 function(offices) {
-                  vm.model.userOffices = (!offices || offices.length <= 0) ? [] : offices;
-                  vm.model.selectedFromOffice = (offices.length > 0) ? offices[0] : null;
+                  $scope.$apply(function() {
+                    vm.model.userOffices = (!offices || offices.length <= 0) ? [] : offices;
+                    vm.model.selectedFromOffice = (offices.length > 0) ? offices[0] : null;
+                  });
                 }, function(error) {
                   messageError(error);
                 }
@@ -122,7 +126,9 @@
           vm.model.areas = [];
           Issues.getAreas(office.id).then(
             function(offices) {
-              vm.model.areas = offices;
+              $scope.$apply(function() {
+                vm.model.areas = offices;
+              });
             },
             function(error) {
               messageError(error);
@@ -132,7 +138,9 @@
 
         function loadSubjects(office) {
           Issues.getOfficeSubjects(office.id).then(function(subjects) {
-            vm.model.subjects = subjects;
+            $scope.$apply(function() {
+              vm.model.subjects = subjects;
+            });
           });
         }
 
@@ -190,7 +198,9 @@
           // vm.messageLoading();
           Issues.create(subject, description, parentId, office.id, fromOfficeId, null, vm.model.files).then(
             function(data) {
-              messageCreated();
+              $scope.$apply(function() {
+                messageCreated();
+              });
               $timeout(function () {
                 closeMessage();
                 $location.path("myOrders");

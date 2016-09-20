@@ -152,7 +152,7 @@
                 function(offices) {
                   $scope.$apply(function() {
                     vm.model.officesUser = (!offices || offices.length <= 0) ? [] : offices;
-                    vm.model.selectedFromOffice = (offices.length > 0) ? offices[0] : null;                    
+                    vm.model.selectedFromOffice = (offices.length > 0) ? offices[0] : null;
                   });
                 }, function(error) {
                   messageError(error);
@@ -196,7 +196,9 @@
           vm.model.areas = [];
           Issues.getAreas(office.id).then(
             function(offices) {
-              vm.model.areas = offices;
+              $scope.$apply(function() {
+                vm.model.areas = offices;
+              });
             },
             function(error) {
               messageError(error);
@@ -241,7 +243,9 @@
           messageLoading();
           Issues.create(subject, description, parentId, office.id, fromOfficeId, author.id, vm.model.files).then(
             function(data) {
-              messageCreated();
+              $scope.$apply(function() {
+                messageCreated();
+              });
               $timeout(function () {
                 closeMessage();
                 $location.path("orders");

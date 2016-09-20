@@ -67,8 +67,8 @@
                     <img class="avatar" ng-src='{{vm.getUserPhoto(vm.model.issue)}}' alt="foto de perfil"/>
                 </div>
                 <div class="nameUser">
-                  {{vm.model.issue.user.name}} </br>
-                  {{vm.model.issue.user.lastname}}
+                  {{vm.getName(vm.model.issue)}} </br>
+                  {{vm.getLastname(vm.model.issue)}}
                 </div>
             </div>
             <!-- <div class="contentArrow">

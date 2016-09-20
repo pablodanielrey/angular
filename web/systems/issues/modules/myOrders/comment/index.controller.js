@@ -60,8 +60,10 @@
         function loadIssue(id) {
           Issues.findById(id).then(
             function(issue) {
-              vm.model.issue = issue;
-              closeMessage();
+              $scope.$apply(function() {
+                vm.model.issue = issue;
+                closeMessage();
+              })
             }, function(error) {
               vm.messageError(error);
             }
@@ -97,7 +99,9 @@
           vm.messageLoading();
           Issues.createComment(subject, vm.model.replyDescription, parentId, officeId, vm.model.files).then(
             function(data) {
-              vm.messageSending();
+              $scope.$apply(function() {
+                vm.messageSending();
+              });
               $timeout(function() {
                 $location.path('myOrdersDetail/' + vm.model.issue.id);
               }, 2000);
