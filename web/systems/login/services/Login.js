@@ -120,7 +120,12 @@
 
 
     service.getCredentials = function() {
-      return service._getAuthCookie();
+      var creds = service._getAuthCookie();
+      if (creds == null) {
+        $window.location.href = '/';
+        return;
+      }
+      return creds;
     }
 
     service.getPublicData = function(username) {
