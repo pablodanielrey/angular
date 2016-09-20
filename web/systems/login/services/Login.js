@@ -40,7 +40,7 @@
     }
 
     service.getPrivateTransport = function() {
-      if (serice.privateConnection == null) {
+      if (service.privateConnection == null) {
         return null;
       }
       return wamp(service.privateConnection);
