@@ -3,17 +3,11 @@
 
   angular
     .module('login')
-    .factory('wamp', wamp)
     .service('Login', Login);
 
 
-    function wamp()  {
-        var factory  =   {};
-        var connection = null;
-
-        factory.init = function(conn) {
-          connection = conn;
-        };
+    function wamp(connection)  {
+        var factory = {};
 
         factory.subscribe = function(topic, handler) {
           connection.session.subscribe(topic, handler);
@@ -23,16 +17,12 @@
           return connection.session.call(procedure, args);
         };
 
-        factory.getConnection = function() {
-          return connection;
-        };
-
         return factory;
     };
 
-  Login.$inject = ['$rootScope', '$window', '$q', '$cookies', 'wamp'];
+  Login.$inject = ['$rootScope', '$window', '$q', '$cookies'];
 
-  function Login($rootScope, $window, $q, $cookies, wamp) {
+  function Login($rootScope, $window, $q, $cookies) {
     var service = this;
 
     service.username = null;
@@ -44,19 +34,17 @@
 
 
     service.getPublicTransport = function() {
-      wamp.init(service.publicConnection);
-      return wamp;
+      return wamp(service.publicConnection);
     }
 
     service.getPrivateTransport = function() {
-      wamp.init(service.privateConnection);
-      return wamp;
+      return wamp(service.privateConnection);
     }
 
 
     // inicializamos la conexión pública
 
-    var host = '127.0.0.1';
+    var host = location.hostname;
     var options = {
         url: 'ws://' + host + ':80/ws',
         realm: 'public',
@@ -138,7 +126,7 @@
     service.getPrivateConnection = function(username, password) {
       var d = $q.defer();
 
-      var host = '127.0.0.1';
+      var host = location.hostname;
       var options = {
           url: 'ws://' + host + ':80/ws',
           realm: 'core',
@@ -176,7 +164,6 @@
       return d.promise;
     }
 
-
     service.login = function(username, password) {
       var d = $q.defer();
       service.getPrivateConnection(username, password).then(function(conn) {
@@ -191,19 +178,6 @@
     service.getRegisteredSystems = function(conn) {
       return conn.session.call('login.get_registered_systems');
     }
-
-    service.hasOneRole = function(roles) {
-      return new Promise(function(cok, cerr) {
-        var sid = Session.getSessionId();
-    		$wamp.call('system.profile.hasOneRole', [sid, roles])
-        .then(function(v) {
-          cok(v);
-        },function(err) {
-          cerr(err);
-        });
-      });
-    };
-
 
     service.logout = function() {
       $cookies.remove('authlogin', {path:'/'});
