@@ -65,7 +65,7 @@
 
 
         function activate() {
-          if (Login.getPrivateTransport().getConnection() == null) {
+          if (Login.getPrivateTransport() == null) {
             return;
           }
           vm.model.userId = Login.getCredentials().userId;

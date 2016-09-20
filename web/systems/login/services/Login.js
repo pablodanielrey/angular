@@ -32,12 +32,17 @@
     service.privateConnection = null;
     service.publicConnection = null;
 
-
     service.getPublicTransport = function() {
+      if (service.publicConnection == null) {
+        return null;
+      }
       return wamp(service.publicConnection);
     }
 
     service.getPrivateTransport = function() {
+      if (serice.privateConnection == null) {
+        return null;
+      }
       return wamp(service.privateConnection);
     }
 

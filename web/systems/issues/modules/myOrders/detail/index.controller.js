@@ -48,7 +48,7 @@
 
 
         function activate() {
-          if (Login.getPrivateTransport().getConnection() == null) {
+          if (Login.getPrivateTransport() == null) {
             return;
           }
           var params = $routeParams;
