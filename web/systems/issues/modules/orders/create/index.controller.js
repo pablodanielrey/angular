@@ -189,7 +189,20 @@
           vm.model.selectedArea = area;
           vm.model.searchArea = (area == null) ? {name:''} : {name: area.name};
           vm.view.style2 = '';
+          vm.model.subject = "";
           loadSubjects(vm.model.selectedArea);
+        }
+
+        vm.displaySearchOffice = displaySearchOffice;
+        function displaySearchOffice() {
+          vm.view.style2 = (vm.view.style2 == 'buscarOficina') ? '' : 'buscarOficina';
+          vm.model.searchOffice = '';
+        }
+
+        vm.displaySearchArea = displaySearchArea;
+        function displaySearchArea() {
+          vm.view.style2 = (vm.view.style2 == 'buscarArea') ? '' : 'buscarArea';
+          vm.model.searchArea = '';
         }
 
         function loadAreas(office) {
