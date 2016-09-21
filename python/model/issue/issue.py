@@ -343,7 +343,7 @@ class IssueModel():
     @classmethod
     def getSubjectTypes(cls, con, oId):
         if oId == cls.ditesiId:
-            return ['No anda el servidor', 'No anda el correo', 'No anda la red', 'Wifi', 'Swtich', 'Error en el sistema', 'Desarrollar', 'No prende la computadora', 'No puedo iniciar sesión', 'Virus', 'Owncloud', 'No anda la red', 'Crear cuenta', 'Error de Windows', 'No Imprime', 'Problema con el correo', 'Otro']
+            return ['No anda el servidor', 'No anda el correo', 'Wifi', 'Swtich', 'Error en el sistema', 'Desarrollar', 'No prende la computadora', 'No puedo iniciar sesión', 'Virus', 'Owncloud', 'No anda la red', 'Crear cuenta', 'Error de Windows', 'No Imprime', 'Problema con el correo', 'Otro']
         elif oId == cls.soporteId:
             return ['No prende la computadora', 'Problema con el correo', 'No puedo iniciar sesión', 'Virus', 'Owncloud', 'No anda la red', 'Crear cuenta', 'Error de Windows', 'No Imprime', 'Otro']
         elif oId == cls.desarroloId:

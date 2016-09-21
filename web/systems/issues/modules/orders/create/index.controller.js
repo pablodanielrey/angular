@@ -189,7 +189,7 @@
           vm.model.selectedArea = area;
           vm.model.searchArea = (area == null) ? {name:''} : {name: area.name};
           vm.view.style2 = '';
-          vm.loadSubjects(vm.model.selectedArea);
+          loadSubjects(vm.model.selectedArea);
         }
 
         function loadAreas(office) {
