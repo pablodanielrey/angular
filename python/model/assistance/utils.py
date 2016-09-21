@@ -36,6 +36,14 @@ class Utils:
         return local
 
     @classmethod
+    def _localizeUtc(cls, naive):
+        if naive is None:
+            return None
+        tz = dateutil.tz.tzutc()
+        utc = naive.replace(tzinfo=tz)
+        return utc
+
+    @classmethod
     def _naiveFromLocalAware(cls, aware):
         if aware is None:
             return None

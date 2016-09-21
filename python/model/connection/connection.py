@@ -19,7 +19,7 @@ class Connection:
         self.database = registry.get('database')
         self.user = registry.get('user')
         self.password = registry.get('password')
-        self.pool = psycopg2.pool.ThreadedConnectionPool(1, 10, host=self.host, database=self.database, user=self.user, password=self.password, cursor_factory=DictCursor)
+        self.pool = psycopg2.pool.ThreadedConnectionPool(1, 3, host=self.host, database=self.database, user=self.user, password=self.password, cursor_factory=DictCursor)
 
     def get(self):
         logging.debug('obteniendo conexion a la base')

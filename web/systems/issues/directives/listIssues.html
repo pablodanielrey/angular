@@ -1,0 +1,68 @@
+<!-- --------------- LISTADO DE PEDIDOS ------------------ -->
+    <div class="contentOrders">
+      <div class="itemOrders" ng-repeat="issue in vm.issues">
+          <div class="itemInfo">
+
+              <!-- ---- Prioridad del pedido, por defecto tiene que estar en "normal" ---- -->
+              <div class="contentPriority {{vm.getPriority(issue)}}">
+                  <div class="subContentPriority">&nbsp;</div>
+              </div>
+
+              <!-- ---- Numero de pedido y fecha ---- -->
+              <div class="itemDate">
+                  <div class="textNumerOrders">Nº {{issue.id}}</div>
+                  <div class="textDateOrders">{{vm.getDate(issue) | date: 'd MMMM  yyyy - HH:mm'}} hs</div>
+                  <div class="textDaysOrders">{{vm.getDiffDay(issue)}}</div>
+              </div>
+
+              <!-- ---- Estado ---- -->
+              <div class="itemStatus">
+                  <div class="status {{vm.getStatus(issue)}}">
+                      <!-- VARIABLES:
+                      abierta, enProgreso, cerrada, pausada, rechazada -->
+                      <div class="textA1">ABIERTA</div>
+                      <div class="textA2"></div>
+                      <div class="textEC1">EN CURSO</div>
+                      <div class="textEC2"></div>
+                      <div class="textC1">CERRADA</div>
+                      <div class="textC2"></div>
+                      <div class="textP1">PAUSADA</div>
+                      <div class="textP2"></div>
+                      <div class="textR1">RECHAZADA</div>
+                      <div class="textR2"></div>
+                  </div>
+              </div>
+
+              <!-- ---- Info oficina y solicitud ---- -->
+              <div class="itemsType">
+                <div class="textMini">Para:</div>
+                <div class="textDateOrders">{{issue.office.name}}</div>
+                <!-- <div class="textDaysOrders">Soporte tecnico</div> -->
+                <div class="textDateOrders">{{issue.area.name}}</div>
+                <div class="contentAsunto">
+                    <div class="textMini">Asunto: &nbsp;  </div>
+                    <div class="textName">{{issue.subject}}</div>
+                </div>
+              </div>
+
+              <!-- ---- Usuarios de la carga del pedido ---- -->
+              <div class="itemsOffice" ng-class="{true: 'solicitadoPorEl', false: 'solicitadoPorOtro'}[issue.creatorId == null || issue.creatorId == '']">
+                <div>
+                  <div class="textMini">Solicitado por:</div>
+                  <div class="textUser">{{vm.getFullName(issue)}}</div>
+                  <div class="textDaysOrders">{{issue.fromOffice.name}} </div>
+                </div>
+                <div class="userUpload">
+                  <div class="textMini">Cargado por:&nbsp;  </div>
+                  <div class="textName">{{vm.getCreator(issue)}}</div>
+                </div>
+              </div>
+
+          </div>
+
+          <div class="itemActions" ng-click="vm.viewDetail(issue)">
+            <i class=" fa fa-angle-right" aria-hidden="true"></i>
+          </div>
+
+      </div>
+    </div>

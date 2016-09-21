@@ -7,7 +7,7 @@ import re
 import hashlib
 import uuid
 from model.registry import Registry
-from model.login.session import Session
+from model.session.session import Session
 from model.login.profiles import Profile
 # from model.users.users import UserPassword, UserPasswordDAO, User, UserDAO, UserModel
 from model.users.users import UserPassword, User, Mail
@@ -165,6 +165,33 @@ class Login:
 
     reg = inject.attr(Registry)
 
+    @classmethod
+    def getPublicData(cls, con, dni):
+        print(dni)
+        (userId, version) = User.findByDni(con, dni)
+        if userId is None:
+            return None
+
+        users = User.findById(con, [userId])
+        if users is None or len(users) <= 0:
+            return None
+
+        photo = [User.findPhoto(con, users[0].photo) if 'photo' in dir(users[0]) and users[0].photo is not None and users[0].photo != '' else None][0]
+
+        return {
+            'name':users[0].name,
+            'lastname':users[0].lastname,
+            'photo': photo
+        }
+
+    @classmethod
+    def getUserIdByUsername(cls, con, username):
+        up = UserPassword.findByUsername(con, username)
+        if len(up) > 0:
+            return up[0].userId
+        return None
+
+
     def hasRoles(self, con, sId, roles = []):
         ss = Session.findById(con, [sId])
         if len(ss) <= 0:
@@ -198,6 +225,7 @@ class Login:
         up = UserPassword.findByUsername(con, username)
         return len(up) > 0
 
+
     def login(self, con, username, password):
         assert username is not None
         assert password is not None
@@ -205,6 +233,7 @@ class Login:
         if up is None:
             return None
 
+        """
         s = Session()
         s.userId = up.userId
         s.username = up.username
@@ -216,6 +245,8 @@ class Login:
         sid = s.persist(con)
         s.id = sid
         return s
+        """
+        return up.userId
 
     def logout(self, con, sid):
         assert sid is not None

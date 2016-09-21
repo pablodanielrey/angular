@@ -1,0 +1,132 @@
+<!-- ---------------- DETALLE DE PEDIDO ------------------ -->
+<div class="myOrders pantallaDetallePedido {{vm.view.style3}} {{vm.view.style4}}">
+
+    <div class="contentOrderDetail">
+
+
+        <div class="headerDetail">
+
+              <div class="detail">
+                  <div class="contentBtnReturn" title="Volver">
+                      <a href="#/myOrders"><div class="btnReturn"><i class=" fa fa-angle-left fa-2x" aria-hidden="true"></i></div></a>
+                  </div>
+                  <div class="itemDate2">
+                      <div class="textDaysOrders">Consulta</div>
+                      <div class="textNumerOrders2">Nº {{vm.model.issue.id}}</div>
+                      <!-- <div class="textDateOrders">25 May. 2016 - 09:25 hs</div>
+                      <div class="textDaysOrders">Hoy</div> -->
+                  </div>
+                  <div class="itemsType">
+                         <div class="textMini">Para:</div>
+                        <div class="textType">{{vm.model.issue.projectName}}</div>
+                        <div class="contentAsunto">
+                            <div class="textMini">Asunto:&nbsp; </div>
+                            <div class="textSubType">{{vm.model.issue.subject}}</div>
+                        </div>
+                  </div>
+
+                  <div class="contentOffice">
+                      <div class="textMini">Solicitado por:</div>
+                        <div class="textOffice">{{vm.model.issue.fromOffice.name}}</div>
+                        <div class="textName">{{vm.getName(vm.model.issue)}} {{vm.getLastname(vm.model.issue)}}</div>
+                  </div>
+
+                  <div class="contentActions">
+
+                      <div class="itemStatus2">
+                          <div class="status2 {{vm.getStatus(vm.model.issue)}}">
+                              <!-- VARIABLES:
+                              abierta, enProgreso, cerrada, pausada, rechazada -->
+                              <div class="textA1">ABIERTA</div>
+                              <div class="textA2">A</div>
+                              <div class="textEC1">EN CURSO</div>
+                              <div class="textEC2">eC</div>
+                              <div class="textC1">CERRADA</div>
+                              <div class="textC2">C</div>
+                              <div class="textP1">PAUSADA</div>
+                              <div class="textP2">P</div>
+                              <div class="textR1">RECHAZADA</div>
+                              <div class="textR2">R</div>
+                          </div>
+                      </div>
+
+                      <div class="contentBtnReply">
+                          <button class="btnReply" ng-click="vm.reply()">RESPONDER</button>
+                          <button class="btnReply2" ng-click="vm.reply()"><i class="fa fa-comment-o fa-2x"></i></button>
+                      </div>
+
+                  </div>
+
+              </div>
+
+            </div>
+
+        <div class="infoOrder">
+            <div class="contentUser">
+                <div class="photo">
+                    <img class="avatar" ng-src='{{vm.getUserPhoto(vm.model.issue)}}' alt="foto de perfil"/>
+                </div>
+                <div class="nameUser">
+                  {{vm.getName(vm.model.issue)}} </br>
+                  {{vm.getLastname(vm.model.issue)}}
+                </div>
+            </div>
+            <!-- <div class="contentArrow">
+              <i class="fa fa-caret-left" aria-hidden="true"></i>
+            </div> -->
+            <div class="contentInfo ">
+                <!-- VARIABLES: conAdjunto, sinAdjunto -->
+                <div class="textDateDetailOrders">
+                    {{vm.getDiffDay(vm.model.issue)}} - {{vm.getDate(vm.model.issue) | date: 'd MMMM  yyyy - HH:mm'}} hs
+                </div>
+                <div>
+                  {{vm.model.issue.description}}
+                </div>
+                <div ng-repeat="file in vm.model.issue.files" class="contentAddInfo"><i class="archiveAdd"></i> <a href="{{file.url}}">{{file.name}}</a></div>
+            </div>
+
+        </div>
+
+        <div class="contentTotalReplys">
+
+          <div class="reply" ng-class="{true: 'miRespuesta' , false: 'respuestaDeAutor'}[vm.model.issue.userId != child.userId]" ng-repeat="child in vm.model.issue.children">
+              <!-- VARIABLES: miRespuesta, respuestaDeAutor -->
+                <div class="contentReplys">
+                  <div class="subcontentReply">
+                    <div class="contentArrowLeft">
+                      <i class="fa fa-caret-left" aria-hidden="true"></i>
+                    </div>
+
+                    <div class="textReply">
+                        <!-- VARIABLES: sinAdjunto, conAdjunto -->
+                        <div class="textDateDetailOrders">
+                            {{vm.getDiffDay(child)}} - {{vm.getDate(child) | date: 'd MMMM  yyyy - HH:mm'}} hs
+                        </div>
+                        <div>
+                              {{child.description}}
+                        </div>
+                        <div class="contentAddInfo" ng-repeat="file in child.files"><i class="fa fa-paperclip"></i> <a class="archiveAdd" href="{{file.url}}"> {{file.name}}</a></div>
+                    </div>
+
+                    <div class="contentArrowRight">
+                      <i class="fa fa-caret-right" aria-hidden="true"></i>
+                    </div>
+
+                  <div class="contentUser">
+                      <div class="photo">
+                          <img class="avatar" ng-src='{{vm.getUserPhoto(child)}}' alt="foto de perfil"/>
+                      </div>
+                      <div class="nameUser">
+                        {{vm.getName(child)}} </br>
+                        {{vm.getLastname(child)}}
+                      </div>
+                  </div>
+              </div>
+
+
+        </div>
+
+    </div>
+
+    <div ng-include="'modules/myOrders/messageUser.html?t=' + time"></div>
+  </div>

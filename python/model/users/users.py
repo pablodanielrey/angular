@@ -8,9 +8,9 @@ import logging
 import datetime
 import uuid
 from model.connection.connection import Connection
-from model.serializer.utils import JSONSerializable
+from model.serializer import JSONSerializable
 from model.dao import DAO
-from model.files.files import FileDAO
+from model.files.files import File, FileDAO
 
 
 class UserDAO(DAO):
@@ -620,8 +620,6 @@ class Mail(JSONSerializable):
         return cls.dao.findById(con, eid)
 
 
-
-
 class User(JSONSerializable):
     ''' usuario básico del sistema '''
 
@@ -674,6 +672,14 @@ class User(JSONSerializable):
     def findByDni(cls, con, dni):
         assert cls.dao is not None
         return cls.dao.findByDni(con, dni)
+
+    @classmethod
+    def findPhoto(cls, con, photoId):
+        f = File.findById(con, photoId)
+        if f is not None:
+            content = f.getContent(con).tobytes().decode('utf-8')
+            f.content = content
+        return f
 
 
 class Telephone(JSONSerializable):

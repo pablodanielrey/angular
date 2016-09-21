@@ -1,6 +1,6 @@
 
 angular
-  .module('mainApp')
+  .module('fce')
   .controller('IndexCtrl',IndexCtrl);
 
 IndexCtrl.$inject = ['$rootScope','$scope','$wamp','$window', 'Notifications', 'Login'];

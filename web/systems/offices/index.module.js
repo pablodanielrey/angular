@@ -1,2 +1,6 @@
-angular
-    .module('mainApp',['ngRoute'])
+(function() {
+  'user strict'
+  angular
+      .module('offices',[]);
+
+})();

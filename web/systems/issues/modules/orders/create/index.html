@@ -1,0 +1,136 @@
+<div class="orders pantallaNuevoPedido {{vm.view.style2}} {{vm.view.style3}} {{vm.view.style4}}">
+
+<div class="contentNewOrder">
+  <div class="subContentNewOrder">
+      <div class="newOrder">
+          <!-- ---- HEADER DE SOLICITAR PEDIDO ---- -->
+          <div class="contentTitleNewOrder">
+
+              <div class="contentBackNewOrder">
+                  <div class="contentBtnReturn">
+                      <button class="btnReturn" ng-click="vm.cancel()"><i class=" fa fa-angle-left fa-2x" aria-hidden="true"></i></button>
+                  </div>
+                  <div class="titleNewOrder">
+                    NUEVO PEDIDO
+                  </div>
+              </div>
+
+              <!-- ---- Cargar pedido a nombre de otro ---- -->
+              <div class="contentUserOrder">
+                  <div class="subContentOrderLeft">
+                      <div class="textDe">De</div>
+                      <div>Oficina</div>
+                  </div>
+                  <div class="subContentOrderRight">
+                    <div class="userOrder">{{vm.model.user.name}} {{vm.model.user.lastname}}</div>
+                    <!-- ---- buscar el usuario ---- -->
+                    <div class="contentSearchUser" ng-class="{true: 'loadingUsers'}[vm.view.searching]">
+                        <!-- VARIABLE: loadingUsers -->
+                        <div class="titleListRequest">
+                            <span class="icoInputSearch"><i class="fa fa-search"></i></span>
+                            <input class="inputSearch3" ng-click="vm.model.search = ''" ng-model="vm.model.search" type="text" placeholder="Buscar personal..." ng-disabled="vm.view.searching" ng-model-options="{ debounce: 1000 }" ng-change="vm.searchUsers()">
+                        </div>
+                        <div class="contentListPerson">
+                            <div class="btnItemPerson" ng-click="vm.selectUser(user)" ng-repeat="user in vm.model.users">
+                                <div class="contentImgUser">
+                                    <img class="imgUser" ng-src='{{vm.getUserPhoto(user)}}' alt="foto de perfil"/>
+                                </div>
+                                <div class="contentNameUser">
+                                  <div class="">{{user.name}} {{user.lastname}}</div>
+                                  <div class="dniUser">{{user.dni}}</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="contentLoadingUsers">
+                          <div class="circle"><i class="fa fa-circle-o-notch fa-spin fa-3x fa-fw"></i></div>
+                          <div><b>Cargando...</b></div>
+                          <div>Por favor espere</div>
+                        </div>
+                    </div>
+
+                    <div class="officeOrder">{{vm.model.selectedFromOffice.name}}</div>
+                    <!-- ---- Seleccionar la oficina del usuario ---- -->
+                    <div class="contentSearchOffice">
+                        <div class="titleListRequest">
+                            <span class="icoInputSearch"><i class="fa fa-search"></i></span>
+                            <input class="inputSearch3" type="text" placeholder="Seleccionar Oficina" ng-model="vm.model.searchFromOffice.name">
+                        </div>
+                        <div class="contentListOffice">
+                            <div class="btnItemOffice" ng-click="vm.selectFromOffice(office)" ng-repeat="office in vm.model.officesUser | filter: vm.model.searchFromOffice">
+                                <div class="contentImgOffice">
+                                    <img class="imgOffice" src="img/empresa.jpg" alt="foto de la oficina">
+                                </div>
+                                <div class="contentNameOffice">
+                                  <div class="">{{office.name}}</div>
+                                  <div class="dniUser">FCE</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                  </div>
+                  <div>
+                    <div class="arrowOpen" ng-click="vm.view.style2 = 'buscarUsuario'"><i class="fa fa-caret-down" aria-hidden="true"></i></div>
+                    <div class="arrowOpen2" ng-click="vm.view.style2 = 'buscarOficinaDeUsuario'"><i class="fa fa-caret-down" aria-hidden="true"></i></div>
+                  </div>
+              </div>
+
+              <div>
+                  <button class="btnApply" ng-click="vm.save()">SOLICITAR</button>
+                  <button class="btnApply2" ng-click="vm.save()"><i class="fa fa-paper-plane"></i></button>
+              </div>
+          </div>
+          <!-- ---- CAMPOS PARA LLENAR EN UN NUEVO PEDIDO ---- -->
+          <div class="contentOrder">
+              <div class="contentOrientation">
+                  <div class="subtitleNewOrder">OFICINA</div>
+                  <div><input type="text" class="inputNewOrder" placeholder="Buscar..." ng-model='vm.model.searchOffice.name' ng-click="vm.displaySearchOffice()"></input></div>
+              </div>
+              <!-- ---- LISTADO DE OFICINAS ---- -->
+              <div class="offices">
+                <div class="itemsSelectOffice"  ng-repeat='office in vm.model.offices | filter: vm.model.searchOffice' ng-click="vm.selectOffice(office)" >
+                  {{office.name}}
+                </div>
+              </div>
+
+              <div class="contentOrientation">
+                  <div class="subtitleNewOrder">ÁREA</div>
+                  <div><input type="text" class="inputNewOrder" placeholder="Buscar..." ng-model='vm.model.searchArea.name'  ng-click="vm.displaySearchArea()"></input></div>
+              </div>
+              <!-- ---- LISTADO DE AREAS ---- -->
+              <div class="areas">
+                <div class="itemsSelectArea" ng-repeat='area in vm.model.areas | filter: vm.model.searchArea' ng-click="vm.selectArea(area)">
+                  {{area.name}}
+                </div>
+              </div>
+
+              <div class="contentOrientation">
+                  <div class="subtitleNewOrder">CONSULTA</div>
+                  <div><input type="text" class="inputNewOrder" placeholder="Seleccionar..." ng-model='vm.model.subject' ng-click="vm.view.style2 = 'buscarConsulta'"></input></div>
+              </div>
+              <!-- ---- LISTADO DE PROBLEMAS ---- -->
+              <div class="querys">
+                  <div class="itemsSelectQuery" ng-repeat="subject in vm.model.subjects | filter: vm.model.subject" ng-click="vm.selectSubject(subject)">
+                      {{subject}}
+                  </div>
+              </div>
+
+              <div class="subtitleNewOrder2">MENSAJE</div>
+              <div><textarea class="textareaNewOrder" ng-model="vm.model.description"></textarea></div>
+
+              <div class="addMenssage2">
+                  <div><button class="btnAdd" title="Adjuntar Archivo"><i class="fa fa-paperclip" aria-hidden="true"></i> Subir Archivo</button></div>
+                  <div class="ArchivesAdd">
+                    <input type="file" e-on-read-file-binary-string="vm.addFile(fileName,fileContent, fileType, fileSize)" class="inputFile" />
+                    <span ng-repeat="file in vm.model.files"> <i class="fa fa-file-o"></i> {{file.name}} <button class="btnTrashAdd" ng-click="vm.removeFile(file)"><i class="fa fa-trash-o" aria-hidden="true"></i></button></span>
+                  </div>
+              </div>
+
+          </div>
+
+      </div>
+  </div>
+</div>
+
+<div ng-include="'modules/orders/messageUser.html?t=' + time"></div>
+
+</div>

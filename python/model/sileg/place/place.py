@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import uuid
 from model.sileg.silegdao import SilegDAO
-from model.serializer.utils import JSONSerializable
+from model.serializer import JSONSerializable
 
 
 class PlaceDAO(SilegDAO):
@@ -102,6 +102,20 @@ class PlaceDAO(SilegDAO):
         finally:
             cur.close()
 
+
+    @classmethod
+    def findAll(cls, con):
+        cur = con.cursor()
+
+        try:
+            cur.execute("""
+                SELECT id
+                FROM sileg.place
+            """)
+            return [r['id'] for r in cur]
+
+        finally:
+            cur.close()
 
 
 class Place(JSONSerializable):

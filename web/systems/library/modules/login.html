@@ -1,0 +1,20 @@
+<div>
+  <div>{{message}}</div>
+  <div>usuario {{creds.username}}</div>
+  <div>token {{creds.ticket}}</div>
+  <div>expira {{creds.expires}}</div>
+
+  <form ng-submit="login()">
+      <div>
+        USUARIO:
+        <input type='text' ng-model='username'/>
+      </div>
+      <div>
+        CLAVE:
+        <input type='password' ng-model='password'/>
+      </div>
+      <div>
+        <button type='submit'>Entrar</button>
+      </div>
+  </from>
+</div>

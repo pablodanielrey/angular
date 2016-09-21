@@ -1,0 +1,26 @@
+<div class="orders pantallaMensaje {{vm.view.style3}} {{vm.view.style4}}">
+  <div class="contentMessage">
+      <div class="subContentMessage">
+          <div class="message">
+              <div class="titleMessage">
+                NUEVO MENSAJE
+              </div>
+              <div class="textMessage">
+                <textarea class="textareaMenssage" ng-model="vm.model.replyDescription"></textarea>
+                <div class="addMenssage2">
+                    <div><button class="btnAdd" title="Adjuntar Archivo"><i class="fa fa-paperclip" aria-hidden="true"></i> Subir Archivo</button></div>
+                    <div class="ArchivesAdd">
+                      <input type="file" e-on-read-file-binary-string="vm.addFile(fileName,fileContent, fileType, fileSize)" class="inputFile" />
+                      <span ng-repeat="file in vm.model.files"> <i class="fa fa-file-o"></i> {{file.name}} <button class="btnTrashAdd" ng-click="vm.removeFile(file)"><i class="fa fa-trash-o" aria-hidden="true"></i></button></span>
+                    </div>
+                </div>
+              </div>
+              <div class="actionMessage">
+                <button class="btnAceptMennsage" ng-click="vm.createComment()">ACEPTAR</button>
+                <a class="btnCancelMennsage" ng-href="#/ordersDetail/{{vm.model.issue.id}}">CANCELAR</a>
+              </div>
+          </div>
+      </div>
+  </div>
+  <div ng-include="'modules/orders/messageUser.html?t=' + time"></div>
+</div>

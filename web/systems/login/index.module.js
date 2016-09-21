@@ -1,23 +1,39 @@
-angular
-    .module('mainApp',['ngRoute','vxWamp'])
-    .config(function($wampProvider) {
+(function() {
+  'use strict';
 
-      if (config.url == undefined || config.url == 'autodetect') {
-        var conn = {
-          url: "ws://" + location.host + ":443/ws",
-          realm: config.realm
-        };
-        console.log(conn);
-        $wampProvider.init(conn);
-      } else {
-        var conn = {
-          url: config.url,
-          realm: config.realm
-        };
-        console.log(conn);
-        $wampProvider.init(conn);
-      }
-    })
-    .run(function($wamp) {
-      $wamp.open();
-    });
+  angular
+      .module('login',['ngRoute','ngCookies','files'])
+
+/*
+  angular
+      .module('login',['ngRoute','ngCookies','vxWamp', 'files'])
+      .provider('$wampPublic', function ($wampProvider) {
+          var host = location.hostname;
+          var options = {
+              url: 'ws://' + host + ':80/ws',
+              realm: 'public',
+              prefix: '$wampPublic',
+              authmethods: ['anonymous']
+          };
+          this.$get = function ($injector) {
+              console.log('wampPublic injector');
+              $wampProvider.init(options);
+              return $injector.invoke($wampProvider.$get);
+          };
+      })
+      .provider('$wampCore', function ($wampProvider) {
+        var host = location.hostname;
+        var options = {
+            url: 'ws://' + host + ':80/ws',
+              realm: 'core',
+              prefix: '$wampCore',
+              authmethods: ['ticket']
+          };
+          this.$get = function ($injector) {
+              console.log('wampCore injector');
+              $wampProvider.init(options);
+              return $injector.invoke($wampProvider.$get);
+          };
+      })
+*/
+})();

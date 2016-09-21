@@ -1,0 +1,389 @@
+{
+    "version": 2,
+    "controller": {
+        "id": "node1",
+        "options": {
+            "title": "crossbar-controller"
+        }
+    },
+    "workers": [
+        {
+            "id": "router1",
+            "type": "router",
+            "options": {
+              "pythonpath": [
+                  "../../python",
+                  "../../server",
+                  "components"
+              ]
+            },
+            "realms": [
+                {
+                    "name": "authenticators",
+                    "roles": [
+                        {
+                            "name": "authenticator",
+                            "permissions": [
+                                {
+                                    "uri": "authenticate.",
+                                    "match": "prefix",
+                                    "allow": {
+                                        "call": true,
+                                        "register": true,
+                                        "publish": true,
+                                        "subscribe": true
+                                    },
+                                    "disclose": {
+                                        "caller": true,
+                                        "publisher": true
+                                    }
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "name": "public",
+                    "roles": [
+                        {
+                            "name": "anonymous",
+                            "permissions": [
+                                {
+                                    "uri": "",
+                                    "match": "prefix",
+                                    "allow": {
+                                        "call": true,
+                                        "register": false,
+                                        "publish": false,
+                                        "subscribe": false
+                                    },
+                                    "disclose": {
+                                        "caller": true,
+                                        "publisher": true
+                                    },
+                                    "cache": false
+                                }
+                            ]
+                        },
+                        {
+                            "name": "system",
+                            "permissions": [
+                                {
+                                    "uri": "",
+                                    "match": "prefix",
+                                    "allow": {
+                                        "call": true,
+                                        "register": true,
+                                        "publish": true,
+                                        "subscribe": true
+                                    },
+                                    "disclose": {
+                                        "caller": true,
+                                        "publisher": true
+                                    },
+                                    "cache": false
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "name": "core",
+                    "roles": [
+                        {
+                            "name": "authenticated",
+                            "permissions": [
+                                {
+                                    "uri": "",
+                                    "match": "prefix",
+                                    "allow": {
+                                        "call": true,
+                                        "register": false,
+                                        "publish": false,
+                                        "subscribe": true
+                                    },
+                                    "disclose": {
+                                        "caller": true,
+                                        "publisher": true
+                                    },
+                                    "cache": false
+                                }
+                            ]
+                        },
+                        {
+                            "name": "system",
+                            "permissions": [
+                                {
+                                    "uri": "",
+                                    "match": "prefix",
+                                    "allow": {
+                                        "call": true,
+                                        "register": true,
+                                        "publish": true,
+                                        "subscribe": true
+                                    },
+                                    "disclose": {
+                                        "caller": true,
+                                        "publisher": true
+                                    },
+                                    "cache": false
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ],
+
+            "components": [
+                {
+                    "type": "class",
+                    "classname": "wamp.authenticator.TokenGeneratorComponent",
+                    "realm": "authenticators",
+                    "role": "authenticator"
+                },
+                {
+                    "type": "class",
+                    "classname": "wamp.authenticator.AnonymousAuth",
+                    "realm": "authenticators",
+                    "role": "authenticator"
+                },
+                {
+                    "type": "class",
+                    "classname": "wamp.authenticator.TicketAuth",
+                    "realm": "authenticators",
+                    "role": "authenticator"
+                }
+            ],
+
+            "transports": [
+                {
+                    "id": "transport1",
+                    "type": "websocket",
+                    "debug": true,
+                    "serializers": [
+                        "json"
+                    ],
+                    "endpoint": {
+                        "type": "tcp",
+                        "version": 4,
+                        "port": 8081
+                    },
+                    "auth": {
+                        "anonymous": {
+                            "type": "dynamic",
+                            "authenticator": "authenticate.anonymous",
+                            "authenticator-realm": "authenticators"
+                        },
+                        "ticket": {
+                            "type": "dynamic",
+                            "authenticator": "authenticate.ticket",
+                            "authenticator-realm": "authenticators"
+                        }
+                    },
+                    "cookie": {
+                        "name": "cbtid",
+                        "length": 64,
+                        "max_age": 864000,
+                        "store": {
+                            "type": "file",
+                            "filename": "cookies.dat"
+                        }
+                    }
+                },
+                {
+                    "id": "web1",
+                    "type": "web",
+                    "endpoint": {
+                        "type": "tcp",
+                        "port": 8080
+                    },
+                    "paths": {
+                        "/": {
+                            "type": "static",
+                            "directory": "../../web"
+                        },
+                        "ws": {
+                            "type": "websocket",
+                            "debug": true,
+                            "serializers": [
+                                "json"
+                            ],
+                            "auth": {
+                                "anonymous": {
+                                    "type": "dynamic",
+                                    "authenticator": "authenticate.anonymous",
+                                    "authenticator-realm": "authenticators"
+                                },
+                                "ticket": {
+                                    "type": "dynamic",
+                                    "authenticator": "authenticate.ticket",
+                                    "authenticator-realm": "authenticators"
+                                }
+                            }
+                        }
+                    }
+                }
+            ]
+        },
+
+        {
+            "type": "container",
+            "options": {
+                "pythonpath": [
+                    "../../python",
+                    "../../server",
+                    "components"
+                ]
+            },
+            "components": [
+                {
+                    "id": "register_serializer_component",
+                    "type": "class",
+                    "classname": "serializer.RegisterSerializers",
+                    "realm": "core",
+                    "transport": {
+                        "type": "websocket",
+                        "endpoint": {
+                            "type": "tcp",
+                            "host": "127.0.0.1",
+                            "port": 8081
+                        },
+                        "url": "ws://localhost:8081"
+                    }
+                },
+                {
+                    "id": "s_core",
+                    "type": "class",
+                    "classname": "wamp.session.WampSessionComponent",
+                    "realm": "core",
+                    "extra": {
+                        "parametro1": "ejemplo"
+                    },
+                    "transport": {
+                        "type": "websocket",
+                        "endpoint": {
+                            "type": "tcp",
+                            "host": "127.0.0.1",
+                            "port": 8081
+                        },
+                        "url": "ws://localhost:8081"
+                    }
+                },
+                {
+                    "id": "library",
+                    "type": "class",
+                    "classname": "actions.systems.library.library.LibrarySession",
+                    "realm": "core",
+                    "transport": {
+                        "type": "websocket",
+                        "endpoint": {
+                            "type": "tcp",
+                            "host": "127.0.0.1",
+                            "port": 8081
+                        },
+                        "url": "ws://localhost:8081"
+                    }
+                },
+
+                {
+                    "id": "s_public",
+                    "type": "class",
+                    "classname": "wamp.session.WampSessionComponent",
+                    "realm": "public",
+                    "extra": {
+                        "parametro1": "ejemplo"
+                    },
+                    "transport": {
+                        "type": "websocket",
+                        "endpoint": {
+                            "type": "tcp",
+                            "host": "127.0.0.1",
+                            "port": 8081
+                        },
+                        "url": "ws://localhost:8081"
+                    }
+                },
+                {
+                    "id": "lp1",
+                    "type": "class",
+                    "classname": "actions.systems.login.login.LoginPublicSession",
+                    "realm": "public",
+                    "transport": {
+                        "type": "websocket",
+                        "endpoint": {
+                            "type": "tcp",
+                            "host": "127.0.0.1",
+                            "port": 8081
+                        },
+                        "url": "ws://localhost:8081"
+                    }
+                },
+                {
+                    "id": "lp2",
+                    "type": "class",
+                    "classname": "actions.systems.login.login.LoginSession",
+                    "realm": "core",
+                    "transport": {
+                        "type": "websocket",
+                        "endpoint": {
+                            "type": "tcp",
+                            "host": "127.0.0.1",
+                            "port": 8081
+                        },
+                        "url": "ws://localhost:8081"
+                    }
+                },
+
+                {
+                    "id": "issues",
+                    "type": "class",
+                    "classname": "actions.systems.issues.issues.Issues",
+                    "realm": "core",
+                    "transport": {
+                        "type": "websocket",
+                        "endpoint": {
+                            "type": "tcp",
+                            "host": "127.0.0.1",
+                            "port": 8081
+                        },
+                        "url": "ws://localhost:8081"
+                    }
+                },
+
+                {
+                    "id": "users",
+                    "type": "class",
+                    "classname": "actions.users.users.Users",
+                    "realm": "core",
+                    "transport": {
+                        "type": "websocket",
+                        "endpoint": {
+                            "type": "tcp",
+                            "host": "127.0.0.1",
+                            "port": 8081
+                        },
+                        "url": "ws://localhost:8081"
+                    }
+                },
+
+                {
+                    "id": "offices",
+                    "type": "class",
+                    "classname": "actions.systems.offices.offices.Offices",
+                    "realm": "core",
+                    "transport": {
+                        "type": "websocket",
+                        "endpoint": {
+                            "type": "tcp",
+                            "host": "127.0.0.1",
+                            "port": 8081
+                        },
+                        "url": "ws://localhost:8081"
+                    }
+                }
+            ]
+        }
+
+
+    ]
+}

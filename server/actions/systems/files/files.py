@@ -11,6 +11,23 @@ from model.connection.connection import Connection
 from model.files.files import FileDAO, File
 
 
+class FilesSession(SystemComponentSession):
+
+    conn = wamp.getConnectionManager()
+
+    @autobahn.wamp.register('files.find')
+    def find(self, fid):
+        con = self.conn.get()
+        try:
+            users = yield self.call('users.findById', uid)
+            r = File.findById(con, id)
+            r.content = self.files.getContent(con, id)
+            rs = r.__dict__
+            return rs
+
+        finally:
+            self.conn.put(con)
+
 class FilesWamp(ApplicationSession):
 
     def __init__(self, config=None):

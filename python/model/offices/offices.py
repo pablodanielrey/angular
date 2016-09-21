@@ -2,7 +2,7 @@
 import uuid
 from model.dao import DAO
 from model.users.users import UserDAO
-from model.serializer.utils import JSONSerializable
+from model.serializer import JSONSerializable
 
 class Office(JSONSerializable):
     ''' oficina '''
@@ -12,6 +12,7 @@ class Office(JSONSerializable):
         self.parent = None
         self.name = None
         self.telephone = None
+        self.area = False
         self.email = None
         self.users = []
         self.childs = []
@@ -40,12 +41,20 @@ class Office(JSONSerializable):
          return OfficeDAO.getOfficesByUserRole(con, userId, tree, role)
 
     @classmethod
+    def getOfficesByUser(cls, con, userId, tree=False):
+        return OfficeDAO.getOfficesByUser(con, userId, tree)
+
+
+    @classmethod
     def getOfficesUsers(cls, con, offices):
         return OfficeDAO.getOfficesUsers(con, offices)
 
     @classmethod
-    def getOfficesByUser(cls, con, userId):
-        return OfficeDAO.getOfficesByUser(con, userId)
+    def getOffices(cls, con):
+        return OfficeDAO.getOffices(con)
+
+    def getAreas(self, con):
+        return OfficeDAO.getAreas(con, self.id)
 
 
 class OfficeDAO(DAO):
@@ -66,6 +75,7 @@ class OfficeDAO(DAO):
                   telephone VARCHAR,
                   email VARCHAR,
                   parent VARCHAR REFERENCES offices.offices (id),
+                  area boolean default false,
                   UNIQUE (name, parent)
                 );
 
@@ -95,6 +105,7 @@ class OfficeDAO(DAO):
         o.name = r['name']
         o.telephone = r['telephone']
         o.email = r['email']
+        o.area = r['area']
         return o
 
     @staticmethod
@@ -122,6 +133,30 @@ class OfficeDAO(DAO):
         cur = con.cursor()
         try:
             cur.execute('select id from offices.offices')
+            ids = [o['id'] for o in cur]
+            return ids
+
+        finally:
+            cur.close()
+
+    @staticmethod
+    def getOffices(con):
+        ''' obtiene todos los ids '''
+        cur = con.cursor()
+        try:
+            cur.execute('select id from offices.offices where area = false')
+            ids = [o['id'] for o in cur]
+            return ids
+
+        finally:
+            cur.close()
+
+    @staticmethod
+    def getAreas(con, oid):
+        ''' obtiene todos los ids '''
+        cur = con.cursor()
+        try:
+            cur.execute('select id from offices.offices where area = true and parent = %s', (oid,))
             ids = [o['id'] for o in cur]
             return ids
 
@@ -195,7 +230,33 @@ class OfficeDAO(DAO):
 
         return users
 
+    '''
+        obtiene todas las oficinas a las cuales el usuario pertenece
+    '''
+    @classmethod
+    def getOfficesByUser(cls,con,userId,tree=False):
 
+        cur = con.cursor()
+        ids = []
+        try:
+            cur.execute('select office_id from offices.offices_users where user_id = %s',(userId,))
+            if cur.rowcount <= 0:
+                return []
+
+            for off in cur:
+                oId = off[0]
+                ids.append(oId)
+
+            if tree:
+                childrens = cls._getChildOffices(con,ids)
+                ids.extend(x for x in childrens if x not in offices)
+        finally:
+            cur.close()
+
+        return ids
+
+
+    '''
     @classmethod
     def getOfficesByUser(cls, con, userId):
         cur = con.cursor()
@@ -207,6 +268,7 @@ class OfficeDAO(DAO):
             return [ s['office_id'] for s in cur ]
         finally:
             cur.close()
+    '''
 
     '''
         obtiene todas las oficinas en las cuales el usuario tiene asignado un rol

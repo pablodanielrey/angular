@@ -1,20 +1,31 @@
 # -*- coding: utf-8 -*-
-import logging
-import inject
+import autobahn
 
-from model.login.profiles import ProfileDAO
 from model.offices.offices import Office
+import wamp
+
+class Offices(wamp.SystemComponentSession):
+
+    conn = wamp.getConnectionManager()
+
+    @autobahn.wamp.register('offices.find_offices_by_user')
+    def findOfficesByUser(self, userId, tree):
+        con = self.conn.get()
+        try:
+            return Office.getOfficesByUser(con, userId, tree)
+        finally:
+            self.conn.put(con)
+
+    @autobahn.wamp.register('offices.find_by_id')
+    def findById(self, ids):
+        con = self.conn.get()
+        try:
+            return Office.findById(con, ids)
+        finally:
+            self.conn.put(con)
 
 
-from model.registry import Registry
-from model.connection import connection
-from model.login.login import Login
-
-import asyncio
-from asyncio import coroutine
-from autobahn.asyncio.wamp import ApplicationSession
-
-from model.serializer.utils import  JSONSerializable
+"""
 
 class OfficeWamp(ApplicationSession):
 
@@ -30,6 +41,7 @@ class OfficeWamp(ApplicationSession):
     def onJoin(self, details):
         logging.debug('registering methods')
         yield from self.register(self.getOfficesByUserRole_async, 'office.getOfficesByUserRole')
+        yield from self.register(self.getOfficesByUser_async, 'office.getOfficesByUser')
         yield from self.register(self.findById_async, 'office.findById')
         yield from self.register(self.getOfficesUsers_async, 'office.getOfficesUsers')
 
@@ -46,12 +58,15 @@ class OfficeWamp(ApplicationSession):
         r = yield from loop.run_in_executor(None, self.getOfficesByUserRole, userId, tree, role)
         return r
 
+    def getOfficesByUser(self, userId, tree):
+
+    @coroutine
+    def getOfficesByUser_async(self, userId, tree = False):
+        loop = asyncio.get_event_loop()
+        r = yield from loop.run_in_executor(None, self.getOfficesByUser, userId, tree)
+        return r
+
     def findById(self, ids):
-        con = self.conn.get()
-        try:
-            return Office.findById(con, ids)
-        finally:
-            self.conn.put(con)
 
     @coroutine
     def findById_async(self, ids):
@@ -71,3 +86,4 @@ class OfficeWamp(ApplicationSession):
         loop = asyncio.get_event_loop()
         r = yield from loop.run_in_executor(None, self.getOfficesUsers, ids)
         return r
+"""

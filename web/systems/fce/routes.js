@@ -1,5 +1,5 @@
 
-var app = angular.module('mainApp')
+var app = angular.module('fce')
 
 app.config(['$routeProvider', function($routeProvider) {
 
