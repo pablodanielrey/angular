@@ -36,7 +36,7 @@
           <div class="contentOrder">
             <div class="contentOrientation">
                 <div class="subtitleNewOrder">OFICINA</div>
-                <input type="texy" class="inputNewOrder" placeholder="Buscar..."  ng-model='vm.model.searchOffice.name' ng-click="vm.view.style2 = 'buscarOficina'"></input>
+                <input type="texy" class="inputNewOrder" placeholder="Buscar..."  ng-model='vm.model.searchOffice.name' ng-click="vm.displaySearchOffice()"></input>
             </div>
             <!-- ---- LISTADO DE OFICINAS ---- -->
             <div class="offices">
@@ -47,7 +47,7 @@
 
             <div class="contentOrientation">
                 <div class="subtitleNewOrder">ÁREA</div>
-                <input type="text" class="inputNewOrder" placeholder="Buscar..." ng-model='vm.model.searchArea.name' ng-click="vm.view.style2 = 'buscarArea'"></input>
+                <input type="text" class="inputNewOrder" placeholder="Buscar..." ng-model='vm.model.searchArea.name' ng-click="vm.displaySearchArea()"></input>
             </div>
             <!-- ---- LISTADO DE AREAS ---- -->
             <div class="areas">

@@ -57,6 +57,8 @@
         vm.removeFile = removeFile;
         vm.selectSubject = selectSubject;
         vm.save = save;
+        vm.displaySearchOffice = displaySearchOffice;
+        vm.displaySearchArea = displaySearchArea;
 
         $scope.$on('openPrivateConnection', function(event, args) {
           vm.model.privateTransport = Login.getPrivateTransport();
@@ -193,13 +195,11 @@
           loadSubjects(vm.model.selectedArea);
         }
 
-        vm.displaySearchOffice = displaySearchOffice;
         function displaySearchOffice() {
           vm.view.style2 = (vm.view.style2 == 'buscarOficina') ? '' : 'buscarOficina';
           vm.model.searchOffice = '';
         }
 
-        vm.displaySearchArea = displaySearchArea;
         function displaySearchArea() {
           vm.view.style2 = (vm.view.style2 == 'buscarArea') ? '' : 'buscarArea';
           vm.model.searchArea = '';
