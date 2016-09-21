@@ -350,7 +350,7 @@ class IssueModel():
             return ['Error en el sistema', 'No puedo iniciar sesión', 'Desarrollar', 'Otro']
         elif oId == servidoresId:
             return ['No anda el servidor', 'No anda el correo', 'No anda la red', 'Wifi', 'Swtich', 'Otro']
-        else
+        else:
             return ['Otro']
 
     @classmethod
