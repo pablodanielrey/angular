@@ -128,7 +128,7 @@ class Issues(wamp.SystemComponentSession):
     def getOfficeSubjects(self, officeId, details):
         con = self.conn.get()
         try:
-            return IssuesModel.getSubjectTypes(con, officeId)
+            return IssueModel.getSubjectTypes(con, officeId)
         finally:
             self.conn.put(con)
 
