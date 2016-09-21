@@ -39,7 +39,7 @@
         vm.selectPriority = selectPriority; //seleccion de estado
         vm.setPriority = setPriority; //cambio de estado
 
-        $scope.$on('openPrivateConnection', function(event, args) {
+        $scope.$on('wamp.open', function(event, args) {
           vm.model.privateTransport = Login.getPrivateTransport();
           activate();
         });

@@ -39,7 +39,7 @@
         vm.messageError = messageError;
         vm.messageSending = messageSending;
 
-        $scope.$on('openPrivateConnection', function(event, args) {
+        $scope.$on('wamp.open', function(event, args) {
           vm.model.privateTransport = Login.getPrivateTransport();
           activate();
         });

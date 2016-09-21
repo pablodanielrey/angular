@@ -47,7 +47,7 @@
         vm.loadUserOffices = loadUserOffices;
 
 
-        $scope.$on('openPrivateConnection', function(event, args) {
+        $scope.$on('wamp.open', function(event, args) {
           vm.model.privateTransport = Login.getPrivateTransport();
           activate();
         });
