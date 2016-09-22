@@ -22,9 +22,9 @@
     });
 
 
-  LoginCtrl.$inject = ['$scope','$window', '$interval', '$location', 'Login'];
+  LoginCtrl.$inject = ['$scope','$window', '$interval', '$location', 'Login', 'Files', '$q'];
 
-  function LoginCtrl($scope, $window, $interval, $location, Login) {
+  function LoginCtrl($scope, $window, $interval, $location, Login, Files, $q) {
 
     /* ---------------------------------------------------
      * --------------------- VARIABLES -------------------
@@ -117,7 +117,7 @@
        }
 
        function sendUsername() {
-         Login.getPublicData($scope.username).then(
+         Login.getPublicData($scope.model.username).then(
            function(publicData) {
              $scope.model.user = publicData;
              $scope.view.focus = 'inputPassword';
@@ -132,22 +132,29 @@
          if ($scope.model.user == null || $scope.model.user.photo == null || $scope.model.user.photo == '') {
            return "modules/img/imgUser.jpg";
          } else {
-           return $scope.model.user.photo;
+           return Files.toDataUri($scope.model.user.photo);
          }
        }
 
        function sendPassword() {
          Login.login($scope.model.username, $scope.model.password).then(
-           function(systems) {
-             console.log(systems);
-             for (var i = 0; i < systems['registered'].length; i++) {
-                 if ($location.host() == systems['registered'][i].domain) {
-                   $window.location.href = systems['registered'][i].relative;
-                   return;
+           function (conn) {
+
+             Login.getRegisteredSystems(conn).then(
+             function(systems) {
+                 console.log(systems);
+                 for (var i = 0; i < systems['registered'].length; i++) {
+                     if ($location.host() == systems['registered'][i].domain) {
+                       $window.location.href = systems['registered'][i].relative;
+                       return;
+                     }
                  }
-             }
-             // si no lo encuentra usa la ultima (deberia ser la de sistema en mantenimiento o algo parecido)
-             $window.location.href = systems['default'];
+                 // si no lo encuentra usa la ultima (deberia ser la de sistema en mantenimiento o algo parecido)
+                 $window.location.href = systems['default'];
+               },
+               function(err) {
+                  $scope.viewPasswordError();
+               });
            },
            function(err) {
               $scope.viewPasswordError();
@@ -192,8 +199,10 @@
         }
 
         function viewPassword() {
-          $scope.view.classScreen = classNameViewPassword;
-          $scope.view.classError = classNameNoError;
+          $scope.$apply(function() {
+            $scope.view.classScreen = classNameViewPassword;
+            $scope.view.classError = classNameNoError;
+          });
         }
 
         function viewPasswordError() {

@@ -5,15 +5,16 @@
         .module('issues')
         .controller('OrdersDetailCtrl', OrdersDetailCtrl);
 
-    OrdersDetailCtrl.$inject = ['$scope', '$routeParams', '$location', 'Login', 'Issues', 'Users', 'IssuesDD'];
+    OrdersDetailCtrl.$inject = ['$scope', '$routeParams', '$location', 'Login', 'Issues', 'Users', 'IssuesDD', '$timeout'];
 
     /* @ngInject */
-    function OrdersDetailCtrl($scope, $routeParams, $location, Login, Issues, Users, IssuesDD) {
+    function OrdersDetailCtrl($scope, $routeParams, $location, Login, Issues, Users, IssuesDD, $timeout) {
         var vm = this;
 
         // variables del modelo
         vm.model = {
-          issue: null, //issue inicial
+          privateTransport: null,
+          issue: null //issue inicial
         }
 
         // variables de la vista
@@ -38,25 +39,58 @@
         vm.selectPriority = selectPriority; //seleccion de estado
         vm.setPriority = setPriority; //cambio de estado
 
+        $scope.$on('wamp.open', function(event, args) {
+          vm.model.privateTransport = Login.getPrivateTransport();
+          activate();
+        });
+
         activate();
 
+
         function activate() {
+          if (Login.getPrivateTransport() == null) {
+            return;
+          }
           vm.model.userId = Login.getCredentials()['userId'];
           vm.view.style2 = vm.view.styles2[0];
           vm.view.style3 = vm.view.styles3[0];
           vm.view.style4 = vm.view.styles4[0];
           var params = $routeParams;
           messageLoading();
+          registerEventManagers();
+
           IssuesDD.issueDetail(params.issueId).then(
             function(issue) {
-              vm.model.issue = issue;
-              closeMessage();
+              $scope.$apply(function() {
+                vm.model.issue = issue;
+                closeMessage();
+              });
             },
             function(error) {
               messageError(error);
             }
           )
         };
+
+
+        // TODO: manejador de eventos
+        function registerEventManagers() {
+          Issues.subscribe('issues.comment_created_event', function(params) {
+            var parentId = params[0];
+            var commentId = params[1];
+            if (vm.model.issue.id == parentId) {
+              IssuesDD.issueDetail(commentId).then(
+                function(issue) {
+                  $scope.$apply(function() {
+                    vm.model.issue.children.push(issue);
+                  });
+                },
+                function(error) {
+                    vm.messageError(error);
+                });
+            }
+          });
+        }
 
 
         function issueStatus() {

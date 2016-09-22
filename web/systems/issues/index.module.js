@@ -1,8 +1,8 @@
 (function() {
   'user strict'
   angular
-      .module('issues',['ngRoute','login','users','offices','files'])
-      .run(function(Login) {
+      .module('issues',['ngRoute','login','users','offices','files','fce'])
+      .run(function(Login, $window) {
         Login.check();
       });
 

@@ -5,16 +5,17 @@
         .module('issues')
         .controller('MyOrdersCommentCtrl', MyOrdersCommentCtrl);
 
-    MyOrdersCommentCtrl.$inject = ['$scope', '$routeParams', '$location', '$timeout', 'Issues', 'Files'];
+    MyOrdersCommentCtrl.$inject = ['$scope', '$routeParams', '$location', '$timeout', 'Issues', 'Files', 'Login'];
 
     /* @ngInject */
-    function MyOrdersCommentCtrl($scope, $routeParams, $location, $timeout, Issues, Files) {
+    function MyOrdersCommentCtrl($scope, $routeParams, $location, $timeout, Issues, Files, Login) {
         var vm = this;
 
         vm.model = {
           issue: null,
           replyDescription: '',
-          files: []
+          files: [],
+          privateTransport: null
         }
 
         vm.view = {
@@ -35,9 +36,18 @@
         vm.messageSending = messageSending;
 
 
+        $scope.$on('wamp.open', function(event, args) {
+          vm.model.privateTransport = Login.getPrivateTransport();
+          activate();
+        });
+
         activate();
 
+
         function activate() {
+          if (Login.getPrivateTransport() == null) {
+            return;
+          }
           var params = $routeParams;
           if (params.issueId == undefined) {
             $location.path('/myOrders');
@@ -50,8 +60,10 @@
         function loadIssue(id) {
           Issues.findById(id).then(
             function(issue) {
-              vm.model.issue = issue;
-              closeMessage();
+              $scope.$apply(function() {
+                vm.model.issue = issue;
+                closeMessage();
+              })
             }, function(error) {
               vm.messageError(error);
             }
@@ -87,7 +99,9 @@
           vm.messageLoading();
           Issues.createComment(subject, vm.model.replyDescription, parentId, officeId, vm.model.files).then(
             function(data) {
-              vm.messageSending();
+              $scope.$apply(function() {
+                vm.messageSending();
+              });
               $timeout(function() {
                 $location.path('myOrdersDetail/' + vm.model.issue.id);
               }, 2000);

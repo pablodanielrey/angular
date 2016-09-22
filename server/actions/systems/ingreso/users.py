@@ -45,6 +45,11 @@ class IngresoWamp(ApplicationSession):
 
             uid, version = puser
             passwords = UserPassword.findByUserId(con, uid)
+            if passwords is None or len(passwords) <= 0:
+                passwd = UserPassword()
+                passwd.userId = uid
+                passwd.username = dni
+                passwords = [passwd]
             for passwd in passwords:
                 passwd.setPassword(password)
                 passwd.persist(con)

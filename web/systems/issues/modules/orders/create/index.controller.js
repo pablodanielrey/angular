@@ -27,7 +27,8 @@
           searchArea: {name:''},
           subject: '',
           description: '',
-          files: []
+          files: [],
+          privateTransport: null
         }
 
 
@@ -43,7 +44,6 @@
         }
 
         // métodos
-        activate();
         vm.cancel = cancel;
         vm.searchUsers = searchUsers;
         vm.getUserPhoto = getUserPhoto;
@@ -57,8 +57,21 @@
         vm.removeFile = removeFile;
         vm.selectSubject = selectSubject;
         vm.save = save;
+        vm.displaySearchOffice = displaySearchOffice;
+        vm.displaySearchArea = displaySearchArea;
+
+        $scope.$on('wamp.open', function(event, args) {
+          vm.model.privateTransport = Login.getPrivateTransport();
+          activate();
+        });
+
+        activate();
+
 
         function activate() {
+          if (Login.getPrivateTransport() == null) {
+            return;
+          }
           vm.model.userId = Login.getCredentials()['userId'];
           vm.model.user = {name:'-'};
           vm.model.search = '';
@@ -78,7 +91,9 @@
           vm.model.offices = [];
           Issues.getOffices().then(
             function(offices) {
-              vm.model.offices = offices;
+              $scope.$apply(function() {
+                vm.model.offices = offices;
+              });
             },
             function(error) {
               messageError(error);
@@ -110,8 +125,10 @@
           vm.view.searching = true;
           Issues.searchUsers(vm.model.search).then(
             function(users) {
-              vm.view.searching = false;
-              vm.model.users = users;
+              $scope.$apply(function() {
+                vm.view.searching = false;
+                vm.model.users = users;
+              });
             }, function(error) {
               messageError(error);
             }
@@ -135,8 +152,10 @@
 
               Offices.findById(ids).then(
                 function(offices) {
-                  vm.model.officesUser = (!offices || offices.length <= 0) ? [] : offices;
-                  vm.model.selectedFromOffice = (offices.length > 0) ? offices[0] : null;
+                  $scope.$apply(function() {
+                    vm.model.officesUser = (!offices || offices.length <= 0) ? [] : offices;
+                    vm.model.selectedFromOffice = (offices.length > 0) ? offices[0] : null;
+                  });
                 }, function(error) {
                   messageError(error);
                 }
@@ -172,14 +191,27 @@
           vm.model.selectedArea = area;
           vm.model.searchArea = (area == null) ? {name:''} : {name: area.name};
           vm.view.style2 = '';
-          vm.loadSubjects(vm.model.selectedArea);
+          vm.model.subject = "";
+          loadSubjects(vm.model.selectedArea);
+        }
+
+        function displaySearchOffice() {
+          vm.view.style2 = (vm.view.style2 == 'buscarOficina') ? '' : 'buscarOficina';
+          vm.model.searchOffice = '';
+        }
+
+        function displaySearchArea() {
+          vm.view.style2 = (vm.view.style2 == 'buscarArea') ? '' : 'buscarArea';
+          vm.model.searchArea = '';
         }
 
         function loadAreas(office) {
           vm.model.areas = [];
           Issues.getAreas(office.id).then(
             function(offices) {
-              vm.model.areas = offices;
+              $scope.$apply(function() {
+                vm.model.areas = offices;
+              });
             },
             function(error) {
               messageError(error);
@@ -224,7 +256,9 @@
           messageLoading();
           Issues.create(subject, description, parentId, office.id, fromOfficeId, author.id, vm.model.files).then(
             function(data) {
-              messageCreated();
+              $scope.$apply(function() {
+                messageCreated();
+              });
               $timeout(function () {
                 closeMessage();
                 $location.path("orders");

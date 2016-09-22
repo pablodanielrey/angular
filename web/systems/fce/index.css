@@ -191,6 +191,9 @@ html, .sistema {
   .MenuCel {
     display: none;
   }
+  .sistema .footerSmall {
+    display: none;
+  }
 }
 
 @media (max-width: 719px) {
@@ -205,6 +208,7 @@ html, .sistema {
     -webkit-flex-direction:column; /* Safari */
     -moz-flex-direction:column; /* mozilla */
   }
+
 }
 
 
@@ -215,7 +219,7 @@ html, .sistema {
 }
 
 @media (max-width: 720px){
-  .sistema .footer {
+  .sistema .footerLarge {
       display: none;
   }
 
@@ -223,10 +227,4 @@ html, .sistema {
     height: calc(100% - 60px);
   }
 
-}
-
-@media (max-height: 500px){
-  .sistema .footer {
-      display: none;
-  }
 }

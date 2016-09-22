@@ -86,6 +86,23 @@
   color: white;
 }
 
+.mails .mailPersonal.pending .btnSendMail,
+.mails .mailPersonal.pending .btnMailValidated {
+  display: none;
+}
+
+.mails .mailPersonal.sending .btnForwardMail,
+.mails .mailPersonal.sending .btnMailNoValidated,
+.mails .mailPersonal.sending .btnMailValidated {
+  display: none;
+}
+
+.mails .mailPersonal.confirmed .btnMailNoValidated,
+.mails .mailPersonal.confirmed .btnForwardMail,
+.mails .mailPersonal.confirmed .btnSendMail {
+  display:none;
+}
+
 .mails .btnDeleteMail {
   padding: 10px;
   background-color: #E43E46;
@@ -112,6 +129,17 @@
   padding: 10px;
   background-color: #92AD17;
     border-radius: 2px;
+  -moz-border-radius:2px;
+  -webkit-border-radius:2px;
+  border: none;
+  color: white;
+  cursor: pointer;
+}
+
+.mails .btnSendMail {
+  padding: 10px;
+  background-color: #92AD17;
+  border-radius: 2px;
   -moz-border-radius:2px;
   -webkit-border-radius:2px;
   border: none;

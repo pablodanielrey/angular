@@ -59,9 +59,10 @@
          controller: 'LogoutCtrl'
       })
 
-      /*.otherwise({
-        redirectTo: '/orders'
-      });*/
+      .otherwise({
+        redirectTo: '/home',
+        templateUrl: 'modules/home/index.html'
+      });
 
     }]);
 

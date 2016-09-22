@@ -23,13 +23,6 @@
   <!-- TODO: ver como se puede hacer esto -->
   <link rel="stylesheet" type="text/css" href="../fce/index.css"/>
 
-  <link rel="stylesheet" type="text/css" href="../fce/modules/header/header.css"/>
-  <script type="text/javascript" src="../fce/modules/header/header.controller.js"></script>
-  <link rel="stylesheet" type="text/css" href="../fce/modules/footer/footer.css"/>
-
-
-
-
   <script src='../login/index.module.js'></script>
   <script src='../login/services/Login.js'></script>
 
@@ -42,21 +35,24 @@
   <script src='../files/index.module.js'></script>
   <script src='../files/services/Files.js'></script>
 
+  <script src='../fce/index.module.js'></script>
+
   <script src='index.module.js'></script>
   <script src='index.controller.js'></script>
   <script src='routes.js'></script>
   <script src='services/Issues.js'></script>
   <script src='services/IssuesDD.js'></script>
 
-  <link rel="stylesheet" type="text/css" href="index.css"/>
+  <!-- <link rel="stylesheet" type="text/css" href="index.css"/> -->
 
   <script type="text/javascript" src="directives/onReadFileBinaryString.js"></script>
 
   <script type="text/javascript" src="directives/listIssues.directive.js"></script>
 
-	<!-- modules -->
-  <script type="text/javascript" src="modules/index.controller.js"></script>
 
+  <link rel="stylesheet" type="text/css" href="../fce/modules/header/header.css"/>
+  <script type="text/javascript" src="../fce/modules/header/header.controller.js"></script>
+  <link rel="stylesheet" type="text/css" href="../fce/modules/footer/footer.css"/>
 
 
   <script type="text/javascript" src="modules/orders/detail/index.controller.js"></script>
@@ -75,11 +71,14 @@
   <script type="text/javascript" src="modules/menuCel/index.controller.js"></script>
   <link rel="stylesheet" type="text/css" href="modules/menuCel/index.css"/>
 
+  <link rel="stylesheet" type="text/css" href="modules/home/home.css"/>
+
+
 </head>
 
 <body class="sistema  {{styleMenu}}" ng-controller="IndexCtrl">
 
-    <div ng-include="'../fce/modules/header/index.html'" ></div>
+    <div ng-include="'../fce/modules/header/index.html'" ng-controller="HeaderCtrl as vm"></div>
     <div class="main">
       <div class="MenuContent" ng-controller="MenuCtrl" ng-include="'modules/menu/index.html?t=' + time"></div>
       <div class="MenuCel" ng-controller="MenuCelCtrl" ng-include="'modules/menuCel/index.html?t=' + time"></div>

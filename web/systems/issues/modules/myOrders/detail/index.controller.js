@@ -5,14 +5,15 @@
         .module('issues')
         .controller('MyOrdersDetailCtrl', MyOrdersDetailCtrl);
 
-    MyOrdersDetailCtrl.$inject = ['$scope', '$routeParams', '$location', '$timeout', 'Issues', 'Users', 'Files', 'Offices'];
+    MyOrdersDetailCtrl.$inject = ['$scope', '$routeParams', '$location', '$timeout', 'Issues', 'Users', 'Files', 'Offices', 'Login'];
 
     /* @ngInject */
-    function MyOrdersDetailCtrl($scope, $routeParams, $location, $timeout, Issues, Users, Files, Offices) {
+    function MyOrdersDetailCtrl($scope, $routeParams, $location, $timeout, Issues, Users, Files, Offices, Login) {
         var vm = this;
         vm.model = {
           issue: null,
-          users: []
+          users: [],
+          privateTransport: null
         }
 
         vm.view = {
@@ -38,9 +39,18 @@
         vm.messageError = messageError;
         vm.messageSending = messageSending;
 
+        $scope.$on('wamp.open', function(event, args) {
+          vm.model.privateTransport = Login.getPrivateTransport();
+          activate();
+        });
+
         activate();
 
+
         function activate() {
+          if (Login.getPrivateTransport() == null) {
+            return;
+          }
           var params = $routeParams;
           if (params.issueId == undefined) {
             $location.path('/myOrders');
@@ -54,6 +64,8 @@
         function loadIssue(id) {
           Issues.findById(id).then(
             function(issue) {
+              loadUser(issue.userId);
+              loadUser(issue.creatorId);
               var size = (issue.children == undefined) ? 0 : issue.children.length;
               for (var i = 0; i < size; i++) {
                   var child = issue.children[i];
@@ -61,12 +73,13 @@
                     loadUser(child.userId);
                   }
               }
-
-              vm.model.issue = issue;
               if (issue.fromOfficeId != undefined) {
                 loadOffice(issue.fromOfficeId);
               }
-              closeMessage();
+              $scope.$apply(function() {
+                vm.model.issue = issue;
+                closeMessage();
+              });
             }, function(error) {
               vm.messageError(error);
             }
@@ -81,8 +94,12 @@
             if (vm.model.issue.id == parentId) {
               Issues.findById(commentId).then(
                 function(comment) {
-
+                  $scope.$apply(function() {
                     vm.model.issue.children.push(comment);
+                    if (comment.user == undefined) {
+                      loadUser(comment.userId);
+                    }
+                  });
                 },
                 function(error) {
                     vm.messageError(error);
@@ -98,13 +115,17 @@
           if (vm.model.users[userId] == null) {
             Users.findById([userId]).then(
               function(users) {
-                vm.model.users[userId] = users[0];
-                var user = vm.model.users[userId];
-                if (user.photoSrc == undefined || user.photoSrc == null) {
-                  Users.findPhoto(users[0].photo).then(function(photo) {
-                    vm.model.users[userId].photoSrc = Files.toDataUri(photo);
-                  });
-                }
+                $scope.$apply(function() {
+                  vm.model.users[userId] = users[0];
+                  var user = vm.model.users[userId];
+                  if (user.photoSrc == undefined || user.photoSrc == null) {
+                    Users.findPhoto(users[0].photo).then(function(photo) {
+                      $scope.$apply(function() {
+                        vm.model.users[userId].photoSrc = Files.toDataUri(photo);
+                      });
+                    });
+                  }
+                });
               }
             );
           }
@@ -117,7 +138,9 @@
           }
           Offices.findById([officeId]).then(
             function(offices) {
-              vm.model.office = (offices == null || offices.length <= 0) ? null : offices[0];
+              $scope.$apply(function() {
+                vm.model.office = (offices == null || offices.length <= 0) ? null : offices[0];
+              });
             }, function(error) {
               // vm.messageError(error);
             }

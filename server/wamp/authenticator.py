@@ -60,6 +60,8 @@ class TicketAuth(wamp.SystemComponentSession):
     @inlineCallbacks
     def authenticate(self, realm, authid, details):
 
+        print(details);
+
         """ chequeo si es un componente del sistema """
         if authid == self.username and details['ticket'] == self.password:
             principal = {
@@ -70,6 +72,8 @@ class TicketAuth(wamp.SystemComponentSession):
             }
             return principal
 
+        print('1')
+
         """ chequeo si es un token ya generado """
         token = yield self.call('authenticate.check_user_token', authid, details['ticket'])
         if token:
@@ -79,8 +83,13 @@ class TicketAuth(wamp.SystemComponentSession):
             }
             return principal
 
+        print('2')
+
         """ chequeo si es un usuario de la base de datos """
         con = wamp.getConnectionManager().get()
+
+        print(authid)
+        print(details['ticket'])
         try:
             username = authid
             password = details['ticket']
@@ -88,11 +97,14 @@ class TicketAuth(wamp.SystemComponentSession):
             if not userId:
                 raise ApplicationError('usuario o clave incorrectas')
 
+            print('3.4')
+
             token = yield self.call('authenticate.get_new_token', username, userId);
             principal = {
                 'role': 'authenticated',
                 'extra': token
             }
+            print('4')
             return principal
 
         except ApplicationError as ae:

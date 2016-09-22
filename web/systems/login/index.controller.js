@@ -4,12 +4,17 @@
 
   angular
     .module('login')
+    .controller('IndexLoginCtrl',IndexLoginCtrl);
+
+  /*
+  angular
+    .module('login')
     .controller('IndexLoginCtrl',IndexLoginCtrl)
     .run(function($wampPublic) {
       console.log('abriendo conexion');
       $wampPublic.open();
     });
-
+*/
   IndexLoginCtrl.$inject = ['$rootScope','$scope'];
 
   function IndexLoginCtrl($rootScope, $scope, $wampPublic) {

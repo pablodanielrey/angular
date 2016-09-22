@@ -147,6 +147,11 @@ class ResetPassword:
         if cls.checkEmailCode(con, eid, code):
             user = User.findById(con, [uid])[0]
             ups = UserPassword.findByUserId(con, uid)
+            if ups is None or len(ups) <= 0:
+                passwd = UserPassword()
+                passwd.userId = uid
+                passwd.username = dni
+                ups = [passwd]
             for up in ups:
                 if up.username == dni:
                     up.setPassword(password)
@@ -159,6 +164,25 @@ class ResetPassword:
 class Login:
 
     reg = inject.attr(Registry)
+
+    @classmethod
+    def getPublicData(cls, con, dni):
+        print(dni)
+        (userId, version) = User.findByDni(con, dni)
+        if userId is None:
+            return None
+
+        users = User.findById(con, [userId])
+        if users is None or len(users) <= 0:
+            return None
+
+        photo = [User.findPhoto(con, users[0].photo) if 'photo' in dir(users[0]) and users[0].photo is not None and users[0].photo != '' else None][0]
+
+        return {
+            'name':users[0].name,
+            'lastname':users[0].lastname,
+            'photo': photo
+        }
 
     @classmethod
     def getUserIdByUsername(cls, con, username):

@@ -2,12 +2,12 @@
 
     <div class="infoMenu">
       <button class="btnMenuCel" ng-click="view.style='expandirMenu'"><i class="fa fa-bars fa-2x"></i> MENU</button>
-      <div class="title"><i class="fa fa-clock-o"></i> Cuentas FCE</div>
+      <div class="title"><i class="fa fa-tags"></i> Pedidos FCE</div>
     </div>
 
     <div class="menuContent">
 
-      <div class="itemMenu" ng-click="selectHome();view.style='ocultarMenu'">
+      <div class="itemMenu" ng-click="selectOrders();view.style='ocultarMenu'">
           <div class="itemTextMenu">
             <i class="fa fa-caret-right arrowItemsMenu"></i> Pedidos
           </div>
@@ -15,7 +15,7 @@
             <i class="fa fa-tags iconsMenu" ></i>
           </div>
       </div>
-      <div class="itemMenu"  ng-click="selectRequest();view.style='ocultarMenu'">
+      <div class="itemMenu"  ng-click="selectMyOrders();view.style='ocultarMenu'">
           <div class="itemTextMenu">
             <i class="fa fa-caret-right arrowItemsMenu"></i> Mis Pedidos
           </div>

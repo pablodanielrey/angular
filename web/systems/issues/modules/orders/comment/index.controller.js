@@ -5,15 +5,16 @@
         .module('issues')
         .controller('OrdersCommentCtrl', OrdersCommentCtrl);
 
-    OrdersCommentCtrl.$inject = ['$scope', '$routeParams', '$location', '$timeout', 'Issues', 'Files'];
+    OrdersCommentCtrl.$inject = ['$scope', '$routeParams', '$location', '$timeout', 'Issues', 'Files', 'Login'];
 
-    function OrdersCommentCtrl($scope, $routeParams, $location, $timeout, Issues, Files) {
+    function OrdersCommentCtrl($scope, $routeParams, $location, $timeout, Issues, Files, Login) {
         var vm = this;
 
         vm.model = {
           issue:{}, //issue padre
           files:[], //archivos del comentario del issue
           replyDescription: '', //descripcion del comentario del issue
+          privateTransport: null
         }
 
         vm.view = {
@@ -27,16 +28,26 @@
         vm.removeFile = removeFile;
         vm.createComment = createComment;
 
+        $scope.$on('wamp.open', function(event, args) {
+          vm.model.privateTransport = Login.getPrivateTransport();
+          activate();
+        });
 
         activate();
 
+
         function activate() {
+          if (Login.getPrivateTransport() == null) {
+            return;
+          }
           messageLoading();
           vm.model.files = [];
           Issues.findById($routeParams.issueId).then(
             function(issue) {
-              vm.model.issue = issue;
-              closeMessage();
+              $scope.$apply(function() {
+                vm.model.issue = issue;
+                closeMessage();
+              });
             }, function(error) { messageError(error); }
           );
         }
@@ -61,7 +72,9 @@
           messageLoading();
           Issues.createComment(vm.model.issue.subject, vm.model.replyDescription, vm.model.issue.id, vm.model.issue.projectId, vm.model.files).then(
             function(data) {
-                messageSending();
+                $scope.$apply(function() {
+                  messageSending();
+                });
                 $timeout(function() {
                   $location.path('ordersDetail/' + vm.model.issue.id);
                 }, 2000);

@@ -73,9 +73,8 @@ class Attachment(JSONSerializable):
 class RedmineAPI:
 
     import os
-    #REDMINE_URL = 'http://163.10.17.8:3000'
     REDMINE_URL = os.environ['ISSUES_REDMINE']
-    KEY = 'd9834b4adde478b3d72378c039f5b019c0bbec96'
+    KEY = os.environ['ISSUES_REDMINE_KEY']
     TRACKER_ERROR = 1
     TRACKER_COMMENT = 4
     STATUS_NEW = 1
@@ -161,11 +160,7 @@ class RedmineAPI:
             return None
         up = ups[0]
 
-        users = redmine.user.filter(name=up.username)
-        if len(users) <= 0:
-            return None
-
-        user = users[0]
+        user = cls._getUserRedmine(up, userId, con)
         return user.id
 
     @classmethod
@@ -177,18 +172,17 @@ class RedmineAPI:
             if len(ups) <= 0:
                 return None
             up = ups[0]
-            userRedmine = cls._getUserRedmine(up, userId, con)
+            userRedmine = cls._getUserRedmine(up, userId, con).login
             return Redmine(cls.REDMINE_URL, key = cls.KEY, impersonate = userRedmine, version='3.3', requests={'verify': False})
 
     @classmethod
     def _getUserRedmine(cls, up, uid, con):
         redmine = cls._getRedmineInstance(cls, con)
         user = up.username
-        print(user)
         usersRedmine = redmine.user.filter(name=user)
         if len(usersRedmine) <= 0:
             usersRedmine = [cls._createUserRedmine(uid, up, con, redmine)]
-        return usersRedmine[0].login
+        return usersRedmine[0]
 
     @classmethod
     def _createUserRedmine(cls, uid, up, con, redmine):
@@ -297,7 +291,7 @@ class RedmineAPI:
         issue.subject = iss.subject
         issue.description = iss.description
         issue.status_id = iss.statusId
-        issue.parent_issue_id = str(iss.parentId)
+        issue.parent_issue_id = iss.parentId
         issue.start_date = iss.start
         issue.tracker_id = iss.tracker
         issue.priority_id = iss.priority
@@ -341,6 +335,23 @@ class IssueModel():
     TRACKER_ERROR = RedmineAPI.TRACKER_ERROR
     TRACKER_COMMENT = RedmineAPI.TRACKER_COMMENT
     cache = {}
+    ditesiId = '117ae745-acb3-48df-9005-343538f85403'
+    soporteId = '4a3409e3-b4f0-43ab-b922-98a1138e3360'
+    desarroloId = 'e55e67d4-9675-4bdf-bed0-da3adc0aec71'
+    servidoresId = '02ad99c8-934d-402b-ab3e-64fd2440de05'
+
+    @classmethod
+    def getSubjectTypes(cls, con, oId):
+        if oId == cls.ditesiId:
+            return ['No anda el servidor', 'No anda el correo', 'Wifi', 'Swtich', 'Error en el sistema', 'Desarrollar', 'No prende la computadora', 'No puedo iniciar sesión', 'Virus', 'Owncloud', 'No anda la red', 'Crear cuenta', 'Error de Windows', 'No Imprime', 'Problema con el correo', 'Otro']
+        elif oId == cls.soporteId:
+            return ['No prende la computadora', 'Problema con el correo', 'No puedo iniciar sesión', 'Virus', 'Owncloud', 'No anda la red', 'Crear cuenta', 'Error de Windows', 'No Imprime', 'Otro']
+        elif oId == cls.desarroloId:
+            return ['Error en el sistema', 'No puedo iniciar sesión', 'Desarrollar', 'Otro']
+        elif oId == cls.servidoresId:
+            return ['No anda el servidor', 'No anda el correo', 'No anda la red', 'Wifi', 'Swtich', 'Otro']
+        else:
+            return ['Otro']
 
     @classmethod
     def getOffices(cls, con):

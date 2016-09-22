@@ -5,27 +5,31 @@
     <div class="headerDetail">
 
           <div class="detail">
-              <div class="contentBtnReturn">
-                  <a href="#/orders" class="btnReturn"><i class=" fa fa-angle-left" aria-hidden="true"></i></a>
+              <div class="contentBtnReturn" title="Volver">
+                  <a href="#/orders"><div class="btnReturn"><i class=" fa fa-angle-left fa-2x" aria-hidden="true"></i></div></a>
               </div>
               <div class="itemDate2">
                   <div class="textDaysOrders">Consulta</div>
                   <div class="textNumerOrders2">Nº {{vm.model.issue.id}}</div>
               </div>
               <div class="itemsType">
-                    <div class="textType">{{vm.model.issue.fromOffice.name}}</div>
-                    <div class="textType2">{{vm.model.issue.area.name}}</div>
-                    <div class="textSubType">{{vm.model.issue.subject}}</div>
+                    <div class="textMini">Oficina:</div>
+                    <div class="textDateOrders"> {{vm.model.issue.fromOffice.name}}</div>
+                    <div class="textType2"> {{vm.model.issue.area.name}}</div>
+                    <div class="contentAsunto">
+                        <div class="textMini">Asunto:&nbsp; </div>
+                        <div class="textSubType"> {{vm.model.issue.subject}}</div>
+                    </div>
               </div>
 
               <!-- ---- Usuarios de la carga del pedido ---- -->
               <div class="contentOffice"   ng-class="{true: 'solicitadoPorEl', false: 'solicitadoPorOtro'}[!vm.model.issue.creatorId]">
                   <div>
                     <div class="textMini">Solicitado por:</div>
-                    <div class="textName"><b>{{vm.model.issue.user.name}} {{vm.model.issue.user.lastname}}</b></div> <!-- Usuario que pide el pedido -->
+                    <div class="textDateOrders">{{vm.model.issue.user.name}} {{vm.model.issue.user.lastname}}</div> <!-- Usuario que pide el pedido -->
                   </div>
                   <div class="userUpload">
-                    <div class="textMini">Cargado por:</div>
+                    <div class="textMini">Cargado por: &nbsp;</div>
                     <div class="textName">{{vm.model.issue.creator.name}}  {{vm.model.issue.creator.lastname}}</div> <!-- Usuario que cargo el pedido -->
                   </div>
               </div>
@@ -33,12 +37,12 @@
               <!-- ---- Contenedor de Acciones del pedido ---- -->
               <div class="contentActions">
                   <!-- ---- Cambiar estado del pedido ---- -->
-                  <div class="itemStatus2">
+                  <div class="itemStatus2" title="Seleccionar Estado">
                       <div class="status2 {{vm.issueStatus()}}" ng-click="vm.selectStatus()">
                           <div class="textA1">ABIERTA <i class="fa fa-caret-down"></i></div>
                           <div class="textA2" title="Abierta">A <i class="fa fa-caret-down"></i></div>
                           <div class="textEC1">EN CURSO <i class="fa fa-caret-down"></i></div>
-                          <div class="textEC2" title="En Curso">eC <i class="fa fa-caret-down"></i></div>
+                          <div class="textEC2" title="En Curso">C <i class="fa fa-caret-down"></i></div>
                           <div class="textC1">CERRADA <i class="fa fa-caret-down"></i></div>
                           <div class="textC2" title="Cerrada">C <i class="fa fa-caret-down"></i></div>
                           <div class="textP1">PAUSADA <i class="fa fa-caret-down"></i></div>
@@ -76,9 +80,8 @@
                   </div>
                   <!-- ---- Cambiar la prioridad del pedido ---- -->
                   <div class="itemPriority">
-                      <div class="contentSelectPriority {{vm.issuePriority()}}" ng-click="vm.selectPriority()">
+                      <div class="contentSelectPriority {{vm.issuePriority()}}" ng-click="vm.selectPriority()" title="Seleccionar Prioridad">
                           <!-- ---- VARIABLES: baja, normal, alta ---- -->
-                          <div class="textPriority">Prioridad</div>
                           <div class="priorityB">BAJA <i class="fa fa-caret-down"></i></div>
                           <div class="priorityN">NORMAL <i class="fa fa-caret-down"></i></div>
                           <div class="priorityA">ALTA <i class="fa fa-caret-down"></i></div>

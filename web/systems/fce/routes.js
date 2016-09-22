@@ -1,5 +1,5 @@
 
-var app = angular.module('mainApp')
+var app = angular.module('fce')
 
 app.config(['$routeProvider', function($routeProvider) {
 
@@ -17,7 +17,8 @@ app.config(['$routeProvider', function($routeProvider) {
 
   .when('/mails', {
      templateUrl: '/systems/fce/modules/mails/index.html',
-     controller: 'MailsCtrl'
+     controller: 'MailsCtrl',
+     controllerAs: 'vm'
   })
 
   .when('/systems', {

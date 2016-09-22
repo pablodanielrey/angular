@@ -5,12 +5,12 @@
     app.controller('MenuCelCtrl', ['$scope','$location',
       function ($scope, $location) {
 
-        $scope.selectHome = function() {
-          $location.path('/home');
+        $scope.selectOrders = function() {
+          $location.path('/orders');
         }
 
-        $scope.selectRequest = function() {
-          $location.path('/request');
+        $scope.selectMyOrders = function() {
+          $location.path('/myOrders');
         }
 
       }
