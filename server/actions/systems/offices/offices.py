@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import autobahn
 
-from model.offices.offices import Office
+from model.offices.office import Office
 import wamp
 
 class Offices(wamp.SystemComponentSession):
