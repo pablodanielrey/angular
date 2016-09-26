@@ -58,10 +58,7 @@
   -webkit-align-items:center; /* Safari */
   -moz-align-items:center; /* mozilla */
   margin-right: 10px;
-<<<<<<< HEAD
-  cursor: pointer;
   /*cursor: pointer;*/
->>>>>>> origin/issues
 }
 
 .headerFce .imgUserRecent {
@@ -92,7 +89,6 @@
   opacity: 0;
   margin: 0px;
   margin-left: -150px
-<<<<<<< HEAD
 }
 
 .headerFce.verPerfil .myProfileOpen {
@@ -135,57 +131,6 @@
 .headerFce .itemProfile0:hover {
   cursor: pointer;
   background-color: #C7D1D6;
->>>>>>> origin/issues
-}
-
-.headerFce.verPerfil .myProfileOpen {
-    animation: mostrarChat .3s;
-    height: 193px;
-    top: 40px;
-    opacity: 1;
-}
-
-.headerFce .arrowProfile {
-  color: #DBE2E5;
-  height: 11px;
-  margin-left: 5px;
-}
-
-.headerFce .contentProfile {
-  background-color: #DBE2E5;
-  border-radius: 5px 5px 0 0;
-  margin: 0;
-  color: #28292D;
-  margin-top: -3px;
-  font-size: 14px;
-  border: 1px solid #d2d8db;
-}
-
-.headerFce .itemProfile0 {
-  padding: 5px 20px 5px 10px;
-  border-radius: 5px 5px 0 0;
-}
-
-<<<<<<< HEAD
-.headerFce .itemProfile {
-  padding: 5px 20px 5px 10px;
-.headerFce .links {
-  text-decoration: none;
->>>>>>> origin/issues
-}
-.headerFce .links:link {color:#28292D;}
-.headerFce .links:visited {color:#28292D;}
-.headerFce .links:active {color:#28292D;}
-.headerFce .links:hover {color:#28292D;}
-
-.headerFce .itemProfile:hover {
-  cursor: pointer;
-  background-color: #C7D1D6;
-}
-
-.headerFce .itemProfile0:hover {
-  cursor: pointer;
-  background-color: #C7D1D6;
 }
 
 
@@ -198,9 +143,7 @@
 .headerFce .links:hover {color:#28292D;}
 
 
-<<<<<<< HEAD
 
->>>>>>> origin/issues
 .headerFce .myAccess {
   display: flex;
   display: -webkit-flex; /* Safari */
