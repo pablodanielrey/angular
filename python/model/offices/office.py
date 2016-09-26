@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from model.serializer import JSONSerializable
-
+from model.dao import DAO
+from model.users.users import UserDAO
 
 class Office(JSONSerializable):
 
@@ -8,17 +9,17 @@ class Office(JSONSerializable):
 
     def __init__(self):
         self.id = None
-        self.parent = None
         self.name = None
         self.telephone = None
         self.number = None
         self.type = officeType[1]
         self.email = None
+        self.parent = None
         self.designations = []
         self.childs = []
 
     def persist(self, con):
-        return OfficeDAO.persist(con)
+        return OfficeDAO.persist(con, self)
 
     @classmethod
     def findAll(cls, con, type=None):
@@ -28,6 +29,71 @@ class Office(JSONSerializable):
     def findByIds(cls, con, ids):
         return OfficeDAO.findByIds(con, ids)
 
+
+class OfficeDAO(DAO):
+
+    @classmethod
+    def _createSchema(cls, con):
+        super()._createSchema(con)
+        cur = con.cursor()
+        try:
+            cur.execute("""
+                CREATE SCHEMA IF NOT EXISTS offices;
+
+                CREATE TABLE IF NOT EXISTS offices.offices (
+                  id VARCHAR NOT NULL PRIMARY KEY,
+                  name VARCHAR NOT NULL,
+                  telephone VARCHAR,
+                  nro VARCHAR,
+                  email VARCHAR,
+                  parent VARCHAR REFERENCES offices.offices (id),
+                  type VARCHAR NOT NULL,
+                  UNIQUE (name)
+                );
+
+            """)
+        finally:
+            cur.close()
+
+    @staticmethod
+    def _fromResult(r):
+        o = Office()
+        o.id = r['id']
+        o.name = r['name']
+        o.telephone = r['telephone']
+        o.number = r['nro']
+        o.type = r['type']
+        o.email = r['name']
+        o.parent = r['parent']
+        return o
+
+    @classmethod
+    def findByIds(cls, con, ids):
+        assert ids is not None
+        cur = con.cursor()
+        try:
+            cur.execute('select * from offices.offices where id in %s', (ids,))
+            if cur.rowcount <= 0:
+                return []
+
+            return [OfficeDAO._fromResult(o) for o in cur.fetchall()]
+
+        finally:
+            cur.close()
+
+    @classmethod
+    def findAll(cls, con, types=Office.officeType):
+        cur = con.cursor()
+        try:
+            cur.execute('select id from offices.offices where type in %s',(types,))
+            return [o['id'] for o in cur]
+
+        finally:
+            cur.close()
+
+    @classmethod
+    def persit(cls, con, off):
+        return
 
 class Designation(JSONSerializable):
 
@@ -46,22 +112,121 @@ class Designation(JSONSerializable):
 
     @classmethod
     def getDesignationByUser(cls, con, userId, history=False):
-        return DesignationDAO.getDesignationByUser(con, userId)
+        return DesignationDAO.getDesignationByUser(con, userId, history)
 
 
     @classmethod
     def getDesignationByOffice(cls, con, officeId, history=False):
-        return DesignationDAO.getDesignationByOffice(con, officeId)
+        return DesignationDAO.getDesignationByOffice(con, officeId, history)
 
 
     @classmethod
     def getDesignationByPosition(cls, con, position, history=False):
-        return DesignationDAO.getDesignationByPosition(con, position)
+        return DesignationDAO.getDesignationByPosition(con, position, history)
 
 
     def persist(self, con):
         return DesignationDAO.persist(con, self)
 
+class DesignationDAO(DAO):
+    dependencies = [UserDAO, OfficeDAO]
+
+    @classmethod
+    def _createSchema(cls, con):
+        super()._createSchema(con)
+        cur = con.cursor()
+        try:
+            cur.execute("""
+                CREATE SCHEMA IF NOT EXISTS offices;
+
+                CREATE TABLE IF NOT EXISTS offices.designation (
+                  user_id VARCHAR NOT NULL REFERENCES profile.users (id),
+                  office_id VARCHAR REFERENCES offices.offices (id),
+                  position VARCHAR,
+                  sstart TIMESTAMPTZ DEFAULT now(),
+                  send TIMESTAMPTZ DEFAULT now(),
+                  UNIQUE (user_id, office_id)
+                );
+            """)
+        finally:
+            cur.close()
+
+    @staticmethod
+    def _fromResult(r):
+        d = Designation()
+        d.officeId = r['office_id']
+        d.position = r['position']
+        d.userId = r['user_id']
+        d.start = r['sstart']
+        d.end = r['send']
+        return d
+
+    @classmethod
+    def findByIds(cls, con, ids):
+        assert ids is not None
+        cur = con.cursor()
+        try:
+            cur.execute('select * from offices.designation where id in %s', (ids,))
+            if cur.rowcount <= 0:
+                return []
+
+            return [DesignationDAO._fromResult(d) for d in cur.fetchall()]
+
+            cur.close()
+        finally:
+
+
+    @classmethod
+    def getDesignationByUser(cls, con, userId, history=False):
+        assert userId is not None
+        cur = con.cursor()
+        try:
+            if history is None or not history:
+                cur.execute('select id from offices.designation where user_id = %s and send is null',(userId,))
+            else:
+                cur.execute('select id from offices.designation where user_id = %s',(userId,))
+
+            return [d['id'] for d in cur]
+
+        finally:
+            cur.close()
+
+
+    @classmethod
+    def getDesignationByOffice(cls, con, officeId, history=False):
+        assert officeId is not None
+        cur = con.cursor()
+        try:
+            if history is None or not history:
+                cur.execute('select id from offices.designation where office_id = %s and send is null',(officeId,))
+            else:
+                cur.execute('select id from offices.designation where office_id = %s',(officeId,))
+
+            return [d['id'] for d in cur]
+
+        finally:
+            cur.close()
+
+
+    @classmethod
+    def getDesignationByPosition(cls, con, position, history=False):
+        assert position is not None
+        cur = con.cursor()
+        try:
+            if history is None or not history:
+                cur.execute('select id from offices.designation where position = %s and send is null',(position,))
+            else:
+                cur.execute('select id from offices.designation where position = %s',(position,))
+
+            return [d['id'] for d in cur]
+
+        finally:
+            cur.close()
+
+
+    @classmethod
+    def persist(cls, con, desig):
+        return
 
 class OfficeModel():
 
