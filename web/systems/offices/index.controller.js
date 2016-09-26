@@ -1,7 +1,7 @@
 (function() {
     'use strict'
     angular
-      .module('issues')
+      .module('offices')
       .controller('IndexCtrl', IndexCtrl);
 
     IndexCtrl.$inject = ['$scope'];
