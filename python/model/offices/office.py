@@ -172,9 +172,8 @@ class DesignationDAO(DAO):
 
             return [DesignationDAO._fromResult(d) for d in cur.fetchall()]
 
-            cur.close()
         finally:
-
+            cur.close()
 
     @classmethod
     def getDesignationByUser(cls, con, userId, history=False):
