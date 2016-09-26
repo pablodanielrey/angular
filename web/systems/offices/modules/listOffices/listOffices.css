@@ -1,0 +1,78 @@
+.screenOffices {
+  width: calc(33% - 40px);
+  height: calc(100% - 40px);
+  background-color: white;
+  padding: 20px;
+  animation-name: movimiento;
+   animation-duration: .5s;
+}
+
+@keyframes movimiento {
+    0% {margin-left: 50px}
+    100% {margin-left: 0px}
+}
+
+.screenOffices .contentSearch,
+.screenOffices .titleListOffices {
+  color: #5C5F69;
+  margin-bottom: 10px;
+}
+
+.screenOffices .inputSearch {
+  border-radius: 2px;
+  -moz-border-radius: 2px;
+  -webkit-border-radius: 2px;
+  font-size: 20px;
+  border: 1px solid #DBE2E5;
+  padding: 10px;
+  width: calc(100% - 20px);
+  margin-bottom: 10px;
+}
+
+.screenOffices .contentOffices {
+  height: calc(100% - 170px);
+  overflow-y: auto;
+  margin-bottom: 10px;
+}
+
+.screenOffices .itemOffice {
+  height: 40px;
+  border-radius: 2px;
+  -moz-border-radius: 2px;
+  -webkit-border-radius: 2px;
+  background-color: #EEEEEE;
+  margin-bottom: 10px;
+  padding: 10px;
+  border: 1px solid #DBE2E5;
+  font-size: 14px;
+}
+
+.screenOffices .itemOffice:hover {
+  cursor: pointer;
+  background-color: #d1d1d1;
+  animation-name: colorDeFondo;
+   animation-duration: 0.3s;
+}
+
+@keyframes colorDeFondo {
+    0% {background-color: #EEEEEE; padding-left: 10px;}
+    50% {padding-left: 15px}
+    100% {background-color: #d1d1d1; padding-left: 10px;}
+}
+
+
+
+.screenOffices .btnCreateNew {
+  background-color: #804080;
+  color: white;
+  border-radius: 3px;
+  -moz-border-radius: 3px;
+  -webkit-border-radius: 3px;
+  padding: 10px;
+  text-align: center;
+}
+
+.screenOffices .btnCreateNew:hover {
+  background-color: #6d316d;
+  cursor: pointer;
+}

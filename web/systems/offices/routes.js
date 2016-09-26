@@ -7,7 +7,7 @@
 
       .otherwise({
         redirectTo: '/home',
-        templateUrl: 'modules/home/index.html'
+        templateUrl: 'modules/listOffices/index.html'
       });
 
     }]);
