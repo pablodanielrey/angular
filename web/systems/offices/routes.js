@@ -1,38 +1,20 @@
-angular
-  .module('mainApp')
-  .config(config);
+(function() {
+    'use strict'
+    var app = angular.module('issues')
 
-config.$inject = ['$routeProvider'];
+    app.config(['$routeProvider', function($routeProvider) {
+      $routeProvider
 
-function config($routeProvider) {
+      .when('/main', {
+         templateUrl: 'modules/home/index.html',
+         controller: 'HomeCtrl'
+      })
 
-  $routeProvider
+      .otherwise({
+        redirectTo: '/home',
+        templateUrl: 'modules/home/index.html'
+      });
 
-    .when('/offices', {
-      templateUrl: '/systems/offices/modules/index.html',
-      controller: 'MainOfficeController',
-      controllerAs: 'vm'
-    })
+    }]);
 
-    .when('/modifyOffice', {
-      templateUrl: '/systems/offices/modules/modifyOffice.html',
-      controller: 'ModifyOfficeController',
-      controllerAs: 'vm'
-    })
-
-    .when('/usersOffices', {
-      templateUrl: '/systems/offices/modules/usersOffices.html',
-      controller: 'UsersOfficesController',
-      controllerAs: 'vm'
-    })
-
-    .when('/rolesOffices', {
-      templateUrl: '/systems/offices/modules/rolesOffices.html',
-      controller: 'RolesOfficesController',
-      controllerAs: 'vm'
-    })
-
-    .otherwise({
-        redirectTo: '/offices'
-    });
-}
+})();

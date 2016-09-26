@@ -1,0 +1,15 @@
+.home {
+  width: 100%;
+  height: calc(100% - 60px);
+  /*background-color: red;*/
+  display: flex;
+  display: -webkit-flex; /* Safari */
+  display: -moz-flex; /* mozilla */
+  align-items: center;
+  -webkit-align-items:center; /* Safari */
+  -moz-align-items:center; /* mozilla */
+  justify-content: center;
+  -moz-justify-content: center;
+  -webkit-justify-content: center;
+
+}
