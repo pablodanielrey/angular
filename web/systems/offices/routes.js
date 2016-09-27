@@ -1,38 +1,32 @@
-angular
-  .module('mainApp')
-  .config(config);
+(function() {
+    'use strict'
+    var app = angular.module('offices')
 
-config.$inject = ['$routeProvider'];
+    app.config(['$routeProvider', function($routeProvider) {
+      $routeProvider
 
-function config($routeProvider) {
+      .when('/create', {
+         templateUrl: 'modules/offices/index.html',
+         controller: 'OfficesCtrl',
+         controllerAs: 'vm'
+      })
 
-  $routeProvider
+      .when('/edit/:officeId', {
+         templateUrl: 'modules/offices/index.html',
+         controller: 'OfficesCtrl',
+         controllerAs: 'vm'
+      })
 
-    .when('/offices', {
-      templateUrl: '/systems/offices/modules/index.html',
-      controller: 'MainOfficeController',
-      controllerAs: 'vm'
-    })
+      .when('/list', {
+         templateUrl: 'modules/offices/index.html',
+         controller: 'OfficesCtrl',
+         controllerAs: 'vm'
+      })
 
-    .when('/modifyOffice', {
-      templateUrl: '/systems/offices/modules/modifyOffice.html',
-      controller: 'ModifyOfficeController',
-      controllerAs: 'vm'
-    })
+      .otherwise({
+        redirectTo: '/list'
+      });
 
-    .when('/usersOffices', {
-      templateUrl: '/systems/offices/modules/usersOffices.html',
-      controller: 'UsersOfficesController',
-      controllerAs: 'vm'
-    })
+    }]);
 
-    .when('/rolesOffices', {
-      templateUrl: '/systems/offices/modules/rolesOffices.html',
-      controller: 'RolesOfficesController',
-      controllerAs: 'vm'
-    })
-
-    .otherwise({
-        redirectTo: '/offices'
-    });
-}
+})();

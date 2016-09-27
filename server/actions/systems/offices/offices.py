@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import autobahn
 
-from model.offices.offices import Office
+from model.offices.office import Office
 import wamp
 
 class Offices(wamp.SystemComponentSession):
@@ -12,7 +12,8 @@ class Offices(wamp.SystemComponentSession):
     def findOfficesByUser(self, userId, tree):
         con = self.conn.get()
         try:
-            return Office.getOfficesByUser(con, userId, tree)
+            # return Office.getOfficesByUser(con, userId, tree)
+            return []
         finally:
             self.conn.put(con)
 
