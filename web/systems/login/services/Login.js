@@ -49,9 +49,9 @@
 
     // inicializamos la conexión pública
 
-    var host = location.hostname;
+    var host = location.host;
     var options = {
-        url: 'ws://' + host + ':80/ws',
+        url: 'ws://' + host + '/ws',
         realm: 'public',
         authmethods: ['anonymous']
     };
@@ -136,9 +136,9 @@
     service.getPrivateConnection = function(username, password) {
       var d = $q.defer();
 
-      var host = location.hostname;
+      var host = location.host;
       var options = {
-          url: 'ws://' + host + ':80/ws',
+          url: 'ws://' + host + '/ws',
           realm: 'core',
           authid: username,
           authmethods: ['ticket'],
