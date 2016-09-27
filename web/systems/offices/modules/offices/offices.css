@@ -1,4 +1,12 @@
-.screenOffices {
+.offices {
+  width: 100%;
+  height: 100%;
+  background-color: white;
+  display: flex;
+  flex-direction: row;
+}
+
+.offices .listOffices {
   width: calc(33% - 40px);
   height: calc(100% - 40px);
   background-color: white;
@@ -12,13 +20,13 @@
     100% {margin-left: 0px}
 }
 
-.screenOffices .contentSearch,
-.screenOffices .titleListOffices {
+.offices .contentSearch,
+.offices .titleListOffices {
   color: #5C5F69;
   margin-bottom: 10px;
 }
 
-.screenOffices .inputSearch {
+.offices .inputSearch {
   border-radius: 2px;
   -moz-border-radius: 2px;
   -webkit-border-radius: 2px;
@@ -29,13 +37,13 @@
   margin-bottom: 10px;
 }
 
-.screenOffices .contentOffices {
+.offices .contentOffices {
   height: calc(100% - 170px);
   overflow-y: auto;
   margin-bottom: 10px;
 }
 
-.screenOffices .itemOffice {
+.offices .itemOffice {
   height: 40px;
   border-radius: 2px;
   -moz-border-radius: 2px;
@@ -47,7 +55,7 @@
   font-size: 14px;
 }
 
-.screenOffices .itemOffice:hover {
+.offices .itemOffice:hover {
   cursor: pointer;
   background-color: #d1d1d1;
   animation-name: colorDeFondo;
@@ -62,7 +70,7 @@
 
 
 
-.screenOffices .btnCreateNew {
+.offices .btnCreateNew {
   background-color: #804080;
   color: white;
   border-radius: 3px;
@@ -72,7 +80,7 @@
   text-align: center;
 }
 
-.screenOffices .btnCreateNew:hover {
+.offices .btnCreateNew:hover {
   background-color: #6d316d;
   cursor: pointer;
 }
