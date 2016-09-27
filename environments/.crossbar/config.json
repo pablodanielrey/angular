@@ -206,7 +206,7 @@
                             "type": "websocket",
                             "debug": true,
 			    "options": {
-				"auto_ping_interval": 45
+				"auto_ping_interval": 30000
 			    },
                             "serializers": [
                                 "json"
