@@ -1,20 +1,15 @@
-var app = angular.module('mainApp');
+(function() {
+    'user strict'
 
-app.controller('MenuCtrl', ["$rootScope", '$scope','$location',
+    var app = angular.module('offices');
+    app.controller('MenuCtrl', ['$scope','$location',
 
-  function ($rootScope, $scope, $location) {
+      function ($scope, $location) {
+        $scope.selectOrders = function() {
+          $location.path('/main');
+        }
 
-    $scope.selectHome = function() {
+      }
+    ]);
 
-      $location.path('/home');
-    }
-
-    $scope.selectRequest = function() {
-      $location.path('/request');
-    }
-
-    $scope.selectSchedule = function() {
-      $location.path('/schedule');
-    }
-  }
-]);
+})();

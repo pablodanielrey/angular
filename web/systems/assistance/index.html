@@ -1,104 +1,73 @@
 <!DOCTYPE html>
-<html ng-app="mainApp">
+<html ng-app="offices">
 <head>
   <meta charset="utf-8"/>
   <meta name='viewport' content='width=device-width'/>
-  <title>Asistencia | FCE </title>
+  <title>Pedidos | FCE </title>
 
-  <script src="/libs/bower_components/angularjs/angular.js"></script>
-  <script src="/libs/bower_components/angular-route/angular-route.js"></script>
-  <script src="/libs/bower_components/autobahn/autobahn.js"></script>
-  <script src="/libs/bower_components/angular-wamp/release/angular-wamp.js"></script>
+  <script>
+    // AUTOBAHN_DEBUG = true;
+  </script>
+
+  <script src="../../libs/bower_components/angular/angular.js"></script>
+  <script src="../../libs/bower_components/angular-route/angular-route.js"></script>
+  <script src="../../libs/bower_components/angular-cookies/angular-cookies.js"></script>
+  <script src="../../libs/bower_components/autobahn/autobahn.js"></script>
+  <script src="../../libs/bower_components/angular-wamp/release/angular-wamp.js"></script>
 
   <!-- esto es el estilo de font awesome para tener los iconos -->
-  <link rel="stylesheet" href="/libs/font-awesome/css/font-awesome.min.css">
+  <link rel="stylesheet" href="/libs/font-awesome-4.5.0/css/font-awesome.min.css">
   <link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
   <link rel="shortcut icon" href="/systems/fce/img/favicon2.ico">
 
-  <script type="text/javascript" src="/config.json"></script>
+  <!-- TODO: ver como se puede hacer esto -->
+  <link rel="stylesheet" type="text/css" href="../fce/index.css"/>
 
-  <script type="text/javascript" src="/systems/assistance/index.module.js"></script>
-  <script type="text/javascript" src="/systems/assistance/index.controller.js"></script>
-  <script type="text/javascript" src="/systems/assistance/routes.js"></script>
-  <link rel="stylesheet" type="text/css" href="/systems/fce/index.css"/>
+  <script src='../login/index.module.js'></script>
+  <script src='../login/services/Login.js'></script>
 
-	<!-- servicios -->
-	<script type="text/javascript" src="/services/Credentials.js"></script>
-	<script type="text/javascript" src="/services/Utils.js"></script>
-	<script type="text/javascript" src="/services/Cache.js"></script>
-	<script type="text/javascript" src="/services/Session.js"></script>
-	<script type="text/javascript" src="/services/Notifications.js"></script>
-	<script type="text/javascript" src="/services/Profiles.js"></script>
-  <script type="text/javascript" src="/services/Login.js"></script>
-  <script type="text/javascript" src="/services/Users.js"></script>
-  <script type="text/javascript" src="/services/systems/positions/Positions.js"></script>
-  <script type="text/javascript" src="/services/systems/assistance/Assistance.js"></script>
-  <script type="text/javascript" src="/services/systems/office/Office.js"></script>
+  <script src='../users/index.module.js'></script>
+  <script src='../users/services/Users.js'></script>
 
-	<!-- modules -->
-  <script type="text/javascript" src="/systems/assistance/modules/index.controller.js"></script>
-  <link rel="stylesheet" type="text/css" href="/systems/assistance/modules/index.css"/>
+  <script src='../files/index.module.js'></script>
+  <script src='../files/services/Files.js'></script>
 
-  <script type="text/javascript" src="/systems/assistance/modules/home/index.controller.js"></script>
-  <link rel="stylesheet" type="text/css" href="/systems/assistance/modules/home/index.css"/>
+  <script src='../fce/index.module.js'></script>
 
-  <script type="text/javascript" src="/systems/assistance/modules/request/index.controller.js"></script>
-  <link rel="stylesheet" type="text/css" href="/systems/assistance/modules/request/index.css"/>
+  <script src='index.module.js'></script>
+  <script src='index.controller.js'></script>
+  <script src='routes.js'></script>
+  <script src='services/Offices.js'></script>
 
-  <script type="text/javascript" src="/systems/assistance/modules/schedule/index.controller.js"></script>
-    <script type="text/javascript" src="/systems/assistance/modules/schedule/schedule.directive.js"></script>
-  <link rel="stylesheet" type="text/css" href="/systems/assistance/modules/schedule/index.css"/>
-
-  <!--************************* SOLICITUDES ************************************ -->
-  <!-- AUSENTE CON AVISO -->
-  <script type="text/javascript" src="/systems/assistance/modules/request/AA/aa.controller.js"></script>
-  <link rel="stylesheet" type="text/css" href="/systems/assistance/modules/request/AA/aa.css"/>
-  <!-- BOLETA DE SALIDA -->
-  <script type="text/javascript" src="/systems/assistance/modules/request/BDS/bds.controller.js"></script>
-  <link rel="stylesheet" type="text/css" href="/systems/assistance/modules/request/BDS/bds.css"/>
-  <script type="text/javascript" src="/systems/assistance/modules/request/BDS_SR/index.controller.js"></script>
-  <link rel="stylesheet" type="text/css" href="/systems/assistance/modules/request/BDS_SR/index.css"/>
-  <!-- PRE-EXAMEN -->
-  <script type="text/javascript" src="/systems/assistance/modules/request/PE/pe.controller.js"></script>
-  <link rel="stylesheet" type="text/css" href="/systems/assistance/modules/request/PE/pe.css"/>
-  <!--ART 102 -->
-  <script type="text/javascript" src="/systems/assistance/modules/request/A102/a102.controller.js"></script>
-  <link rel="stylesheet" type="text/css" href="/systems/assistance/modules/request/A102/a102.css"/>
-  <!--COMPENSATORIO -->
-  <script type="text/javascript" src="/systems/assistance/modules/request/compensatorio/compensatorio.controller.js"></script>
-  <link rel="stylesheet" type="text/css" href="/systems/assistance/modules/request/compensatorio/compensatorio.css"/>
-  <!--VACACIONES -->
-  <script type="text/javascript" src="/systems/assistance/modules/request/vacaciones/vacaciones.controller.js"></script>
-  <link rel="stylesheet" type="text/css" href="/systems/assistance/modules/request/vacaciones/vacaciones.css"/>
-  <!--CUMPLEAÑO -->
-  <!-- <script type="text/javascript" src="/systems/assistance/modules/request/cumpleanos/cumpleanos.controller.js"></script> -->
-  <!-- <link rel="stylesheet" type="text/css" href="/systems/assistance/modules/request/cumpleanos/cumpleanos.css"/> -->
-  <!--************************ FIN SOLICITUDES ********************************** -->
+  <!-- <link rel="stylesheet" type="text/css" href="index.css"/> -->
 
 
-  <script type="text/javascript" src="/systems/assistance/modules/menu/index.controller.js"></script>
-  <script type="text/javascript" src="/systems/assistance/modules/menuCel/index.controller.js"></script>
-  <link rel="stylesheet" type="text/css" href="/systems/assistance/modules/menuCel/index.css"/>
-
-  <script type="text/javascript" src="/modules/messages/messages.js"></script>
-  <link rel="stylesheet" type="text/css" href="/modules/messages/messages.css"/>
-
-  <link rel="stylesheet" type="text/css" href="/systems/fce/modules/header/header.css"/>
-  <script type="text/javascript" src="/systems/fce/modules/header/header.controller.js"></script>
-  <link rel="stylesheet" type="text/css" href="/systems/fce/modules/footer/footer.css"/>
+  <link rel="stylesheet" type="text/css" href="../fce/modules/header/header.css"/>
+  <script type="text/javascript" src="../fce/modules/header/header.controller.js"></script>
+  <link rel="stylesheet" type="text/css" href="../fce/modules/footer/footer.css"/>
 
 
-  <link rel="stylesheet" type="text/css" href="/systems/assistance/index.css"/>
+  <!-- <script type="text/javascript" src="modules/orders/detail/index.controller.js"></script> -->
+  <!-- <link rel="stylesheet" type="text/css" href="modules/orders/index.css"/> -->
+
+  <script type="text/javascript" src="modules/menu/index.controller.js"></script>
+  <script type="text/javascript" src="modules/menuCel/index.controller.js"></script>
+  <link rel="stylesheet" type="text/css" href="modules/menuCel/index.css"/>
+
+
+  <link rel="stylesheet" type="text/css" href="modules/offices/offices.css"/>
+
 
 </head>
+
 <body class="sistema  {{styleMenu}}" ng-controller="IndexCtrl">
 
-    <div ng-include="'/systems/fce/modules/header/index.html'" ng-controller="HeaderCtrl"></div>
+    <div ng-include="'../fce/modules/header/index.html'" ng-controller="HeaderCtrl as vm"></div>
     <div class="main">
-      <div class="MenuContent" ng-controller="MenuCtrl" ng-include="'/systems/assistance/modules/menu/index.html'"></div>
-      <div class="MenuCel" ng-controller="MenuCelCtrl" ng-include="'/systems/assistance/modules/menuCel/index.html'"></div>
+      <div class="MenuContent" ng-controller="MenuCtrl" ng-include="'modules/menu/index.html?t=' + time"></div>
+      <div class="MenuCel" ng-controller="MenuCelCtrl" ng-include="'modules/menuCel/index.html?t=' + time"></div>
       <div class="viewContent" ng-view></div>
     </div>
-    <div ng-include="'/systems/fce/modules/footer/index.html'"></div>
+    <div ng-include="'../fce/modules/footer/index.html'"></div>
 </body>
 </html>
