@@ -3,7 +3,11 @@
   height: 100%;
   background-color: white;
   display: flex;
-  flex-direction: row;
+  display: -webkit-flex; /* Safari */
+  display: -moz-flex; /* mozilla */
+  flex-direction:row;
+  -webkit-flex-direction:row; /* Safari */
+  -moz-flex-direction:row; /* mozilla */
 }
 
 .offices .listOffices {
@@ -44,13 +48,22 @@
 }
 
 .offices .itemOffice {
-  height: 40px;
+  display: flex;
+  display: -webkit-flex; /* Safari */
+  display: -moz-flex; /* mozilla */
+  flex-direction:row;
+  -webkit-flex-direction:row; /* Safari */
+  -moz-flex-direction:row; /* mozilla */
+  justify-content: space-between;
+  -webkit-justify-content: space-between;
+  -moz-justify-content: space-between;
+  width: 98%;
+  height: 70px;
   border-radius: 2px;
   -moz-border-radius: 2px;
   -webkit-border-radius: 2px;
   background-color: #EEEEEE;
   margin-bottom: 10px;
-  padding: 10px;
   border: 1px solid #DBE2E5;
   font-size: 14px;
 }
@@ -63,9 +76,69 @@
 }
 
 @keyframes colorDeFondo {
-    0% {background-color: #EEEEEE; padding-left: 10px;}
-    50% {padding-left: 15px}
-    100% {background-color: #d1d1d1; padding-left: 10px;}
+    0% {background-color: #EEEEEE}
+    100% {background-color: #d1d1d1}
+}
+
+.offices .officesData {
+  width: 100%;
+}
+
+.offices .officeType {
+  width: 40px;
+  background-color: #eae8e8;
+  font-size: 10px;
+  color: #28292D;
+  padding: 1px;
+  border-radius: 2px 2px 0 0;
+  -moz-border-radius: 2px 2px 0 0;
+  -webkit-border-radius: 2px 2px 0 0;
+  padding-left: 10px;
+}
+
+.offices .officeName {
+  margin: 5px 0 0 10px;
+
+}
+
+.offices .itemOffice:hover .officeName {
+  animation-name: margen;
+  animation-duration: 0.5s;
+}
+
+@keyframes margen {
+  0% {margin-left: 10px}
+  50% {margin-left: 13px}
+  100% {margin-left: 10px}
+}
+
+.offices .btnDelete {
+  width: 50px;
+  height: 100%;
+  background-color: #c4c2c2;
+  color: #5C5F69;
+  display: flex;
+  display: -webkit-flex; /* Safari */
+  display: -moz-flex; /* mozilla */
+  flex-direction:row;
+  -webkit-flex-direction:row; /* Safari */
+  -moz-flex-direction:row; /* mozilla */
+  justify-content: center;
+  -webkit-justify-content: center;
+  -moz-justify-content: center;
+  align-items: center;
+  -webkit-align-items:center; /* Safari */
+  -moz-align-items:center; /* mozilla */
+}
+
+.offices .btnDelete:hover {
+  color: white;
+  background-color: #E43E46;
+  background: red; /* For browsers that do not support gradients */
+  background: -webkit-radial-gradient(#c42d32, #E43E46); /* Safari 5.1 to 6.0 */
+  background: -o-radial-gradient(#c42d32, #E43E46); /* For Opera 11.6 to 12.0 */
+  background: -moz-radial-gradient(#c42d32, #E43E46); /* For Firefox 3.6 to 15 */
+  background: radial-gradient(#c42d32, #E43E46); /* Standard syntax */
 }
 
 

@@ -43,7 +43,7 @@
         }
 
         function loadOffices() {
-          vm.model.offices = [ {name: 'Dirección de Tecnología y Servicios Informáticos', users:[]}, {name: 'Soporte', users:[]}, {name: 'Desarrollo', users:[]}];
+          vm.model.offices = [ {name: 'Dirección de Tecnología y Servicios Informáticos', users:[]}, {name: 'Dirección de Mantenimiento y Servicios Generales ', users:[]}, {name: 'Soporte Técnico', users:[]}, {name: 'Dirección de Económico Financiero ', users:[]},{name: 'Dirección de Despacho', users:[]}];
           vm.model.users = [ {name: 'Emanuel Pais'}, {name: 'Ivan Castañeda'}, {name: 'Walter Blanco'}];
         }
 

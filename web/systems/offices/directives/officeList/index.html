@@ -1,21 +1,27 @@
+<div class="contentSearch">
+  <i class="fa fa-search"></i> BUSCAR OFICINA
+</div>
 
+<div>
+  <input class="inputSearch" type="text" ng-model="vm.model.search">
+</div>
 
-    <div class="contentSearch">
-      <i class="fa fa-search"></i> BUSCAR OFICINA
+<div class="titleListOffices">
+  Listado de Oficinas
+</div>
+
+<div class="contentOffices">
+    <!-- <div class="itemOffice" ng-repeat="office in vm.offices | filter: vm.model.search"> <span ng-click="vm.select(office)">{{office.name}}</span> <span ng-click="vm.remove(office)"> X </span></div> -->
+    <div class="itemOffice" ng-repeat="office in vm.offices | filter: vm.model.search" ng-click="vm.select(office)">
+        <div class="officesData">
+            <div class="officeType">Oficina</div>
+            <div class="officeName">{{office.name}}</div>
+        </div>
+        <div class="btnDelete" ng-click="vm.remove(office)"> <i class="fa fa-trash" aria-hidden="true"></i> </div>
     </div>
 
-    <div>
-      <input class="inputSearch" type="text" ng-model="vm.model.search">
-    </div>
+</div>
 
-    <div class="titleListOffices">
-      Listado de Oficinas
-    </div>
-
-    <div class="contentOffices">
-        <div class="itemOffice" ng-repeat="office in vm.offices | filter: vm.model.search"> <span ng-click="vm.select(office)">{{office.name}}</span> <span ng-click="vm.remove(office)"> X </span></div>
-    </div>
-
-    <div class="btnCreateNew" ng-click="vm.create()">
-      CREAR NUEVA
-    </div>
+<div class="btnCreateNew" ng-click="vm.create()">
+  CREAR NUEVA
+</div>
