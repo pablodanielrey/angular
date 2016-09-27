@@ -5,9 +5,26 @@
     app.config(['$routeProvider', function($routeProvider) {
       $routeProvider
 
+      .when('/create', {
+         templateUrl: 'modules/offices/index.html',
+         controller: 'OfficesCtrl',
+         controllerAs: 'vm'
+      })
+
+      .when('/edit/:officeId', {
+         templateUrl: 'modules/offices/index.html',
+         controller: 'OfficesCtrl',
+         controllerAs: 'vm'
+      })
+
+      .when('/list', {
+         templateUrl: 'modules/offices/index.html',
+         controller: 'OfficesCtrl',
+         controllerAs: 'vm'
+      })
+
       .otherwise({
-        redirectTo: '/home',
-        templateUrl: 'modules/listOffices/index.html'
+        redirectTo: '/list'
       });
 
     }]);

@@ -15,11 +15,19 @@ class Office(JSONSerializable):
         self.type = officeType[1]
         self.email = None
         self.parent = None
-        self.designations = []
-        self.childs = []
 
     def persist(self, con):
         return OfficeDAO.persist(con, self)
+
+    def findDesignations(self, con):
+        pass
+
+    def findChilds(self, con):
+        pass
+
+    @classmethod
+    def getTypes(cls):
+        return cls.officeType
 
     @classmethod
     def findAll(cls, con, type=None):
@@ -95,38 +103,44 @@ class OfficeDAO(DAO):
     def persit(cls, con, off):
         return
 
+
 class Designation(JSONSerializable):
 
     def __init__(self):
+        self.id = None
         self.officeId = None
         self.position = 'Cumple función'
         self.userId = None
         self.start = None
         self.end = None
 
+    @classmethod
+    def removeByIds(cls, con, ids):
+        DesignationDAO.removeByIds(con, ids)
+
+    def remove(self, con):
+        DesignationDAO.removeByIds(con, [self.id])
 
     @classmethod
     def findByIds(cls, con, ids):
         return DesignationDAO.findByIds(con, ids)
 
-
     @classmethod
     def getDesignationByUser(cls, con, userId, history=False):
         return DesignationDAO.getDesignationByUser(con, userId, history)
-
 
     @classmethod
     def getDesignationByOffice(cls, con, officeId, history=False):
         return DesignationDAO.getDesignationByOffice(con, officeId, history)
 
-
     @classmethod
     def getDesignationByPosition(cls, con, position, history=False):
         return DesignationDAO.getDesignationByPosition(con, position, history)
 
-
     def persist(self, con):
         return DesignationDAO.persist(con, self)
+
+
 
 class DesignationDAO(DAO):
     dependencies = [UserDAO, OfficeDAO]
@@ -140,12 +154,13 @@ class DesignationDAO(DAO):
                 CREATE SCHEMA IF NOT EXISTS offices;
 
                 CREATE TABLE IF NOT EXISTS offices.designation (
+                  id VARCHAR PRIMARY KEY,
                   user_id VARCHAR NOT NULL REFERENCES profile.users (id),
                   office_id VARCHAR REFERENCES offices.offices (id),
                   position VARCHAR,
-                  sstart TIMESTAMPTZ DEFAULT now(),
-                  send TIMESTAMPTZ DEFAULT now(),
-                  UNIQUE (user_id, office_id)
+                  sstart DATE default now(),
+                  send DATE,
+                  UNIQUE (user_id, office_id, position)
                 );
             """)
         finally:
@@ -154,6 +169,7 @@ class DesignationDAO(DAO):
     @staticmethod
     def _fromResult(r):
         d = Designation()
+        d.id = r['id']
         d.officeId = r['office_id']
         d.position = r['position']
         d.userId = r['user_id']
@@ -162,11 +178,22 @@ class DesignationDAO(DAO):
         return d
 
     @classmethod
+    def removeByIds(cls, con, ids):
+        assert ids is not None
+        cur = con.cursor()
+        try:
+            cur.execute('delete from offices.designation where id in %s', (ids,))
+
+        finally:
+            cur.close()
+
+
+    @classmethod
     def findByIds(cls, con, ids):
         assert ids is not None
         cur = con.cursor()
         try:
-            cur.execute('select * from offices.designation where id in %s', (ids,))
+            cur.execute('select * from offices.designation where id in %s order by sstart asc', (ids,))
             if cur.rowcount <= 0:
                 return []
 
@@ -181,15 +208,14 @@ class DesignationDAO(DAO):
         cur = con.cursor()
         try:
             if history is None or not history:
-                cur.execute('select id from offices.designation where user_id = %s and send is null',(userId,))
+                cur.execute('select id from offices.designation where user_id = %s and send is null order by sstart',(userId,))
             else:
-                cur.execute('select id from offices.designation where user_id = %s',(userId,))
+                cur.execute('select id from offices.designation where user_id = %s order by sstart',(userId,))
 
             return [d['id'] for d in cur]
 
         finally:
             cur.close()
-
 
     @classmethod
     def getDesignationByOffice(cls, con, officeId, history=False):
@@ -206,7 +232,6 @@ class DesignationDAO(DAO):
         finally:
             cur.close()
 
-
     @classmethod
     def getDesignationByPosition(cls, con, position, history=False):
         assert position is not None
@@ -222,10 +247,10 @@ class DesignationDAO(DAO):
         finally:
             cur.close()
 
-
     @classmethod
     def persist(cls, con, desig):
         return
+
 
 class OfficeModel():
 
