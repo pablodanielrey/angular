@@ -2,7 +2,7 @@
 
 
     <div>
-      <input class="inputSearch" type="text" placeholder="NOMBRE DE OFICINA">
+      <input class="inputSearch" type="text" placeholder="NOMBRE DE OFICINA" ng.model="vm.model.office.name">
     </div>
 
     <div class="titleListOffices">
@@ -10,7 +10,7 @@
     </div>
 
     <div class="contentOffices">
-        <div class="itemOffice"> Alejandro Oporto </div>
+        <div class="itemOffice" ng-repeat="user in vm.model.office.users"> {{user.name}} <span ng-click="vm.removeUser(user)">X</span> </div>
 
     </div>
 

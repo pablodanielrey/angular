@@ -13,12 +13,17 @@
 
         vm.model = {
           userId: null,
-          offices: []
+          offices: [],
+          users: [],
+          office: null
         }
 
         vm.loadOffices = loadOffices;
         vm.remove = remove;
         vm.create = create;
+        vm.addUser = addUser;
+        vm.removeUser = removeUser;
+        vm.selectOffice = selectOffice;
 
         $scope.$on('wamp.open', function(event, args) {
           vm.model.privateTransport = Login.getPrivateTransport();
@@ -39,10 +44,18 @@
 
         function loadOffices() {
           vm.model.offices = [ {name: 'Dirección de Tecnología y Servicios Informáticos'}, {name: 'Soporte'}, {name: 'Desarrollo'}];
+          vm.model.users = [ {name: 'Emanuel Pais'}, {name: 'Ivan Castañeda'}, {name: 'Walter Blanco'}];
         }
 
         function create() {
-          console.log('create');
+          vm.model.office = {};
+          vm.model.office.users = [];
+          vm.model.office.name = '';
+        }
+
+        function selectOffice(office) {
+          vm.model.office = office;
+          console.log(vm.model.office.name);
         }
 
         function remove(office) {
@@ -50,6 +63,22 @@
           if (index > -1) {
               vm.model.offices.splice(index, 1);
           }
+        }
+
+        function addUser(user) {
+          var index = vm.model.users.indexOf(user);
+          if (index > -1) {
+              vm.model.users.splice(index, 1);
+          }
+          vm.model.office.users.push(user);
+        }
+
+        function removeUser(user) {
+          var index = vm.model.office.users.indexOf(user);
+          if (index > -1) {
+              vm.model.office.users.splice(index, 1);
+          }
+          vm.model.users.push(user);
         }
     }
 })();

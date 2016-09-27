@@ -5,7 +5,7 @@
     </div>
 
     <div>
-      <input class="inputSearch" type="text">
+      <input class="inputSearch" type="text" ng-model="vm.search">
     </div>
 
     <div class="titleListOffices">
@@ -13,8 +13,5 @@
     </div>
 
     <div class="contentOffices">
-        <div class="itemOffice"> Emanuel País </div>
-        <div class="itemOffice"> Walter Blanco </div>
-        <div class="itemOffice"> Iván Castañeda </div>
-
+        <div class="itemOffice" ng-repeat="user in vm.users | filter: vm.search"> <span ng-click="vm.removeUser(user)"><<</span> {{user.name}}</div>
     </div>

@@ -11,14 +11,15 @@
             restrict: 'E',
             templateUrl: function(elem, attr) {
               var time = new Date().getTime();
-              return 'directives/userList/index.html'
+              return 'directives/userList/index.html?t=' + time;
             },
             scope: {},
             link: linkFunc,
             controller: UserListCtrl,
             controllerAs: 'vm',
             bindToController: {
-
+              users: '=users',
+              deleteUser: '&removeUser'
             }
         };
 
@@ -35,10 +36,16 @@
     function UserListCtrl($scope) {
         var vm = this;
 
+        vm.removeUser = removeUser;
+
         activate();
 
         function activate() {
 
+        }
+
+        function removeUser(user) {
+          vm.deleteUser({user: user});
         }
     }
 })();

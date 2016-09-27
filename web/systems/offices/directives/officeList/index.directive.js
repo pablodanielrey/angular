@@ -20,7 +20,8 @@
             bindToController: {
               offices: '=offices',
               onRemove: '&onRemove',
-              onCreate: '&onCreate'
+              onCreate: '&onCreate',
+              onSelect: '&onSelect'
             }
         };
 
@@ -38,6 +39,7 @@
         var vm = this;
         vm.create = create;
         vm.remove = remove;
+        vm.select = select;
 
         activate();
 
@@ -51,6 +53,10 @@
 
         function remove(office) {
           vm.onRemove({office: office});
+        }
+
+        function select(office) {
+          vm.onSelect({office: office});
         }
     }
 })();
