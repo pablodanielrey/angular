@@ -35,7 +35,7 @@
   border-radius: 2px;
   -moz-border-radius: 2px;
   -webkit-border-radius: 2px;
-  font-size: 20px;
+  font-size: 16px;
   border: 1px solid #c9cbd3;
   padding: 10px;
   width: calc(100% - 20px);
@@ -89,7 +89,7 @@
   -webkit-justify-content: space-between;
   -moz-justify-content: space-between;
   width: 98%;
-  height: 70px;
+  height: 60px;
   border-radius: 2px;
   -moz-border-radius: 2px;
   -webkit-border-radius: 2px;
@@ -130,6 +130,7 @@
 
 .offices .officeName {
   margin: 5px 0 0 10px;
+  font-size: 12px;
 
 }
 
@@ -161,6 +162,9 @@
   align-items: center;
   -webkit-align-items:center; /* Safari */
   -moz-align-items:center; /* mozilla */
+  border-radius: 0px 2px 2px 0;
+  -moz-border-radius: 0px 2px 2px 0;
+  -webkit-border-radius: 0px 2px 2px 0;
 }
 
 .offices .btnDelete:hover {
@@ -209,7 +213,7 @@
   border-radius: 2px;
   -moz-border-radius: 2px;
   -webkit-border-radius: 2px;
-  font-size: 20px;
+  font-size: 16px;
   border: 1px solid #c9cbd3;
   padding: 10px;
   width: calc(100% - 20px);
@@ -252,7 +256,7 @@
   border-top: 1px solid #c9cbd3;
 }
 
-.offices .btnAddUser {
+.offices .btnAddUsers {
   background-color: #E5E5E5;
   color: #5C5F69;
   border-radius: 3px;
@@ -262,9 +266,10 @@
   text-align: center;
   font-size: 13px;
   border: 1px solid #c9cbd3;
+
 }
 
-.offices .btnAddUser:hover {
+.offices .btnAddUsers:hover {
   background-color: #804080;
   color: white;
   cursor: pointer;
@@ -323,6 +328,7 @@
 
 .offices .textName {
   margin: 0 0 0 10px;
+  font-size: 12px;
 }
 
 .offices .textDNI {
@@ -336,11 +342,52 @@
 .offices .searchUsers {
   width: calc(33% - 40px);
   height: calc(100% - 40px);
-  background-color: white;
+  /*background-color: white;*/
   padding: 20px;
   animation-name: movimiento;
    animation-duration: .5s;
 }
+
+.offices .titleListUsers {
+  color: #5C5F69;
+  margin-bottom: 10px;
+}
+
+.offices .btnAddUser {
+  width: 50px;
+  height: 100%;
+  background-color: #e5e5e5;
+  color: #5C5F69;
+  display: flex;
+  display: -webkit-flex; /* Safari */
+  display: -moz-flex; /* mozilla */
+  flex-direction:row;
+  -webkit-flex-direction:row; /* Safari */
+  -moz-flex-direction:row; /* mozilla */
+  justify-content: center;
+  -webkit-justify-content: center;
+  -moz-justify-content: center;
+  align-items: center;
+  -webkit-align-items:center; /* Safari */
+  -moz-align-items:center; /* mozilla */
+  border-radius: 2px 0px 0px 2px;
+  -moz-border-radius:  2px 0px 0px 2px;
+  -webkit-border-radius:  2px 0px 0px 2px;
+}
+
+.offices .btnAddUser:hover {
+  color: white;
+  background-color: #804080;
+  cursor: pointer;
+}
+
+.offices .contentUserList {
+  height: calc(100% - 115px);
+  overflow-y: auto;
+  margin-bottom: 20px;
+  /*background-color: white;*/
+}
+
 
 
 
