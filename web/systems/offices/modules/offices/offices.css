@@ -26,6 +26,14 @@
     100% {margin-left: 0px}
 }
 
+.offices .imgUser{
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+  -moz-border-radius: 50%;
+  -webkit-border-radius: 50%;
+}
+
 .offices .contentSearch,
 .offices .titleListOffices {
   color: #5C5F69;
