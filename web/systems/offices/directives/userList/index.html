@@ -1,17 +1,19 @@
+<div class="contentSearch">  <i class="fa fa-search"></i> BUSCAR USUARIOS </div>
 
+<div> <input class="inputSearch" type="text" ng-model="vm.filter" ng-change="vm.search()"> </div>
 
-    <div class="contentSearch">
-      <i class="fa fa-search"></i> BUSCAR OFICINA
+<div class="titleListOffices">  Listado de Usuarios </div>
+
+<div class="contentUserList">
+    <!-- <div class="itemOffice" ng-repeat="user in vm.users"> <span ng-click="vm.removeUser(user)"><<</span> <img class="imgUser" ng-src='{{vm.getUserPhoto(user)}}' alt="foto de perfil"/>{{user.name}} {{user.lastname}}</div> -->
+    <div class="itemMembers" ng-repeat="user in vm.users" ng-click="vm.select(office)">
+        <div class="memberData">
+            <div class="btnAddUser" ng-click="vm.removeUser(user)" title="Agregar Usuario"> <i class="fa fa-chevron-left" aria-hidden="true"></i> </div>
+            <div><img class="imgUser" ng-src='{{vm.getUserPhoto(user)}}' alt="foto de perfil" src="img/avatarMan.jpg"></div>
+            <div>
+                <div class="textName"> {{user.name}}</div>
+                <div class="textDNI"> 31258691</div>
+            </div>
+        </div>
     </div>
-
-    <div>
-      <input class="inputSearch" type="text" ng-model="vm.filter" ng-change="vm.search()">
-    </div>
-
-    <div class="titleListOffices">
-      Listado de Usuarios
-    </div>
-
-    <div class="contentOffices">
-        <div class="itemOffice" ng-repeat="user in vm.users"> <span ng-click="vm.removeUser(user)"><<</span> <img class="imgUser" ng-src='{{vm.getUserPhoto(user)}}' alt="foto de perfil"/>{{user.name}} {{user.lastname}}</div>
-    </div>
+</div>
