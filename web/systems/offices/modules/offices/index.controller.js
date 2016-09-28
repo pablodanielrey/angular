@@ -17,15 +17,18 @@
           users: [],
           dictUsers: {},
           displayUsers: [],
-          office: null
+          office: null,
+          officeTypes: []
         }
 
         vm.loadOffices = loadOffices;
+        vm.getOfficeTypes = getOfficeTypes;
         vm.remove = remove;
         vm.create = create;
         vm.addUser = addUser;
         vm.removeUser = removeUser;
         vm.selectOffice = selectOffice;
+        vm.searchUsers = searchUsers;
 
         $scope.$on('wamp.open', function(event, args) {
           vm.model.privateTransport = Login.getPrivateTransport();
@@ -41,18 +44,54 @@
           }
 
           vm.model.userId = Login.getCredentials().userId;
-          vm.loadOffices();
+          vm.getOfficeTypes();
+          loadUsers();
         }
 
-        function loadOffices() {
-          vm.model.offices = [ {name: 'Dirección de Tecnología y Servicios Informáticos', users:[]}, {name: 'Soporte Técnico', users:[]}, {name: 'Dirección de Económico Financiero ', users:[]}, {name: 'Dirección de Mantenimiento y Servicios Generales ', users:[]}, {name: 'Soporte Técnico', users:[]}, {name: 'Dirección de Económico Financiero ', users:[]},{name: 'Dirección de Despacho', users:[]}];
+
+        function loadUsers() {
           vm.model.users = [{id: 1, name: 'Emanuel Pais'}, {id: 2, name: 'Ivan Castañeda'}, {id:3, name: 'Walter Blanco'} , {id: 2, name: 'Alejandro Oporto'} , {id: 2, name: 'Pablo Daniel Rey'} , {id: 2, name: 'Maximiliano Saucedo'}];
           vm.model.dictUsers = {1: vm.model.users[0],
                                 2: vm.model.users[1],
                                 3: vm.model.users[2]};
         }
 
-        vm.searchUsers = searchUsers;
+        function loadOffices(type) {
+          vm.model.offices = [];
+          Offices.findAll([type]).then(
+            function(ids) {
+              Offices.findById(ids).then (
+                function(offices) {
+                  $scope.$apply(function() {
+                    vm.model.offices = offices;
+                  });
+                }, function(error) {
+                  console.log(error);
+                }
+              );
+            }, function(error) {
+              console.log(error);
+            }
+          );
+          // vm.model.offices = [ {name: 'Dirección de Tecnología y Servicios Informáticos', users:[]}, {name: 'Dirección de Mantenimiento y Servicios Generales ', users:[]}, {name: 'Soporte Técnico', users:[]}, {name: 'Dirección de Económico Financiero ', users:[]},{name: 'Dirección de Despacho', users:[]}];
+        }
+
+        function getOfficeTypes() {
+          vm.model.officeTypes = [];
+          Offices.getOfficeTypes().then(
+            function(types) {
+              $scope.$apply(function() {
+                vm.model.officeTypes = types;
+                vm.model.officeTypes.push({value:null, name: 'Todos'});
+                vm.loadOffices(vm.model.officeTypes[0]);
+              });
+            }, function(error) {
+              // messageError(error);
+              console.log(error);
+            }
+          );
+        }
+
         function searchUsers(text) {
           /*if (vm.view.searching) {
             return
