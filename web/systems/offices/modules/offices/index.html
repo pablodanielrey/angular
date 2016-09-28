@@ -1,4 +1,8 @@
-<div class="offices">
+<div class="offices {{view.style}}">
+<!-- ---- VARIABLES ----
+    VARIABLES 1: pantallaPrincipal, pantallaEdicion, pantallaUsuarios (ESTAS VARIABLES SON PRINCIPALMENTE PARA LA NAVEGACION POR CELULAR)
+    VARIABLES 2:
+-->
 
   <div class="listOffices">  <e-office-list offices="vm.model.offices" on-remove="vm.remove(office)" on-create="vm.create()" on-select="vm.selectOffice(office)"></e-office-list> </div>
   <div class="editOffices" ng-include="'modules/offices/form.html?t=' + time"></div>

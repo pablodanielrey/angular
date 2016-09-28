@@ -11,6 +11,10 @@
     function OfficesCtrl($scope, Login, Offices) {
         var vm = this;
 
+        vm.view = {
+          style: ''
+        };
+
         vm.model = {
           userId: null,
           offices: [],
@@ -132,7 +136,17 @@
           }
         }
 
+        function cancel() {
+          vm.view.style = '';
+        }
+
+        function addUsers() {
+          vm.view.style = 'seleccionarUsuarios';
+        }
+
         function create() {
+          vm.view.style = 'crearOficina';
+
           vm.model.office = {};
           vm.model.office.users = [];
           vm.model.office.name = '';
