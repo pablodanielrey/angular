@@ -2,6 +2,7 @@
 from model.serializer import JSONSerializable
 from model.dao import DAO
 from model.users.users import UserDAO, User
+import re
 
 class Office(JSONSerializable):
 
