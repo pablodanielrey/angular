@@ -309,3 +309,23 @@ class OfficeModel():
         ''' busco por nombre y apellido '''
         matched = [ cls._getUserData(con, u) for u in users if m.search(u.name) or m.search(u.lastname) or m.search(u.name + u.lastname) or m.search(u.lastname + u.name)]
         return matched
+
+    @classmethod
+    def _getUserData(cls, con, user):
+        u = UserIssueData()
+        u.name = user.name
+        u.lastname = user.lastname
+        u.dni = user.dni
+        u.id = user.id
+        u.genre = user.genre
+        u.photo = [User.findPhoto(con, user.photo) if 'photo' in dir(user) and user.photo is not None and user.photo != '' else None][0]
+        return u
+
+class UserIssueData(JSONSerializable):
+
+    def __init__(self):
+        self.name = ''
+        self.lastname = ''
+        self.dni = ''
+        self.photo = ''
+        self.id = ''          
