@@ -1,7 +1,6 @@
 <div class="offices">
 
-  <div class="listOffices">  <e-office-list offices="vm.model.offices" on-remove="vm.remove(office)" on-create="vm.create()" on-select="vm.selectOffice(office)"></e-office-list> </div>
+  <div class="listOffices">  <e-office-list offices="vm.model.offices" types="vm.model.officeTypes" on-select-type="vm.loadOffices(type)" on-remove="vm.remove(office)" on-create="vm.create()" on-select="vm.selectOffice(office)"></e-office-list> </div>
   <div class="editOffices" ng-include="'modules/offices/form.html?t=' + time"></div>
   <div class="searchUsers">  <e-user-list users="vm.model.displayUsers" remove-user="vm.addUser(user)" search-users="vm.searchUsers(text)"></e-user-list> </div>
-
 </div>

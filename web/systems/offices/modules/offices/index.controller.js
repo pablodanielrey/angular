@@ -60,6 +60,9 @@
           vm.model.offices = [];
           Offices.findAll([type]).then(
             function(ids) {
+              if (ids.length <= 0) {
+                return;
+              }
               Offices.findById(ids).then (
                 function(offices) {
                   $scope.$apply(function() {

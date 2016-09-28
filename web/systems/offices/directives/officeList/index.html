@@ -7,13 +7,11 @@
 </div>
 
 <div class="titleListOffices">
-    <div> Listado de Oficinas </div>
+    <div> Listado de Oficinas</div>
     <div>
-        <select class="selectOfficesType">
-            <option> Todos </option>
-            <option> Oficinas </option>
-            <option> Áreas</option>
-        </select>
+        <!-- <select  ng-model="vm.selectedType" ng-options="type in vm.types" >           -->
+        <select class="selectOfficesType" ng-options="item as item.name for item in vm.types" ng-model="vm.selected" ng-change="vm.selectType()"></select>
+
     </div>
 </div>
 
