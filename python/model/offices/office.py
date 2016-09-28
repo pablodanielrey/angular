@@ -6,14 +6,14 @@ import re
 
 class Office(JSONSerializable):
 
-    officeType = ['unit', 'office', 'physical-office', 'area']
+    officeType = [{'value': 'office', 'name':'Organigrama'}, {'value': 'unit', 'name': 'Dependencia'}, {'value': 'physical-office', 'name': 'Oficina'}, {'value': 'area', 'name': 'Area'}]
 
     def __init__(self):
         self.id = None
         self.name = None
         self.telephone = None
         self.number = None
-        self.type = officeType[1]
+        self.type = self.officeType[1]
         self.email = None
         self.parent = None
 
@@ -81,7 +81,7 @@ class OfficeDAO(DAO):
         assert ids is not None
         cur = con.cursor()
         try:
-            cur.execute('select * from offices.offices where id in %s', (ids,))
+            cur.execute('select * from offices.offices where id in %s', (tuple(ids),))
             if cur.rowcount <= 0:
                 return []
 
@@ -94,7 +94,11 @@ class OfficeDAO(DAO):
     def findAll(cls, con, types=Office.officeType):
         cur = con.cursor()
         try:
-            cur.execute('select id from offices.offices where type in %s',(types,))
+            if len(types) == 1 and types[0]['value'] is None:
+                types = Office.officeType
+
+            t = [o['value'] for o in types]
+            cur.execute('select id from offices.offices where type in %s',(tuple(t),))
             return [o['id'] for o in cur]
 
         finally:
@@ -328,4 +332,4 @@ class UserIssueData(JSONSerializable):
         self.lastname = ''
         self.dni = ''
         self.photo = ''
-        self.id = ''          
+        self.id = ''

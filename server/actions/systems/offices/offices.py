@@ -22,9 +22,12 @@ class Offices(wamp.SystemComponentSession):
     def findById(self, ids):
         con = self.conn.get()
         try:
-            return Office.findById(con, ids)
+            return Office.findByIds(con, ids)
         finally:
             self.conn.put(con)
+
+
+
 
 
     @autobahn.wamp.register('offices.search_users')
@@ -32,6 +35,20 @@ class Offices(wamp.SystemComponentSession):
         con = self.conn.get()
         try:
             return OfficeModel.searchUsers(con, regex)
+        finally:
+            self.conn.put(con)
+
+
+    @autobahn.wamp.register('offices.get_office_types')
+    def getOfficeTypes(self):
+        return Office.getTypes()
+
+
+    @autobahn.wamp.register('offices.find_all')
+    def findAll(self, types):
+        con = self.conn.get()
+        try:
+            return Office.findAll(con, types)
         finally:
             self.conn.put(con)
 
