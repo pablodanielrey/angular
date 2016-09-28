@@ -5,16 +5,18 @@
         .module('offices')
         .controller('OfficesCtrl', OfficesCtrl);
 
-    OfficesCtrl.$inject = ['$scope', 'Login'];
+    OfficesCtrl.$inject = ['$scope', 'Login', 'Offices'];
 
     /* @ngInject */
-    function OfficesCtrl($scope, Login) {
+    function OfficesCtrl($scope, Login, Offices) {
         var vm = this;
 
         vm.model = {
           userId: null,
           offices: [],
           users: [],
+          dictUsers: {},
+          displayUsers: [],
           office: null
         }
 
@@ -44,41 +46,75 @@
 
         function loadOffices() {
           vm.model.offices = [ {name: 'Dirección de Tecnología y Servicios Informáticos', users:[]}, {name: 'Dirección de Mantenimiento y Servicios Generales ', users:[]}, {name: 'Soporte Técnico', users:[]}, {name: 'Dirección de Económico Financiero ', users:[]},{name: 'Dirección de Despacho', users:[]}];
-          vm.model.users = [ {name: 'Emanuel Pais'}, {name: 'Ivan Castañeda'}, {name: 'Walter Blanco'}];
+          vm.model.users = [{id: 1, name: 'Emanuel Pais'}, {id: 2, name: 'Ivan Castañeda'}, {id:3, name: 'Walter Blanco'}];
+          vm.model.dictUsers = {1: vm.model.users[0],
+                                2: vm.model.users[1],
+                                3: vm.model.users[2]};
+        }
+
+        vm.searchUsers = searchUsers;
+        function searchUsers(text) {
+          /*if (vm.view.searching) {
+            return
+          }*/
+          if (text.length < 5) {
+            vm.view.searching = false;
+            return;
+          }
+          // vm.view.searching = true;
+          Offices.searchUsers(text).then(
+            function(users) {
+              $scope.$apply(function() {
+                // vm.view.searching = false;
+                vm.model.users = users;
+                vm.model.displayUsers = users.slice(0);
+              });
+            }, function(error) {
+              // messageError(error);
+              console.log(error);
+            }
+          );
         }
 
         function create() {
           vm.model.office = {};
           vm.model.office.users = [];
           vm.model.office.name = '';
+          vm.model.displayUsers = vm.model.users.slice(0);
         }
 
         function selectOffice(office) {
           vm.model.office = office;
-          console.log(vm.model.office.name);
+          vm.model.displayUsers = vm.model.users.slice(0);
+          for (var i = 0; i < vm.model.office.users.length; i++) {
+            var userId = vm.model.office.users[i].id;
+            if (userId == null) {
+              continue;
+            }
+            var elem = vm.model.dictUsers[userId];
+            removeItem(vm.model.displayUsers, elem);
+          }
+        }
+
+        function removeItem(array, item) {
+          var index = array.indexOf(item);
+          if (index > -1) {
+              array.splice(index, 1);
+          }
         }
 
         function remove(office) {
-          var index = vm.model.offices.indexOf(office);
-          if (index > -1) {
-              vm.model.offices.splice(index, 1);
-          }
+          removeItem(vm.model.offices, office);
         }
 
         function addUser(user) {
-          var index = vm.model.users.indexOf(user);
-          if (index > -1) {
-              vm.model.users.splice(index, 1);
-          }
+          removeItem(vm.model.displayUsers, user);
           vm.model.office.users.push(user);
         }
 
         function removeUser(user) {
-          var index = vm.model.office.users.indexOf(user);
-          if (index > -1) {
-              vm.model.office.users.splice(index, 1);
-          }
-          vm.model.users.push(user);
+          removeItem(vm.model.office.users, user);
+          vm.model.displayUsers.push(user);
         }
     }
 })();

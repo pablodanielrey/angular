@@ -19,7 +19,8 @@
             controllerAs: 'vm',
             bindToController: {
               users: '=users',
-              deleteUser: '&removeUser'
+              deleteUser: '&removeUser',
+              searchUsers: '&searchUsers'
             }
         };
 
@@ -37,15 +38,24 @@
         var vm = this;
 
         vm.removeUser = removeUser;
+        vm.search = search;
+        vm.filter = '';
 
         activate();
 
         function activate() {
-
+          vm.filter = '';
         }
 
         function removeUser(user) {
           vm.deleteUser({user: user});
+        }
+
+        function search() {
+          if (vm.filter.length < 5) {
+            return;
+          }
+          vm.searchUsers({text:vm.filter});
         }
     }
 })();

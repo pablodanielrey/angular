@@ -11,6 +11,7 @@
 			this.subscribe = subscribe;
 		  this.findById = findById;
 			this.getOfficesByUser = getOfficesByUser;
+			this.searchUsers = searchUsers;
 
 			function subscribe(event, func) {
 				Login.getPrivateTransport().subscribe(event, func);
@@ -24,6 +25,9 @@
 				return Login.getPrivateTransport().call('offices.find_offices_by_user',[user_id, tree]);
 			}
 
+			function searchUsers(regex) {
+				return Login.getPrivateTransport().call('offices.search_users', [regex]);
+			}
 		}
 
 })();

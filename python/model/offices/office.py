@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from model.serializer import JSONSerializable
 from model.dao import DAO
-from model.users.users import UserDAO
+from model.users.users import UserDAO, User
 
 class Office(JSONSerializable):
 
@@ -254,6 +254,8 @@ class DesignationDAO(DAO):
 
 class OfficeModel():
 
+    cache = {}
+
     @classmethod
     def getOfficesByUser(cls, con, userId, tree=False, types=None):
         idsD = Designation.getDesignationByUser(con, userId)
@@ -274,3 +276,35 @@ class OfficeModel():
             if d.userId not in uids:
                 uIds.append(d.userId)
         return uIds
+
+
+    @classmethod
+    def searchUsers(cls, con, regex):
+        assert regex is not None
+
+        if regex == '':
+            return []
+
+        userIds = User.findAll(con)
+
+        users = []
+        for u in userIds:
+            (uid, version) = u
+            if uid not in cls.cache.keys():
+                print(uid)
+                user = User.findById(con, [uid])[0]
+                cls.cache[uid] = user
+            users.append(cls.cache[uid])
+
+        m = re.compile(".*{}.*".format(regex), re.I)
+        matched = []
+
+        digits = re.compile('^\d+$')
+        if digits.match(regex):
+            ''' busco por dni '''
+            matched = [ cls._getUserData(con, u) for u in users if m.search(u.dni) ]
+            return matched
+
+        ''' busco por nombre y apellido '''
+        matched = [ cls._getUserData(con, u) for u in users if m.search(u.name) or m.search(u.lastname) or m.search(u.name + u.lastname) or m.search(u.lastname + u.name)]
+        return matched

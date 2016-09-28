@@ -1,8 +1,9 @@
 # -*- coding: utf-8 -*-
 import autobahn
 
-from model.offices.office import Office
+from model.offices.office import Office, OfficeModel
 import wamp
+
 
 class Offices(wamp.SystemComponentSession):
 
@@ -22,6 +23,15 @@ class Offices(wamp.SystemComponentSession):
         con = self.conn.get()
         try:
             return Office.findById(con, ids)
+        finally:
+            self.conn.put(con)
+
+
+    @autobahn.wamp.register('offices.search_users')
+    def searchUsers(self, regex):
+        con = self.conn.get()
+        try:
+            return OfficeModel.searchUsers(con, regex)
         finally:
             self.conn.put(con)
 
