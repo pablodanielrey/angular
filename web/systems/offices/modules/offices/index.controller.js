@@ -48,8 +48,9 @@
           loadUsers();
         }
 
+
         function loadUsers() {
-          vm.model.users = [{id: 1, name: 'Emanuel Pais'}, {id: 2, name: 'Ivan Castañeda'}, {id:3, name: 'Walter Blanco'}];
+          vm.model.users = [{id: 1, name: 'Emanuel Pais'}, {id: 2, name: 'Ivan Castañeda'}, {id:3, name: 'Walter Blanco'} , {id: 2, name: 'Alejandro Oporto'} , {id: 2, name: 'Pablo Daniel Rey'} , {id: 2, name: 'Maximiliano Saucedo'}];
           vm.model.dictUsers = {1: vm.model.users[0],
                                 2: vm.model.users[1],
                                 3: vm.model.users[2]};

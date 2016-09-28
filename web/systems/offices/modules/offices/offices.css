@@ -26,16 +26,7 @@
     100% {margin-left: 0px}
 }
 
-.offices .imgUser{
-  width: 45px;
-  height: 45px;
-  border-radius: 50%;
-  -moz-border-radius: 50%;
-  -webkit-border-radius: 50%;
-}
-
-.offices .contentSearch,
-.offices .titleListOffices {
+.offices .contentSearch {
   color: #5C5F69;
   margin-bottom: 10px;
 }
@@ -45,16 +36,45 @@
   -moz-border-radius: 2px;
   -webkit-border-radius: 2px;
   font-size: 20px;
-  border: 1px solid #DBE2E5;
+  border: 1px solid #c9cbd3;
   padding: 10px;
   width: calc(100% - 20px);
   margin-bottom: 10px;
+
+}
+
+.offices .titleListOffices {
+  display: flex;
+  display: -webkit-flex; /* Safari */
+  display: -moz-flex; /* mozilla */
+  flex-direction:row;
+  -webkit-flex-direction:row; /* Safari */
+  -moz-flex-direction:row; /* mozilla */
+  justify-content: space-between;
+  -webkit-justify-content: space-between;
+  -moz-justify-content: space-between;
+  align-items: center;
+  -webkit-align-items:center; /* Safari */
+  -moz-align-items:center; /* mozilla */
+  color: #5C5F69;
+  margin-bottom: 10px;
+}
+
+.offices .selectOfficesType {
+  border-radius: 2px;
+  -moz-border-radius: 2px;
+  -webkit-border-radius: 2px;
+  background-color: white;
+    color: #5C5F69;
+    width: 100px;
+    padding: 2px;
+    font-size: 12px;
 }
 
 .offices .contentOffices {
-  height: calc(100% - 170px);
+  height: calc(100% - 180px);
   overflow-y: auto;
-  margin-bottom: 10px;
+  margin-bottom: 20px;
   /*background-color: white;*/
 }
 
@@ -151,6 +171,7 @@
   background: -o-radial-gradient(#c42d32, #E43E46); /* For Opera 11.6 to 12.0 */
   background: -moz-radial-gradient(#c42d32, #E43E46); /* For Firefox 3.6 to 15 */
   background: radial-gradient(#c42d32, #E43E46); /* Standard syntax */
+  cursor: pointer;
 }
 
 .offices .btnCreateNew {
@@ -173,11 +194,142 @@
 .offices .editOffices {
   width: calc(33% - 40px);
   height: calc(100% - 40px);
-  background-color: white;
+  /*background-color: white;*/
   padding: 20px;
   animation-name: movimiento;
    animation-duration: .5s;
 }
+
+.offices .contentNameOffice {
+  color: #5C5F69;
+  margin-bottom: 10px;
+}
+
+.offices .inputOfficeName {
+  border-radius: 2px;
+  -moz-border-radius: 2px;
+  -webkit-border-radius: 2px;
+  font-size: 20px;
+  border: 1px solid #c9cbd3;
+  padding: 10px;
+  width: calc(100% - 20px);
+  margin-bottom: 10px;
+}
+
+.offices .contentOfficeType {
+  display: flex;
+  display: -webkit-flex; /* Safari */
+  display: -moz-flex; /* mozilla */
+  flex-direction:row;
+  -webkit-flex-direction:row; /* Safari */
+  -moz-flex-direction:row; /* mozilla */
+  justify-content: space-between;
+  -webkit-justify-content: space-between;
+  -moz-justify-content: space-between;
+  align-items: center;
+  -webkit-align-items:center; /* Safari */
+  -moz-align-items:center; /* mozilla */
+  color: #5C5F69;
+  margin-bottom: 10px;
+}
+
+.offices .contentOfficeMembers {
+  display: flex;
+  display: -webkit-flex; /* Safari */
+  display: -moz-flex; /* mozilla */
+  flex-direction:row;
+  -webkit-flex-direction:row; /* Safari */
+  -moz-flex-direction:row; /* mozilla */
+  justify-content: space-between;
+  -webkit-justify-content: space-between;
+  -moz-justify-content: space-between;
+  align-items: center;
+  -webkit-align-items:center; /* Safari */
+  -moz-align-items:center; /* mozilla */
+  color: #5C5F69;
+  margin-bottom: 10px;
+  padding-top: 5px;
+  border-top: 1px solid #c9cbd3;
+}
+
+.offices .btnAddUser {
+  background-color: #E5E5E5;
+  color: #5C5F69;
+  border-radius: 3px;
+  -moz-border-radius: 3px;
+  -webkit-border-radius: 3px;
+  padding: 3px 10px 3px 10px;
+  text-align: center;
+  font-size: 13px;
+  border: 1px solid #c9cbd3;
+}
+
+.offices .btnAddUser:hover {
+  background-color: #804080;
+  color: white;
+  cursor: pointer;
+}
+
+.offices .contentMembers {
+  height: calc(100% - 222px);
+  overflow-y: auto;
+  margin-bottom: 20px;
+  /*background-color: white;*/
+}
+
+.offices .itemMembers {
+  display: flex;
+  display: -webkit-flex; /* Safari */
+  display: -moz-flex; /* mozilla */
+  flex-direction:row;
+  -webkit-flex-direction:row; /* Safari */
+  -moz-flex-direction:row; /* mozilla */
+  justify-content: space-between;
+  -webkit-justify-content: space-between;
+  -moz-justify-content: space-between;
+  width: 98%;
+  height: 55px;
+  border-radius: 2px;
+  -moz-border-radius: 2px;
+  -webkit-border-radius: 2px;
+  /*background-color: #EEEEEE;*/
+  background-color: white;
+  margin-bottom: 10px;
+  border: 1px solid #c9cbd3;
+  font-size: 14px;
+}
+
+.offices .memberData {
+  display: flex;
+  display: -webkit-flex; /* Safari */
+  display: -moz-flex; /* mozilla */
+  flex-direction:row;
+  -webkit-flex-direction:row; /* Safari */
+  -moz-flex-direction:row; /* mozilla */
+  align-items: center;
+  -webkit-align-items:center; /* Safari */
+  -moz-align-items:center; /* mozilla */
+}
+
+.offices .imgUser{
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+  -moz-border-radius: 50%;
+  -webkit-border-radius: 50%;
+  margin-left: 10px;
+  margin-top: 3px;
+}
+
+.offices .textName {
+  margin: 0 0 0 10px;
+}
+
+.offices .textDNI {
+  margin-left: 10px;
+  font-size: 10px;
+}
+
 
 /*------- PANTALLA BUSCAR USUARIO -------*/
 
@@ -196,6 +348,6 @@
 
 @media (min-width:1800px) {
   .offices {
-    zoom: 1.4;
+    zoom: 1.3;
   }
 }
