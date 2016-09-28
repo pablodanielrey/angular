@@ -13,5 +13,5 @@
     </div>
 
     <div class="contentOffices">
-        <div class="itemOffice" ng-repeat="user in vm.users"> <span ng-click="vm.removeUser(user)"><<</span> {{user.name}}</div>
+        <div class="itemOffice" ng-repeat="user in vm.users"> <span ng-click="vm.removeUser(user)"><<</span> <img class="imgUser" ng-src='{{vm.getUserPhoto(user)}}' alt="foto de perfil"/>{{user.name}} {{user.lastname}}</div>
     </div>

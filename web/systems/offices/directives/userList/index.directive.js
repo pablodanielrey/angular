@@ -31,15 +31,16 @@
         }
     }
 
-    UserListCtrl.$inject = ['$scope'];
+    UserListCtrl.$inject = ['$scope', 'Files'];
 
     /* @ngInject */
-    function UserListCtrl($scope) {
+    function UserListCtrl($scope, Files) {
         var vm = this;
 
         vm.removeUser = removeUser;
         vm.search = search;
         vm.filter = '';
+        vm.getUserPhoto = getUserPhoto;
 
         activate();
 
@@ -57,5 +58,15 @@
           }
           vm.searchUsers({text:vm.filter});
         }
+
+        function getUserPhoto(user) {
+          if (user == null || user.photo == null) {
+            var img = user != null && "genre" in user && user.genre != null && (user.genre.toLowerCase() == 'femenino' || user.genre.toLowerCase() == 'mujer') ? "img/avatarWoman.jpg" : "img/avatarMan.jpg";
+            return img;
+          } else {
+            return Files.toDataUri(user.photo);
+          }
+        }
+
     }
 })();
