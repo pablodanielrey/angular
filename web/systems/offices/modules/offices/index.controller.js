@@ -68,12 +68,29 @@
                 // vm.view.searching = false;
                 vm.model.users = users;
                 vm.model.displayUsers = users.slice(0);
+                if (vm.model.office == null || vm.model.office.users == null || vm.model.office.users === undefined) {
+                  return;
+                }
+                removeDisplayUsers();
               });
             }, function(error) {
               // messageError(error);
               console.log(error);
             }
           );
+        }
+
+        function removeDisplayUsers() {
+          for (var i = 0; i < vm.model.office.users.length; i++) {
+            var j = 0;
+            var userId = vm.model.office.users[i].id;
+            while(j < vm.model.displayUsers.length) {
+              if (vm.model.displayUsers[j].id == userId) {
+                removeItem(vm.model.displayUsers, vm.model.displayUsers[j]);
+              }
+              j = j + 1;
+            }
+          }
         }
 
         function create() {
@@ -86,14 +103,7 @@
         function selectOffice(office) {
           vm.model.office = office;
           vm.model.displayUsers = vm.model.users.slice(0);
-          for (var i = 0; i < vm.model.office.users.length; i++) {
-            var userId = vm.model.office.users[i].id;
-            if (userId == null) {
-              continue;
-            }
-            var elem = vm.model.dictUsers[userId];
-            removeItem(vm.model.displayUsers, elem);
-          }
+          removeDisplayUsers();
         }
 
         function removeItem(array, item) {
