@@ -10,6 +10,8 @@
   -moz-flex-direction:row; /* mozilla */
 }
 
+/*----- PANTALLA BUSCAR OFICINA -----*/
+
 .offices .listOffices {
   width: calc(33% - 40px);
   height: calc(100% - 40px);
@@ -141,8 +143,6 @@
   background: radial-gradient(#c42d32, #E43E46); /* Standard syntax */
 }
 
-
-
 .offices .btnCreateNew {
   background-color: #804080;
   color: white;
@@ -156,4 +156,16 @@
 .offices .btnCreateNew:hover {
   background-color: #6d316d;
   cursor: pointer;
+}
+
+/*------- PANTALLA EDITAR OFICINA -------*/
+
+
+
+/*----------- MEDIA QUERIS -------------*/
+
+@media (min-width:1800px) {
+  .offices {
+    zoom: 1.4;
+  }
 }
