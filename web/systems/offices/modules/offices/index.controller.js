@@ -194,6 +194,9 @@
         function selectOffice(office) {
           vm.view.style = vm.view.styles[1];
           vm.model.office = office;
+          if (vm.model.office.users == undefined) {
+            vm.model.office.users = [];
+          }
           for(var i = 0; i < vm.model.officeTypes.length; i++) {
             if (vm.model.officeTypes[i].value == office.type.value) {
               office.type = vm.model.officeTypes[i];
