@@ -161,6 +161,7 @@
         }
 
         function selectOffice(office) {
+          console.log(office);
           vm.model.office = office;
           vm.model.displayUsers = vm.model.users.slice(0);
           removeDisplayUsers();

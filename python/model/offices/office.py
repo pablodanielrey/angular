@@ -71,7 +71,7 @@ class OfficeDAO(DAO):
         o.name = r['name']
         o.telephone = r['telephone']
         o.number = r['nro']
-        o.type = r['type']
+        o.type = [t for t in Office.officeType if t['value'] == r['type']][0]
         o.email = r['name']
         o.parent = r['parent']
         return o
