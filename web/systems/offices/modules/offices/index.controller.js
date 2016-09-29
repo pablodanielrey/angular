@@ -163,8 +163,28 @@
         function selectOffice(office) {
           console.log(office);
           vm.model.office = office;
+          for(var i = 0; i < vm.model.officeTypes.length; i++) {
+            if (vm.model.officeTypes[i].value == office.type.value) {
+              office.type = vm.model.officeTypes[i];
+              break;
+            }
+          }
+          if (office.parent != null && office.parent.trim() != '') {
+            Offices.findById([office.parent]).then (
+              function(offices) {
+                if (offices.length <= 0) {
+                  return;
+                }
+                $scope.$apply(function() {
+                  vm.model.office.parentObj = offices[0];
+                });
+              }, function(error) {
+                console.log(error);
+              }
+            );
+          }
           vm.model.displayUsers = vm.model.users.slice(0);
-          removeDisplayUsers();
+          // removeDisplayUsers();
         }
 
         function removeItem(array, item) {

@@ -9,14 +9,11 @@
 <div class="contentOfficeType">
     <div> Tipo: </div>
     <div>
-        <select class="selectOfficesType">
-            <option> Oficina </option>
-            <option> Área</option>
-        </select>
+        <select class="selectOfficesType" ng-options="item as item.name for item in vm.model.officeTypes" ng-model="vm.model.office.type"></select>
     </div>
     <div> Padre: </div>
     <div>
-        <select class="selectOfficesType">
+        <select class="selectOfficesType" ng-options="office in vm.model.officesAll" ng-model="vm.model.office.parentOj" ng-change="vm.selectParentOffice(office)">
             <option> Seleccionar </option>
         </select>
     </div>
