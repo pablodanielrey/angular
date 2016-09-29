@@ -10,6 +10,11 @@
          controller: 'LogsCtrl',
          controllerAs: 'vm'
       })
+      .when('/reports', {
+         templateUrl: 'modules/reports/index.html',
+         controller: 'ReportsCtrl',
+         controllerAs: 'vm'
+      })
 
       .otherwise({
         redirectTo: '/logs'
