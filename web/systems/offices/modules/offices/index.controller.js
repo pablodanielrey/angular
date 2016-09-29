@@ -12,7 +12,10 @@
         var vm = this;
 
         vm.view = {
-          style: ''
+          style: '',
+          styles: ['pantallaPrincipal', 'pantallaEdicion', 'pantallaUsuarios'],
+          style2:'',
+          styles2:['']
         };
 
         vm.model = {
@@ -23,7 +26,8 @@
           displayUsers: [],
           office: null,
           officeTypes: [],
-          selectedType: null
+          selectedType: null,
+          officeAll: []
         }
 
         vm.loadOffices = loadOffices;
@@ -34,6 +38,8 @@
         vm.removeUser = removeUser;
         vm.selectOffice = selectOffice;
         vm.searchUsers = searchUsers;
+        vm.saveOffice = saveOffice;
+        vm.cancel = cancel;
 
         $scope.$on('wamp.open', function(event, args) {
           vm.model.privateTransport = Login.getPrivateTransport();
@@ -48,10 +54,14 @@
             return;
           }
 
+          vm.view.style = vm.view.styles[0];
+          vm.view.style2 = vm.view.styles2[0];
+
           vm.model.selectedType = null;
           vm.model.userId = Login.getCredentials().userId;
           vm.getOfficeTypes();
           loadUsers();
+          loadAllOffices();
         }
 
 
@@ -82,7 +92,32 @@
               console.log(error);
             }
           );
-          // vm.model.offices = [ {name: 'Dirección de Tecnología y Servicios Informáticos', users:[]}, {name: 'Dirección de Mantenimiento y Servicios Generales ', users:[]}, {name: 'Soporte Técnico', users:[]}, {name: 'Dirección de Económico Financiero ', users:[]},{name: 'Dirección de Despacho', users:[]}];
+        }
+
+        function saveOffice() {
+          vm.view.style = vm.view.styles[0];
+        }
+
+        function loadAllOffices() {
+          vm.model.officeAll = [];
+          Offices.findAll([]).then(
+            function(ids) {
+              if (ids.length <= 0) {
+                return;
+              }
+              Offices.findById(ids).then (
+                function(offices) {
+                  $scope.$apply(function() {
+                    vm.model.officeAll = offices;
+                  });
+                }, function(error) {
+                  console.log(error);
+                }
+              );
+            }, function(error) {
+              console.log(error);
+            }
+          );
         }
 
         function getOfficeTypes() {
@@ -144,15 +179,11 @@
         }
 
         function cancel() {
-          vm.view.style = '';
-        }
-
-        function addUsers() {
-          vm.view.style = 'seleccionarUsuarios';
+          vm.view.style = vm.view.styles[0];
         }
 
         function create() {
-          vm.view.style = 'crearOficina';
+          vm.view.style = vm.view.styles[1];
 
           vm.model.office = {};
           vm.model.office.users = [];
@@ -161,7 +192,7 @@
         }
 
         function selectOffice(office) {
-          console.log(office);
+          vm.view.style = vm.view.styles[1];
           vm.model.office = office;
           for(var i = 0; i < vm.model.officeTypes.length; i++) {
             if (vm.model.officeTypes[i].value == office.type.value) {
@@ -177,6 +208,7 @@
                 }
                 $scope.$apply(function() {
                   vm.model.office.parentObj = offices[0];
+                  console.log(vm.model.office.parentObj);
                 });
               }, function(error) {
                 console.log(error);

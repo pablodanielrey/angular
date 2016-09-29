@@ -72,7 +72,7 @@ class OfficeDAO(DAO):
         o.telephone = r['telephone']
         o.number = r['nro']
         o.type = [t for t in Office.officeType if t['value'] == r['type']][0]
-        o.email = r['name']
+        o.email = r['email']
         o.parent = r['parent']
         return o
 
@@ -94,7 +94,7 @@ class OfficeDAO(DAO):
     def findAll(cls, con, types=Office.officeType):
         cur = con.cursor()
         try:
-            if len(types) == 1 and types[0]['value'] is None:
+            if len(types) < 1 or (len(types) == 1 and types[0]['value'] is None):
                 types = Office.officeType
 
             t = [o['value'] for o in types]

@@ -13,7 +13,7 @@
     </div>
     <div> Padre: </div>
     <div>
-        <select class="selectOfficesType" ng-options="office in vm.model.officesAll" ng-model="vm.model.office.parentOj" ng-change="vm.selectParentOffice(office)">
+        <select class="selectOfficesType" ng-ng-options="item as item.name for item in vm.model.officesAll" ng-model="vm.model.office.parentObj" ng-change="vm.selectParentOffice(office)">
             <option> Seleccionar </option>
         </select>
     </div>
@@ -40,6 +40,6 @@
 </div>
 
 <div class="contentActions">
-    <div class="btnSave"> GUARDAR </div>
+    <div class="btnSave" ng-click="vm.saveOffice()"> GUARDAR </div>
     <div class="btnCancel" ng-click="vm.cancel()"> CANCELAR </div>
 </div>
