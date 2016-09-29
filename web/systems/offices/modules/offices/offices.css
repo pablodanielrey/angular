@@ -22,8 +22,8 @@
 }
 
 @keyframes movimiento {
-    0% {margin-left: 50px}
-    100% {margin-left: 0px}
+    0% {opacity: 0}
+    100% {opacity: 1}
 }
 
 .offices .contentSearch {
@@ -191,6 +191,14 @@
 .offices .btnCreateNew:hover {
   background-color: #6d316d;
   cursor: pointer;
+}
+
+.offices.pantallaUsuarios .btnCreateNew,
+.offices.pantallaEdicion .btnCreateNew {
+  background-color: #e5e5e5;
+  color: #5C5F69;
+  border: 1px solid #c9cbd3;
+  cursor: auto;
 }
 
 /*------- PANTALLA EDITAR OFICINA -------*/
@@ -463,7 +471,6 @@
   .offices.pantallaUsuarios .editOffices {
     display: none;
   }
-
 
 }
 
