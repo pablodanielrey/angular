@@ -1,10 +1,6 @@
 # -*- coding: utf-8 -*-
 
-
-from model.serializer.utils import JSONSerializable
-
-
-
+from model.serializer import JSONSerializable
 from model.dao import DAO
 from model.users.users import UserDAO
 
