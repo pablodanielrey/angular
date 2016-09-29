@@ -5,16 +5,14 @@
     app.config(['$routeProvider', function($routeProvider) {
       $routeProvider
 
-      /*
-      .when('/create', {
-         templateUrl: 'modules/offices/index.html',
-         controller: 'OfficesCtrl',
+      .when('/logs', {
+         templateUrl: 'modules/logs/index.html',
+         controller: 'LogsCtrl',
          controllerAs: 'vm'
       })
-	*/
 
       .otherwise({
-        redirectTo: '/list'
+        redirectTo: '/logs'
       });
 
     }]);
