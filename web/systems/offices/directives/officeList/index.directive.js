@@ -20,6 +20,7 @@
             bindToController: {
               offices: '=offices',
               types: '=types',
+              selectedType: '=selectedType',
               onSelectType: '&onSelectType',
               onRemove: '&onRemove',
               onCreate: '&onCreate',
@@ -43,7 +44,6 @@
         vm.remove = remove;
         vm.select = select;
         vm.selectType = selectType;
-        vm.selected = null;
 
         activate();
 
@@ -64,7 +64,7 @@
         }
 
         function selectType() {
-          vm.onSelectType({type: vm.selected});
+          vm.onSelectType({type: vm.selectedType});
         }
     }
 })();

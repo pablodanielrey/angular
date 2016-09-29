@@ -22,7 +22,8 @@
           dictUsers: {},
           displayUsers: [],
           office: null,
-          officeTypes: []
+          officeTypes: [],
+          selectedType: null
         }
 
         vm.loadOffices = loadOffices;
@@ -47,6 +48,7 @@
             return;
           }
 
+          vm.model.selectedType = null;
           vm.model.userId = Login.getCredentials().userId;
           vm.getOfficeTypes();
           loadUsers();
@@ -85,12 +87,14 @@
 
         function getOfficeTypes() {
           vm.model.officeTypes = [];
+          vm.model.selectedType = null;
           Offices.getOfficeTypes().then(
             function(types) {
               $scope.$apply(function() {
                 vm.model.officeTypes = types;
                 vm.model.officeTypes.push({value:null, name: 'Todos'});
-                vm.loadOffices(vm.model.officeTypes[0]);
+                vm.model.selectedType = vm.model.officeTypes[0];
+                vm.loadOffices(vm.model.selectedType);
               });
             }, function(error) {
               // messageError(error);
