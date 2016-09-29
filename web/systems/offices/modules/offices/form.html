@@ -9,16 +9,16 @@
 <div class="contentOfficeType">
     <div> Tipo: </div>
     <div>
-        <select class="selectOfficesType" ng-options="item as item.name for item in vm.model.officeTypes" ng-model="vm.model.office.type"></select>
+        <select class="selectOfficesType" ng-options="item as item.name for item in vm.model.officeTypes | orderBy: 'name'" ng-model="vm.model.office.type"></select>
     </div>
     <div> Padre: </div>
     <div>
-        <select class="selectOfficesType" ng-ng-options="item as item.name for item in vm.model.officesAll" ng-model="vm.model.office.parentObj" ng-change="vm.selectParentOffice(office)">
-            <option> Seleccionar </option>
+        <select class="selectOfficesType" ng-options="item as item.name disable when item.id == vm.model.office.id for item in vm.model.officeAll | orderBy: 'name'" ng-model="vm.model.office.parentObj" ng-change="vm.selectParentOffice(office)">
         </select>
     </div>
-</div>
 
+
+</div>
 <div class="contentOfficeMembers">
     <div> Integrantes </div>
     <div class="btnAddUsers" ng-click="vm.view.style='pantallaUsuarios'"> <i class="fa fa-user-plus" aria-hidden="true"></i> AGREGAR </div>
