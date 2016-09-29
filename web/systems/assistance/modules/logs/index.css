@@ -3,6 +3,7 @@
   width: 100%;
   overflow-y: hidden;
   overflow-x: hidden;
+  /*background-color: red;*/
 }
 
 .library .header {
@@ -17,7 +18,7 @@
   width: 100%;
   height: 100%;
   min-height: 200px;
-  background-color: #EEEEEE;
+  /*background-color: #EEEEEE;*/
   /*background-color: red;*/
   overflow-y: none;
   display: flex;
@@ -36,7 +37,7 @@
   flex-direction: column;
   -webkit-flex-direction: column;
   -moz-flex-direction: column;
-  height: 95%;
+  height: 98%;
   width: 100%;
   border-right: 2px solid #DBE2E5;
   /*color: white;*/
@@ -588,7 +589,7 @@
 .library .contentAside {
   width: 30%;
   min-width: 300px;
-  height: 95%;
+  height: 98%;
   /*background-color: red;*/
 }
 
@@ -748,6 +749,10 @@
 /******************** MEDIA QUERIS ***************************/
 
 @media (max-width: 719px){
+  .library {
+    height: calc(100% - 70px)
+  }
+
   .library .header {
       display: none;
   }
@@ -807,8 +812,8 @@
 
 
   .library .contentMain {
-    height: 97%;
-    width: 97%;
+    height: 98%;
+    width: 100%;
   }
 
 
