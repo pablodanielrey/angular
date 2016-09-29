@@ -351,9 +351,9 @@
                 },
 
                 {
-                    "id": "offices",
+                    "id": "assistance",
                     "type": "class",
-                    "classname": "actions.systems.offices.offices.Offices",
+                    "classname": "actions.systems.assistance.assistance.Assistance",
                     "realm": "core",
                     "transport": {
                         "type": "websocket",
