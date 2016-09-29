@@ -100,6 +100,7 @@
 
         function loadAllOffices() {
           vm.model.officeAll = [];
+          vm.model.officesDict = {};
           Offices.findAll([]).then(
             function(ids) {
               if (ids.length <= 0) {
@@ -109,6 +110,9 @@
                 function(offices) {
                   $scope.$apply(function() {
                     vm.model.officeAll = offices;
+                    for (var i = 0; i < offices.length; i++) {
+                      vm.model.officesDict[offices[i].id] = offices[i];
+                    }
                   });
                 }, function(error) {
                   console.log(error);
@@ -194,32 +198,28 @@
         function selectOffice(office) {
           vm.view.style = vm.view.styles[1];
           vm.model.office = office;
+
+          // provisorio, hay eliminarlo cunado este lo de funciones
           if (vm.model.office.users == undefined) {
             vm.model.office.users = [];
           }
+          // ----------------------------------------------------
+
+          // selecciono el tipo de oficina del arreglo de officesTypes para que se la misma instancia de typeOffice
           for(var i = 0; i < vm.model.officeTypes.length; i++) {
             if (vm.model.officeTypes[i].value == office.type.value) {
               office.type = vm.model.officeTypes[i];
               break;
             }
           }
+
+          // selecciono el padre
           if (office.parent != null && office.parent.trim() != '') {
-            Offices.findById([office.parent]).then (
-              function(offices) {
-                if (offices.length <= 0) {
-                  return;
-                }
-                $scope.$apply(function() {
-                  vm.model.office.parentObj = offices[0];
-                  console.log(vm.model.office.parentObj);
-                });
-              }, function(error) {
-                console.log(error);
-              }
-            );
+            vm.model.office.parentObj = vm.model.officesDict[office.parent];
           }
+
           vm.model.displayUsers = vm.model.users.slice(0);
-          // removeDisplayUsers();
+          removeDisplayUsers();
         }
 
         function removeItem(array, item) {
