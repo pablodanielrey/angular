@@ -113,10 +113,57 @@ class RedmineAPI:
         att.name = file.filename
         return att
 
+
+    officeRedmineIdCache = {}
+    officeIdCache = {}
+    officeCache = {}
+
     @classmethod
     def _loadOffice(cls, con, redmine, officeId):
         if officeId is None:
             return None
+
+        id = None
+        if officeId not in cls.officeRedmineIdCache.keys():
+            project = redmine.project.get(officeId)
+            id = project.identifier
+            cls.officeRedmineIdCache[officeId] = id
+            cls.officeIdCache[id] = officeId
+        else:
+            id = cls.officeRedmineIdCache[officeId]
+
+        office = None
+        if id not in cls.officeCache.keys():
+            office = cls._findOffice(con, id)
+            cls.officeCache[id] = office
+        else:
+            office = cls.officeCache[id]
+
+        return office
+
+    @classmethod
+    def _findOffice(cls, con, id):
+        if id is None:
+            return None
+
+        office = None
+        if id not in cls.officeCache.keys():
+            offices = Office.findById(con, [id])
+            office = offices[0] if len(offices) > 0 else None
+            cls.officeCache[id] = office
+        else:
+            office = cls.officeCache[id]
+
+        return office
+
+
+    """
+    @classmethod
+    def _loadOffice(cls, con, redmine, officeId):
+        if officeId is None:
+            return None
+
+        offId = cls.officeRedmineIdCache[officeId]
 
         project = redmine.project.get(officeId)
         id = project.identifier
@@ -129,6 +176,7 @@ class RedmineAPI:
 
         offices = Office.findById(con, [id])
         return offices[0] if len(offices) > 0 else None
+    """
 
     @classmethod
     def _fromResult(cls, con, r, redmine):
@@ -145,7 +193,6 @@ class RedmineAPI:
         else:
             issue.area = None
             issue.office = office
-
 
         issue.projectName = [r.project.name if 'project' in attrs else None][0]
 
@@ -167,7 +214,9 @@ class RedmineAPI:
                 issue.fromOfficeId = cf.value
                 issue.fromOffice = cls._findOffice(con, issue.fromOfficeId)
 
+        """
         issue.children = [cls.findById(con, iss.id) for iss in r.children if iss is not None]
+        """
         issue.files = [cls._loadFile(file) for file in r.attachments if file is not None]
         return issue
 
@@ -267,12 +316,20 @@ class RedmineAPI:
         return issues
 
     @classmethod
-    @do_cprofile
+    #@do_cprofile
+    def getAssignedIssues(cls, con, userId, oIds):
+        redmine = cls._getRedmineInstance(con)
+        userRedmine = cls._findUserId(con, redmine, userId)
+        issues = cls._getIssuesByProject(con, oIds, userRedmine, redmine)
+        return [cls._fromResult(con, issue, redmine) for issue in issues]
+
+    """
     def getAssignedIssues(cls, con, userId, oIds):
         redmine = cls._getRedmineInstance(con)
         userRedmine = cls._findUserId(con, redmine, userId)
         issues = cls._getIssuesByProject(con, oIds, userRedmine, redmine)
         return [cls._fromResult(con, issue, redmine) for issue in issues if not cls._include(issues,issue)]
+    """
 
     @classmethod
     def _getIssuesByProject(cls, con, pidentifiers, user, redmine):
@@ -280,10 +337,8 @@ class RedmineAPI:
             return []
         issues = []
         for pidentifier in pidentifiers:
-            issues.extend(redmine.issue.filter(project_id=pidentifier, status_id='*'))
-
+            issues.extend(redmine.issue.filter(project_id=pidentifier, subproject_id='!*', status_id='open'))
         return issues
-
 
     @classmethod
     def _include(cls, issues, issue):
