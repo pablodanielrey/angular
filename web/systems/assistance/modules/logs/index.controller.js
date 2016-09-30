@@ -15,19 +15,22 @@
 
         vm.getLogs = getLogs;
 
-        function _formatDateDay(d) {
-          return d.getDate() + '/' + d.getMonth() + '/' + d.getFullYear()
-        }
-
-        function _formatDateHour(d) {
-          return d.getHours() + ':' + d.getMinutes() + ':' + d.getSeconds();
-        }
-
-        function _parseLog(log, users) {
+        function _parseLog(log, users, status) {
           var user = _findUser(log.userId, users);
+
+          // calculo si es entrada/salida usando un arreglo temporal status
+          // horrible y muy lento. hay que mejorarlo.
+          var cca = 'entrada';
+          if (status.indexOf(user.id) > -1) {
+            cca = 'salida';
+            status.splice(status.indexOf(user.id),1);
+          } else {
+            status.push(user.id);
+          }
+
           var d = new Date(log.log);
           return {
-              clase: 'entrada',
+              clase: cca,
               tipo: 'NoDocente',
               name: user.name,
               lastname: user.lastname,
@@ -35,23 +38,6 @@
               dia: _formatDateDay(d),
               hora: _formatDateHour(d)
           }
-        }
-
-        function _findUser(uid, users) {
-          for (var i = 0; i < users.length; i++) {
-            if (users[i].id == uid) {
-              return users[i];
-            }
-          }
-          return null;
-        }
-
-        function _getUsers(logs) {
-          var uids = [];
-          for (var i = 0; i < logs.length; i++) {
-            uids.push(logs[i].userId);
-          }
-          return uids;
         }
 
         function getLogs() {
@@ -66,8 +52,10 @@
             // busco a los usuarios de los logs.
             var uids = _getUsers(logs);
             Users.findById(uids).then(function(users) {
+
+              var status = [];
               for (var i = 0; i < logs.length; i++) {
-                vm.model.logs.push(_parseLog(logs[i], users));
+                vm.model.logs.push(_parseLog(logs[i], users, status));
               }
 
             }, function(err) {
@@ -81,6 +69,32 @@
         }
 
     };
+
+    function _formatDateDay(d) {
+      return d.getDate() + '/' + d.getMonth() + '/' + d.getFullYear()
+    }
+
+    function _formatDateHour(d) {
+      return d.getHours() + ':' + d.getMinutes() + ':' + d.getSeconds();
+    }
+
+    function _findUser(uid, users) {
+      for (var i = 0; i < users.length; i++) {
+        if (users[i].id == uid) {
+          return users[i];
+        }
+      }
+      return null;
+    }
+
+    function _getUsers(logs) {
+      var uids = [];
+      for (var i = 0; i < logs.length; i++) {
+        uids.push(logs[i].userId);
+      }
+      return uids;
+    }
+
 
 })();
 
