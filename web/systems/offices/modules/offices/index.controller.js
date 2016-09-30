@@ -15,7 +15,9 @@
           style: '',
           styles: ['pantallaPrincipal', 'pantallaEdicion', 'pantallaUsuarios'],
           style2:'',
-          styles2:['']
+          styles2: ['', 'mensajes'],
+          style3: '',
+          styles3: ['mensajeEliminarOficina', 'mensajeGuardado', 'mensajeCargando']
         };
 
         vm.model = {
@@ -36,6 +38,7 @@
         vm.create = create;
         vm.addUser = addUser;
         vm.removeUser = removeUser;
+        vm.displayRemove = displayRemove;
         vm.selectOffice = selectOffice;
         vm.searchUsers = searchUsers;
         vm.saveOffice = saveOffice;
@@ -269,10 +272,17 @@
           }
         }
 
-        function remove(office) {
-          Utils.remove(office).then(
-            function(id) {
+        function displayRemove(office) {
+          vm.model.office = office;
+          vm.view.style2 = vm.view.styles2[1];
+          vm.view.style3 = vm.view.styles3[1];
+        }
 
+        function remove() {
+          Utils.remove(vm.model.office).then(
+            function(id) {
+              vm.view.style2 = vm.view.styles2[0];
+              vm.view.style3 = vm.view.styles2[0];
             }, function(error) {
               console.error(error);
             }
