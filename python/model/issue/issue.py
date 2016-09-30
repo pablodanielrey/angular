@@ -12,6 +12,26 @@ import re
 from model.assistance.utils import Utils
 
 
+import cProfile
+
+def do_cprofile(func):
+    def profiled_func(*args, **kwargs):
+        profile = cProfile.Profile()
+        try:
+            profile.enable()
+            result = func(*args, **kwargs)
+            profile.disable()
+            return result
+        finally:
+            profile.print_stats()
+    return profiled_func
+
+def get_number():
+    for x in xrange(5000000):
+        yield x
+
+
+
 class Issue(JSONSerializable):
 
     def __init__(self):
@@ -247,12 +267,12 @@ class RedmineAPI:
         return issues
 
     @classmethod
+    @do_cprofile
     def getAssignedIssues(cls, con, userId, oIds):
         redmine = cls._getRedmineInstance(con)
         userRedmine = cls._findUserId(con, redmine, userId)
         issues = cls._getIssuesByProject(con, oIds, userRedmine, redmine)
         return [cls._fromResult(con, issue, redmine) for issue in issues if not cls._include(issues,issue)]
-
 
     @classmethod
     def _getIssuesByProject(cls, con, pidentifiers, user, redmine):
