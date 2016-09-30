@@ -56,7 +56,7 @@ class LogDAO(DAO):
         assert date is not None
         cur = con.cursor()
         try:
-            cur.execute('select * from assistance.attlog where log = %s', (date,))
+            cur.execute('select * from assistance.attlog where log::DATE = %s::DATE', (date,))
             if cur.rowcount <= 0:
                 return []
             return [cls._fromResult(r) for r in cur]

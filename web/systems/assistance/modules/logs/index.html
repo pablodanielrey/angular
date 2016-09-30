@@ -26,7 +26,7 @@
                     <div class="btnOrder" title="Ordenar Nombre"><i class="fa fa-sort-alpha-asc"></i></div>
                 </div>
                 <div class="contentFilters">
-                  <div class="btnOrder" title="Restablecer valores por defecto"><i class="fa fa-home"></i></div>
+                  <div class="btnOrder" title="Restablecer valores por defecto"><i class="fa fa-home" ng-click='vm.getLogs()'></i></div>
                   <div class="btnOrder" title="Descargar Lista"><i class="fa fa-download"></i></div>
                   <div class="btnSearch" ng-click="view.style = 'buscar'" title="Buscar..."><i class="fa fa-search"></i></div>
                 </div>
@@ -85,7 +85,7 @@
                 </div>
                 <!-- ---- Accesos ----- -->
                 <div class="listAccess">
-                  <div class="itemListAccess {{i.clase}}" ng-repeat="i in logs">
+                  <div class="itemListAccess {{i.clase}}" ng-repeat="i in vm.model.logs">
                     <!-- VARIABLES: entrada, salida -->
                     <div class="file1b">
                         <i class="inOut fa fa-chevron-circle-left"></i>

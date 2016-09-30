@@ -1,13 +1,110 @@
+(function() {
+    'use strict'
+    angular
+      .module('assistance')
+      .controller('LogsCtrl', LogsCtrl);
+
+    LogsCtrl.$inject = ['$scope', 'Assistance', 'Users'];
+
+    function LogsCtrl($scope, Assistance, Users) {
+        var vm = this;
+
+        vm.model = {
+          logs: []
+        };
+
+        vm.getLogs = getLogs;
+
+        function _formatDateDay(d) {
+          return d.getDate() + '/' + d.getMonth() + '/' + d.getFullYear()
+        }
+
+        function _formatDateHour(d) {
+          return d.getHours() + ':' + d.getMinutes() + ':' + d.getSeconds();
+        }
+
+        function _parseLog(log, users) {
+          var user = _findUser(log.userId, users);
+          var d = new Date(log.log);
+          return {
+              clase: 'entrada',
+              tipo: 'NoDocente',
+              name: user.name,
+              lastname: user.lastname,
+              dni: user.dni,
+              dia: _formatDateDay(d),
+              hora: _formatDateHour(d)
+          }
+        }
+
+        function _findUser(uid, users) {
+          for (var i = 0; i < users.length; i++) {
+            if (users[i].id == uid) {
+              return users[i];
+            }
+          }
+          return null;
+        }
+
+        function _getUsers(logs) {
+          var uids = [];
+          for (var i = 0; i < logs.length; i++) {
+            uids.push(logs[i].userId);
+          }
+          return uids;
+        }
+
+        function getLogs() {
+          var d = new Date()
+          Assistance.getLogs(d).then(function(logs) {
+            console.log(logs);
+
+            if (logs.length <= 0) {
+              return;
+            }
+
+            // busco a los usuarios de los logs.
+            var uids = _getUsers(logs);
+            Users.findById(uids).then(function(users) {
+              for (var i = 0; i < logs.length; i++) {
+                vm.model.logs.push(_parseLog(logs[i], users));
+              }
+
+            }, function(err) {
+              console.log(err);
+            });
+
+          }, function(err) {
+            console.log(err);
+          })
+
+        }
+
+    };
+
+})();
+
+
+/*
 var app = angular.module('assistance');
 
-app.controller('LogsCtrl', ["$rootScope", '$scope',
+app.controller('LogsCtrl', ["$rootScope", '$scope', 'Login',
   function ($rootScope, $scope) {
+    var mv = this;
 
     var nombres = ['Walter Roberto', 'Pablo Daniel', 'Alejandro Agustin', 'Maximiliano Antonio', 'Ivan Roberto'];
     var dnis = ['2738457298', '27294557', '30001823', '12345678', '876554432'];
     var cclase = '';
 
     $scope.logs = [];
+
+
+    function getLogs() {
+      console.log('getLogs');
+    }
+
+
+
     for (var i = 0; i < 100; i++) {
       if (i % 2 == 0) {
         cclase = 'entrada';
@@ -28,99 +125,7 @@ app.controller('LogsCtrl', ["$rootScope", '$scope',
       );
     };
 
-    /*
-      repetir solooooo
-
-      $scope.variable = [];
-      for (var i = 0; i < cantidad; i++) {
-        $scope.variable.push('valor a agregar');
-      }
-
-      y en el html usar:
-
-      ng-repeat='i in variable'
-
-    */
-
-
-    /*
-
-      la lista inicial va entre []
-      los valores internos a la lista van entre {}
-      se separan usando ,
-      acordarse al final de la lista poner ;
-      ej:
-
-      $scope.variable = [
-
-        {
-            hora:'sdfdsf',
-            nombre:'sdfdsf',
-            dni:'sdfdsf',
-            lastname:'sdfdsf',
-            tipo:'sdf',
-            clase:'sdf'
-        },
-
-        {
-            hora:'sdfdsf',
-            nombre:'sdfdsf',
-            dni:'sdfdsf',
-            lastname:'sdfdsf',
-            tipo:'sdf',
-            clase:'sdf'
-        },
-
-        {
-            hora:'sdfdsf',
-            nombre:'sdfdsf',
-            dni:'sdfdsf',
-            lastname:'sdfdsf',
-            tipo:'sdf',
-            clase:'sdf'
-        },
-
-        {
-            hora:'sdfdsf',
-            nombre:'sdfdsf',
-            dni:'sdfdsf',
-            lastname:'sdfdsf',
-            tipo:'sdf',
-            clase:'sdf'
-        },
-
-        {
-            hora:'sdfdsf',
-            nombre:'sdfdsf',
-            dni:'sdfdsf',
-            lastname:'sdfdsf',
-            tipo:'sdf',
-            clase:'sdf'
-        },
-
-        {
-            hora:'sdfdsf',
-            nombre:'sdfdsf',
-            dni:'sdfdsf',
-            lastname:'sdfdsf',
-            tipo:'sdf',
-            clase:'sdf'
-        },
-
-        {
-            hora:'sdfdsf',
-            nombre:'sdfdsf',
-            dni:'sdfdsf',
-            lastname:'sdfdsf',
-            tipo:'sdf',
-            clase:'sdf'
-        }
-
-    ];
-
-    */
-
-
 
   }
 ]);
+*/
