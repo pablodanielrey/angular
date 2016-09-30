@@ -10,24 +10,37 @@
         var vm = this;
 
         vm.model = {
-          logs: []
+          logs: [],
+          status: [],
+          inside: 0,
+          outside: 0
         };
 
         vm.getLogs = getLogs;
 
-        function _parseLog(log, users, status) {
-          var user = _findUser(log.userId, users);
-
-          // calculo si es entrada/salida usando un arreglo temporal status
-          // horrible y muy lento. hay que mejorarlo.
-          var cca = 'entrada';
-          if (status.indexOf(user.id) > -1) {
-            cca = 'salida';
-            status.splice(status.indexOf(user.id),1);
-          } else {
-            status.push(user.id);
+        function _getStatus(userId) {
+          for (var i = 0; i < vm.model.status.length; i++) {
+            if (vm.model.status[i].id == userId) {
+              return vm.model.status[i].status;
+            }
           }
+          return false;
+        }
 
+        function _calcStatus(userId) {
+          for (var i = 0; i < vm.model.status.length; i++) {
+            if (vm.model.status[i].id == userId) {
+              vm.model.status[i].status = !(vm.model.status[i].status);
+              return vm.model.status[i].status;
+            }
+          }
+          vm.model.status.push({id:userId, status:true});
+          return true;
+        }
+
+        function _parseLog(log, users) {
+          var user = _findUser(log.userId, users);
+          var cca = _calcStatus(user.id) ? 'entrada' : 'salida';
           var d = new Date(log.log);
           return {
               clase: cca,
@@ -53,10 +66,21 @@
             var uids = _getUsers(logs);
             Users.findById(uids).then(function(users) {
 
+              // seteo los logs y los estados
               var status = [];
               for (var i = 0; i < logs.length; i++) {
                 vm.model.logs.push(_parseLog(logs[i], users, status));
               }
+              // seteo los valores de los contadores finales.
+              vm.model.inside = 0;
+              for (var i = 0; i < vm.model.status.length; i++) {
+                if (vm.model.status.status) {
+                  vm.model.inside = vm.model.inside + 1;
+                } else {
+                  vm.model.outside = vm.model.outside + 1;
+                }
+              }
+
 
             }, function(err) {
               console.log(err);
