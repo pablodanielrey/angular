@@ -74,7 +74,8 @@
 
         function loadOffices(type) {
           vm.model.offices = [];
-          Offices.findAll([type]).then(
+          var types = (type == null) ? null : [type]
+          Offices.findAll(types).then(
             function(ids) {
               if (ids.length <= 0) {
                 return;
