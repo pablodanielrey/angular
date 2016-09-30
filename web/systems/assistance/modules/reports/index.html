@@ -68,28 +68,25 @@
             <div class="contentList">
                 <!-- ---- Titulos del listado ----- -->
                 <div class="titleListAccess">
-                  <div class="file0">A</div>
-                  <div class="file1">Acceso</div>
-                  <div class="file2">Día</div>
-                  <div class="file2b">Hora</div>
+                  <div class="file2">Fecha</div>
                   <div class="file3">Nombre y Apellido</div>
-                  <div class="file4">DNI</div>
-                  <div class="file5">Tipo</div>
+                      <div class="file4">DNI</div>
+                        <div class="file5">Tipo</div>
+                  <div class="file2b">Hora</div>
+
+
                 </div>
                 <!-- ---- Accesos ----- -->
                 <div class="listAccess">
                   <div class="itemListAccess {{i.clase}}" ng-repeat="i in logs">
                     <!-- VARIABLES: entrada, salida -->
-                    <div class="file1b">
-                        <i class="inOut fa fa-chevron-circle-left"></i>
-                        <div class="inOut in">Entrada</div>
-                        <div class="inOut out">Salida</div>
-                    </div>
-                    <div class="file2">{{i.dia}}</div>
+                      <div class="file2">{{i.dia}}</div>
+                      <div class="file3">{{i.name}} {{i.lastname}}</div>
+                      <div class="file4">{{i.dni}}</div>
+                      <div class="file5">{{i.tipo}}</div>
                     <div class="file2b">{{i.hora}}</div>
-                    <div class="file3">{{i.name}} {{i.lastname}}</div>
-                    <div class="file4">{{i.dni}}</div>
-                    <div class="file5">{{i.tipo}}</div>
+
+
                   </div>
                 </div>
                 <!-- ---- Preload para la busqueda ----- -->
