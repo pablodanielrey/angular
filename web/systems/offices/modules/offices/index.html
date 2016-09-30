@@ -12,10 +12,10 @@
       <div class="subContentMessages">
 
           <div class="messageDeleOffice">
-              <div>¿ Está seguro que desea eliminar la oficina?</div>
+              <div>¿ Está seguro que desea eliminar la oficina {{vm.model.office.name}}?</div>
               <div class="contentActionsMessages">
                   <div class="btnSave" ng-click="vm.remove()"> BORRAR </div>
-                  <div class="btnCancel"> CANCELAR </div>
+                  <div class="btnCancel" ng-click="vm.cancelRemove()"> CANCELAR </div>
               </div>
           </div>
 

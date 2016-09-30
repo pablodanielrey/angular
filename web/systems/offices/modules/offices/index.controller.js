@@ -5,10 +5,10 @@
         .module('offices')
         .controller('OfficesCtrl', OfficesCtrl);
 
-    OfficesCtrl.$inject = ['$scope', 'Login', 'Offices', 'Utils'];
+    OfficesCtrl.$inject = ['$scope', 'Login', 'Offices', 'Utils', '$timeout'];
 
     /* @ngInject */
-    function OfficesCtrl($scope, Login, Offices, Utils) {
+    function OfficesCtrl($scope, Login, Offices, Utils, $timeout) {
         var vm = this;
 
         vm.view = {
@@ -223,7 +223,14 @@
           Utils.persist(vm.model.office).then(
             function(response) {
               $scope.$apply(function() {
-                vm.view.style = vm.view.styles[0];
+                vm.view.style2 = vm.view.styles2[1];
+                vm.view.style3 = vm.view.styles3[1];
+                $timeout(function () {
+                    vm.view.style2 = vm.view.styles2[0];
+                    vm.view.style = vm.view.styles[0];
+                }, 1000);
+
+
               })
             }, function(error) {
               console.error(error);
@@ -275,14 +282,18 @@
         function displayRemove(office) {
           vm.model.office = office;
           vm.view.style2 = vm.view.styles2[1];
-          vm.view.style3 = vm.view.styles3[1];
+          vm.view.style3 = vm.view.styles3[0];
+        }
+
+        vm.cancelRemove = cancelRemove;
+        function cancelRemove() {
+          vm.view.style2 = vm.view.styles2[0];
         }
 
         function remove() {
           Utils.remove(vm.model.office).then(
             function(id) {
               vm.view.style2 = vm.view.styles2[0];
-              vm.view.style3 = vm.view.styles2[0];
             }, function(error) {
               console.error(error);
             }

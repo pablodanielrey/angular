@@ -10,6 +10,10 @@
   -moz-flex-direction:row; /* mozilla */
 }
 
+.offices .contentMessages {
+  display:none;
+}
+
 /*----- PANTALLA BUSCAR OFICINA -----*/
 
 .offices .listOffices {
@@ -464,7 +468,7 @@
 
 
 
-.offices .contentMessages {
+.offices.mensajes .contentMessages {
   position: absolute;
   display: flex;
   display: -webkit-flex; /* Safari */
