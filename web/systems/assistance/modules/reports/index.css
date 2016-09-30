@@ -528,6 +528,7 @@
 }
 .library .file2 {
   width: 85px;
+  margin-left: 5px;
 }
 .library .file2b {
   width: 80px;
@@ -536,10 +537,19 @@
   width: 250px;
 }
 .library .file4 {
-  width: 100px;
+  width: 80px;
 }
 .library .file5 {
-
+  width: 60px;
+}
+.library .file6 {
+  width: 80px;
+}
+.library .file7 {
+  width: 60px;
+}
+.library .file8 {
+  width: 30px;
 }
 
 .library .listAccess {

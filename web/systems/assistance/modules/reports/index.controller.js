@@ -4,7 +4,7 @@ app.controller('ReportsCtrl', ["$rootScope", '$scope',
   function ($rootScope, $scope) {
 
     var nombres = ['Walter Roberto', 'Pablo Daniel', 'Alejandro Agustin', 'Maximiliano Antonio', 'Ivan Roberto'];
-    var dnis = ['2738457298', '27294557', '30001823', '12345678', '876554432'];
+    var dnis = ['30235984', '28963548', '30001823', '35879562', '36549822'];
     var cclase = '';
 
     $scope.logs = [];
@@ -18,7 +18,7 @@ app.controller('ReportsCtrl', ["$rootScope", '$scope',
       $scope.logs.push(
         {
           clase: cclase,
-          tipo: 'NoDocente',
+          tipo: 'E7',
           name: nombres[i % nombres.length],
           lastname: 'Blanco',
           dni: dnis[i % dnis.length],
