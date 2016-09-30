@@ -5,14 +5,16 @@
         .module('offices')
         .service('Utils', Utils);
 
-    Utils.$inject = ['Offices', '$q', '$window'];
+    Utils.$inject = ['Offices', '$q', '$window', '$timeout'];
 
     /* @ngInject */
-    function Utils(Offices, $q, $window) {
+    function Utils(Offices, $q, $window, $timeout) {
 
         this.getOfficeTypes = getOfficeTypes;
         this.findAll = findAll;
         this.findByIds = findByIds;
+        this.persist = persist;
+        this.remove = remove;
 
         function getOfficeTypes() {
           var officesTypes = $window.sessionStorage.getItem("officesTypes");
@@ -71,6 +73,32 @@
                 }
               );
 
+        }
+
+        function remove(office) {
+          $window.sessionStorage.removeItem(office.id);
+          return Offices.remove(office);
+        }
+
+        function persist(office) {
+          var off = convertOffice(office);
+          return Offices.persist(off);
+        }
+
+        function convertOffice(office) {
+          var off = {};
+          off.name = office.name;
+          off.type = office.type.value;
+          off.parent = (office.parentObj == null) ? null : office.parentObj.id;
+          off.number = office.number;
+          off.telephone = office.telephone;
+          off.id = office.id;
+          off.__json_class__ = 'Office';
+          off.__json_module__ = "model.offices.office"
+
+          console.log(JSON.stringify(off));
+
+          return off;
         }
 
 

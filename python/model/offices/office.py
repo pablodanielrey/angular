@@ -3,6 +3,7 @@ from model.serializer import JSONSerializable
 from model.dao import DAO
 from model.users.users import UserDAO, User
 import re
+import uuid
 
 class Office(JSONSerializable):
 
@@ -13,12 +14,15 @@ class Office(JSONSerializable):
         self.name = None
         self.telephone = None
         self.number = None
-        self.type = self.officeType[1]
+        self.type = None
         self.email = None
         self.parent = None
 
     def persist(self, con):
         return OfficeDAO.persist(con, self)
+
+    def remove(self, con):
+        return OfficeDAO.remove(con, self.id)
 
     def findDesignations(self, con):
         pass
@@ -106,8 +110,32 @@ class OfficeDAO(DAO):
             cur.close()
 
     @classmethod
-    def persit(cls, con, off):
-        return
+    def persist(cls, con, office):
+        ''' inserta o actualiza una oficia '''
+        cur = con.cursor()
+        try:
+            if office.id is None:
+                office.id = str(uuid.uuid4())
+                params = office.__dict__
+                cur.execute('insert into offices.offices (id, name, telephone, nro, type, parent) values (%(id)s, %(name)s, %(telephone)s, %(number)s, %(type)s, %(parent)s)', params)
+            else:
+                params = office.__dict__
+                cur.execute('update offices.offices set name = %(name)s, telephone = %(telephone)s, nro = %(number)s, type = %(type)s, parent = %(parent)s where id = %(id)s', params)
+
+            return office.id
+
+        finally:
+            cur.close()
+
+
+    @classmethod
+    def remove(cls, con, id):
+        cur = con.cursor()
+        try:
+            cur.execute('delete from offices.offices where id = %s',(id,))
+            return id
+        finally:
+            cur.close()
 
 
 class Designation(JSONSerializable):

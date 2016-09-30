@@ -54,6 +54,7 @@
             return;
           }
 
+          subscribeEvents();
           vm.view.style = vm.view.styles[0];
           vm.view.style2 = vm.view.styles2[0];
 
@@ -62,6 +63,24 @@
           vm.getOfficeTypes();
           loadUsers();
           loadAllOffices();
+        }
+
+        function subscribeEvents() {
+          Offices.subscribe('offices.persist_event', function(params) {
+            var id = params[0];
+            $scope.$apply(function() {
+              loadAllOffices();
+              loadOffices(vm.model.selectedType);
+            });
+          });
+
+          Offices.subscribe('offices.remove_event', function(params) {
+            var id = params[0];
+            $scope.$apply(function() {
+              loadAllOffices();
+              loadOffices(vm.model.selectedType);
+            });
+          });
         }
 
 
@@ -93,10 +112,6 @@
               console.log(error);
             }
           );
-        }
-
-        function saveOffice() {
-          vm.view.style = vm.view.styles[0];
         }
 
 
@@ -172,13 +187,45 @@
           vm.view.style = vm.view.styles[0];
         }
 
+
         function create() {
           vm.view.style = vm.view.styles[1];
 
           vm.model.office = {};
+          vm.model.office.id = null;
           vm.model.office.users = [];
           vm.model.office.name = '';
+          vm.model.office.telephone = '';
+          vm.model.office.number = '';
           vm.model.displayUsers = vm.model.users.slice(0);
+        }
+
+        function saveOffice() {
+          var ok = true;
+
+          if (vm.model.office.name.trim() == '') {
+            ok = false;
+            window.alert("Debe completar el nombre de la oficina");
+          }
+
+          if (vm.model.office.type == null) {
+            ok = false;
+            window.alert('Debe seleccionar el tipo de la oficina');
+          }
+
+          if (!ok) {
+            return;
+          }
+
+          Utils.persist(vm.model.office).then(
+            function(response) {
+              $scope.$apply(function() {
+                vm.view.style = vm.view.styles[0];
+              })
+            }, function(error) {
+              console.error(error);
+            }
+          )
         }
 
         function selectOffice(office) {
@@ -223,7 +270,13 @@
         }
 
         function remove(office) {
-          removeItem(vm.model.offices, office);
+          Utils.remove(office).then(
+            function(id) {
+
+            }, function(error) {
+              console.error(error);
+            }
+          );
         }
 
         function addUser(user) {

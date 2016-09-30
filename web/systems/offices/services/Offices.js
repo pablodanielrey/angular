@@ -14,6 +14,8 @@
 			this.searchUsers = searchUsers;
 			this.getOfficeTypes = getOfficeTypes;
 			this.findAll = findAll;
+			this.persist = persist;
+			this.remove = remove;
 
 			function subscribe(event, func) {
 				Login.getPrivateTransport().subscribe(event, func);
@@ -37,6 +39,14 @@
 
 			function findAll(types) {
 				return Login.getPrivateTransport().call('offices.find_all', [types]);
+			}
+
+			function persist(office) {
+				return Login.getPrivateTransport().call('offices.persist', [office]);
+			}
+
+			function remove(office) {
+				return Login.getPrivateTransport().call('offices.remove', [office]);
 			}
 
 		}

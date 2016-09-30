@@ -1,8 +1,10 @@
 # -*- coding: utf-8 -*-
-import autobahn
-
 from model.offices.office import Office, OfficeModel
 import wamp
+import autobahn
+from twisted.internet.defer import inlineCallbacks
+import logging
+logging.getLogger().setLevel(logging.INFO)
 
 
 class Offices(wamp.SystemComponentSession):
@@ -53,6 +55,29 @@ class Offices(wamp.SystemComponentSession):
             self.conn.put(con)
 
 
+    @autobahn.wamp.register('offices.persist')
+    @inlineCallbacks
+    def persist(self, office):
+        con = self.conn.get()
+        try:
+            id = office.persist(con)
+            con.commit()
+            yield self.publish('offices.persist_event', id)
+            return id
+        finally:
+            self.conn.put(con)
+
+    @autobahn.wamp.register('offices.remove')
+    @inlineCallbacks
+    def remove(self, office):
+        con = self.conn.get()
+        try:
+            id = office.remove(con)
+            con.commit()
+            yield self.publish('offices.remove_event', id)
+            return id
+        finally:
+            self.conn.put(con)
 """
 
 class OfficeWamp(ApplicationSession):
