@@ -1,9 +1,36 @@
-<div class="offices {{vm.view.style}}">
+<div class="offices {{vm.view.style}} mensajes mensajeCargando">
 <!-- ---- VARIABLES ----
     VARIABLES 1: pantallaPrincipal, pantallaEdicion, pantallaUsuarios (ESTAS VARIABLES SON PRINCIPALMENTE PARA LA NAVEGACION POR CELULAR)
-    VARIABLES 2:
+    VARIABLES 2: mensajes
+    VARIABLES 3: mensajeEliminarOficina, mensajeGuardado, mensajeCargando
 -->
   <div class="listOffices">  <e-office-list offices="vm.model.offices" types="vm.model.officeTypes" selected-type="vm.model.selectedType" on-select-type="vm.loadOffices(type)" on-remove="vm.remove(office)" on-create="vm.create()" on-select="vm.selectOffice(office)"></e-office-list> </div>
   <div class="editOffices" ng-include="'modules/offices/form.html?t=' + time"></div>
   <div class="searchUsers">  <e-user-list users="vm.model.displayUsers" remove-user="vm.addUser(user)" search-users="vm.searchUsers(text)"></e-user-list> </div>
+
+  <div class="contentMessages">
+      <div class="subContentMessages">
+
+          <div class="messageDeleOffice">
+              <div>¿ Está seguro que desea eliminar la oficina?</div>
+              <div class="contentActionsMessages">
+                  <div class="btnSave"> BORRAR </div>
+                  <div class="btnCancel"> CANCELAR </div>
+              </div>
+          </div>
+
+          <div class="messageSave">
+              <div><i class=" icoCheck fa fa-check fa-3x"></i> guardado correcto!</div>
+          </div>
+
+          <div class="messageLoading">
+              <div><i class="icoPreload fa fa-spinner fa-spin fa-3x fa-fw"></i></div>
+              <div> Cargando...</div>
+              <div class="textLoading"> por favor espere</div>
+          </div>
+
+      </div>
+  </div>
+
+
 </div>

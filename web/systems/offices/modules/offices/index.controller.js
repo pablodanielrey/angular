@@ -282,6 +282,7 @@
         function addUser(user) {
           removeItem(vm.model.displayUsers, user);
           vm.model.office.users.push(user);
+          vm.view.style = vm.view.styles[1];
         }
 
         function removeUser(user) {
