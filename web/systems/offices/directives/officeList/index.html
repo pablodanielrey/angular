@@ -9,7 +9,9 @@
 <div class="titleListOffices">
     <div> Listado de Oficinas</div>
     <div>
-        <select class="selectOfficesType" ng-options="item as item.name for item in vm.types  | orderBy: 'name'" ng-model="vm.selectedType" ng-change="vm.selectType()"></select>
+        <select class="selectOfficesType" ng-options="item as item.name for item in vm.types  | orderBy: 'name'" ng-model="vm.selectedType" ng-change="vm.selectType()">
+          <option value="">Todos</option>
+        </select>
 
     </div>
 </div>

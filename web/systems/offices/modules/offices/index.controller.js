@@ -5,10 +5,10 @@
         .module('offices')
         .controller('OfficesCtrl', OfficesCtrl);
 
-    OfficesCtrl.$inject = ['$scope', 'Login', 'Offices'];
+    OfficesCtrl.$inject = ['$scope', 'Login', 'Offices', 'Utils'];
 
     /* @ngInject */
-    function OfficesCtrl($scope, Login, Offices) {
+    function OfficesCtrl($scope, Login, Offices, Utils) {
         var vm = this;
 
         vm.view = {
@@ -98,43 +98,28 @@
           vm.view.style = vm.view.styles[0];
         }
 
+
+        // TODO: obtiene todas las oficinas
         function loadAllOffices() {
           vm.model.officeAll = [];
-          vm.model.officesDict = {};
-          Offices.findAll([]).then(
-            function(ids) {
-              if (ids.length <= 0) {
-                return;
+          Utils.findAll().then(
+              function(offices) {
+                vm.model.officeAll = offices;
+              }, function(error) {
+                console.error(error);
               }
-              Offices.findById(ids).then (
-                function(offices) {
-                  $scope.$apply(function() {
-                    vm.model.officeAll = offices;
-                    for (var i = 0; i < offices.length; i++) {
-                      vm.model.officesDict[offices[i].id] = offices[i];
-                    }
-                  });
-                }, function(error) {
-                  console.log(error);
-                }
-              );
-            }, function(error) {
-              console.log(error);
-            }
           );
         }
 
+        // TODO: obtiene el listado de tipos de oficinas
         function getOfficeTypes() {
           vm.model.officeTypes = [];
           vm.model.selectedType = null;
-          Offices.getOfficeTypes().then(
+          Utils.getOfficeTypes().then(
             function(types) {
-              $scope.$apply(function() {
-                vm.model.officeTypes = types;
-                vm.model.officeTypes.push({value:null, name: 'Todos'});
-                vm.model.selectedType = vm.model.officeTypes[0];
-                vm.loadOffices(vm.model.selectedType);
-              });
+              vm.model.officeTypes = types;
+              vm.model.selectedType = vm.model.officeTypes[0];
+              vm.loadOffices(vm.model.selectedType);
             }, function(error) {
               // messageError(error);
               console.log(error);
@@ -214,8 +199,15 @@
           }
 
           // selecciono el padre
+          vm.model.office.parentObj = null;
           if (office.parent != null && office.parent.trim() != '') {
-            vm.model.office.parentObj = vm.model.officesDict[office.parent];
+            for (var i = 0; i < vm.model.officeAll.length; i++) {
+              if (office.parent == vm.model.officeAll[i].id) {
+                vm.model.office.parentObj = vm.model.officeAll[i];
+                break;
+              }
+            }
+
           }
 
           vm.model.displayUsers = vm.model.users.slice(0);
