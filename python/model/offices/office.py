@@ -94,7 +94,8 @@ class OfficeDAO(DAO):
     def findAll(cls, con, types=Office.officeType):
         cur = con.cursor()
         try:
-            if types is None:
+            print(types)
+            if types is None or len(types) < 1:
                 types = Office.officeType
 
             t = [o['value'] for o in types]
