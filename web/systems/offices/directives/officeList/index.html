@@ -21,7 +21,7 @@
     <div class="itemOffice" ng-repeat="office in vm.offices | orderBy: 'name' | filter: vm.model.search" >
         <div class="officesData" ng-click="vm.select(office)">
             <div class="officeType">{{office.type.name}}</div>
-            <div class="officeName">{{office.name}}</div>
+            <div class="officeName"><b>{{office.name}}</b></div>
         </div>
         <div class="btnDelete" ng-click="vm.remove(office)" title="Eliminar Oficina"> <i class="fa fa-trash" aria-hidden="true"></i> </div>
     </div>

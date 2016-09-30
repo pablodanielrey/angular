@@ -7,16 +7,35 @@
 </div>
 
 <div class="contentOfficeType">
-    <div> Tipo: </div>
-    <div>
-        <select class="selectOfficesType" ng-options="item as item.name for item in vm.model.officeTypes | orderBy: 'name'" ng-model="vm.model.office.type"></select>
+
+    <div class="infoOffices">
+        <div> Tipo: </div>
+        <div>
+            <select class="selectOfficesType" ng-options="item as item.name for item in vm.model.officeTypes | orderBy: 'name'" ng-model="vm.model.office.type"></select>
+        </div>
+        <div> Padre: </div>
+        <div>
+            <select class="selectOfficesType" ng-options="item as item.name disable when item.id == vm.model.office.id for item in vm.model.officeAll | orderBy: 'name'" ng-model="vm.model.office.parentObj" ng-change="vm.selectParentOffice(office)">
+              <option value="">No posee</option>
+            </select>
+        </div>
     </div>
-    <div> Padre: </div>
-    <div>
-        <select class="selectOfficesType" ng-options="item as item.name disable when item.id == vm.model.office.id for item in vm.model.officeAll | orderBy: 'name'" ng-model="vm.model.office.parentObj" ng-change="vm.selectParentOffice(office)">
-          <option value="">No posee</option>
-        </select>
+
+    <div class="infoOffices">
+      <div> Interno: </div>
+      <div> <input class="inputOfficeData" type="text"></input> </div>
+      <div> Nº: </div>
+      <div> <input class="inputOfficeData" type="text"></input> </div>
+      <div><i class="fa fa-product-hunt" title="Agregar al Sistema de Pedidos"></i></div>
+      <div> <input class="inputOfficeData3" type="checkbox"></input> </div>
     </div>
+    <div class="infoOffices">
+      <div> Correo: </div>
+      <div> <input class="inputOfficeData2" type="text"></input> </div>
+    </div>
+
+    <!-- <div> Interno: </div>
+    <div> <input class="selectOfficesType" type="text"></input> </div> -->
 
 
 </div>

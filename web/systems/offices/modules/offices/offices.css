@@ -69,7 +69,7 @@
   -moz-border-radius: 2px;
   -webkit-border-radius: 2px;
   background-color: white;
-    color: #5C5F69;
+    color: #28292D;
     width: 100px;
     padding: 2px;
     font-size: 12px;
@@ -121,7 +121,8 @@
 }
 
 .offices .officeType {
-  width: 40px;
+  min-width: 40px;
+  max-width: 70px;
   background-color: #eae8e8;
   font-size: 10px;
   color: #28292D;
@@ -233,6 +234,12 @@
 }
 
 .offices .contentOfficeType {
+  color: #5C5F69;
+  margin-bottom: 10px;
+  flex-wrap: wrap;
+}
+
+.offices .infoOffices {
   display: flex;
   display: -webkit-flex; /* Safari */
   display: -moz-flex; /* mozilla */
@@ -245,8 +252,52 @@
   align-items: center;
   -webkit-align-items:center; /* Safari */
   -moz-align-items:center; /* mozilla */
-  color: #5C5F69;
-  margin-bottom: 10px;
+  margin-bottom: 5px;
+  width: 100%;
+}
+
+.offices .inputOfficeData {
+  border-radius: 2px;
+  -moz-border-radius: 2px;
+  -webkit-border-radius: 2px;
+  background-color: white;
+    color: #5C5F69;
+    width: 80px;
+    padding: 2px;
+    font-size: 12px;
+    border: none;
+    border: 1px solid #c9cbd3;
+    padding: 3px;
+    color: #28292d;
+}
+
+.offices .inputOfficeData3 {
+  border-radius: 2px;
+  -moz-border-radius: 2px;
+  -webkit-border-radius: 2px;
+  background-color: white;
+    color: #5C5F69;
+
+    font-size: 12px;
+    border: none;
+    border: 1px solid #c9cbd3;
+    padding: 10px;
+    color: #28292d;
+}
+
+.offices .inputOfficeData2 {
+  border-radius: 2px;
+  -moz-border-radius: 2px;
+  -webkit-border-radius: 2px;
+  background-color: white;
+    color: #5C5F69;
+    width: 250px;
+    padding: 2px;
+    font-size: 12px;
+    border: none;
+    border: 1px solid #c9cbd3;
+    padding: 3px;
+    color: #28292d;
 }
 
 .offices .contentOfficeMembers {
@@ -288,7 +339,7 @@
 }
 
 .offices .contentMembers {
-  height: calc(100% - 222px);
+  height: calc(100% - 280px);
   overflow-y: auto;
   margin-bottom: 20px;
   /*background-color: white;*/
@@ -451,18 +502,27 @@
 
 /*---------- PANTALLA MENSAJES ----------*/
 
+.offices.mensajes.mensajeEliminarOficina .messageError,
 .offices.mensajes.mensajeEliminarOficina .messageSave,
 .offices.mensajes.mensajeEliminarOficina .messageLoading {
   display: none;
 }
 
+.offices.mensajes.mensajeGuardado .messageError,
 .offices.mensajes.mensajeGuardado .messageDeleOffice,
 .offices.mensajes.mensajeGuardado .messageLoading {
   display: none;
 }
 
+.offices.mensajes.mensajeCargando .messageError,
 .offices.mensajes.mensajeCargando .messageSave,
 .offices.mensajes.mensajeCargando .messageDeleOffice {
+  display: none;
+}
+
+.offices.mensajes.mensajeError .messageLoading,
+.offices.mensajes.mensajeError .messageSave,
+.offices.mensajes.mensajeError .messageDeleOffice{
   display: none;
 }
 
@@ -537,6 +597,7 @@
 
 }
 
+
 .offices .messageDeleOffice,
 .offices .messageSave {
   animation-name: opacidad;
@@ -578,6 +639,32 @@
 
 .offices .textLoading {
   font-size: 11px;
+}
+
+.offices .textMessage {
+  text-align: center;
+}
+
+.offices .messageError {
+  display: flex;
+  display: -webkit-flex; /* Safari */
+  display: -moz-flex; /* mozilla */
+  flex-direction:column;;
+  -webkit-flex-direction:column; /* Safari */
+  -moz-flex-direction:column; /* mozilla */
+  justify-content: center;
+  -webkit-justify-content: center;
+  -moz-justify-content: center;
+  align-items: center;
+  -webkit-align-items:center; /* Safari */
+  -moz-align-items:center; /* mozilla */
+  animation-name: opacidad;
+  animation-duration: .7s;
+  color: #5C5F69;
+}
+
+.offices .icoError  {
+  color:#E43E46;
 }
 
 
