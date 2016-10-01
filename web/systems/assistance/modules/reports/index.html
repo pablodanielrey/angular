@@ -1,7 +1,7 @@
 <div class="reports {{view.style}} {{view.style2}}">
     <!--
-    VARIABLES1: buscar, cargando
-    VARIABLES2: rangoHorario, rangoFechas
+    VARIABLES1: cargando
+    VARIABLES2: seleccionarOficinas, rangoHorario, rangoFechas
     -->
 
     <!-- -------------- CONTENEDOR PRINCIPAL DEL SISTEMA ----------------- -->
@@ -10,58 +10,126 @@
 
         <div class="contentMain">
 
-            <!-- ---- Contenedor de ordenamiento y busqueda ----- -->
-            <div class="headerContentList">
-                <div class="dataList">
-                    <div>Ordenar </div>
-                    <div class="btnOrder" title="Ordenar por Entrada / Salida"><i class="fa fa-exchange"></i></div>
-                    <div class="btnOrder" title="Ordenar Horario"><i class="fa fa-clock-o"></i></div>
-                    <div class="btnOrder" title="Ordenar Nombre"><i class="fa fa-sort-alpha-asc"></i></div>
-                </div>
-                <div class="contentFilters">
-                  <div class="btnOrder" title="Restablecer valores por defecto"><i class="fa fa-home"></i></div>
-                  <div class="btnOrder" title="Descargar Lista"><i class="fa fa-download"></i></div>
-                  <div class="btnSearch" ng-click="view.style = 'buscar'" title="Buscar..."><i class="fa fa-search"></i></div>
-                </div>
-                <!-- ---- Buscador por nombre, fecha y hora ----- -->
-                <div class="contentSearch">
-                    <div class="subContentSearch">
-                        <div class="contentItemSearch">
-                          <div class="icoSeach"><i class="fa fa-search"></i></div>
-                          <div><input type="search" placeholder="Buscar..."class="inputSearch"></input></div>
-                          <div class=textRanck>
-                              <div class="contentRangDate">
-                                  <div class="btnOrder2" ng-click="view.style2 = 'rangoFechas'">Rango de Fechas</div>
-                                  <div class="btnOrder3" ng-click="view.style2 = 'rangoFechas'"><i class="fa fa-calendar-o"></i></div>
+            <!-- ---- Header----- -->
+            <div class="contentSearch">
 
-                                  <div class="contentInputDate">
-                                    <div> Fecha Inico </div>
-                                    <div><input type="date"  class="inputTime "></input></div>
-                                    <div> Fecha Fin </div>
-                                    <div><input type="date" class="inputTime"></input></div>
-                                    <div class="btnSave" ng-click="view.style2 = ''">OK</div>
-                                  </div>
-                              </div>
-                              <div>
-                                  <div class="btnOrder2" ng-click="view.style2 = 'rangoHorario'">Rango Horario</div>
-                                  <div class="btnOrder3" ng-click="view.style2 = 'rangoHorario'"><i class="fa fa-clock-o"></i></div>
+                <div class="contentSearchLeft">
 
-                                  <div class="contentInputTime">
-                                    <div> Hora de Inicio </div>
-                                    <div><input type="time"  class="inputTime "></input></div>
-                                    <div> Hora Fin </div>
-                                    <div><input type="time" class="inputTime"></input></div>
-                                    <div class="btnSave" ng-click="view.style2 = ''">OK</div>
-                                  </div>
-                              </div>
+                    <div class="textReports"> REPORTES </div>
+
+                    <div class="btnOrder" title="Restablecer valores por defecto"><i class="fa fa-home"></i></div>
+
+                    <div class="icoSeach"><i class="fa fa-search"></i></div>
+                    <div><input type="search" placeholder="Buscar..."class="inputSearch"></input></div>
+
+                    <!-- SELECCINAR OFICINAS -->
+                    <div>
+                      <div class="btnOrder2" ng-click="view.style2 = 'seleccionarOficinas'">Oficinas</div>
+                          <div class="contentInputOffices">
+                            <div><i class="icoSeach2 fa fa-search"></i><input type="search" placeholder="Buscar..."class="inputSearch"></input></div>
+                            <div class="contentSelectAll">
+                              <div><input type="checkbox"></div>
+                              <div>Seleccionar Todas</div>
+                            </div>
+                            <div class="contentListOffices">
+                                <div class="itemOffices">
+                                  <div><input type="checkbox"></div>
+                                  <div>Comunicación Institucional</div>
+                                </div>
+                                <div class="itemOffices">
+                                  <div><input type="checkbox"></div>
+                                  <div>Dirección de Personal</div>
+                                </div>
+                                <div class="itemOffices">
+                                  <div><input type="checkbox"></div>
+                                  <div>Economico Financiero</div>
+                                </div>
+                                <div class="itemOffices">
+                                  <div><input type="checkbox"></div>
+                                  <div>Departamento de Alumnos</div>
+                                </div>
+                                <div class="itemOffices">
+                                  <div><input type="checkbox"></div>
+                                  <div>Mantenimiento y Produccion</div>
+                                </div>
+                                <div class="itemOffices">
+                                  <div><input type="checkbox"></div>
+                                  <div>Ditesi</div>
+                                </div>
+                                <div class="itemOffices">
+                                  <div><input type="checkbox"></div>
+                                  <div>Graduados</div>
+                                </div>
+                                <div class="itemOffices">
+                                  <div><input type="checkbox"></div>
+                                  <div>Comunicación Institucional</div>
+                                </div>
+                                <div class="itemOffices">
+                                  <div><input type="checkbox"></div>
+                                  <div>Dirección de Personal</div>
+                                </div>
+                                <div class="itemOffices">
+                                  <div><input type="checkbox"></div>
+                                  <div>Economico Financiero</div>
+                                </div>
+                                <div class="itemOffices">
+                                  <div><input type="checkbox"></div>
+                                  <div>Departamento de Alumnos</div>
+                                </div>
+                                <div class="itemOffices">
+                                  <div><input type="checkbox"></div>
+                                  <div>Mantenimiento y Produccion</div>
+                                </div>
+                                <div class="itemOffices">
+                                  <div><input type="checkbox"></div>
+                                  <div>Ditesi</div>
+                                </div>
+                                <div class="itemOffices">
+                                  <div><input type="checkbox"></div>
+                                  <div>Graduados</div>
+                                </div>
+
+                            </div>
+
+                            <div class="btnSave" ng-click="view.style2 = ''">OK</div>
                           </div>
+                    </div>
+
+                    <!-- SELECCINAR FECHAS -->
+                    <div class="contentRangDate">
+                        <div class="btnOrder2" ng-click="view.style2 = 'rangoFechas'">Rango de Fechas</div>
+                        <div class="btnOrder3" ng-click="view.style2 = 'rangoFechas'"><i class="fa fa-calendar-o"></i></div>
+
+                        <div class="contentInputDate">
+                          <div> Fecha Inico </div>
+                          <div><input type="date"  class="inputTime "></input></div>
+                          <div> Fecha Fin </div>
+                          <div><input type="date" class="inputTime"></input></div>
+                          <div class="btnSave" ng-click="view.style2 = ''">OK</div>
                         </div>
-                        <div>
-                          <div class="btnSearch2" ng-click="view.style = ''" title="Buscar..."><i class="fa fa-check"></i></div>
+                    </div>
+
+                    <!-- SELECCIONAR HORARIO -->
+                    <div>
+                        <div class="btnOrder2" ng-click="view.style2 = 'rangoHorario'">Rango Horario</div>
+                        <div class="btnOrder3" ng-click="view.style2 = 'rangoHorario'"><i class="fa fa-clock-o"></i></div>
+
+                        <div class="contentInputTime">
+                          <div> Hora de Inicio </div>
+                          <div><input type="time"  class="inputTime "></input></div>
+                          <div> Hora Fin </div>
+                          <div><input type="time" class="inputTime"></input></div>
+                          <div class="btnSave" ng-click="view.style2 = ''">OK</div>
                         </div>
                     </div>
 
                 </div>
+
+                <div class="contentSearchRigth">
+                  <div class="btnOrder" title="Imprimir Lista"><i class="fa fa-print"></i></div>
+                  <div class="btnOrder" title="Descargar Lista"><i class="fa fa-download"></i></div>
+                </div>
+
             </div>
 
             <!-- ---- Listado de accesos ----- -->
@@ -91,8 +159,8 @@
                     <div class="file5">{{i.tipo}}</div>
                     <div class="file2b entradaPorHuella">
                         <!-- VARIABLES: entradaPorHuella, entradaPorTeclado -->
-                        <div class="inFinger" title="Marcación por huella"><i class=" icoHuella fa fa-forumbee" aria-hidden="true"></i> {{i.hora}}</div>
-                        <div class="inKeyboard" title="Marcación por teclado"><i class=" icoHuella fa fa-table" aria-hidden="true"></i> {{i.hora}}</div>
+                        <div class="inFinger" title="Marcación por huella"><i class=" icoHuella fa fa-forumbee"></i> {{i.hora}}</div>
+                        <div class="inKeyboard" title="Marcación por teclado"><i class=" icoHuella fa fa-table"></i> {{i.hora}}</div>
                     </div>
                     <div class="file6 salidaPorTeclado">
                         <!-- VARIABLES: salidaPorHuella, salidaPorTeclado -->
@@ -102,12 +170,10 @@
                     <div class="file7">07:15</div>
                     <div class="file8">Ausente con aviso</div>
                     <div class="file9"><input class="notes" tipe="text" placeholder="Agregar nota"></input></div>
-
-
-
-
                   </div>
                 </div>
+
+
                 <!-- ---- Preload para la busqueda ----- -->
                 <div class="preload">
                   <div class="circle"><i class="fa fa-circle-o-notch fa-spin fa-3x fa-fw"></i></div>
