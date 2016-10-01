@@ -1,4 +1,4 @@
-<div class="library {{view.style}} {{view.style2}}">
+<div class="reports {{view.style}} {{view.style2}}">
     <!--
     VARIABLES1: buscar, cargando
     VARIABLES2: rangoHorario, rangoFechas
@@ -68,30 +68,40 @@
             <div class="contentList">
                 <!-- ---- Titulos del listado ----- -->
                 <div class="titleListAccess">
-                  <div class="file2">Fecha</div>
-                  <div class="file3">Nombre y Apellido</div>
-                  <div class="file4">DNI</div>
-                  <div class="file5">Cargo</div>
-                  <div class="file2b">Entrada</div>
-                  <div class="file6">Salida</div>
-                  <div class="file7">Horas</div>
-                  <div class="file8">M</div>
-
-
-
+                  <div class="file0 cursor"> <i class="icoOrdination fa fa-sort"></i> <b>Día</b> </div>
+                  <div class="file2 cursor"> <i class="icoOrdination fa fa-sort"></i> <b>Fecha</b> </div>
+                  <div class="file3 cursor"> <i class="icoOrdination fa fa-sort"></i> <b>Nombre y Apellido</b></div>
+                  <div class="file4 cursor"> <i class="icoOrdination fa fa-sort"></i> <b>DNI</b> </div>
+                  <div class="file5 cursor"> <i class="icoOrdination fa fa-sort"></i> <b>Cargo</b> </div>
+                  <div class="file2b cursor"> <i class="icoOrdination fa fa-sort"></i> <b>Entrada</b> </div>
+                  <div class="file6 cursor"> <i class="icoOrdination fa fa-sort"></i> <b>Salida </b> </div>
+                  <div class="file7 cursor"> <i class="icoOrdination fa fa-sort"></i> <b>Horas</b> </div>
+                  <div class="file8 cursor"> <i class="icoOrdination fa fa-sort"></i> <b>Justificaciones </b></div>
+                    <div class="file9 cursor"> <i class="icoOrdination fa fa-sort"></i> <b>Notas</b> </div>
                 </div>
+
+
                 <!-- ---- Accesos ----- -->
                 <div class="listAccess">
-                  <div class="itemListAccess {{i.clase}}" ng-repeat="i in logs">
-                    <!-- VARIABLES: entrada, salida -->
+                  <div class="itemListAccess" ng-repeat="i in logs">
+                    <div class="file0">Lun </div>
                     <div class="file2">{{i.dia}}</div>
                     <div class="file3">{{i.name}} {{i.lastname}}</div>
                     <div class="file4">{{i.dni}}</div>
                     <div class="file5">{{i.tipo}}</div>
-                    <div class="file2b">{{i.hora}}</div>
-                    <div class="file6">{{i.hora}}</div>
+                    <div class="file2b entradaPorHuella">
+                        <!-- VARIABLES: entradaPorHuella, entradaPorTeclado -->
+                        <div class="inFinger" title="Marcación por huella"><i class=" icoHuella fa fa-forumbee" aria-hidden="true"></i> {{i.hora}}</div>
+                        <div class="inKeyboard" title="Marcación por teclado"><i class=" icoHuella fa fa-table" aria-hidden="true"></i> {{i.hora}}</div>
+                    </div>
+                    <div class="file6 salidaPorTeclado">
+                        <!-- VARIABLES: salidaPorHuella, salidaPorTeclado -->
+                        <div class="outFinger" title="Marcación por huella"><i class=" icoHuella fa fa-forumbee" aria-hidden="true"></i> {{i.hora}}</div>
+                        <div class="outKeyboard" title="Marcación por teclado"><i class=" icoHuella fa fa-table" aria-hidden="true"></i> {{i.hora}}</div>
+                    </div>
                     <div class="file7">07:15</div>
-                    <div class="file8">H</div>
+                    <div class="file8">Ausente con aviso</div>
+                    <div class="file9"><input class="notes" tipe="text" placeholder="Agregar nota"></input></div>
 
 
 
