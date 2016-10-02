@@ -571,6 +571,20 @@
 
 }
 
+.reports.seleccionarColumnas .contentColumns {
+  display: block;
+  position: absolute;
+  background-color: #3A3C44;
+  padding: 20px;
+  z-index: 999;
+  width: 140px;
+  left: calc(100% - 187px)
+}
+
+.reports .contentColumns {
+  display: none;
+}
+
 .reports .titleListAccess {
   width: 100%;
   background-color: #c7d1d6;
@@ -620,6 +634,7 @@
 }
 .reports .file3 {
   width: 250px;
+  margin-left: 5px;
 }
 .reports .file4 {
   width: 80px;
@@ -640,6 +655,25 @@
 .reports .file9 {
 }
 
+.reports .file0b {
+  width: 35px;
+  margin-left: 5px;
+  display: none;
+}
+.reports .file2a {
+  display: none;
+  width: 85px;
+  margin-left: 10px;
+}
+
+.reports.verDiaSalida .file0b {
+  display: block;
+}
+.reports.verFechaSalida .file2a {
+  display: block;
+}
+
+
 .reports .cursor {
   cursor: pointer;
 }
@@ -649,6 +683,8 @@
   color: #3A3C44;
   width: 200%;
 }
+
+
 
 .reports .listAccess {
   width: 100%;
