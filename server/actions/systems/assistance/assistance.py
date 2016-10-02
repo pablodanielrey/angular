@@ -22,27 +22,25 @@ class Assistance(wamp.SystemComponentSession):
         return autobahn.wamp.RegisterOptions(details_arg='details')
 
     @autobahn.wamp.register('assistance.get_logs')
-    def getLogs(self, date, details):
+    def getLogs(self, initDate, endDate, details):
 
         ########################
         # ver como lo corregimos para que lo maneje wamp al tema del date.
         # tambien el docker parece no setear el timezone.
         import pytz
         timezone = pytz.timezone('America/Argentina/Buenos_Aires')
-
-        logging.info(date)
         from dateutil.parser import parse
-        date = parse(date)
-        logging.info(date)
+        initDate = parse(initDate)
+        endDate = parse(endDate)
 
         from model.assistance.utils import Utils
-        date = Utils._localizeUtc(date).astimezone(timezone)
-        logging.info(date)
+        initDate = Utils._localizeUtc(initDate).astimezone(timezone)
+        endDate = Utils._localizeUtc(endDate).astimezone(timezone)
         #########################
 
         con = self.conn.get()
         try:
-            logs = Log.findByDate(con, date)
+            logs = Log.findByDateRange(con, initDate, endDate)
             return logs
         finally:
             self.conn.put(con)

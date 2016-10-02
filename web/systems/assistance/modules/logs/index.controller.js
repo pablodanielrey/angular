@@ -6,17 +6,62 @@
 
     LogsCtrl.$inject = ['$scope', 'Assistance', 'Users'];
 
+    function _getDateInTime(hours, minutes, seconds) {
+      var d = new Date()
+      d.setHours(hours);
+      d.setMinutes(minutes);
+      d.setSeconds(seconds);
+      d.setMilliseconds(0);
+      return d;
+    }
+
     function LogsCtrl($scope, Assistance, Users) {
         var vm = this;
 
+        vm.view = {
+          style2: '',
+          style: ''
+        }
+
         vm.model = {
+          search: {
+            initDate: new Date(),
+            endDate: new Date(),
+            initHour: _getDateInTime(0,0,0),
+            endHour: _getDateInTime(23,59,59)
+          },
           logs: [],
           status: [],
           inside: 0,
           outside: 0
         };
 
-        vm.getLogs = getLogs;
+        vm.resetSearchAndGetLogs = resetSearchAndGetLogs;
+        vm.searchLogs = searchLogs;
+
+        function _resetSearch() {
+          vm.model.search = {
+            initDate: new Date(),
+            endDate: new Date(),
+            initHour: _getDateInTime(0,0,0),
+            endHour: _getDateInTime(23,59,59)
+          }
+        }
+
+        function searchLogs() {
+          vm.view.style2 = '';
+          _getLogs();
+        }
+
+        function resetSearchAndGetLogs() {
+          vm.view.style2 = '';
+          _resetSearch();
+          _getLogs();
+        }
+
+
+
+        /////// Estado de los ususarios (si se encuentra afuera o adentro) /////
 
         function _getStatus(userId) {
           for (var i = 0; i < vm.model.status.length; i++) {
@@ -31,12 +76,29 @@
           for (var i = 0; i < vm.model.status.length; i++) {
             if (vm.model.status[i].id == userId) {
               vm.model.status[i].status = !(vm.model.status[i].status);
-              return vm.model.status[i].status;
+              if (vm.model.status[i].status) {
+                vm.model.inside = vm.model.inside + 1;
+                vm.model.outside = vm.model.outside - 1;
+                return true;
+              } else {
+                vm.model.inside = vm.model.inside - 1;
+                vm.model.outside = vm.model.outside + 1;
+                return false;
+              }
             }
           }
+          vm.model.inside = vm.model.inside + 1;
           vm.model.status.push({id:userId, status:true});
           return true;
         }
+
+        function _resetStatus() {
+          vm.model.status = [];
+          vm.model.inside = 0;
+          vm.model.outside = 0;
+        }
+
+        /////////////////////////
 
         function _parseLog(log, users) {
           var user = _findUser(log.userId, users);
@@ -53,9 +115,14 @@
           }
         }
 
-        function getLogs() {
-          var d = new Date()
-          Assistance.getLogs(d).then(function(logs) {
+
+
+        function _getLogs() {
+          vm.model.logs = [];
+          _resetStatus();
+
+          var s = vm.model.search;
+          Assistance.getLogs(s.initDate, s.endDate).then(function(logs) {
             console.log(logs);
 
             if (logs.length <= 0) {
@@ -67,20 +134,12 @@
             Users.findById(uids).then(function(users) {
 
               // seteo los logs y los estados
-              var status = [];
-              for (var i = 0; i < logs.length; i++) {
-                vm.model.logs.push(_parseLog(logs[i], users, status));
-              }
-              // seteo los valores de los contadores finales.
-              vm.model.inside = 0;
-              for (var i = 0; i < vm.model.status.length; i++) {
-                if (vm.model.status.status) {
-                  vm.model.inside = vm.model.inside + 1;
-                } else {
-                  vm.model.outside = vm.model.outside + 1;
+              $scope.$apply(function() {
+                var status = [];
+                for (var i = 0; i < logs.length; i++) {
+                  vm.model.logs.push(_parseLog(logs[i], users, status));
                 }
-              }
-
+              });
 
             }, function(err) {
               console.log(err);

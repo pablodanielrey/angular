@@ -9,9 +9,10 @@
 		function Assistance(Login) {
       this.getLogs = getLogs;
 
-      function getLogs(date) {
-        var d = date.toISOString();
-        return Login.getPrivateTransport().call('assistance.get_logs', [d]);
+      function getLogs(initDate, endDate) {
+        var di = initDate.toISOString();
+				var de = endDate.toISOString();
+        return Login.getPrivateTransport().call('assistance.get_logs', [di,de]);
       }
 
     }

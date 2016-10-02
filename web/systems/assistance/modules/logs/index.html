@@ -1,4 +1,4 @@
-<div class="library {{view.style}} {{view.style2}}">
+<div class="library {{vm.view.style}} {{vm.view.style2}}">
     <!--
     VARIABLES1: buscar, cargando
     VARIABLES2: rangoHorario, rangoFechas
@@ -12,8 +12,8 @@
             <!-- ---- Header del sistema ----- -->
             <div class="contentInfoList">
                 <div class="contentStatusNew">
-                      <div class="cantPerson"><div class="textCantPerson">{{vm.model.inside}} </div>Presentes</div><!-- ---- Cantidad de personas presentes en la sala ----- -->
-                      <div class="cantPerson2"><div class="textCantPerson2">{{vm.model.outside}} </div> Personas</div> <!-- ---- Cantidad de personas que entraron y salieron ----- -->
+                      <div class="cantPerson"><div class="textCantPerson">{{vm.model.inside}} </div>Entradas</div><!-- ---- Cantidad de personas presentes en la sala ----- -->
+                      <div class="cantPerson2"><div class="textCantPerson2">{{vm.model.outside}} </div> Entrada/Salida</div> <!-- ---- Cantidad de personas que entraron y salieron ----- -->
                       <div class="cantPerson3"><div class="textCantPerson3">{{vm.model.logs.length}} </div> Total de Marcaciones</div><!-- ---- total de accesos ----- -->
                 </div>
             </div>
@@ -26,9 +26,9 @@
                     <div class="btnOrder" title="Ordenar Nombre"><i class="fa fa-sort-alpha-asc"></i></div>
                 </div>
                 <div class="contentFilters">
-                  <div class="btnOrder" title="Restablecer valores por defecto"><i class="fa fa-home" ng-click='vm.getLogs()'></i></div>
+                  <div class="btnOrder" title="Restablecer valores por defecto"><i class="fa fa-home" ng-click='vm.resetSearchAndGetLogs()'></i></div>
                   <div class="btnOrder" title="Descargar Lista"><i class="fa fa-download"></i></div>
-                  <div class="btnSearch" ng-click="view.style = 'buscar'" title="Buscar..."><i class="fa fa-search"></i></div>
+                  <div class="btnSearch" ng-click="vm.view.style = 'buscar'" title="Buscar..."><i class="fa fa-search"></i></div>
                 </div>
                 <!-- ---- Buscador por nombre, fecha y hora ----- -->
                 <div class="contentSearch">
@@ -38,33 +38,33 @@
                           <div><input type="search" placeholder="Buscar..."class="inputSearch"></input></div>
                           <div class=textRanck>
                               <div class="contentRangDate">
-                                  <div class="btnOrder2" ng-click="view.style2 = 'rangoFechas'">Rango de Fechas</div>
-                                  <div class="btnOrder3" ng-click="view.style2 = 'rangoFechas'"><i class="fa fa-calendar-o"></i></div>
+                                  <div class="btnOrder2" ng-click="vm.view.style2 = 'rangoFechas'">Rango de Fechas</div>
+                                  <div class="btnOrder3" ng-click="vm.view.style2 = 'rangoFechas'"><i class="fa fa-calendar-o"></i></div>
 
                                   <div class="contentInputDate">
-                                    <div> Fecha Inico </div>
-                                    <div><input type="date"  class="inputTime "></input></div>
+                                    <div> Fecha Inicio </div>
+                                    <div><input type="date"  class="inputTime " ng-model="vm.model.search.initDate"></input></div>
                                     <div> Fecha Fin </div>
-                                    <div><input type="date" class="inputTime"></input></div>
-                                    <div class="btnSave" ng-click="view.style2 = ''">OK</div>
+                                    <div><input type="date" class="inputTime" ng-model="vm.model.search.endDate"></input></div>
+                                    <div class="btnSave" ng-click="vm.searchLogs()">OK</div>
                                   </div>
                               </div>
                               <div>
-                                  <div class="btnOrder2" ng-click="view.style2 = 'rangoHorario'">Rango Horario</div>
-                                  <div class="btnOrder3" ng-click="view.style2 = 'rangoHorario'"><i class="fa fa-clock-o"></i></div>
+                                  <div class="btnOrder2" ng-click="vm.view.style2 = 'rangoHorario'" ng-model="vm.model.search.initHour">Rango Horario</div>
+                                  <div class="btnOrder3" ng-click="vm.view.style2 = 'rangoHorario'" ng-model="vm.model.search.endHour"><i class="fa fa-clock-o"></i></div>
 
                                   <div class="contentInputTime">
                                     <div> Hora de Inicio </div>
                                     <div><input type="time"  class="inputTime "></input></div>
                                     <div> Hora Fin </div>
                                     <div><input type="time" class="inputTime"></input></div>
-                                    <div class="btnSave" ng-click="view.style2 = ''">OK</div>
+                                    <div class="btnSave" ng-click="vm.view.style2 = ''">OK</div>
                                   </div>
                               </div>
                           </div>
                         </div>
                         <div>
-                          <div class="btnSearch2" ng-click="view.style = ''" title="Buscar..."><i class="fa fa-check"></i></div>
+                          <div class="btnSearch2" ng-click="vm.view.style = ''" title="Buscar..."><i class="fa fa-check"></i></div>
                         </div>
                     </div>
 
