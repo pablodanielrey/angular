@@ -27,15 +27,13 @@
           style2:'',
           styles2: ['', 'mensajes'],
           style3: '',
-          styles3: ['mensajeEliminarOficina', 'mensajeGuardado', 'mensajeCargando']
+          styles3: ['mensajeEliminarOficina', 'mensajeGuardado', 'mensajeCargando'],
         };
 
         vm.model = {
-          userId: null,
           offices: [],
-          users: [],
-          displayUsers: [],
           office: null,
+          users: [],
           officeTypes: [],
           selectedType: null
         }
@@ -68,7 +66,7 @@
           vm.view.style2 = vm.view.styles2[0];
 
           vm.model.selectedType = null;
-          vm.model.userId = Login.getCredentials().userId;
+          //vm.model.userId = Login.getCredentials().userId;
           vm.getOfficeTypes();
           loadAllOffices();
         }
@@ -88,8 +86,6 @@
             });
           });
         }
-
-
 
 
         function loadAllOffices() {
@@ -212,7 +208,7 @@
 
         function selectOffice(office) {
           vm.view.style = vm.view.styles[1];
-          vm.model.office = office;
+          vm.model.office = angular.copy(office);
 
           // TODO: reever código. implemente el metodo para obtener los usuarios de las oficinas.
           vm.model.officeUsers = [];
@@ -227,10 +223,10 @@
           // ----------------------------------------------------
 
           // selecciono el tipo de oficina del arreglo de officesTypes para que se la misma instancia de typeOffice
-          if (office.type != undefined && office.type != null) {
+          if (vm.model.office.type != undefined && vm.model.office.type != null) {
             for(var i = 0; i < vm.model.officeTypes.length; i++) {
-              if (vm.model.officeTypes[i].value == office.type.value) {
-                office.type = vm.model.officeTypes[i];
+              if (vm.model.officeTypes[i].value == vm.model.office.type.value) {
+                vm.model.office.type = vm.model.officeTypes[i];
                 break;
               }
             }
@@ -238,9 +234,9 @@
 
           // selecciono el padre
           vm.model.office.parentObj = null;
-          if (office.parent != null && office.parent.trim() != '') {
+          if (vm.model.office.parent != null && vm.model.office.parent.trim() != '') {
             for (var i = 0; i < vm.model.offices.length; i++) {
-              if (office.parent == vm.model.offices[i].id) {
+              if (vm.model.office.parent == vm.model.offices[i].id) {
                 vm.model.office.parentObj = vm.model.offices[i];
                 break;
               }
