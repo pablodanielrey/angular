@@ -67,7 +67,9 @@
           return Offices.findById([id]).then(
                 function(offices) {
                   if (offices.length > 0) {
-                    $window.sessionStorage.setItem(offices[0].id, JSON.stringify(offices[0]))
+                    var office = offices[0];
+                    office.type = (office.type == null) ? {value: null} : office.type;
+                    $window.sessionStorage.setItem(offices[0].id, JSON.stringify(office))
                   }
                   return offices[0];
                 }

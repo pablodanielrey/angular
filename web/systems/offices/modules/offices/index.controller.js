@@ -1,4 +1,4 @@
-(function() {
+ (function() {
     'use strict';
 
     angular
@@ -88,6 +88,10 @@
         }
 
 
+        function onOfficeTypesSelected() {
+            // nada
+        }
+
         function loadAllOffices() {
           Utils.findAll().then(
               function(offices) {
@@ -114,28 +118,37 @@
           );
         }
 
+        vm.model.searchTimer = null;
+
         function searchUsers(text) {
           if (text.length < 3) {
             vm.view.searching = false;
             return;
           }
 
-          Offices.searchUsers(text).then(
-            function(users) {
-              $scope.$apply(function() {
-                // vm.view.searching = false;
-                vm.model.users = users;
-                vm.model.displayUsers = users.slice(0);
-                if (vm.model.office == null || vm.model.office.users == null || vm.model.office.users === undefined) {
-                  return;
-                }
-                removeDisplayUsers();
-              });
-            }, function(error) {
-              // messageError(error);
-              console.log(error);
-            }
-          );
+          if (vm.model.searchTimer != null) {
+            $timeout.cancel(vm.model.searchTimer);
+          }
+          vm.model.searchTimer = $timeout(function () {
+            vm.model.searchTimer = null;
+            Offices.searchUsers(text).then(
+              function(users) {
+                $scope.$apply(function() {
+                  // vm.view.searching = false;
+                  vm.model.users = users;
+                  vm.model.displayUsers = users.slice(0);
+                  if (vm.model.office == null || vm.model.office.users == null || vm.model.office.users === undefined) {
+                    return;
+                  }
+                  removeDisplayUsers();
+                });
+              }, function(error) {
+                // messageError(error);
+                console.log(error);
+              }
+            );
+          }, 5000);
+
         }
 
         function removeDisplayUsers() {
@@ -156,6 +169,7 @@
 
         function cancel() {
           vm.view.style = vm.view.styles[0];
+           loadAllOffices();
         }
 
 

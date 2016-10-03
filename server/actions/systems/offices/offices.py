@@ -7,20 +7,44 @@ import logging
 logging.getLogger().setLevel(logging.INFO)
 
 
+
+import cProfile
+
+def do_cprofile(func):
+    def profiled_func(*args, **kwargs):
+        profile = cProfile.Profile()
+        try:
+            profile.enable()
+            result = func(*args, **kwargs)
+            profile.disable()
+            return result
+        finally:
+            profile.print_stats()
+    return profiled_func
+
+
+
 class Offices(wamp.SystemComponentSession):
 
     conn = wamp.getConnectionManager()
 
-    """
     @autobahn.wamp.register('offices.find_offices_by_user')
     def findOfficesByUser(self, userId, tree):
         con = self.conn.get()
         try:
-            # return Office.getOfficesByUser(con, userId, tree)
-            return []
+            return Office.getOfficesByUser(con, userId, tree)
         finally:
             self.conn.put(con)
-    """
+
+    @autobahn.wamp.register('offices.find_users_by_regex')
+    def findUsersByRegex(self, regex):
+        logging.info('searchUsers')
+        logging.info(regex)
+        con = self.conn.get()
+        try:
+            return OfficeModel.searchUsers(con, regex)
+        finally:
+            self.conn.put(con)
 
     @autobahn.wamp.register('offices.find_by_id')
     def findById(self, ids):
@@ -30,14 +54,6 @@ class Offices(wamp.SystemComponentSession):
             for office in offices:
                 office.users = OfficeModel.getUsers(con, office.id)
             return offices
-        finally:
-            self.conn.put(con)
-
-    @autobahn.wamp.register('offices.search_users')
-    def searchUsers(self, regex):
-        con = self.conn.get()
-        try:
-            return OfficeModel.searchUsers(con, regex)
         finally:
             self.conn.put(con)
 
@@ -86,6 +102,7 @@ class Offices(wamp.SystemComponentSession):
             return id
         finally:
             self.conn.put(con)
+
 """
 
 class OfficeWamp(ApplicationSession):
