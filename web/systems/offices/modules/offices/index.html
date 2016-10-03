@@ -6,13 +6,13 @@
 -->
   <div class="listOffices">  <e-office-list offices="vm.model.offices" types="vm.model.officeTypes" selected-type="vm.model.selectedType" on-select-type="vm.onOfficeTypesSelected()" on-remove="vm.displayRemove(office)" on-create="vm.create()" on-select="vm.selectOffice(office)"></e-office-list> </div>
   <div class="editOffices" ng-include="'modules/offices/form.html?t=' + time"></div>
-  <div class="searchUsers">  <e-user-list users="vm.model.displayUsers" remove-user="vm.addUser(user)" search-users="vm.searchUsers(text)"></e-user-list> </div>
+  <div class="searchUsers">  <e-user-list users="vm.model.usersToAdd" remove-user="vm.addUser(user)" search-users="vm.searchUsers(text)"></e-user-list> </div>
 
   <div class="contentMessages">
       <div class="subContentMessages">
 
           <div class="messageDeleOffice">
-              <div class="textMessage">¿ Está seguro que desea eliminar la oficina {{vm.model.office.name}}</div>
+              <div class="textMessage">¿ Está seguro que desea eliminar la oficina</div>
               <div class="textMessage"> <b>{{vm.model.office.name}}</b>?</div>
 
               <div class="contentActionsMessages">

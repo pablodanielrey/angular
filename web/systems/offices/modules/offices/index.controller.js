@@ -5,7 +5,7 @@
         .module('offices')
         .controller('OfficesCtrl', OfficesCtrl);
 
-    OfficesCtrl.$inject = ['$scope', 'Login', 'Offices', 'Utils', '$timeout', 'Users'];
+    OfficesCtrl.$inject = ['$scope', 'Login', 'Offices', 'Utils', '$timeout', 'Users', 'Files'];
 
     ///////// funciones utilitarias genéricas //////////////
 
@@ -18,7 +18,7 @@
 
 
     /* @ngInject */
-    function OfficesCtrl($scope, Login, Offices, Utils, $timeout, Users) {
+    function OfficesCtrl($scope, Login, Offices, Utils, $timeout, Users, Files) {
         var vm = this;
 
         vm.view = {
@@ -27,27 +27,59 @@
           style2:'',
           styles2: ['', 'mensajes'],
           style3: '',
-          styles3: ['mensajeEliminarOficina', 'mensajeGuardado', 'mensajeCargando'],
+          styles3: ['mensajeEliminarOficina', 'mensajeGuardado', 'mensajeCargando']
         };
 
         vm.model = {
           offices: [],
           office: null,
-          users: [],
+          officeUsers: [],
+
+          usersToAdd: [],                 // usuarios a agregar a la oficina
           officeTypes: [],
           selectedType: null
         }
 
+        vm.aux = {
+          searchTimer: null               // timer usado en la directiva de usuarios para buscar un nuvo usuario
+        }
+
+        ////////////////// directiva de lista de oficinas //////////
         vm.getOfficeTypes = getOfficeTypes;
         vm.remove = remove;
         vm.create = create;
-        vm.addUser = addUser;
-        vm.removeUser = removeUser;
-        vm.displayRemove = displayRemove;
         vm.selectOffice = selectOffice;
-        vm.searchUsers = searchUsers;
-        vm.saveOffice = saveOffice;
+        /////////////////////////////////////////
+
+        /////// pantalla de edición de oficina ////////////
         vm.cancel = cancel;
+        vm.addUser = addUser;
+        vm.saveOffice = saveOffice;
+        //////////////////////////////////////////
+
+        /////// directiva de lista de usuarios ////////////
+        vm.searchUsers = searchUsers;
+        vm.showUsersToAdd = showUsersToAdd;
+        vm.removeUser = removeUser;
+        //////////////////////////////////////////////////////
+
+        ////////// visaules ///////////////
+        vm.getUserPhoto = getUserPhoto;
+        //////////////////////
+
+
+        function getUserPhoto(user) {
+          if (user == null || user.photo == null) {
+            var img = user != null && "genre" in user && user.genre != null && (user.genre.toLowerCase() == 'femenino' || user.genre.toLowerCase() == 'mujer') ? "img/avatarWoman.jpg" : "img/avatarMan.jpg";
+            return img;
+          } else {
+            return Files.toDataUri(user.photo);
+          }
+        }
+
+
+
+
 
         $scope.$on('wamp.open', function(event, args) {
           vm.model.privateTransport = Login.getPrivateTransport();
@@ -102,7 +134,6 @@
           );
         }
 
-
         // TODO: obtiene el listado de tipos de oficinas
         function getOfficeTypes() {
           vm.model.officeTypes = [];
@@ -112,60 +143,65 @@
               vm.model.officeTypes = types;
               vm.model.selectedType = vm.model.officeTypes[0];
             }, function(error) {
-              // messageError(error);
               console.log(error);
             }
           );
         }
 
-        vm.model.searchTimer = null;
-
+        /*
+          Busca usuarios a partir de una expresión regular.
+          actualizar :
+            vm.view.searching ---- true|false
+            vm.aux.searchTimer  -- timer del proceso a buscar usuarios
+        */
         function searchUsers(text) {
           if (text.length < 3) {
             vm.view.searching = false;
             return;
           }
 
-          if (vm.model.searchTimer != null) {
-            $timeout.cancel(vm.model.searchTimer);
+          if (vm.aux.searchTimer != null) {
+            $timeout.cancel(vm.aux.searchTimer);
           }
-          vm.model.searchTimer = $timeout(function () {
-            vm.model.searchTimer = null;
+          vm.aux.searchTimer = $timeout(function () {
+            vm.aux.searchTimer = null;
+            vm.view.style2 = vm.view.styles2[1];
+            vm.view.style3 = vm.view.styles3[2];
+
             Offices.searchUsers(text).then(
               function(users) {
                 $scope.$apply(function() {
-                  // vm.view.searching = false;
-                  vm.model.users = users;
-                  vm.model.displayUsers = users.slice(0);
-                  if (vm.model.office == null || vm.model.office.users == null || vm.model.office.users === undefined) {
-                    return;
-                  }
-                  removeDisplayUsers();
+                  vm.view.style2 = vm.view.styles2[0];
+                  _processUsersFound(users);
                 });
               }, function(error) {
-                // messageError(error);
                 console.log(error);
               }
             );
-          }, 5000);
-
+          }, 2000);
         }
 
-        function removeDisplayUsers() {
-          if (vm.model.office.users == undefined || vm.model.office.users == null) {
-            return;
-          }
-          for (var i = 0; i < vm.model.office.users.length; i++) {
-            var j = 0;
-            var userId = vm.model.office.users[i].id;
-            while(j < vm.model.displayUsers.length) {
-              if (vm.model.displayUsers[j].id == userId) {
-                removeItem(vm.model.displayUsers, vm.model.displayUsers[j]);
+        /*
+          Procesa los usaurios encontrados desde el searchUsers(text)
+         hay que actualizar las variables :
+
+              vm.model.usersToAdd --- > usuarios que se muestran en la listad  --- esta es la que setea!!!
+              vm.model.officeUsers ---> usuarios mostrados dentro de la oficina
+              vm.model.office.users --> ids de los usuarios de las personas
+        */
+        function _processUsersFound(users) {
+          vm.model.usersToAdd = users.filter(function(u) {
+            for (var i = 0; i < vm.model.office.users.length; i++) {
+              if (u.id == vm.model.office.users[i].id) {
+                return false;
               }
-              j = j + 1;
             }
-          }
+            return true;
+          });
         }
+
+
+
 
         function cancel() {
           vm.view.style = vm.view.styles[0];
@@ -257,9 +293,6 @@
             }
 
           }
-
-          vm.model.displayUsers = vm.model.users.slice(0);
-          removeDisplayUsers();
         }
 
 
@@ -289,16 +322,51 @@
 
         //// manejo de usuarios de una oficina ///////
 
+        function showUsersToAdd() {
+          vm.view.style = vm.view.styles[2];
+        }
+
         function addUser(user) {
-          removeItem(vm.model.displayUsers, user);
+          //vm.view.style = vm.view.styles[2];
+
+          // elimino el usuario de la lista.
+          vm.model.usersToAdd = vm.model.usersToAdd.filter(function(u) {
+            if (u.id == user.id) {
+              return false;
+            }
+            return true;
+          });
+
+          // lo agrego a la lista de usuarios de la oficina
           vm.model.officeUsers.push(user);
-          vm.view.style = vm.view.styles[1];
+          vm.model.office.users.push(user.id);
+
         }
 
         function removeUser(user) {
-          removeItem(vm.model.officeUsers, user);
-          vm.model.displayUsers.push(user);
+          //vm.view.style = vm.view.styles[2];
+
+          // elimino el usuario de la lista.
+          vm.model.officeUsers = vm.model.officeUsers.filter(function(u) {
+            if (u.id == user.id) {
+              return false;
+            }
+            return true;
+          });
+          vm.model.office.users = vm.model.office.users.filter(function(id) {
+            if (id == user.id) {
+              return false;
+            }
+            return true;
+          });
+
+          // lo agrego a la lista de usuarios
+          var temp = angular.copy(vm.model.usersToAdd);
+          temp.push(user);
+          vm.model.usersToAdd = _processUsersFound(temp);
+
         }
+
 
         ////////////////////////
     }

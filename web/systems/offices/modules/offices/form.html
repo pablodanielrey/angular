@@ -41,16 +41,16 @@
 </div>
 <div class="contentOfficeMembers">
     <div> Integrantes </div>
-    <div class="btnAddUsers" ng-click="vm.view.style='pantallaUsuarios'"> <i class="fa fa-user-plus" aria-hidden="true"></i> AGREGAR </div>
+    <div class="btnAddUsers" ng-click="vm.showUsersToAdd()"> <i class="fa fa-user-plus" aria-hidden="true"></i> AGREGAR </div>
 </div>
 
 <div class="contentMembers">
     <!-- <div class="itemOffice" ng-repeat="user in vm.model.office.users"> {{user.name}} <span ng-click="vm.removeUser(user)">X</span> </div> -->
     <div class="itemMembers" ng-repeat="user in vm.model.officeUsers" ng-click="vm.select(office)">
         <div class="memberData">
-            <div><img class="imgUser" ng-src="img/avatarMan.jpg" alt="foto de perfil" src="img/avatarMan.jpg"></div>
+            <div><img class="imgUser" ng-src='{{vm.getUserPhoto(user)}}' alt="foto de perfil" src="img/avatarMan.jpg"></div>
             <div>
-                <div class="textName"> {{user.name}}</div>
+                <div class="textName"> {{user.name}} {{user.lastname}}</div>
                 <div class="textDNI"> {{user.dni}}</div>
             </div>
         </div>

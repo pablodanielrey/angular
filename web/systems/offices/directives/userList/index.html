@@ -11,8 +11,8 @@
             <div class="btnAddUser" ng-click="vm.removeUser(user)" title="Agregar Usuario"> <i class="fa fa-chevron-left" aria-hidden="true"></i> </div>
             <div><img class="imgUser" ng-src='{{vm.getUserPhoto(user)}}' alt="foto de perfil" src="img/avatarMan.jpg"></div>
             <div>
-                <div class="textName"> {{user.name}}</div>
-                <div class="textDNI"> 31258691</div>
+                <div class="textName"> {{user.name}} {{user.lastname}}</div>
+                <div class="textDNI"> {{user.dni}}</div>
             </div>
         </div>
     </div>
