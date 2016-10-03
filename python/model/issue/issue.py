@@ -26,10 +26,6 @@ def do_cprofile(func):
             profile.print_stats()
     return profiled_func
 
-def get_number():
-    for x in xrange(5000000):
-        yield x
-
 
 
 class Issue(JSONSerializable):
@@ -179,7 +175,7 @@ class RedmineAPI:
     """
 
     @classmethod
-    def _fromResult(cls, con, r, redmine):
+    def _fromResult(cls, con, r, redmine, related=False):
         attrs = dir(r)
         issue = Issue()
         issue.id = r.id
@@ -214,10 +210,10 @@ class RedmineAPI:
                 issue.fromOfficeId = cf.value
                 issue.fromOffice = cls._findOffice(con, issue.fromOfficeId)
 
-        """
-        issue.children = [cls.findById(con, iss.id) for iss in r.children if iss is not None]
-        """
-        issue.files = [cls._loadFile(file) for file in r.attachments if file is not None]
+        if related:
+            issue.children = [cls.findById(con, iss.id) for iss in r.children if iss is not None]
+            issue.files = [cls._loadFile(file) for file in r.attachments if file is not None]
+
         return issue
 
 
@@ -282,7 +278,7 @@ class RedmineAPI:
         if redmine is None:
             return None
         issue = redmine.issue.get(issue_id, include='children, attachments')
-        return cls._fromResult(con, issue, redmine)
+        return cls._fromResult(con, issue, redmine, True)
 
     @classmethod
     def findAllProjects(cls):
@@ -316,7 +312,7 @@ class RedmineAPI:
         return issues
 
     @classmethod
-    #@do_cprofile
+    @do_cprofile
     def getAssignedIssues(cls, con, userId, oIds):
         redmine = cls._getRedmineInstance(con)
         userRedmine = cls._findUserId(con, redmine, userId)
