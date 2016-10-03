@@ -90,6 +90,18 @@
                 });
             }
           });
+
+          // params: [id, status, priority]
+          Issues.subscribe('issues.updated_event', function(params) {
+            Issues.updateIssue(params[0], params[1], params[2]);
+            if (params[0] == vm.model.issue.id) {
+              $scope.$apply(function() {
+                vm.model.issue.statusId = params[1];
+                vm.model.issue.priority = params[2];
+              });
+            }
+
+          });
         }
 
 
@@ -104,7 +116,6 @@
         function setStatus(status) {
           vm.view.style2 = vm.view.styles2[0];
           var statusId = vm.view.status.indexOf(status);
-          vm.model.issue.statusId = statusId;
 
           // messageLoading();
           Issues.changeStatus(vm.model.issue, statusId).then(
@@ -116,6 +127,7 @@
             }
           )
         }
+
 
         function issuePriority() {
           if (vm.model.issue && "priority" in vm.model.issue) return vm.view.priorities[vm.model.issue.priority];
@@ -129,7 +141,7 @@
         function setPriority(priority) {
           vm.view.style2 = vm.view.styles2[0];
           var priorityId = vm.view.priorities.indexOf(priority);
-          vm.model.issue.priority = priorityId;
+
 
           // messageLoading();
           Issues.changePriority(vm.model.issue, priorityId).then(

@@ -312,7 +312,7 @@ class RedmineAPI:
         return issues
 
     @classmethod
-    @do_cprofile
+    # @do_cprofile
     def getAssignedIssues(cls, con, userId, oIds):
         redmine = cls._getRedmineInstance(con)
         userRedmine = cls._findUserId(con, redmine, userId)
