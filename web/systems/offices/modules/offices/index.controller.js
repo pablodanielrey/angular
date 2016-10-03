@@ -120,6 +120,8 @@
         }
 
 
+        ////////////////////////////////// listado de oficinas //////////////////////////////////////////
+
         function onOfficeTypesSelected() {
             // nada
         }
@@ -148,67 +150,6 @@
           );
         }
 
-        /*
-          Busca usuarios a partir de una expresión regular.
-          actualizar :
-            vm.view.searching ---- true|false
-            vm.aux.searchTimer  -- timer del proceso a buscar usuarios
-        */
-        function searchUsers(text) {
-          if (text.length < 3) {
-            vm.view.searching = false;
-            return;
-          }
-
-          if (vm.aux.searchTimer != null) {
-            $timeout.cancel(vm.aux.searchTimer);
-          }
-          vm.aux.searchTimer = $timeout(function () {
-            vm.aux.searchTimer = null;
-            vm.view.style2 = vm.view.styles2[1];
-            vm.view.style3 = vm.view.styles3[2];
-
-            Offices.searchUsers(text).then(
-              function(users) {
-                $scope.$apply(function() {
-                  vm.view.style2 = vm.view.styles2[0];
-                  _processUsersFound(users);
-                });
-              }, function(error) {
-                console.log(error);
-              }
-            );
-          }, 2000);
-        }
-
-        /*
-          Procesa los usaurios encontrados desde el searchUsers(text)
-         hay que actualizar las variables :
-
-              vm.model.usersToAdd --- > usuarios que se muestran en la listad  --- esta es la que setea!!!
-              vm.model.officeUsers ---> usuarios mostrados dentro de la oficina
-              vm.model.office.users --> ids de los usuarios de las personas
-        */
-        function _processUsersFound(users) {
-          vm.model.usersToAdd = users.filter(function(u) {
-            for (var i = 0; i < vm.model.office.users.length; i++) {
-              if (u.id == vm.model.office.users[i].id) {
-                return false;
-              }
-            }
-            return true;
-          });
-        }
-
-
-
-
-        function cancel() {
-          vm.view.style = vm.view.styles[0];
-           loadAllOffices();
-        }
-
-
         function create() {
           vm.view.style = vm.view.styles[1];
 
@@ -218,8 +159,34 @@
           vm.model.office.telephone = '';
           vm.model.office.number = '';
           vm.model.office.email = '';
-          vm.model.displayUsers = vm.model.users.slice(0);
         }
+
+        function displayRemove(office) {
+          vm.model.office = office;
+          vm.view.style2 = vm.view.styles2[1];
+          vm.view.style3 = vm.view.styles3[0];
+        }
+
+        vm.cancelRemove = cancelRemove;
+        function cancelRemove() {
+          vm.view.style2 = vm.view.styles2[0];
+        }
+
+        function remove() {
+          Utils.remove(vm.model.office).then(
+            function(id) {
+              vm.view.style2 = vm.view.styles2[0];
+            }, function(error) {
+              console.error(error);
+            }
+          );
+        }
+
+        ////////////////////////////////////////////////////////////
+
+
+
+        /////////////// edicion/creación de una oficina ///////////////////
 
         function saveOffice() {
           var ok = true;
@@ -295,37 +262,91 @@
           }
         }
 
-
-
-
-        function displayRemove(office) {
-          vm.model.office = office;
-          vm.view.style2 = vm.view.styles2[1];
-          vm.view.style3 = vm.view.styles3[0];
+        function cancel() {
+          vm.view.style = vm.view.styles[0];
+           loadAllOffices();
         }
 
-        vm.cancelRemove = cancelRemove;
-        function cancelRemove() {
-          vm.view.style2 = vm.view.styles2[0];
-        }
-
-        function remove() {
-          Utils.remove(vm.model.office).then(
-            function(id) {
-              vm.view.style2 = vm.view.styles2[0];
-            }, function(error) {
-              console.error(error);
-            }
-          );
-        }
+        /////////////////////////////////////////////////////////////
 
 
-        //// manejo de usuarios de una oficina ///////
 
+
+
+
+
+
+
+        /////////////// manejo de usuarios de una oficina //////////////////////
+
+        /*
+          muestra la pantalla de lista de usuarios para agregar a la oficina.
+          la busqueda se realiza en searchUsers disparada por un cambio en el buscar.
+        */
         function showUsersToAdd() {
           vm.view.style = vm.view.styles[2];
         }
 
+        /*
+          Busca usuarios a partir de una expresión regular.
+          implementa un timer para no busar con cada cambio que se neceiste.
+          el tema del timer usa:
+            vm.aux.searchTimer ---> timer para el buscado.
+
+          actualizar :
+            vm.view.searching ---- true|false
+            vm.aux.searchTimer  -- timer del proceso a buscar usuarios
+        */
+        function searchUsers(text) {
+          if (text.length < 3) {
+            // menos de 3 letras no se busca
+            return;
+          }
+
+          if (vm.aux.searchTimer != null) {
+            $timeout.cancel(vm.aux.searchTimer);
+          }
+          vm.aux.searchTimer = $timeout(function () {
+            vm.aux.searchTimer = null;
+            vm.view.style2 = vm.view.styles2[1];
+            vm.view.style3 = vm.view.styles3[2];
+
+            Offices.searchUsers(text).then(
+              function(users) {
+                $scope.$apply(function() {
+                  vm.view.style2 = vm.view.styles2[0];
+                  _processUsersFound(users);
+                });
+              }, function(error) {
+                console.log(error);
+              }
+            );
+          }, 2000);
+        }
+
+        /*
+          Procesa los usaurios encontrados desde el searchUsers(text)
+          para actualziar correctamente todas las variables dependeintes de los usuarios que estan o no dentro de la oficina.
+          hay que actualizar las variables :
+
+              vm.model.usersToAdd --- > usuarios que se muestran en la listad  --- esta es la que setea!!!
+              vm.model.officeUsers ---> usuarios mostrados dentro de la oficina
+              vm.model.office.users --> ids de los usuarios de las personas
+        */
+        function _processUsersFound(users) {
+          vm.model.usersToAdd = users.filter(function(u) {
+            for (var i = 0; i < vm.model.office.users.length; i++) {
+              if (u.id == vm.model.office.users[i].id) {
+                return false;
+              }
+            }
+            return true;
+          });
+        }
+
+        /*
+          Llamada desde la directiva para agregar un usuario a la oficina
+        */
         function addUser(user) {
           //vm.view.style = vm.view.styles[2];
 
@@ -340,9 +361,11 @@
           // lo agrego a la lista de usuarios de la oficina
           vm.model.officeUsers.push(user);
           vm.model.office.users.push(user.id);
-
         }
 
+        /*
+          Llamada desde la edición de la oficina para eliinar un usuario de la oficina.
+        */
         function removeUser(user) {
           //vm.view.style = vm.view.styles[2];
 
@@ -360,11 +383,10 @@
             return true;
           });
 
-          // lo agrego a la lista de usuarios
+          // lo agrego a la lista de usuarios a agregar en el caso de que el filtro lo permita.
           var temp = angular.copy(vm.model.usersToAdd);
           temp.push(user);
-          vm.model.usersToAdd = _processUsersFound(temp);
-
+          _processUsersFound(temp);
         }
 
 
