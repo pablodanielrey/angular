@@ -85,11 +85,9 @@
                 vm.loadUser(issues[i].userId);
                 vm.loadUser(issues[i].creatorId);
               }
-              $scope.$apply(function() {
-                vm.model.issues = issues;
-                vm.sortStatus();
-                vm.closeMessage();
-              });
+              vm.model.issues = issues;
+              vm.sortStatus();
+              vm.closeMessage();
 
             },
             function(error) {
@@ -219,6 +217,20 @@
                     messageError()
                   }
                 )
+            }
+          });
+
+          Issues.subscribe('issues.updated_event', function(params) {
+            Issues.updateIssue(params[0], params[1], params[2]);
+            var id = params[0];
+            for (var i = 0; i < vm.model.issues.length; i++) {
+              if (id == vm.model.issues[i].id) {
+                $scope.$apply(function() {
+                  vm.model.issues[i].statusId = params[1];
+                  vm.model.issues[i].priority = params[2];
+                });
+                break;
+              }
             }
           });
         }

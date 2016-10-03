@@ -99,13 +99,17 @@ class Issues(wamp.SystemComponentSession):
             self.conn.put(con)
 
     @autobahn.wamp.register('issues.change_status')
+    @inlineCallbacks
     def changeStatus(self, issue, status, details):
         iss = issue.changeStatus(status)
+        yield self.publish('issues.updated_event', issue.id, status, issue.priority)
         return issue
 
     @autobahn.wamp.register('issues.change_priority')
+    @inlineCallbacks
     def changePriority(self, issue, priority, details):
         iss = issue.changePriority(priority)
+        yield self.publish('issues.updated_event', issue.id, issue.statusId, priority)
         return issue
 
     @autobahn.wamp.register('issues.get_offices')
