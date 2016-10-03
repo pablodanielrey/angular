@@ -1,13 +1,17 @@
 # -*- coding: utf-8 -*-
-import autobahn
-
-from model.offices.office import Office
+from model.offices.office import Office, OfficeModel
 import wamp
+import autobahn
+from twisted.internet.defer import inlineCallbacks
+import logging
+logging.getLogger().setLevel(logging.INFO)
+
 
 class Offices(wamp.SystemComponentSession):
 
     conn = wamp.getConnectionManager()
 
+    """
     @autobahn.wamp.register('offices.find_offices_by_user')
     def findOfficesByUser(self, userId, tree):
         con = self.conn.get()
@@ -16,16 +20,72 @@ class Offices(wamp.SystemComponentSession):
             return []
         finally:
             self.conn.put(con)
+    """
 
     @autobahn.wamp.register('offices.find_by_id')
     def findById(self, ids):
         con = self.conn.get()
         try:
-            return Office.findById(con, ids)
+            offices = Office.findByIds(con, ids)
+            for office in offices:
+                office.users = OfficeModel.getUsers(con, office.id)
+            return offices
+        finally:
+            self.conn.put(con)
+
+    @autobahn.wamp.register('offices.search_users')
+    def searchUsers(self, regex):
+        con = self.conn.get()
+        try:
+            return OfficeModel.searchUsers(con, regex)
+        finally:
+            self.conn.put(con)
+
+    @autobahn.wamp.register('offices.find_users_by_ids')
+    def searchUsers(self, ids):
+        con = self.conn.get()
+        try:
+            return OfficeModel.findUsersByIds(con, ids)
+        finally:
+            self.conn.put(con)
+
+    @autobahn.wamp.register('offices.get_office_types')
+    def getOfficeTypes(self):
+        return Office.getTypes()
+
+
+    @autobahn.wamp.register('offices.find_all')
+    def findAll(self, types):
+        con = self.conn.get()
+        try:
+            return Office.findAll(con, types)
         finally:
             self.conn.put(con)
 
 
+    @autobahn.wamp.register('offices.persist')
+    @inlineCallbacks
+    def persist(self, office):
+        con = self.conn.get()
+        try:
+            id = office.persist(con)
+            con.commit()
+            yield self.publish('offices.persist_event', id)
+            return id
+        finally:
+            self.conn.put(con)
+
+    @autobahn.wamp.register('offices.remove')
+    @inlineCallbacks
+    def remove(self, office):
+        con = self.conn.get()
+        try:
+            id = office.remove(con)
+            con.commit()
+            yield self.publish('offices.remove_event', id)
+            return id
+        finally:
+            self.conn.put(con)
 """
 
 class OfficeWamp(ApplicationSession):
