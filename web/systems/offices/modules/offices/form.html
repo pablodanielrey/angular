@@ -46,12 +46,12 @@
 
 <div class="contentMembers">
     <!-- <div class="itemOffice" ng-repeat="user in vm.model.office.users"> {{user.name}} <span ng-click="vm.removeUser(user)">X</span> </div> -->
-    <div class="itemMembers" ng-repeat="user in vm.model.office.users" ng-click="vm.select(office)">
+    <div class="itemMembers" ng-repeat="user in vm.model.officeUsers" ng-click="vm.select(office)">
         <div class="memberData">
             <div><img class="imgUser" ng-src="img/avatarMan.jpg" alt="foto de perfil" src="img/avatarMan.jpg"></div>
             <div>
                 <div class="textName"> {{user.name}}</div>
-                <div class="textDNI"> 31258691</div>
+                <div class="textDNI"> {{user.dni}}</div>
             </div>
         </div>
         <div class="btnDelete" ng-click="vm.removeUser(user)" title="Eliminar Usuario"> <i class="fa fa-trash" aria-hidden="true"></i> </div>

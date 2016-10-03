@@ -10,8 +10,8 @@
 
 			this.subscribe = subscribe;
 		  this.findById = findById;
-			this.getOfficesByUser = getOfficesByUser;
 			this.searchUsers = searchUsers;
+			this.findUsersByIds = findUsersByIds;
 			this.getOfficeTypes = getOfficeTypes;
 			this.findAll = findAll;
 			this.persist = persist;
@@ -25,12 +25,18 @@
 				return Login.getPrivateTransport().call('offices.find_by_id',[ids]);
 			}
 
+			/*
 			function getOfficesByUser(userId, tree) {
 				return Login.getPrivateTransport().call('offices.find_offices_by_user',[user_id, tree]);
 			}
+			*/
 
 			function searchUsers(regex) {
 				return Login.getPrivateTransport().call('offices.search_users', [regex]);
+			}
+
+			function findUsersByIds(uids) {
+				return Login.getPrivateTransport().call('offices.find_users_by_ids', [uids])
 			}
 
 			function getOfficeTypes() {

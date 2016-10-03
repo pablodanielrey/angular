@@ -92,6 +92,7 @@
           off.parent = (office.parentObj == null) ? null : office.parentObj.id;
           off.number = office.number;
           off.telephone = office.telephone;
+          off.email = office.email;
           off.id = office.id;
           off.__json_class__ = 'Office';
           off.__json_module__ = "model.offices.office"

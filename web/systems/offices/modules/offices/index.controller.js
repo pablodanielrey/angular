@@ -5,10 +5,20 @@
         .module('offices')
         .controller('OfficesCtrl', OfficesCtrl);
 
-    OfficesCtrl.$inject = ['$scope', 'Login', 'Offices', 'Utils', '$timeout'];
+    OfficesCtrl.$inject = ['$scope', 'Login', 'Offices', 'Utils', '$timeout', 'Users'];
+
+    ///////// funciones utilitarias genéricas //////////////
+
+    function removeItem(array, item) {
+      var index = array.indexOf(item);
+      if (index > -1) {
+          array.splice(index, 1);
+      }
+    }
+
 
     /* @ngInject */
-    function OfficesCtrl($scope, Login, Offices, Utils, $timeout) {
+    function OfficesCtrl($scope, Login, Offices, Utils, $timeout, Users) {
         var vm = this;
 
         vm.view = {
@@ -24,15 +34,13 @@
           userId: null,
           offices: [],
           users: [],
-          dictUsers: {},
           displayUsers: [],
           office: null,
           officeTypes: [],
           selectedType: null,
-          officeAll: []
+          allOfficeIds: []
         }
 
-        vm.loadOffices = loadOffices;
         vm.getOfficeTypes = getOfficeTypes;
         vm.remove = remove;
         vm.create = create;
@@ -51,7 +59,6 @@
 
         activate();
 
-
         function activate() {
           if (Login.getPrivateTransport() == null) {
             return;
@@ -64,7 +71,7 @@
           vm.model.selectedType = null;
           vm.model.userId = Login.getCredentials().userId;
           vm.getOfficeTypes();
-          loadUsers();
+          loadOffices(vm.model.selectedType)
           loadAllOffices();
         }
 
@@ -87,12 +94,7 @@
         }
 
 
-        function loadUsers() {
-          vm.model.users = [{id: 1, name: 'Emanuel Pais'}, {id: 2, name: 'Ivan Castañeda'}, {id:3, name: 'Walter Blanco'} , {id: 2, name: 'Alejandro Oporto'} , {id: 2, name: 'Pablo Daniel Rey'} , {id: 2, name: 'Maximiliano Saucedo'}];
-          vm.model.dictUsers = {1: vm.model.users[0],
-                                2: vm.model.users[1],
-                                3: vm.model.users[2]};
-        }
+        /////////////// VER ESTE CODIGO POR QUE SE PIDE 2 VECES /////////////////////////
 
         function loadOffices(type) {
           vm.model.offices = [];
@@ -117,18 +119,19 @@
           );
         }
 
-
-        // TODO: obtiene todas las oficinas
+        // TODO: obtiene los ids de todas las oficinas
         function loadAllOffices() {
-          vm.model.officeAll = [];
+          vm.model.allOfficeIds = [];
           Utils.findAll().then(
               function(offices) {
-                vm.model.officeAll = offices;
+                vm.model.allOffice = offices;
               }, function(error) {
                 console.error(error);
               }
           );
         }
+
+        //////////////////////////////////////////////////////////////////////////////////////////
 
         // TODO: obtiene el listado de tipos de oficinas
         function getOfficeTypes() {
@@ -138,7 +141,6 @@
             function(types) {
               vm.model.officeTypes = types;
               vm.model.selectedType = vm.model.officeTypes[0];
-              vm.loadOffices(vm.model.selectedType);
             }, function(error) {
               // messageError(error);
               console.log(error);
@@ -150,7 +152,7 @@
           /*if (vm.view.searching) {
             return
           }*/
-          if (text.length < 5) {
+          if (text.length < 3) {
             vm.view.searching = false;
             return;
           }
@@ -174,6 +176,9 @@
         }
 
         function removeDisplayUsers() {
+          if (vm.model.office.users == undefined || vm.model.office.users == null) {
+            return;
+          }
           for (var i = 0; i < vm.model.office.users.length; i++) {
             var j = 0;
             var userId = vm.model.office.users[i].id;
@@ -196,10 +201,10 @@
 
           vm.model.office = {};
           vm.model.office.id = null;
-          vm.model.office.users = [];
           vm.model.office.name = '';
           vm.model.office.telephone = '';
           vm.model.office.number = '';
+          vm.model.office.email = '';
           vm.model.displayUsers = vm.model.users.slice(0);
         }
 
@@ -242,26 +247,34 @@
           vm.view.style = vm.view.styles[1];
           vm.model.office = office;
 
-          // provisorio, hay eliminarlo cunado este lo de funciones
-          if (vm.model.office.users == undefined) {
-            vm.model.office.users = [];
-          }
+          // TODO: reever código. implemente el metodo para obtener los usuarios de las oficinas.
+          vm.model.officeUsers = [];
+          Offices.findUsersByIds(vm.model.office.users).then(function(users) {
+            $scope.$apply(function() {
+              vm.model.officeUsers = users;
+            });
+          }, function(err) {
+            console.log(err);
+          });
+
           // ----------------------------------------------------
 
           // selecciono el tipo de oficina del arreglo de officesTypes para que se la misma instancia de typeOffice
-          for(var i = 0; i < vm.model.officeTypes.length; i++) {
-            if (vm.model.officeTypes[i].value == office.type.value) {
-              office.type = vm.model.officeTypes[i];
-              break;
+          if (office.type != undefined && office.type != null) {
+            for(var i = 0; i < vm.model.officeTypes.length; i++) {
+              if (vm.model.officeTypes[i].value == office.type.value) {
+                office.type = vm.model.officeTypes[i];
+                break;
+              }
             }
           }
 
           // selecciono el padre
           vm.model.office.parentObj = null;
           if (office.parent != null && office.parent.trim() != '') {
-            for (var i = 0; i < vm.model.officeAll.length; i++) {
-              if (office.parent == vm.model.officeAll[i].id) {
-                vm.model.office.parentObj = vm.model.officeAll[i];
+            for (var i = 0; i < vm.model.allOfficeIds.length; i++) {
+              if (office.parent == vm.model.allOfficeIds[i].id) {
+                vm.model.office.parentObj = vm.model.allOfficeIds[i];
                 break;
               }
             }
@@ -272,12 +285,8 @@
           removeDisplayUsers();
         }
 
-        function removeItem(array, item) {
-          var index = array.indexOf(item);
-          if (index > -1) {
-              array.splice(index, 1);
-          }
-        }
+
+
 
         function displayRemove(office) {
           vm.model.office = office;
@@ -300,15 +309,20 @@
           );
         }
 
+
+        //// manejo de usuarios de una oficina ///////
+
         function addUser(user) {
           removeItem(vm.model.displayUsers, user);
-          vm.model.office.users.push(user);
+          vm.model.officeUsers.push(user);
           vm.view.style = vm.view.styles[1];
         }
 
         function removeUser(user) {
-          removeItem(vm.model.office.users, user);
+          removeItem(vm.model.officeUsers, user);
           vm.model.displayUsers.push(user);
         }
+
+        ////////////////////////
     }
 })();
