@@ -37,8 +37,7 @@
           displayUsers: [],
           office: null,
           officeTypes: [],
-          selectedType: null,
-          allOfficeIds: []
+          selectedType: null
         }
 
         vm.getOfficeTypes = getOfficeTypes;
@@ -71,7 +70,6 @@
           vm.model.selectedType = null;
           vm.model.userId = Login.getCredentials().userId;
           vm.getOfficeTypes();
-          loadOffices(vm.model.selectedType)
           loadAllOffices();
         }
 
@@ -80,7 +78,6 @@
             var id = params[0];
             $scope.$apply(function() {
               loadAllOffices();
-              loadOffices(vm.model.selectedType);
             });
           });
 
@@ -88,50 +85,23 @@
             var id = params[0];
             $scope.$apply(function() {
               loadAllOffices();
-              loadOffices(vm.model.selectedType);
             });
           });
         }
 
 
-        /////////////// VER ESTE CODIGO POR QUE SE PIDE 2 VECES /////////////////////////
 
-        function loadOffices(type) {
-          vm.model.offices = [];
-          var types = (type == null) ? null : [type]
-          Offices.findAll(types).then(
-            function(ids) {
-              if (ids.length <= 0) {
-                return;
-              }
-              Offices.findById(ids).then (
-                function(offices) {
-                  $scope.$apply(function() {
-                    vm.model.offices = offices;
-                  });
-                }, function(error) {
-                  console.log(error);
-                }
-              );
-            }, function(error) {
-              console.log(error);
-            }
-          );
-        }
 
-        // TODO: obtiene los ids de todas las oficinas
         function loadAllOffices() {
-          vm.model.allOfficeIds = [];
           Utils.findAll().then(
               function(offices) {
-                vm.model.allOffice = offices;
+                vm.model.offices = offices;
               }, function(error) {
                 console.error(error);
               }
           );
         }
 
-        //////////////////////////////////////////////////////////////////////////////////////////
 
         // TODO: obtiene el listado de tipos de oficinas
         function getOfficeTypes() {
@@ -149,14 +119,11 @@
         }
 
         function searchUsers(text) {
-          /*if (vm.view.searching) {
-            return
-          }*/
           if (text.length < 3) {
             vm.view.searching = false;
             return;
           }
-          // vm.view.searching = true;
+
           Offices.searchUsers(text).then(
             function(users) {
               $scope.$apply(function() {
@@ -272,9 +239,9 @@
           // selecciono el padre
           vm.model.office.parentObj = null;
           if (office.parent != null && office.parent.trim() != '') {
-            for (var i = 0; i < vm.model.allOfficeIds.length; i++) {
-              if (office.parent == vm.model.allOfficeIds[i].id) {
-                vm.model.office.parentObj = vm.model.allOfficeIds[i];
+            for (var i = 0; i < vm.model.offices.length; i++) {
+              if (office.parent == vm.model.offices[i].id) {
+                vm.model.office.parentObj = vm.model.offices[i];
                 break;
               }
             }

@@ -15,7 +15,7 @@
         </div>
         <div> Padre: </div>
         <div>
-            <select class="selectOfficesType" ng-options="item as item.name disable when item.id == vm.model.office.id for item in vm.model.officeAll | orderBy: 'name'" ng-model="vm.model.office.parentObj" ng-change="vm.selectParentOffice(office)">
+            <select class="selectOfficesType" ng-options="item as item.name disable when item.id == vm.model.office.id for item in vm.model.offices | orderBy: 'name'" ng-model="vm.model.office.parentObj" ng-change="vm.selectParentOffice(office)">
               <option value="">No posee</option>
             </select>
         </div>
