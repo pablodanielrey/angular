@@ -731,6 +731,7 @@ margin-right: 5px;
   cursor: pointer;
 }
 
+.orders .contentAsunto,
 .orders .contentRow {
   display: flex;
   display: -webkit-flex; /* Safari */
@@ -2886,11 +2887,24 @@ transition: all 500ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
 }
 
 .orders .contentDataExtraOffice {
-  background-color: #BFC0C5;
+  background-color: #E2E2E2;
   margin-right: 10px;
   border-radius: 3px;
   -moz-border-radius: 3px;
   -webkit-border-radius: 3px;
   font-size: 11px;
-  padding: 10px;
+}
+.orders .textMini2 {
+  font-size: 11px;
+  color:white;
+  border-radius: 3px 3px 0 0;
+  -moz-border-radius: 3px 3px 0 0;
+  -webkit-border-radius: 3px 3px 0 0;
+  background-color: #3A3C44;
+  padding: 3px;
+  text-align: center;
+}
+
+.orders .extraData {
+  padding: 5px;
 }
