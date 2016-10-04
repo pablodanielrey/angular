@@ -159,6 +159,9 @@
           vm.model.office.telephone = '';
           vm.model.office.number = '';
           vm.model.office.email = '';
+          vm.model.office.users = [];
+
+          vm.model.officeUsers = [];
         }
 
         function displayRemove(office) {
