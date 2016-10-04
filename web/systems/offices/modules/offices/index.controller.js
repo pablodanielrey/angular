@@ -65,6 +65,7 @@
 
         ////////// visaules ///////////////
         vm.getUserPhoto = getUserPhoto;
+        vm.displayRemove = displayRemove;
         //////////////////////
 
 
@@ -143,7 +144,8 @@
           Utils.getOfficeTypes().then(
             function(types) {
               vm.model.officeTypes = types;
-              vm.model.selectedType = vm.model.officeTypes[0];
+              //vm.model.selectedType = vm.model.officeTypes[0];
+              vm.model.selectedType = '';
             }, function(error) {
               console.log(error);
             }

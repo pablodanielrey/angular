@@ -65,6 +65,7 @@ class OfficeDAO(DAO):
                   email VARCHAR,
                   parent VARCHAR REFERENCES offices.offices (id),
                   type VARCHAR NOT NULL,
+                  removed TIMESTAMPTZ,
                   UNIQUE (name)
                 );
 
@@ -103,12 +104,12 @@ class OfficeDAO(DAO):
         cur = con.cursor()
         try:
             if types is None:
-                cur.execute('select id from offices.offices')
+                cur.execute('select id from offices.offices where removed is null')
                 return [o['id'] for o in cur]
             else:
                 assert isinstance(types, list)
                 t = [o['value'] for o in types]
-                cur.execute('select id from offices.offices where type in %s',(tuple(t),))
+                cur.execute('select id from offices.offices where removed is null and type in %s',(tuple(t),))
                 return [o['id'] for o in cur]
 
         finally:
@@ -137,7 +138,7 @@ class OfficeDAO(DAO):
     def remove(cls, con, id):
         cur = con.cursor()
         try:
-            cur.execute('delete from offices.offices where id = %s',(id,))
+            cur.execute('update offices.offices set removed = NOW() where id = %s', (id,))
             return id
         finally:
             cur.close()
