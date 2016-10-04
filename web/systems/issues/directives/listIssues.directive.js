@@ -20,6 +20,7 @@
             bindToController: {
               issues: '=issues',
               users: '=users',
+              search: '=search',
               detail: '&onDetail'
             }
         };
