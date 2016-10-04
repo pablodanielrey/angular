@@ -119,10 +119,10 @@ class OfficeDAO(DAO):
             if office.id is None:
                 office.id = str(uuid.uuid4())
                 params = office.__dict__
-                cur.execute('insert into offices.offices (id, name, telephone, nro, type, parent) values (%(id)s, %(name)s, %(telephone)s, %(number)s, %(type)s, %(parent)s)', params)
+                cur.execute('insert into offices.offices (id, name, telephone, nro, type, parent, email) values (%(id)s, %(name)s, %(telephone)s, %(number)s, %(type)s, %(parent)s, %(email)s)', params)
             else:
                 params = office.__dict__
-                cur.execute('update offices.offices set name = %(name)s, telephone = %(telephone)s, nro = %(number)s, type = %(type)s, parent = %(parent)s where id = %(id)s', params)
+                cur.execute('update offices.offices set name = %(name)s, telephone = %(telephone)s, nro = %(number)s, type = %(type)s, parent = %(parent)s, email = %(email)s where id = %(id)s', params)
 
             return office.id
 
@@ -156,6 +156,45 @@ class OfficeModel():
         offices = Office.findByIds(con, oIds)
         return [office.id for office in offices if office.type in types]
     """
+
+    @classmethod
+    def persistDesignations(cls, con, oid, userIds):
+        """
+            creo las designaciones para una oficina.
+            hay que ver cuales ya existían ya que no se deben tocar las fechas de estas designaciones.
+        """
+        assert oid is not None
+        assert isinstance(userIds, list)
+
+        existent = Designation.findByOffice(con, oid, history=False)
+
+        if len(userIds) <= 0:
+            """ elimino todas las deisgnaciones """
+            for d in existent:
+                d.expire(con)
+            return
+
+        toRemove = [d for d in existent if d.userId not in userIds]
+
+        """ elimno las designaciones que no deberían existir """
+        for d in toRemove:
+            d.expire(con)
+
+        remaining = set(existent) - set(toRemove)
+        remainingUsers = [d.userId for d in remaining]
+        toGenerate = [u for u in userIds if u not in remainingUsers]
+
+        """ genero y persisto las designaciones adicionales """
+        for uid in toGenerate:
+            d = Designation()
+            d.id = str(uuid.uuid4())
+            d.officeId = oid
+            d.userId = uid
+            d.start = datetime.datetime.now()
+            d.persist(con)
+
+
+
 
     @classmethod
     def getUsers(cls, con, oId):

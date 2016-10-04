@@ -49,6 +49,10 @@
 				return Login.getPrivateTransport().call('offices.persist', [office]);
 			}
 
+			function persistWithUsers(office, userIds) {
+				return Login.getPrivateTransport().call('offices.persist_with_users', [office, userIds]);
+			}
+
 			function remove(office) {
 				return Login.getPrivateTransport().call('offices.remove', [office]);
 			}

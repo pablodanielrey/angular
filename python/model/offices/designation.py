@@ -28,6 +28,9 @@ class Designation(JSONSerializable):
         return DesignationDAO.getDesignationByUser(con, userId, history)
     """
 
+    def expire(self, con):
+        DesignationDAO.expireByIds(con, [self.id])
+
     @classmethod
     def findByIds(cls, con, ids):
         return DesignationDAO.findByIds(con, ids)
@@ -80,6 +83,17 @@ class DesignationDAO(DAO):
         d.start = r['sstart']
         d.end = r['send']
         return d
+
+    @classmethod
+    def expireByIds(cls, con, ids):
+        assert ids is not None
+        assert isinstance(ids, list)
+        cur = con.cursor()
+        try:
+            cur.execute('update offices.designation set send = NOW() where id in %s', (tuple(ids),))
+        finally:
+            cur.close()
+
 
     """
     @classmethod

@@ -188,20 +188,23 @@
 
         /////////////// edicion/creación de una oficina ///////////////////
 
+        /*
+          Actualiza/crea la oficina.
+          para actualizar solo se tiene en cuenta el objeto seleccionado:
+            vm.model.office
+          y se crearán las designaciones "cumpliendo funciones" de los usuarios indicados:
+            vm.model.office.users --> uids de los usuarios que quedan en la oficina.
+        */
         function saveOffice() {
           var ok = true;
 
           if (vm.model.office.name.trim() == '') {
-            ok = false;
             window.alert("Debe completar el nombre de la oficina");
+            return;
           }
 
           if (vm.model.office.type == null) {
-            ok = false;
             window.alert('Debe seleccionar el tipo de la oficina');
-          }
-
-          if (!ok) {
             return;
           }
 

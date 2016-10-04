@@ -84,7 +84,7 @@
 
         function persist(office) {
           var off = convertOffice(office);
-          return Offices.persist(off);
+          return Offices.persistWithUsers(off, office.users);
         }
 
         function convertOffice(office) {

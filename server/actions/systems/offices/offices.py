@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from model.offices.office import Office, OfficeModel
+
 import wamp
 import autobahn
 from twisted.internet.defer import inlineCallbacks
@@ -85,6 +86,21 @@ class Offices(wamp.SystemComponentSession):
         con = self.conn.get()
         try:
             id = office.persist(con)
+            con.commit()
+            yield self.publish('offices.persist_event', id)
+            return id
+        finally:
+            self.conn.put(con)
+
+    @autobahn.wamp.register('offices.persist_with_users')
+    @inlineCallbacks
+    def persistWithUsers(self, office, userIds):
+        assert office is not None
+        assert isinstance(userIds, list)
+        con = self.conn.get()
+        try:
+            id = office.persist(con)
+            OfficeModel.persistDesignations(con, id, userIds)
             con.commit()
             yield self.publish('offices.persist_event', id)
             return id
