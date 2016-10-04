@@ -4,10 +4,12 @@
     <div class="contentHeader">
         <div class="contentTextHeader">
           <div class="textMisPedidos2">PEDIDOS</div>
-          <div class="btnOrder" title="Restablecer valores por defecto"><i class="fa fa-home"></i></div>
+          <div class="contentBtnOrder">
+            <div class="btnOrder" title="Restablecer valores por defecto"><i class="fa fa-home"></i></div>
+          </div>
           <div class="icoSeach"><i class="fa fa-search"></i></div>
-          <div><input type="search" placeholder="Buscar..." class="inputSearch" ng-model="vm.view.search"></div>
-          <div>
+          <div class="contentInputSearch"><input type="search" placeholder="Buscar..." class="inputSearch" ng-model="vm.view.search"></div>
+          <div class="contentBtnStates">
               <div class="btnOrder2" ng-click="vm.view.style3 = 'seleccionarEstado'">Estado</div>
               <div class="contentInputStates">
                   <div class="contentSelectAll">
@@ -40,7 +42,7 @@
               </div>
           </div>
 
-          <div>
+          <div class="contentBtnAreas">
               <div class="btnOrder2" ng-click="vm.view.style3 = 'seleccionarAreas'">Área</div>
               <div class="contentInputAreas">
                   <div class="contentSelectAll">
@@ -65,7 +67,7 @@
               </div>
           </div>
 
-          <div>
+          <div class="contentBtnOffices">
               <div class="btnOrder2" ng-click="vm.view.style3 = 'SeleccionarOficinas'">Oficinas</div>
               <div class="contentInputOffices">
 
