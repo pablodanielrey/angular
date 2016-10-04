@@ -17,12 +17,14 @@
         this.remove = remove;
 
         function getOfficeTypes() {
+          /*
           var officesTypes = $window.sessionStorage.getItem("officesTypes");
           if (officesTypes != null) {
             var d = $q.defer();
             d.resolve(JSON.parse(officesTypes));
             return d.promise;
           }
+          */
 
           return Offices.getOfficeTypes().then(
                 function(types) {
@@ -57,12 +59,14 @@
         }
 
         function findById(id) {
+          /*
           var off = $window.sessionStorage.getItem(id);
           if (off != null) {
             var d = $q.defer();
             d.resolve(JSON.parse(off));
             return d.promise;
           }
+          */
 
           return Offices.findById([id]).then(
                 function(offices) {

@@ -3,6 +3,9 @@ from model.serializer import JSONSerializable
 from model.dao import DAO
 from model.users.users import UserDAO, User
 from model.offices.designation import Designation
+
+import datetime
+
 import re
 import uuid
 
@@ -166,7 +169,8 @@ class OfficeModel():
         assert oid is not None
         assert isinstance(userIds, list)
 
-        existent = Designation.findByOffice(con, oid, history=False)
+        eids = Designation.findByOffice(con, oid, history=False)
+        existent = Designation.findByIds(con, eids)
 
         if len(userIds) <= 0:
             """ elimino todas las deisgnaciones """
@@ -206,6 +210,18 @@ class OfficeModel():
 
     @classmethod
     def searchUsers(cls, con, regex):
+
+        """ datos de prueba """
+        u = User()
+        u.dni = '27294557'
+        u.id = '6eb18010-14f3-488f-8568-1d4b472838cc'
+        u.name = 'prueba'
+        u.lastname = 'l'
+        u.genre = None
+        u.photo = None
+        return [u]
+
+        """
         assert regex is not None
 
         if regex == '':
@@ -234,6 +250,7 @@ class OfficeModel():
         ''' busco por nombre y apellido '''
         matched = [ cls._getUserData(con, u) for u in users if m.search(u.name) or m.search(u.lastname) or m.search(u.name + u.lastname) or m.search(u.lastname + u.name)]
         return matched
+        """
 
     @classmethod
     def findUsersByIds(cls, con, uids):

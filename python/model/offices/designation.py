@@ -66,8 +66,7 @@ class DesignationDAO(DAO):
                   office_id VARCHAR REFERENCES offices.offices (id),
                   position VARCHAR,
                   sstart DATE default now(),
-                  send DATE,
-                  UNIQUE (user_id, office_id, position)
+                  send DATE
                 );
             """)
         finally:
@@ -90,7 +89,7 @@ class DesignationDAO(DAO):
         assert isinstance(ids, list)
         cur = con.cursor()
         try:
-            cur.execute('update offices.designation set send = NOW() where id in %s', (tuple(ids),))
+            cur.execute('update offices.designations set send = NOW() where id in %s', (tuple(ids),))
         finally:
             cur.close()
 
@@ -135,7 +134,7 @@ class DesignationDAO(DAO):
 
         cur = con.cursor()
         try:
-            cur.execute('select * from offices.designation where id in %s order by sstart asc', (tuple(ids),))
+            cur.execute('select * from offices.designations where id in %s order by sstart asc', (tuple(ids),))
             if cur.rowcount <= 0:
                 return []
 

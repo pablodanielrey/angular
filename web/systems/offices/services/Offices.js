@@ -15,6 +15,7 @@
 			this.getOfficeTypes = getOfficeTypes;
 			this.findAll = findAll;
 			this.persist = persist;
+			this.persistWithUsers = persistWithUsers;
 			this.remove = remove;
 
 			function subscribe(event, func) {
