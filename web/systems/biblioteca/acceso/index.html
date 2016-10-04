@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html ng-app="mainApp">
+<head>
+  <meta charset="utf-8"/>
+  <meta name='viewport' content='width=device-width'/>
+  <title>Acceso | FCE</title>
+
+
+  <script src="/libs/bower_components/angularjs/angular.js"></script>
+  <script src="/libs/bower_components/angular-route/angular-route.js"></script>
+  <script src="/libs/bower_components/autobahn/autobahn.js"></script>
+  <script src="/libs/bower_components/angular-wamp/release/angular-wamp.js"></script>
+
+  <!--archivos principales-->
+  <script type="text/javascript" src="/systems/login/index.module.js"></script>
+  <script type="text/javascript" src="/systems/login/index.controller.js"></script>
+
+  <!-- esto es el estilo de font awesome para tener los iconos -->
+  <!-- <link rel="stylesheet" href="/libs/font-awesome/css/font-awesome.min.css"> -->
+  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+  <link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
+  <link href='https://fonts.googleapis.com/css?family=Ropa+Sans' rel='stylesheet' type='text/css'>
+  <link href='https://fonts.googleapis.com/css?family=Lato' rel='stylesheet' type='text/css'>
+  <link rel="shortcut icon" href="/systems/fce/img/favicon2.ico">
+
+  <script type="text/javascript" src="/config.json"></script>
+
+
+	<!-- ***** SERVICIOS ***** -->
+	<script type="text/javascript" src="/services/Cache.js"></script>
+	<script type="text/javascript" src="/services/Session.js"></script>
+  <script type="text/javascript" src="/services/Login.js"></script>
+
+  <script type="text/javascript" src="/services/Users.js"></script>
+  <script type="text/javascript" src="/services/Utils.js"></script>
+	<script type="text/javascript" src="/services/Notifications.js"></script>
+
+	<!-- ***** MODULOS ***** -->
+
+  <script type="text/javascript" src="/systems/biblioteca/acceso/acceso.controller.js"></script>
+  <link rel="stylesheet" type="text/css" href="/systems/biblioteca/acceso/acceso.css" />
+
+</head>
+
+<body ng-controller='accessCtrl'>
+
+    <div class="access {{view.style}}">
+        <!-- VARIABLES: pantallaInicio, pantallaCargando, pantallaUsuario, pantallaError -->
+
+        <div class="contentHeader">
+
+            <div class="logo">
+                  <div class="imgLogo">
+                      <img src="/systems/fce/img/DitesiLogo.png" width="104px" height="25px">
+                  </div>
+                  <div class="textHeader">| Acceso a la Bibliteca de la Facultad de Ciencias Económicas</div>
+            </div>
+        </div>
+
+        <div class="contentMain">
+
+            <!-- *** BORRAR ESTO **** -->
+            <div class="menu">
+              <button class="btnMenu" ng-click="view.style = 'pantallaError'">0</button>
+              <button class="btnMenu" ng-click="view.style = 'pantallaInicio'">1</button>
+              <button class="btnMenu" ng-click="view.style = 'pantallaCargando'">2</button>
+              <button class="btnMenu" ng-click="view.style = 'pantallaUsuario'">3</button>
+
+            </div>
+            <!-- ***** HASTA ACA **** -->
+
+            <div class="contentAcces">
+                  <!-- PANTALLA DEL LOGUIN -->
+                  <div class="screenLogin">
+                        <div>
+                            <input class="inputDNI" type="text" placeholder="DNI"></input>
+                        </div>
+                        <div>
+                            <input class="inputDNI" type="password" placeholder="CONTRASEÑA"></input>
+                        </div>
+                        <div>
+                            <button class="btnNext" type="text" ng-click="view.style = 'pantallaCargando'"> Acceder</button>
+                        </div>
+                  </div>
+                  <!-- PANTALLA DEL ERROR USUARIO -->
+                  <div class="screenError">
+                      <div class="subContentError">
+                        <div class="emoticonError">
+                            <i class="fa fa-meh-o fa-2x" aria-hidden="true"></i> Oops!
+                        </div>
+                        <div class="textError">
+                            Usuario o contraseña <br> inconrrecto!
+                        </div>
+                      </div>
+                  </div>
+                  <!-- PANTALLA CARGANDO -->
+                  <div class="screenPreload">
+                      <div class="contentPreload">
+                          <i class="fa fa-circle-o-notch fa-spin fa-4x fa-fw"></i>
+                      </div>
+                  </div>
+                  <!-- PANTALLA USUARIO -->
+                  <div class="screenUser">
+                      <div class="contentUser">
+                          <div class="avatarUser">
+                              <img class="imgUser" src="/systems/biblioteca/img/pablo.jpg">
+                          </div>
+                      </div>
+                      <div class="contentInfoUser">
+                          <div class="textWelcome">
+                            Hola!
+                          </div>
+                          <div class="textNameUser">
+                            Pablo Daniel Rey
+                          </div>
+                      </div>
+                  </div>
+            </div>
+
+            <div class="progressBar">
+            </div>
+
+            <div class="contentLogoFCE">
+                <div class="imgLogo"><img src="/systems/biblioteca/img/fce_logo.png"></div>
+            </div>
+
+
+        </div>
+
+        <div class="contentFooter">
+          <span class="spanPC">
+            © 2016 | DiTESI | Dirección de tecnologías y Sistemas Informáticos
+            | Facultad de Ciencias Económicas | UNLP | Calle 6 Nº 777
+          </span>
+          <span class="spanCel">
+            © 2016 | DiTESI | Facultad de Ciencias Económicas | UNLP
+          </span>
+        </div>
+
+    </div>
+
+</body>
+</html>

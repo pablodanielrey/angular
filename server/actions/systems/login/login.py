@@ -70,6 +70,41 @@ class LoginSession(SystemComponentSession):
                     'domain': 'asistencia',
                     'relative': '/systems/assistance/',
                     'ticket': 'fnfwfewfewfmewfklemflfdlskmfsd'
+                },
+                {
+                    'domain': 'oficinas',
+                    'relative': '/systems/offices/',
+                    'ticket': 'fnfwfewfewfmewfklemflfdlskmfsd'
+                },
+                {
+                    'domain': 'oficinas.econo.unlp.edu.ar',
+                    'relative': '/systems/offices/',
+                    'ticket': 'fnfwfewfewfmewfklemflfdlskmfsd'
+                },
+                {
+                    'domain': 'www.oficinas.econo.unlp.edu.ar',
+                    'relative': '/systems/offices/',
+                    'ticket': 'fnfwfewfewfmewfklemflfdlskmfsd'
+                },
+                {
+                    'domain': 'assistance',
+                    'relative': '/systems/assistance/',
+                    'ticket': 'fnfwfewfewfmewfklemflfdlskmfsd'
+                },
+                {
+                    'domain': 'asistencia',
+                    'relative': '/systems/assistance/',
+                    'ticket': 'fnfwfewfewfmewfklemflfdlskmfsd'
+                },
+                {
+                    'domain': 'asistencia.econo.unlp.edu.ar',
+                    'relative': '/systems/assistance/',
+                    'ticket': 'fnfwfewfewfmewfklemflfdlskmfsd'
+                },
+                {
+                    'domain': 'www.asistencia.econo.unlp.edu.ar',
+                    'relative': '/systems/assistance/',
+                    'ticket': 'fnfwfewfewfmewfklemflfdlskmfsd'
                 }
             ],
             'default': '/systems/login/'

@@ -1,8 +1,32 @@
 # -*- coding: utf-8 -*-
-import autobahn
+from model.offices.office import Office, OfficeModel
 
-from model.offices.offices import Office
+import datetime
+
 import wamp
+import autobahn
+from twisted.internet.defer import inlineCallbacks
+
+import logging
+logging.getLogger().setLevel(logging.INFO)
+
+
+
+import cProfile
+
+def do_cprofile(func):
+    def profiled_func(*args, **kwargs):
+        profile = cProfile.Profile()
+        try:
+            profile.enable()
+            result = func(*args, **kwargs)
+            profile.disable()
+            return result
+        finally:
+            profile.print_stats()
+    return profiled_func
+
+
 
 class Offices(wamp.SystemComponentSession):
 
@@ -16,14 +40,87 @@ class Offices(wamp.SystemComponentSession):
         finally:
             self.conn.put(con)
 
+    @autobahn.wamp.register('offices.find_users_by_regex')
+    def findUsersByRegex(self, regex):
+        logging.info('searchUsers')
+        logging.info(regex)
+        con = self.conn.get()
+        try:
+            return OfficeModel.searchUsers(con, regex)
+        finally:
+            self.conn.put(con)
+
     @autobahn.wamp.register('offices.find_by_id')
     def findById(self, ids):
         con = self.conn.get()
         try:
-            return Office.findById(con, ids)
+            offices = Office.findByIds(con, ids)
+            for office in offices:
+                office.users = OfficeModel.getUsers(con, office.id)
+            return offices
         finally:
             self.conn.put(con)
 
+    @autobahn.wamp.register('offices.find_users_by_ids')
+    def searchUsers(self, ids):
+        con = self.conn.get()
+        try:
+            return OfficeModel.findUsersByIds(con, ids)
+        finally:
+            self.conn.put(con)
+
+    @autobahn.wamp.register('offices.get_office_types')
+    def getOfficeTypes(self):
+        return Office.getTypes()
+
+
+    @autobahn.wamp.register('offices.find_all')
+    def findAll(self, types):
+        con = self.conn.get()
+        try:
+            return Office.findAll(con, types)
+        finally:
+            self.conn.put(con)
+
+
+    @autobahn.wamp.register('offices.persist')
+    @inlineCallbacks
+    def persist(self, office):
+        con = self.conn.get()
+        try:
+            id = office.persist(con)
+            con.commit()
+            yield self.publish('offices.persist_event', id)
+            return id
+        finally:
+            self.conn.put(con)
+
+    @autobahn.wamp.register('offices.persist_with_users')
+    @inlineCallbacks
+    def persistWithUsers(self, office, userIds):
+        assert office is not None
+        assert isinstance(userIds, list)
+        con = self.conn.get()
+        try:
+            id = office.persist(con)
+            OfficeModel.persistDesignations(con, id, userIds)
+            con.commit()
+            yield self.publish('offices.persist_event', id)
+            return id
+        finally:
+            self.conn.put(con)
+
+    @autobahn.wamp.register('offices.remove')
+    @inlineCallbacks
+    def remove(self, office):
+        con = self.conn.get()
+        try:
+            id = office.remove(con)
+            con.commit()
+            yield self.publish('offices.remove_event', id)
+            return id
+        finally:
+            self.conn.put(con)
 
 """
 

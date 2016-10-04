@@ -147,6 +147,11 @@ class ResetPassword:
         if cls.checkEmailCode(con, eid, code):
             user = User.findById(con, [uid])[0]
             ups = UserPassword.findByUserId(con, uid)
+            if ups is None or len(ups) <= 0:
+                passwd = UserPassword()
+                passwd.userId = uid
+                passwd.username = dni
+                ups = [passwd]
             for up in ups:
                 if up.username == dni:
                     up.setPassword(password)

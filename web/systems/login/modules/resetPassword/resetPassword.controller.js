@@ -50,7 +50,6 @@ function ResetPasswordCtrl($rootScope, $scope, $wamp, $window) {
     $scope.processDni = function() {
       $wamp.call('system.login.findByDni', [$scope.model.dni]).then(
         function(userData) {
-          console.log(userData);
           if (userData == null) {
             $scope.model.clazzError = $scope.model.errors[1];
             return;
@@ -79,7 +78,6 @@ function ResetPasswordCtrl($rootScope, $scope, $wamp, $window) {
           if (ok) {
             $scope.requestPassword();
           } else {
-            console.log(ok);
             $scope.model.clazzError = $scope.model.errors[2];
           }
         },

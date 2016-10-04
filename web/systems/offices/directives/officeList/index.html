@@ -1,0 +1,32 @@
+<div class="contentSearch">
+  <i class="fa fa-search"></i> BUSCAR OFICINA
+</div>
+
+<div>
+  <input class="inputSearch" type="text" ng-model="vm.model.search.name">
+</div>
+
+<div class="titleListOffices">
+    <div> Listado de Oficinas</div>
+    <div>
+        <select class="selectOfficesType" ng-options="item as item.name for item in vm.types  | orderBy: 'name'" ng-model="vm.selectedType" ng-change="vm.selectType()">
+          <option value="">Todos</option>
+        </select>
+
+    </div>
+</div>
+<div class="contentOffices">
+    <!-- <div class="itemOffice" ng-repeat="office in vm.offices | filter: vm.model.search"> <span ng-click="vm.select(office)">{{office.name}}</span> <span ng-click="vm.remove(office)"> X </span></div> -->
+    <div class="itemOffice" ng-repeat="office in vm.offices | orderBy: 'name' | filter: vm.model.search" >
+        <div class="officesData" ng-click="vm.select(office)">
+            <div class="officeType">{{office.type.name}}</div>
+            <div class="officeName"><b>{{office.name}}</b></div>
+        </div>
+        <div class="btnDelete" ng-click="vm.remove(office)" title="Eliminar Oficina"> <i class="fa fa-trash" aria-hidden="true"></i> </div>
+    </div>
+
+</div>
+
+<div class="btnCreateNew" ng-click="vm.create()">
+  CREAR NUEVA
+</div>
