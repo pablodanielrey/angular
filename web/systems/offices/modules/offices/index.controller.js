@@ -80,8 +80,6 @@
 
 
 
-
-
         $scope.$on('wamp.open', function(event, args) {
           vm.model.privateTransport = Login.getPrivateTransport();
           activate();
@@ -131,6 +129,18 @@
           Utils.findAll().then(
               function(offices) {
                 vm.model.offices = offices;
+
+                // actualizo el objeto de la oficina seleccionada. en el caso de que exista
+                var office = vm.model.office;
+                if (office != null) {
+                  for (var i = 0; i < vm.model.offices.length; i++) {
+                    if (vm.model.offices[i].id == office.id) {
+                      selectOffice(vm.model.offices[i]);
+                      break;
+                    }
+                  }
+                }
+
               }, function(error) {
                 console.error(error);
               }
