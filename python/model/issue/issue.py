@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from redmine import Redmine
 from model.users.users  import UserPassword, User, Mail
-from model.offices.offices import Office
+from model.offices.office import Office
 from model.serializer import JSONSerializable
 from model.registry import Registry
 import base64
@@ -144,7 +144,7 @@ class RedmineAPI:
 
         office = None
         if id not in cls.officeCache.keys():
-            offices = Office.findById(con, [id])
+            offices = Office.findByIds(con, [id])
             office = offices[0] if len(offices) > 0 else None
             cls.officeCache[id] = office
         else:
@@ -170,7 +170,7 @@ class RedmineAPI:
         if id is None:
             return None
 
-        offices = Office.findById(con, [id])
+        offices = Office.findByIds(con, [id])
         return offices[0] if len(offices) > 0 else None
     """
 
@@ -183,7 +183,7 @@ class RedmineAPI:
         issue.projectId =  [r.project.id if 'project' in attrs else None][0]
 
         office = cls._loadOffice(con, redmine, issue.projectId)
-        if office is not None and office.area:
+        if office is not None and office.type is not None and office.type['value'] == 'area':
             issue.area = office
             issue.office = cls._findOffice(con, office.parent)
         else:
@@ -429,15 +429,15 @@ class IssueModel():
     def getOffices(cls, con):
         offices = Office.getOffices(con)
         projects = RedmineAPI.findAllProjects()
-        return Office.findById(con, [oid for oid in offices if oid in projects])
+        return Office.findByIds(con, [oid for oid in offices if oid in projects])
 
     @classmethod
     def getAreas(cls, con, oId):
-        offs = Office.findById(con, [oId])
+        offs = Office.findByIds(con, [oId])
         if offs is None or len(offs) <= 0:
             return []
         areas = offs[0].getAreas(con)
-        return Office.findById(con, areas)
+        return Office.findByIds(con, areas)
 
     @classmethod
     def create(cls, con, parentId, officeId, authorId, subject, description, fromOfficeId, creatorId, files, tracker = TRACKER_ERROR):
