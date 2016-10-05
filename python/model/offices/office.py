@@ -141,16 +141,20 @@ class OfficeDAO(DAO):
         try:
             while (len(pids) > 0):
                 pid = pids.pop()
-                if types is None:
-                    cur.execute('select id from offices.offices where parent = %s and removed is null', (pid,))
-                else:
-                    cur.execute('select id from offices.offices where removed is null and type in %s and parent = %s',(tuple(types),pid))
+                cur.execute('select id from offices.offices where parent = %s and removed is null', (pid,))
                 currentIds = [o['id'] for o in cur]
                 cids.update(currentIds)
                 if tree:
                     pids.update(currentIds)
 
-            return list(cids)
+
+            if types is not None and len(cids) > 0:
+                cur.execute('select id from offices.offices where id in %s and type in %s', (tuple(cids),tuple(types)))
+                return [o['id'] for o in cur]
+            else:
+                return list(cids)
+
+
         finally:
             cur.close()
 
@@ -208,11 +212,13 @@ class OfficeModel():
         idsD = Designation.findAllByUser(con, userId)
         desig = Designation.findByIds(con, idsD)
         oIds = [d.officeId for d in desig]
-        if types is None:
-            return oIds
-
         offices = Office.findByIds(con, oIds)
-        return [office.id for office in offices if office.type in types]
+        toReturnIds = []
+        for o in offices:
+            toReturnIds.extend(o.findChilds(con, types, tree))
+
+        #return [office.id for office in toReturn if office.type in types]
+        return list(set(toReturnIds))
 
     @classmethod
     def persistDesignations(cls, con, oid, userIds):
