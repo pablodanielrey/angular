@@ -202,9 +202,6 @@ class OfficeModel():
             d.start = datetime.datetime.now()
             d.persist(con)
 
-
-
-
     @classmethod
     def getUsers(cls, con, oId):
         idsD = Designation.findByOffice(con, oId)
