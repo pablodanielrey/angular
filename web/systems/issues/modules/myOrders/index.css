@@ -2131,3 +2131,7 @@ transition: all 500ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
     zoom: 1.4;
   }
 }
+
+.myOrders .textPreform {
+  white-space: pre-line;
+}

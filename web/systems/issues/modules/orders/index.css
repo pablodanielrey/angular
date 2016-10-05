@@ -2908,3 +2908,20 @@ transition: all 500ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
 .orders .extraData {
   padding: 5px;
 }
+
+.orders .contentAdds {
+  margin-top: 5px;
+  /*background-color: #BFC0C5;*/
+
+  height: 50px;
+  overflow-y: auto;
+}
+
+.orders .textPreform {
+  white-space: pre-line;
+}
+
+.orders .addMessage {
+  width: 200px;
+  background-color: red;
+}

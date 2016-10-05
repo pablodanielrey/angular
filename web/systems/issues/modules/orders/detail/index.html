@@ -156,9 +156,7 @@
               {{vm.model.issue.start | date:"dd/MM/yyyy h:mma"}}
 
             </div>
-            <div>
-              {{vm.model.issue.description}}
-            </div>
+            <div class="textPreform">{{vm.model.issue.description}}</div>
 
             <div ng-repeat="file in vm.model.issue.files">
               <div class="contentAddInfo">
@@ -184,9 +182,7 @@
                   {{child.start | date:"dd/MM/yyyy h:mma"}}
 
                 </div>
-                <div>
-                      {{child.description}}
-                </div>
+                <div class="textPreform">{{child.description}}</div>
                 <div ng-repeat="file in child.files">
                   <div class="contentAddInfo">
                     <i class="fa fa-paperclip"></i> <a class="archiveAdd" ng-href="{{file.url}}">{{file.name}}</a>

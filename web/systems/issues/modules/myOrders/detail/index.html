@@ -79,9 +79,7 @@
                 <div class="textDateDetailOrders">
                     {{vm.getDiffDay(vm.model.issue)}} - {{vm.getDate(vm.model.issue) | date: 'd MMMM  yyyy - HH:mm'}} hs
                 </div>
-                <div>
-                  {{vm.model.issue.description}}
-                </div>
+                <div class="textPreform">{{vm.model.issue.description}}</div>
                 <div ng-repeat="file in vm.model.issue.files" class="contentAddInfo"><i class="archiveAdd"></i> <a href="{{file.url}}">{{file.name}}</a></div>
             </div>
 
@@ -102,9 +100,7 @@
                         <div class="textDateDetailOrders">
                             {{vm.getDiffDay(child)}} - {{vm.getDate(child) | date: 'd MMMM  yyyy - HH:mm'}} hs
                         </div>
-                        <div>
-                              {{child.description}}
-                        </div>
+                        <div class="textPreform">{{child.description}}</div>
                         <div class="contentAddInfo" ng-repeat="file in child.files"><i class="fa fa-paperclip"></i> <a class="archiveAdd" href="{{file.url}}"> {{file.name}}</a></div>
                     </div>
 
