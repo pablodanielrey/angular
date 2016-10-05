@@ -95,10 +95,24 @@
 			}
 
 
+			/*
+				Solo sirve para invalidar la cache de los issues que existan.
+			*/
 			function _asyncInvalidateCache(issueId) {
 				var d = $q.defer()
 				$window.sessionStorage.removeItem('assignedIssues');
 				$window.sessionStorage.removeItem('myIssues');
+				d.resolve(issueId);
+				return d.promise;
+			}
+
+			/*
+				Invalida un issue sin invalidar la lista de todos los demas.
+				se usa cuando se modifica un solo issue.
+			*/
+			function _asyncInvalidateSingleIssueCache(issue) {
+				var d = $q.defer()
+				$window.sessionStorage.removeItem(issue.id);
 				d.resolve(issueId);
 				return d.promise;
 			}
@@ -108,15 +122,15 @@
 			}
 
 		  function createComment(subject, description, parentId, officeId, files) {
-				return Login.getPrivateTransport().call('issues.create_comment', [subject, description, parentId, officeId, files])
+				return Login.getPrivateTransport().call('issues.create_comment', [subject, description, parentId, officeId, files]).then(_asyncInvalidateCache());
 			}
 
 		  function changeStatus(issue, status) {
-				return Login.getPrivateTransport().call('issues.change_status', [issue, status]);
+				return Login.getPrivateTransport().call('issues.change_status', [issue, status]).then(_asyncInvalidateSingleIssueCache());
 			}
 
 		  function changePriority(issue, priority) {
-				return Login.getPrivateTransport().call('issues.change_priority', [issue, priority]);
+				return Login.getPrivateTransport().call('issues.change_priority', [issue, priority]).then(_asyncInvalidateSingleIssueCache());
 			}
 
 			function getOffices() {
