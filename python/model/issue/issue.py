@@ -501,18 +501,27 @@ class IssueModel():
             return ['Otro']
 
     @classmethod
-    def getOffices(cls, con):
+    def getOffices(cls, con, userId):
         officesIds = Office.findAll(con)
         projects = RedmineAPI.findAllProjects()
         offices = Office.findByIds(con, [oid for oid in officesIds if oid in projects])
-        return [o for o in offices if o.public]
+        publicOffices = [o for o in offices if o.public]
+
+        userOfficesIds = Office.findByUser(con, userId, types=['direction','department'], tree=True)
+        userOffices = Office.findByIds(con, [oid for oid in userOfficesIds if oid in projects])
+
+        if userOffices is not None:
+            idPublicOffices = [o.id for o in publicOffices]
+            publicOffices.extend([o for o in userOffices if o.id not in idPublicOffices])
+
+        return publicOffices
 
     @classmethod
     def getAreas(cls, con, oId):
         offs = Office.findByIds(con, [oId])
         if offs is None or len(offs) <= 0:
             return []
-        areas = offs[0].findChilds(con,types=['area'], tree=False)
+        areas = offs[0].findChilds(con, types=['area'], tree=False)
         return Office.findByIds(con, areas)
 
     @classmethod

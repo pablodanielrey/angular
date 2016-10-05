@@ -62,7 +62,10 @@
           loadUserOffices(vm.model.userId);
         }
 
-        //***** cargar oficinas (destino) *****
+        /*
+          Cargar oficinas destino.
+          son todas las oficinas publicas + las suboficinas de las oficinas a las que se pertenece
+        */
         function loadOffices() {
           vm.model.offices = [];
           Issues.getOffices().then(

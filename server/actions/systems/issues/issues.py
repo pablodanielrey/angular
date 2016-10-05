@@ -9,6 +9,7 @@ from twisted.internet.defer import inlineCallbacks
 
 from model.issue.issue import Issue, RedmineAPI, Attachment, IssueModel
 from model.offices.office import Office
+from model.users.users import User
 
 #import asyncio
 #from asyncio import coroutine
@@ -115,7 +116,8 @@ class Issues(wamp.SystemComponentSession):
     def getOffices(self, details):
         con = self.conn.get()
         try:
-            return IssueModel.getOffices(con)
+            userId = self.getUserId(con, details)
+            return IssueModel.getOffices(con, userId)
         finally:
             self.conn.put(con)
 
