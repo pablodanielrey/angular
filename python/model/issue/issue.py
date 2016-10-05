@@ -342,9 +342,14 @@ class RedmineAPI:
         if redmine is None:
             return []
         issues = []
+        projects = [p.identifier for p in redmine.project.all()]
         for pidentifier in pidentifiers:
             # issues.extend(redmine.issue.filter(tracker_id=cls.TRACKER_ERROR, project_id=pidentifier, subproject_id='!*', status_id='open'))
-            issues.extend(redmine.issue.filter(tracker_id=cls.TRACKER_ERROR, project_id=pidentifier, status_id='open'))
+
+            if pidentifier in projects:
+                issues.extend(redmine.issue.filter(tracker_id=cls.TRACKER_ERROR, project_id=pidentifier, status_id='open'))
+            else:
+                print(pidentifier)
         return issues
 
     @classmethod
