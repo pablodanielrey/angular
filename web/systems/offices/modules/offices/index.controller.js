@@ -171,6 +171,7 @@
           vm.model.office.telephone = '';
           vm.model.office.number = '';
           vm.model.office.email = '';
+          vm.model.office.public = false;
           vm.model.office.users = [];
 
           vm.model.officeUsers = [];

@@ -13,6 +13,7 @@
 			this.searchUsers = searchUsers;
 			this.findUsersByIds = findUsersByIds;
 			this.getOfficeTypes = getOfficeTypes;
+			this.getOfficesByUser = getOfficesByUser;
 			this.findAll = findAll;
 			this.persist = persist;
 			this.persistWithUsers = persistWithUsers;
@@ -27,7 +28,7 @@
 			}
 
 			function getOfficesByUser(userId, tree) {
-				return Login.getPrivateTransport().call('offices.find_offices_by_user',[user_id, tree]);
+				return Login.getPrivateTransport().call('offices.find_offices_by_user',[userId, tree]);
 			}
 
 			function searchUsers(regex) {

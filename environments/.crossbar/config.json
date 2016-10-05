@@ -354,6 +354,22 @@
                 },
 
                 {
+                    "id": "issues",
+                    "type": "class",
+                    "classname": "actions.systems.issues.issues.Issues",
+                    "realm": "core",
+                    "transport": {
+                        "type": "websocket",
+                        "endpoint": {
+                            "type": "tcp",
+                            "host": "127.0.0.1",
+                            "port": 8081
+                        },
+                        "url": "ws://localhost:8081"
+                    }
+                },
+
+                {
                     "id": "offices",
                     "type": "class",
                     "classname": "actions.systems.offices.offices.Offices",

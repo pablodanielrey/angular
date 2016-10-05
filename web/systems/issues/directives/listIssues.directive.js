@@ -20,6 +20,7 @@
             bindToController: {
               issues: '=issues',
               users: '=users',
+              search: '=search',
               detail: '&onDetail'
             }
         };
@@ -90,7 +91,13 @@
             return;
           }
           var user = vm.users[issue.userId];
-          return (user == null ) ? 'No tiene nombre' : getName(user) + ' ' + getLastname(user);
+          if (issue == null) {
+            return;
+          }
+
+          issue.fullName = (user == null ) ? 'No tiene nombre' : getName(user) + ' ' + getLastname(user);
+
+          return issue.fullName;
         }
 
         function getName(user) {
@@ -114,7 +121,8 @@
           }
 
           var user = vm.users[issue.creatorId];
-          return (user == null ) ? 'No tiene nombre' : getName(user) + ' ' + getLastname(user);
+          issue.creatorName = (user == null ) ? 'No tiene nombre' : getName(user) + ' ' + getLastname(user);
+          return issue.creatorName;
         }
 
         function getPriority(issue) {

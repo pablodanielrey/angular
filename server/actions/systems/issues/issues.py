@@ -5,11 +5,10 @@ import re
 import logging
 import psycopg2
 
-
 from twisted.internet.defer import inlineCallbacks
 
 from model.issue.issue import Issue, RedmineAPI, Attachment, IssueModel
-from model.offices.offices import Office
+from model.offices.office import Office
 
 #import asyncio
 #from asyncio import coroutine
@@ -52,7 +51,7 @@ class Issues(wamp.SystemComponentSession):
         con = self.conn.get()
         try:
             userId = self.getUserId(con, details)
-            oIds = Office.getOfficesByUser(con, userId, False)
+            oIds = Office.findByUser(con, userId, False)
             return Issue.getAssignedIssues(con, userId, oIds)
         finally:
             self.conn.put(con)
