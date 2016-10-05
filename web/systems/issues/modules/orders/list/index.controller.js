@@ -25,6 +25,7 @@
           style2: '',
           styles2: ['', 'mensajeCargando', 'mensajeError'],
 
+          search: '',
           status: ['','abierta', 'enProgreso', 'cerrada', 'comentarios', 'cerrada', 'rechazada', 'pausada'],
           statusSort: ['','abierta', 'enProgreso', 'pausada', 'rechazada', 'cerrada'],
           priorities: ['baja', 'normal', 'alta', 'alta', 'alta'], //solo se maneja el estilo alta, si esta como urgente o inmediata se lo toma solo como alta
@@ -65,6 +66,7 @@
           vm.view.reverseSortDate = true;
           vm.view.reverseSortStatus = true;
           vm.view.reverseSortPriority = false;
+          vm.view.search = '';
           registerEventManagers();
           loadIssues();
         }

@@ -47,6 +47,10 @@ class Office(JSONSerializable):
     def findByIds(cls, con, ids):
         return OfficeDAO.findByIds(con, ids)
 
+    @classmethod
+    def findByUser(cls, con, userId, tree=False, types=None):
+        return OfficeModel.getOfficesByUser(con, userId, tree, types)
+
 
 class OfficeDAO(DAO):
 
@@ -150,10 +154,9 @@ class OfficeModel():
 
     cache = {}
 
-    """
     @classmethod
     def getOfficesByUser(cls, con, userId, tree=False, types=None):
-        idsD = Designation.getDesignationByUser(con, userId)
+        idsD = Designation.findAllByUser(con, userId)
         desig = Designation.findByIds(con, idsD)
         oIds = [d.officeId for d in desig]
         if types is None:
@@ -161,7 +164,6 @@ class OfficeModel():
 
         offices = Office.findByIds(con, oIds)
         return [office.id for office in offices if office.type in types]
-    """
 
     @classmethod
     def persistDesignations(cls, con, oid, userIds):

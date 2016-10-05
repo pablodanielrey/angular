@@ -23,10 +23,11 @@ class Designation(JSONSerializable):
     def remove(self, con):
         DesignationDAO.removeByIds(con, [self.id])
 
-    @classmethod
-    def getDesignationByUser(cls, con, userId, history=False):
-        return DesignationDAO.getDesignationByUser(con, userId, history)
     """
+
+    @classmethod
+    def findAllByUser(cls, con, userId, history=False):
+        return DesignationDAO.getDesignationsByUser(con, userId, history)
 
     def expire(self, con):
         DesignationDAO.expireByIds(con, [self.id])
@@ -106,23 +107,20 @@ class DesignationDAO(DAO):
         finally:
             cur.close()
 
-
+    """
 
     @classmethod
-    def getDesignationByUser(cls, con, userId, history=False):
+    def getDesignationsByUser(cls, con, userId, history=False):
         assert userId is not None
         cur = con.cursor()
         try:
             if history is None or not history:
-                cur.execute('select id from offices.designation where user_id = %s and send is null order by sstart',(userId,))
+                cur.execute('select id from offices.designations where user_id = %s and send is null order by sstart',(userId,))
             else:
-                cur.execute('select id from offices.designation where user_id = %s order by sstart',(userId,))
-
+                cur.execute('select id from offices.designations where user_id = %s order by sstart',(userId,))
             return [d['id'] for d in cur]
-
         finally:
             cur.close()
-    """
 
     @classmethod
     def findByIds(cls, con, ids):
