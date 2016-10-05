@@ -497,9 +497,10 @@ class IssueModel():
 
     @classmethod
     def getOffices(cls, con):
-        offices = Office.findAll(con)
+        officesIds = Office.findAll(con)
         projects = RedmineAPI.findAllProjects()
-        return Office.findByIds(con, [oid for oid in offices if oid in projects])
+        offices = Office.findByIds(con, [oid for oid in officesIds if oid in projects])
+        return [o for o in offices if o.public]
 
     @classmethod
     def getAreas(cls, con, oId):
@@ -541,8 +542,7 @@ class IssueModel():
         if regex == '':
             return []
 
-        #userIds = User.findAll(con)
-        userIds = [('89d88b81-fbc0-48fa-badb-d32854d3d93a','1')]
+        userIds = User.findAll(con)
 
         users = []
         for u in userIds:

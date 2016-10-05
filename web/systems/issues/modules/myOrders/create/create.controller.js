@@ -21,7 +21,8 @@
           selectedFromOffice: null,
           searchOffice: {name: ''},
           subject: '',
-          userOffices: [], //oficinas del usuario logueado (origen)
+          offices: [],           // oficinas destino.
+          userOffices: [],       //oficinas del usuario logueado (origen)
           privateTransport: null
         };
 
@@ -41,6 +42,7 @@
         vm.save = save;
         vm.displaySearchOffice = displaySearchOffice;
         vm.displaySearchArea = displaySearchArea;
+        vm.getFromOffices = getFromOffices;
 
 
         $scope.$on('wamp.open', function(event, args) {
@@ -97,6 +99,9 @@
           );
         }
 
+        function getFromOffices() {
+          return vm.model.offices.concat(vm.model.userOffices)
+        }
 
         function selectOffice(office) {
           vm.model.selectedArea = null;
