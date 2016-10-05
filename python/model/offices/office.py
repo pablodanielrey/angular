@@ -11,7 +11,22 @@ import uuid
 
 class Office(JSONSerializable):
 
-    officeType = [{'value': 'office', 'name':'Organigrama'}, {'value': 'unit', 'name': 'Dependencia'}, {'value': 'physical-office', 'name': 'Oficina'}, {'value': 'area', 'name': 'Area'}]
+    officeType = [
+        {'value': 'university', 'name': 'Universidad'},
+        {'value': 'faculty', 'name': 'Facultad'},
+        {'value': 'college', 'name': 'Colegio'},
+        {'value': 'unit', 'name': 'Dependencia'},
+        {'value': 'secretary', 'name': 'Secretaría'},
+        {'value': 'department', 'name': 'Departamento'},
+        {'value': 'direction', 'name': 'Dirección'},
+        {'value': 'physical-office', 'name': 'Oficina'},
+        {'value': 'intitute', 'name': 'Instituto'},
+        {'value': 'magazine', 'name': 'Revista'},
+        {'value': 'center', 'name': 'Centro'},
+        {'value': 'unity', 'name': 'Unidad'},
+        {'value': 'area', 'name': 'Area'},
+        {'value': 'group', 'name': 'Grupo'}
+    ]
 
     def __init__(self):
         self.id = None
