@@ -39,7 +39,6 @@
 					return d.promise;
 				}
 
-
 				return Login.getPrivateTransport().call('issues.get_my_issues').then(
 					function(issues) {
 						$window.sessionStorage.setItem('myIssues', JSON.stringify(issues));
@@ -95,8 +94,17 @@
 				return Login.getPrivateTransport().call('issues.find_by_id', [id]);
 			}
 
+
+			function _asyncInvalidateCache(issueId) {
+				var d = $q.defer()
+				$window.sessionStorage.removeItem('assignedIssues');
+				$window.sessionStorage.removeItem('myIssues');
+				d.resolve(issueId);
+				return d.promise;
+			}
+
 		  function create(subject, description, parentId, officeId, fromOfficeId, authorId, files) {
-				return Login.getPrivateTransport().call('issues.create', [subject, description, parentId, officeId, fromOfficeId, authorId, files])
+				return Login.getPrivateTransport().call('issues.create', [subject, description, parentId, officeId, fromOfficeId, authorId, files]).then(_asyncInvalidateCache())
 			}
 
 		  function createComment(subject, description, parentId, officeId, files) {
