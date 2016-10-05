@@ -21,6 +21,7 @@ class Office(JSONSerializable):
         self.type = None
         self.email = None
         self.parent = None
+        self.public = None
 
     def persist(self, con):
         return OfficeDAO.persist(con, self)
@@ -87,6 +88,7 @@ class OfficeDAO(DAO):
         o.type = None if r['type'] is None else [t for t in Office.officeType if t['value'] == r['type']][0]
         o.email = r['email']
         o.parent = r['parent']
+        o.public = r['public']
         return o
 
     @classmethod
@@ -127,10 +129,10 @@ class OfficeDAO(DAO):
             if office.id is None:
                 office.id = str(uuid.uuid4())
                 params = office.__dict__
-                cur.execute('insert into offices.offices (id, name, telephone, nro, type, parent, email) values (%(id)s, %(name)s, %(telephone)s, %(number)s, %(type)s, %(parent)s, %(email)s)', params)
+                cur.execute('insert into offices.offices (id, name, telephone, nro, type, parent, email, public) values (%(id)s, %(name)s, %(telephone)s, %(number)s, %(type)s, %(parent)s, %(email)s, %(public)s)', params)
             else:
                 params = office.__dict__
-                cur.execute('update offices.offices set name = %(name)s, telephone = %(telephone)s, nro = %(number)s, type = %(type)s, parent = %(parent)s, email = %(email)s where id = %(id)s', params)
+                cur.execute('update offices.offices set name = %(name)s, telephone = %(telephone)s, nro = %(number)s, type = %(type)s, parent = %(parent)s, email = %(email)s, public = %(public)s where id = %(id)s', params)
 
             return office.id
 
@@ -199,9 +201,6 @@ class OfficeModel():
             d.userId = uid
             d.start = datetime.datetime.now()
             d.persist(con)
-
-
-
 
     @classmethod
     def getUsers(cls, con, oId):
