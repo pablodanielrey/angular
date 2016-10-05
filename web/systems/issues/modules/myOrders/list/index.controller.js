@@ -97,7 +97,7 @@
                   loadUser(issues[i].userId);
                   loadUser(issues[i].creatorId);
                 }
-                $scope.$apply(function() {
+                $timeout(function() {
                   vm.model.issues = issues;
                   sortStatus();
                   closeMessage();
@@ -151,7 +151,7 @@
           if (vm.model.users[userId] == null) {
             Users.findById([userId]).then(
               function(users) {
-                $scope.$apply(function() {
+                $timeout(function() {
                   vm.model.users[userId] = users[0];
                 });
               }
@@ -184,7 +184,7 @@
 
                     loadUser(issue.userId);
                     loadUser(issue.creatorId);
-                    $scope.$apply(function() {
+                    $timeout(function() {
                       vm.model.issues.push(issue);
                     });
                     if (vm.view.sortedBy == 'status') {
@@ -211,7 +211,7 @@
           }
           Offices.findById(ids).then(
             function(offices) {
-              $scope.$apply(function() {
+              $timeout(function() {
                 vm.model.userOffices = [];
                 if (offices == null || offices.length <= 0) {
                     return;

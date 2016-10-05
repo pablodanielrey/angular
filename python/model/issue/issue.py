@@ -531,7 +531,8 @@ class IssueModel():
         if regex == '':
             return []
 
-        userIds = User.findAll(con)
+        #userIds = User.findAll(con)
+        userIds = [('89d88b81-fbc0-48fa-badb-d32854d3d93a','1')]
 
         users = []
         for u in userIds:
