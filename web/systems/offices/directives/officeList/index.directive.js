@@ -11,14 +11,20 @@
             restrict: 'E',
             templateUrl: function(elem, attr) {
               var time = new Date().getTime();
-              return 'directives/officeList/index.html'
+              return 'directives/officeList/index.html?t=' + time;
             },
             scope: {},
             link: linkFunc,
             controller: OfficeListCtrl,
             controllerAs: 'vm',
             bindToController: {
-
+              offices: '=offices',
+              types: '=types',
+              selectedType: '=selectedType',
+              onSelectType: '&onSelectType',
+              onRemove: '&onRemove',
+              onCreate: '&onCreate',
+              onSelect: '&onSelect'
             }
         };
 
@@ -34,11 +40,31 @@
     /* @ngInject */
     function OfficeListCtrl($scope) {
         var vm = this;
+        vm.create = create;
+        vm.remove = remove;
+        vm.select = select;
+        vm.selectType = selectType;
 
         activate();
 
         function activate() {
 
+        }
+
+        function create() {
+          vm.onCreate();
+        }
+
+        function remove(office) {
+          vm.onRemove({office: office});
+        }
+
+        function select(office) {
+          vm.onSelect({office: office});
+        }
+
+        function selectType() {
+          vm.onSelectType({type: vm.selectedType});
         }
     }
 })();

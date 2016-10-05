@@ -1,18 +1,19 @@
 # -*- coding: utf-8 -*-
 from model.serializer import JSONSerializable
 from model.dao import DAO
-from model.users.users import UserDAO
+from model.users.users import UserDAO, User
+import re
 
 class Office(JSONSerializable):
 
-    officeType = ['unit', 'office', 'physical-office', 'area']
+    officeType = [{'value': 'office', 'name':'Organigrama'}, {'value': 'unit', 'name': 'Dependencia'}, {'value': 'physical-office', 'name': 'Oficina'}, {'value': 'area', 'name': 'Area'}]
 
     def __init__(self):
         self.id = None
         self.name = None
         self.telephone = None
         self.number = None
-        self.type = officeType[1]
+        self.type = self.officeType[1]
         self.email = None
         self.parent = None
 
@@ -70,8 +71,8 @@ class OfficeDAO(DAO):
         o.name = r['name']
         o.telephone = r['telephone']
         o.number = r['nro']
-        o.type = r['type']
-        o.email = r['name']
+        o.type = [t for t in Office.officeType if t['value'] == r['type']][0]
+        o.email = r['email']
         o.parent = r['parent']
         return o
 
@@ -80,7 +81,7 @@ class OfficeDAO(DAO):
         assert ids is not None
         cur = con.cursor()
         try:
-            cur.execute('select * from offices.offices where id in %s', (ids,))
+            cur.execute('select * from offices.offices where id in %s', (tuple(ids),))
             if cur.rowcount <= 0:
                 return []
 
@@ -93,7 +94,11 @@ class OfficeDAO(DAO):
     def findAll(cls, con, types=Office.officeType):
         cur = con.cursor()
         try:
-            cur.execute('select id from offices.offices where type in %s',(types,))
+            if len(types) < 1 or (len(types) == 1 and types[0]['value'] is None):
+                types = Office.officeType
+
+            t = [o['value'] for o in types]
+            cur.execute('select id from offices.offices where type in %s',(tuple(t),))
             return [o['id'] for o in cur]
 
         finally:
@@ -254,6 +259,8 @@ class DesignationDAO(DAO):
 
 class OfficeModel():
 
+    cache = {}
+
     @classmethod
     def getOfficesByUser(cls, con, userId, tree=False, types=None):
         idsD = Designation.getDesignationByUser(con, userId)
@@ -274,3 +281,55 @@ class OfficeModel():
             if d.userId not in uids:
                 uIds.append(d.userId)
         return uIds
+
+
+    @classmethod
+    def searchUsers(cls, con, regex):
+        assert regex is not None
+
+        if regex == '':
+            return []
+
+        userIds = User.findAll(con)
+
+        users = []
+        for u in userIds:
+            (uid, version) = u
+            if uid not in cls.cache.keys():
+                print(uid)
+                user = User.findById(con, [uid])[0]
+                cls.cache[uid] = user
+            users.append(cls.cache[uid])
+
+        m = re.compile(".*{}.*".format(regex), re.I)
+        matched = []
+
+        digits = re.compile('^\d+$')
+        if digits.match(regex):
+            ''' busco por dni '''
+            matched = [ cls._getUserData(con, u) for u in users if m.search(u.dni) ]
+            return matched
+
+        ''' busco por nombre y apellido '''
+        matched = [ cls._getUserData(con, u) for u in users if m.search(u.name) or m.search(u.lastname) or m.search(u.name + u.lastname) or m.search(u.lastname + u.name)]
+        return matched
+
+    @classmethod
+    def _getUserData(cls, con, user):
+        u = UserIssueData()
+        u.name = user.name
+        u.lastname = user.lastname
+        u.dni = user.dni
+        u.id = user.id
+        u.genre = user.genre
+        u.photo = [User.findPhoto(con, user.photo) if 'photo' in dir(user) and user.photo is not None and user.photo != '' else None][0]
+        return u
+
+class UserIssueData(JSONSerializable):
+
+    def __init__(self):
+        self.name = ''
+        self.lastname = ''
+        self.dni = ''
+        self.photo = ''
+        self.id = ''
