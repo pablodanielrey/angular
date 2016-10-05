@@ -17,6 +17,7 @@ class Office(JSONSerializable):
         {'value': 'college', 'name': 'Colegio'},
         {'value': 'unit', 'name': 'Dependencia'},
         {'value': 'secretary', 'name': 'Secretaría'},
+        {'value': 'pro-secretary', 'name': 'Pro Secretaría'},
         {'value': 'department', 'name': 'Departamento'},
         {'value': 'direction', 'name': 'Dirección'},
         {'value': 'physical-office', 'name': 'Oficina'},
@@ -48,8 +49,8 @@ class Office(JSONSerializable):
     def findDesignations(self, con):
         pass
 
-    def findChilds(self, con, type=None, tree=False):
-        return OfficeDAO.findChilds(con, self.id, type, tree)
+    def findChilds(self, con, types=None, tree=False):
+        return OfficeDAO.findChilds(con, self.id, types, tree)
 
     @classmethod
     def getTypes(cls):
@@ -114,6 +115,11 @@ class OfficeDAO(DAO):
     @classmethod
     def findByIds(cls, con, ids):
         assert ids is not None
+        assert isinstance(ids, list)
+
+        if len(ids) <= 0:
+            return None
+
         cur = con.cursor()
         try:
             cur.execute('select * from offices.offices where id in %s', (tuple(ids),))
@@ -130,9 +136,6 @@ class OfficeDAO(DAO):
         cids = set()
         pids = set()
         pids.add(oid)
-        if types is not None:
-            assert isinstance(types, list)
-            types = [o['value'] for o in types]
 
         cur = con.cursor()
         try:
@@ -141,7 +144,7 @@ class OfficeDAO(DAO):
                 if types is None:
                     cur.execute('select id from offices.offices where parent = %s and removed is null', (pid,))
                 else:
-                    cur.execute('select id from offices.offices where removed is null and type in %s',(tuple(types),))
+                    cur.execute('select id from offices.offices where removed is null and type in %s and parent = %s',(tuple(types),pid))
                 currentIds = [o['id'] for o in cur]
                 cids.update(currentIds)
                 if tree:

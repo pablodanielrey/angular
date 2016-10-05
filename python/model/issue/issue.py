@@ -128,6 +128,8 @@ class RedmineAPI:
         else:
             id = cls.officeRedmineIdCache[officeId]
 
+        """
+        saco la cache de office asi las obtengo siempre desde le server
         office = None
         if id not in cls.officeCache.keys():
             office = cls._findOffice(con, id)
@@ -136,12 +138,15 @@ class RedmineAPI:
             office = cls.officeCache[id]
 
         return office
+        """
+        return cls._findOffice(con, id)
 
     @classmethod
     def _findOffice(cls, con, id):
         if id is None:
             return None
 
+        """ saco la cache
         office = None
         if id not in cls.officeCache.keys():
             offices = Office.findByIds(con, [id])
@@ -151,9 +156,14 @@ class RedmineAPI:
             office = cls.officeCache[id]
 
         return office
+        """
+        offices = Office.findByIds(con, [id])
+        office = offices[0] if len(offices) > 0 else None
+        return office
 
 
     """
+    metodos codificados por ema sin cache.
     @classmethod
     def _loadOffice(cls, con, redmine, officeId):
         if officeId is None:
