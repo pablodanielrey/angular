@@ -22,6 +22,7 @@ class Office(JSONSerializable):
         {'value': 'physical-office', 'name': 'Oficina'},
         {'value': 'intitute', 'name': 'Instituto'},
         {'value': 'magazine', 'name': 'Revista'},
+        {'value': 'cdepartment', 'name': 'Cátedra'},
         {'value': 'center', 'name': 'Centro'},
         {'value': 'unity', 'name': 'Unidad'},
         {'value': 'area', 'name': 'Area'},
