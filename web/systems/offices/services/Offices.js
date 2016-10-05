@@ -10,10 +10,13 @@
 
 			this.subscribe = subscribe;
 		  this.findById = findById;
-			this.getOfficesByUser = getOfficesByUser;
 			this.searchUsers = searchUsers;
+			this.findUsersByIds = findUsersByIds;
 			this.getOfficeTypes = getOfficeTypes;
 			this.findAll = findAll;
+			this.persist = persist;
+			this.persistWithUsers = persistWithUsers;
+			this.remove = remove;
 
 			function subscribe(event, func) {
 				Login.getPrivateTransport().subscribe(event, func);
@@ -28,7 +31,11 @@
 			}
 
 			function searchUsers(regex) {
-				return Login.getPrivateTransport().call('offices.search_users', [regex]);
+				return Login.getPrivateTransport().call('offices.find_users_by_regex', [regex]);
+			}
+
+			function findUsersByIds(uids) {
+				return Login.getPrivateTransport().call('offices.find_users_by_ids', [uids])
 			}
 
 			function getOfficeTypes() {
@@ -37,6 +44,18 @@
 
 			function findAll(types) {
 				return Login.getPrivateTransport().call('offices.find_all', [types]);
+			}
+
+			function persist(office) {
+				return Login.getPrivateTransport().call('offices.persist', [office]);
+			}
+
+			function persistWithUsers(office, userIds) {
+				return Login.getPrivateTransport().call('offices.persist_with_users', [office, userIds]);
+			}
+
+			function remove(office) {
+				return Login.getPrivateTransport().call('offices.remove', [office]);
 			}
 
 		}

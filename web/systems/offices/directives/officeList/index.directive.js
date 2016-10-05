@@ -44,12 +44,22 @@
         vm.remove = remove;
         vm.select = select;
         vm.selectType = selectType;
-
+        vm.model = {
+          search: {'name':'', 'type': {'value':''}}
+        };
         activate();
 
         function activate() {
-
+          vm.model.search = {};
+          vm.model.search.name = '';
+          vm.model.search.type = {};
+          vm.model.search.type = (vm.selectedType == null || vm.selectedType.value === undefined) ? '' : vm.selectedType.value;
         }
+
+        $scope.$watch('vm.selectedType', function(newValue, oldValue) {
+          vm.model.search.type = {};
+          vm.model.search.type.value = (vm.selectedType == null || vm.selectedType.value === undefined) ? '' : vm.selectedType.value;
+        })
 
         function create() {
           vm.onCreate();

@@ -53,9 +53,6 @@
         }
 
         function search() {
-          if (vm.filter.length < 5) {
-            return;
-          }
           vm.searchUsers({text:vm.filter});
         }
 

@@ -105,6 +105,9 @@ class UserDAO(DAO):
         assert uids is not None
         assert isinstance(uids, list)
 
+        if len(uids) <= 0:
+            return []
+
         cur = con.cursor()
         try:
             cur.execute('select * from profile.users where id in %s', (tuple(uids),))

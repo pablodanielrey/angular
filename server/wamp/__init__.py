@@ -4,6 +4,8 @@
 import inject
 inject.configure_once()
 
+import logging
+
 from model.registry import Registry
 from model.connection.connection import Connection
 

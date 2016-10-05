@@ -7,31 +7,51 @@
 </div>
 
 <div class="contentOfficeType">
-    <div> Tipo: </div>
-    <div>
-        <select class="selectOfficesType" ng-options="item as item.name for item in vm.model.officeTypes | orderBy: 'name'" ng-model="vm.model.office.type"></select>
+
+    <div class="infoOffices">
+        <div> Tipo: </div>
+        <div>
+            <select class="selectOfficesType" ng-options="item as item.name for item in vm.model.officeTypes | orderBy: 'name'" ng-model="vm.model.office.type"></select>
+        </div>
+        <div> Padre: </div>
+        <div>
+            <select class="selectOfficesType" ng-options="item as item.name disable when item.id == vm.model.office.id for item in vm.model.offices | orderBy: 'name'" ng-model="vm.model.office.parentObj" ng-change="vm.selectParentOffice(office)">
+              <option value="">No posee</option>
+            </select>
+        </div>
     </div>
-    <div> Padre: </div>
-    <div>
-        <select class="selectOfficesType" ng-options="item as item.name disable when item.id == vm.model.office.id for item in vm.model.officeAll | orderBy: 'name'" ng-model="vm.model.office.parentObj" ng-change="vm.selectParentOffice(office)">
-        </select>
+
+    <div class="infoOffices">
+      <div> Interno: </div>
+      <div> <input class="inputOfficeData" ng-model="vm.model.office.telephone" type="text"></input> </div>
+      <div> Nº: </div>
+      <div> <input class="inputOfficeData" type="text" ng-model="vm.model.office.number"></input> </div>
+      <div><i class="fa fa-product-hunt" title="Agregar al Sistema de Pedidos"></i></div>
+      <div> <input class="inputOfficeData3" type="checkbox"></input> </div>
     </div>
+    <div class="infoOffices">
+      <div> Correo: </div>
+      <div> <input class="inputOfficeData2" type="text" ng-model="vm.model.office.email"></input> </div>
+    </div>
+
+    <!-- <div> Interno: </div>
+    <div> <input class="selectOfficesType" type="text"></input> </div> -->
 
 
 </div>
 <div class="contentOfficeMembers">
     <div> Integrantes </div>
-    <div class="btnAddUsers" ng-click="vm.view.style='pantallaUsuarios'"> <i class="fa fa-user-plus" aria-hidden="true"></i> AGREGAR </div>
+    <div class="btnAddUsers" ng-click="vm.showUsersToAdd()"> <i class="fa fa-user-plus" aria-hidden="true"></i> AGREGAR </div>
 </div>
 
 <div class="contentMembers">
     <!-- <div class="itemOffice" ng-repeat="user in vm.model.office.users"> {{user.name}} <span ng-click="vm.removeUser(user)">X</span> </div> -->
-    <div class="itemMembers" ng-repeat="user in vm.model.office.users" ng-click="vm.select(office)">
+    <div class="itemMembers" ng-repeat="user in vm.model.officeUsers" ng-click="vm.select(office)">
         <div class="memberData">
-            <div><img class="imgUser" ng-src="img/avatarMan.jpg" alt="foto de perfil" src="img/avatarMan.jpg"></div>
+            <div><img class="imgUser" ng-src='{{vm.getUserPhoto(user)}}' alt="foto de perfil" src="img/avatarMan.jpg"></div>
             <div>
-                <div class="textName"> {{user.name}}</div>
-                <div class="textDNI"> 31258691</div>
+                <div class="textName"> {{user.name}} {{user.lastname}}</div>
+                <div class="textDNI"> {{user.dni}}</div>
             </div>
         </div>
         <div class="btnDelete" ng-click="vm.removeUser(user)" title="Eliminar Usuario"> <i class="fa fa-trash" aria-hidden="true"></i> </div>

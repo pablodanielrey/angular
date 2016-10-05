@@ -40,6 +40,15 @@ class Users(wamp.SystemComponentSession):
         finally:
             self.conn.put(con)
 
+    @autobahn.wamp.register('users.find_all')
+    def findAll(self):
+        con = self.conn.get()
+        try:
+            return [id for (id,version) in User.findAll(con)]
+        finally:
+            self.conn.put(con)
+
+
 """
 class UsersWamp(ApplicationSession):
 
@@ -303,7 +312,7 @@ class UsersWamp(ApplicationSession):
         con = self.conn.get()
         try:
             import pdb; pdb.set_trace()
-            
+
             logging.warn('sendEmailConfirmation {}'.format(eid))
             Ingreso.sendEmailConfirmation(con, name, lastname, eid)
             con.commit()
