@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from redmine import Redmine
 from model.users.users  import UserPassword, User, Mail
-from model.offices.offices import Office
+from model.offices.office import Office
 from model.serializer import JSONSerializable
 from model.registry import Registry
 import base64
@@ -10,6 +10,22 @@ import datetime
 import uuid
 import re
 from model.assistance.utils import Utils
+
+
+import cProfile
+
+def do_cprofile(func):
+    def profiled_func(*args, **kwargs):
+        profile = cProfile.Profile()
+        try:
+            profile.enable()
+            result = func(*args, **kwargs)
+            profile.disable()
+            return result
+        finally:
+            profile.print_stats()
+    return profiled_func
+
 
 
 class Issue(JSONSerializable):
@@ -93,10 +109,67 @@ class RedmineAPI:
         att.name = file.filename
         return att
 
+
+    officeRedmineIdCache = {}
+    officeIdCache = {}
+    officeCache = {}
+
     @classmethod
     def _loadOffice(cls, con, redmine, officeId):
         if officeId is None:
             return None
+
+        id = None
+        if officeId not in cls.officeRedmineIdCache.keys():
+            project = redmine.project.get(officeId)
+            id = project.identifier
+            cls.officeRedmineIdCache[officeId] = id
+            cls.officeIdCache[id] = officeId
+        else:
+            id = cls.officeRedmineIdCache[officeId]
+
+        """
+        saco la cache de office asi las obtengo siempre desde le server
+        office = None
+        if id not in cls.officeCache.keys():
+            office = cls._findOffice(con, id)
+            cls.officeCache[id] = office
+        else:
+            office = cls.officeCache[id]
+
+        return office
+        """
+        return cls._findOffice(con, id)
+
+    @classmethod
+    def _findOffice(cls, con, id):
+        if id is None:
+            return None
+
+        """ saco la cache
+        office = None
+        if id not in cls.officeCache.keys():
+            offices = Office.findByIds(con, [id])
+            office = offices[0] if len(offices) > 0 else None
+            cls.officeCache[id] = office
+        else:
+            office = cls.officeCache[id]
+
+        return office
+        """
+        offices = Office.findByIds(con, [id])
+        office = offices[0] if len(offices) > 0 else None
+        return office
+
+
+    """
+    metodos codificados por ema sin cache.
+    @classmethod
+    def _loadOffice(cls, con, redmine, officeId):
+        if officeId is None:
+            return None
+
+        offId = cls.officeRedmineIdCache[officeId]
 
         project = redmine.project.get(officeId)
         id = project.identifier
@@ -107,11 +180,12 @@ class RedmineAPI:
         if id is None:
             return None
 
-        offices = Office.findById(con, [id])
+        offices = Office.findByIds(con, [id])
         return offices[0] if len(offices) > 0 else None
+    """
 
     @classmethod
-    def _fromResult(cls, con, r, redmine):
+    def _fromResult(cls, con, r, redmine, related=False):
         attrs = dir(r)
         issue = Issue()
         issue.id = r.id
@@ -119,13 +193,12 @@ class RedmineAPI:
         issue.projectId =  [r.project.id if 'project' in attrs else None][0]
 
         office = cls._loadOffice(con, redmine, issue.projectId)
-        if office is not None and office.area:
+        if office is not None and office.type is not None and office.type['value'] == 'area':
             issue.area = office
             issue.office = cls._findOffice(con, office.parent)
         else:
             issue.area = None
             issue.office = office
-
 
         issue.projectName = [r.project.name if 'project' in attrs else None][0]
 
@@ -147,8 +220,10 @@ class RedmineAPI:
                 issue.fromOfficeId = cf.value
                 issue.fromOffice = cls._findOffice(con, issue.fromOfficeId)
 
-        issue.children = [cls.findById(con, iss.id) for iss in r.children if iss is not None]
-        issue.files = [cls._loadFile(file) for file in r.attachments if file is not None]
+        if related:
+            issue.children = [cls.findById(con, iss.id) for iss in r.children if iss is not None]
+            issue.files = [cls._loadFile(file) for file in r.attachments if file is not None]
+
         return issue
 
 
@@ -213,7 +288,7 @@ class RedmineAPI:
         if redmine is None:
             return None
         issue = redmine.issue.get(issue_id, include='children, attachments')
-        return cls._fromResult(con, issue, redmine)
+        return cls._fromResult(con, issue, redmine, True)
 
     @classmethod
     def findAllProjects(cls):
@@ -225,7 +300,7 @@ class RedmineAPI:
 
     @classmethod
     def getOfficesIssues(cls, con, officeIds):
-        userIds = Office.getOfficesUsers(con, officeIds)
+        userIds = Office.findOfficesUsers(con, officeIds)
         issues = []
         for userId in userIds:
             issues.extend(cls.getMyIssues(con, userId))
@@ -247,23 +322,35 @@ class RedmineAPI:
         return issues
 
     @classmethod
+    # @do_cprofile
+    def getAssignedIssues(cls, con, userId, oIds):
+        redmine = cls._getRedmineInstance(con)
+        userRedmine = cls._findUserId(con, redmine, userId)
+        issues = cls._getIssuesByProject(con, oIds, userRedmine, redmine)
+        return [cls._fromResult(con, issue, redmine) for issue in issues]
+
+    """
     def getAssignedIssues(cls, con, userId, oIds):
         redmine = cls._getRedmineInstance(con)
         userRedmine = cls._findUserId(con, redmine, userId)
         issues = cls._getIssuesByProject(con, oIds, userRedmine, redmine)
         return [cls._fromResult(con, issue, redmine) for issue in issues if not cls._include(issues,issue)]
-
+    """
 
     @classmethod
     def _getIssuesByProject(cls, con, pidentifiers, user, redmine):
         if redmine is None:
             return []
         issues = []
+        projects = [p.identifier for p in redmine.project.all()]
         for pidentifier in pidentifiers:
-            issues.extend(redmine.issue.filter(project_id=pidentifier, status_id='*'))
+            # issues.extend(redmine.issue.filter(tracker_id=cls.TRACKER_ERROR, project_id=pidentifier, subproject_id='!*', status_id='open'))
 
+            if pidentifier in projects:
+                issues.extend(redmine.issue.filter(tracker_id=cls.TRACKER_ERROR, project_id=pidentifier, status_id='open'))
+            else:
+                print(pidentifier)
         return issues
-
 
     @classmethod
     def _include(cls, issues, issue):
@@ -342,30 +429,100 @@ class IssueModel():
 
     @classmethod
     def getSubjectTypes(cls, con, oId):
+        generic = [
+            'Quiero una cuenta institucional de correo',
+            'No tengo usuario y clave',
+            'No me acuerdo mi usuario/clave',
+            'Ingreso mi clave pero me dice acceso denegado/incorrecto',
+            'No tengo acceso a internet',
+            'No puedo enviar correo',
+            'No puedo recibir correo',
+            'Envié correo y no llega a destino',
+            'Me enviaron correo y no lo recibo',
+            'Tengo problemas con la libreta de direcciones'
+        ]
+        systems = [
+            'No puedo entrar al sistema',
+            'No puedo entrar al au24',
+            'No funciona el sistema de Asistencia',
+            'No funciona el sistema de Pedidos',
+            'No funciona el sistema de Inserción Laboral',
+            'No puedo actualizar mis datos',
+            'No puedo subir mi CV',
+            'Error en el sistema'
+        ]
+        net = [
+            'No me puedo conectar a la wifi',
+            'Estoy conectado a wifi pero no navega'
+        ]
+        supp = [
+            'El equipo no enciende',
+            'El equipo anda lento',
+            'El equipo hace mucho ruido',
+            'El equipo se apaga solo',
+            'Error de Windows o Programas',
+            'Problemas con Monitor',
+            'No encuentro un archivo',
+            'Problemas con la nube (archivos)',
+            'Me quede sin espacio en disco',
+            'No puedo imprimir',
+            'Problemas con la impresora',
+            'Virus',
+            'Problema de perfil de usuario'
+        ]
         if oId == cls.ditesiId:
-            return ['No anda el servidor', 'No anda el correo', 'Wifi', 'Swtich', 'Error en el sistema', 'Desarrollar', 'No prende la computadora', 'No puedo iniciar sesión', 'Virus', 'Owncloud', 'No anda la red', 'Crear cuenta', 'Error de Windows', 'No Imprime', 'Problema con el correo', 'Otro']
+            r = []
+            r.extend(generic)
+            r.extend(systems)
+            r.extend(net)
+            r.extend(supp)
+            r.append('Otro')
+            return r
         elif oId == cls.soporteId:
-            return ['No prende la computadora', 'Problema con el correo', 'No puedo iniciar sesión', 'Virus', 'Owncloud', 'No anda la red', 'Crear cuenta', 'Error de Windows', 'No Imprime', 'Otro']
+            r = []
+            r.extend(generic)
+            r.extend(net)
+            r.extend(supp)
+            r.append('Otro')
+            return r
         elif oId == cls.desarroloId:
-            return ['Error en el sistema', 'No puedo iniciar sesión', 'Desarrollar', 'Otro']
+            r = []
+            r.extend(systems)
+            r.append('Otro')
+            return r
         elif oId == cls.servidoresId:
-            return ['No anda el servidor', 'No anda el correo', 'No anda la red', 'Wifi', 'Swtich', 'Otro']
+            r = []
+            r.extend(generic)
+            r.extend(systems)
+            r.extend(net)
+            r.append('Otro')
+            return r
         else:
             return ['Otro']
 
     @classmethod
-    def getOffices(cls, con):
-        offices = Office.getOffices(con)
+    def getOffices(cls, con, userId):
+        officesIds = Office.findAll(con)
         projects = RedmineAPI.findAllProjects()
-        return Office.findById(con, [oid for oid in offices if oid in projects])
+        offices = Office.findByIds(con, [oid for oid in officesIds if oid in projects])
+        publicOffices = [o for o in offices if o.public]
+
+        userOfficesIds = Office.findByUser(con, userId, types=['direction','department'], tree=True)
+        userOffices = Office.findByIds(con, [oid for oid in userOfficesIds if oid in projects])
+
+        if userOffices is not None:
+            idPublicOffices = [o.id for o in publicOffices]
+            publicOffices.extend([o for o in userOffices if o.id not in idPublicOffices])
+
+        return publicOffices
 
     @classmethod
     def getAreas(cls, con, oId):
-        offs = Office.findById(con, [oId])
+        offs = Office.findByIds(con, [oId])
         if offs is None or len(offs) <= 0:
             return []
-        areas = offs[0].getAreas(con)
-        return Office.findById(con, areas)
+        areas = offs[0].findChilds(con, types=['area'], tree=False)
+        return Office.findByIds(con, areas)
 
     @classmethod
     def create(cls, con, parentId, officeId, authorId, subject, description, fromOfficeId, creatorId, files, tracker = TRACKER_ERROR):

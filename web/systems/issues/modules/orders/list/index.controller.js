@@ -25,6 +25,7 @@
           style2: '',
           styles2: ['', 'mensajeCargando', 'mensajeError'],
 
+          search: '',
           status: ['','abierta', 'enProgreso', 'cerrada', 'comentarios', 'cerrada', 'rechazada', 'pausada'],
           statusSort: ['','abierta', 'enProgreso', 'pausada', 'rechazada', 'cerrada'],
           priorities: ['baja', 'normal', 'alta', 'alta', 'alta'], //solo se maneja el estilo alta, si esta como urgente o inmediata se lo toma solo como alta
@@ -65,6 +66,7 @@
           vm.view.reverseSortDate = true;
           vm.view.reverseSortStatus = true;
           vm.view.reverseSortPriority = false;
+          vm.view.search = '';
           registerEventManagers();
           loadIssues();
         }
@@ -85,11 +87,9 @@
                 vm.loadUser(issues[i].userId);
                 vm.loadUser(issues[i].creatorId);
               }
-              $scope.$apply(function() {
-                vm.model.issues = issues;
-                vm.sortStatus();
-                vm.closeMessage();
-              });
+              vm.model.issues = issues;
+              vm.sortStatus();
+              vm.closeMessage();
 
             },
             function(error) {
@@ -123,7 +123,7 @@
           if (vm.model.users[userId] == null) {
             Users.findById([userId]).then(
               function(users) {
-                $scope.$apply(function() {
+                $timeout(function() {
                   vm.model.users[userId] = users[0];
                 });
               }
@@ -205,7 +205,7 @@
 
                       loadUser(issue.userId);
                       loadUser(issue.creatorId);
-                      $scope.$apply(function() {
+                      $timeout(function() {
                         vm.model.issues.push(issue);
                         switch (vm.view.sortedBy) {
                           case 'status': orderByStatus(); break;
@@ -221,6 +221,20 @@
                 )
             }
           });
+
+          Issues.subscribe('issues.updated_event', function(params) {
+            Issues.updateIssue(params[0], params[1], params[2]);
+            var id = params[0];
+            for (var i = 0; i < vm.model.issues.length; i++) {
+              if (id == vm.model.issues[i].id) {
+                $timeout(function() {
+                  vm.model.issues[i].statusId = params[1];
+                  vm.model.issues[i].priority = params[2];
+                });
+                break;
+              }
+            }
+          });
         }
 
         function loadUserOffices(userId) {
@@ -232,7 +246,7 @@
               }
               Offices.findById(ids).then(
                 function(offices) {
-                  $scope.$apply(function() {
+                  $timeout(function() {
                     vm.model.userOffices = [];
                     if (offices == null || offices.length <= 0) {
                         return;

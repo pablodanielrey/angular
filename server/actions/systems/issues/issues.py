@@ -5,11 +5,11 @@ import re
 import logging
 import psycopg2
 
-
 from twisted.internet.defer import inlineCallbacks
 
 from model.issue.issue import Issue, RedmineAPI, Attachment, IssueModel
-from model.offices.offices import Office
+from model.offices.office import Office
+from model.users.users import User
 
 #import asyncio
 #from asyncio import coroutine
@@ -52,7 +52,7 @@ class Issues(wamp.SystemComponentSession):
         con = self.conn.get()
         try:
             userId = self.getUserId(con, details)
-            oIds = Office.getOfficesByUser(con, userId, False)
+            oIds = Office.findByUser(con, userId, False)
             return Issue.getAssignedIssues(con, userId, oIds)
         finally:
             self.conn.put(con)
@@ -99,20 +99,25 @@ class Issues(wamp.SystemComponentSession):
             self.conn.put(con)
 
     @autobahn.wamp.register('issues.change_status')
+    @inlineCallbacks
     def changeStatus(self, issue, status, details):
         iss = issue.changeStatus(status)
+        yield self.publish('issues.updated_event', issue.id, status, issue.priority)
         return issue
 
     @autobahn.wamp.register('issues.change_priority')
+    @inlineCallbacks
     def changePriority(self, issue, priority, details):
         iss = issue.changePriority(priority)
+        yield self.publish('issues.updated_event', issue.id, issue.statusId, priority)
         return issue
 
     @autobahn.wamp.register('issues.get_offices')
     def getOffices(self, details):
         con = self.conn.get()
         try:
-            return IssueModel.getOffices(con)
+            userId = self.getUserId(con, details)
+            return IssueModel.getOffices(con, userId)
         finally:
             self.conn.put(con)
 

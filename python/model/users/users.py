@@ -95,8 +95,7 @@ class UserDAO(DAO):
         cur = con.cursor()
         try:
             cur.execute('select id, version from profile.users')
-            users = [(u['id'], u['version']) for u in cur]
-            return users
+            return [(u['id'], u['version']) for u in cur]
         finally:
             cur.close()
 
@@ -104,6 +103,9 @@ class UserDAO(DAO):
     def findById(con, uids):
         assert uids is not None
         assert isinstance(uids, list)
+
+        if len(uids) <= 0:
+            return []
 
         cur = con.cursor()
         try:

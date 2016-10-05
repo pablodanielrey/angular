@@ -23,7 +23,7 @@
                     <div><i class="fa fa-caret-down" aria-hidden="true"></i></div>
                 </div>
                 <div class="contentListOffices">
-                  <div class="itemsOffice2"  ng-repeat="office in vm.model.userOffices" ng-click="vm.selectFromOffice(office)"> {{office.name}}</div>
+                  <div class="itemsOffice2"  ng-repeat="office in vm.getFromOffices()" ng-click="vm.selectFromOffice(office)"> {{office.name}}</div>
                 </div>
               </div>
               <div>

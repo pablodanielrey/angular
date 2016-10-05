@@ -1,6 +1,6 @@
 <!-- --------------- LISTADO DE PEDIDOS ------------------ -->
     <div class="contentOrders">
-      <div class="itemOrders" ng-repeat="issue in vm.issues">
+      <div class="itemOrders" ng-repeat="issue in vm.issues | filter: vm.search">
           <div class="itemInfo">
 
               <!-- ---- Prioridad del pedido, por defecto tiene que estar en "normal" ---- -->
@@ -36,7 +36,7 @@
               <!-- ---- Info oficina y solicitud ---- -->
               <div class="itemsType">
                 <div class="textMini">Para:</div>
-                <div class="textDateOrders">{{issue.office.name}}</div>
+                <div class="textDateOrders" >{{issue.office.name}}</div>
                 <!-- <div class="textDaysOrders">Soporte tecnico</div> -->
                 <div class="textDateOrders">{{issue.area.name}}</div>
                 <div class="contentAsunto">

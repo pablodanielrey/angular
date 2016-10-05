@@ -205,6 +205,9 @@
                         "ws": {
                             "type": "websocket",
                             "debug": true,
+			    "options": {
+				"auto_ping_interval": 30000
+			    },
                             "serializers": [
                                 "json"
                             ],
@@ -354,6 +357,38 @@
                     "id": "assistance",
                     "type": "class",
                     "classname": "actions.systems.assistance.assistance.Assistance",
+                    "realm": "core",
+                    "transport": {
+                        "type": "websocket",
+                        "endpoint": {
+                            "type": "tcp",
+                            "host": "127.0.0.1",
+                            "port": 8081
+                        },
+                        "url": "ws://localhost:8081"
+                    }
+                },
+
+		{
+                    "id": "issues",
+                    "type": "class",
+                    "classname": "actions.systems.issues.issues.Issues",
+                    "realm": "core",
+                    "transport": {
+                        "type": "websocket",
+                        "endpoint": {
+                            "type": "tcp",
+                            "host": "127.0.0.1",
+                            "port": 8081
+                        },
+                        "url": "ws://localhost:8081"
+                    }
+                },
+
+                {
+                    "id": "offices",
+                    "type": "class",
+                    "classname": "actions.systems.offices.offices.Offices",
                     "realm": "core",
                     "transport": {
                         "type": "websocket",

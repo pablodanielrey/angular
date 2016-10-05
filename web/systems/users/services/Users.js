@@ -12,6 +12,11 @@
       */
       this.findById = findById;
       this.findPhoto = findPhoto;
+      this.findAll = findAll;
+
+      function findAll() {
+        return Login.getPrivateTransport().call('users.find_all');
+      }
 
       function findById(ids) {
         return Login.getPrivateTransport().call('users.find_by_id', [ids]);
