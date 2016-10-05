@@ -1,10 +1,6 @@
 # -*- coding: utf-8 -*-
 
-
-from model.serializer.utils import JSONSerializable
-
-
-
+from model.serializer import JSONSerializable
 from model.dao import DAO
 from model.users.users import UserDAO
 
@@ -55,12 +51,26 @@ class LogDAO(DAO):
             cur.close()
 
     @classmethod
+    def findByDateRange(cls, con, initDate, endDate):
+        assert con is not None
+        assert initDate is not None
+        assert endDate is not None
+        cur = con.cursor()
+        try:
+            cur.execute('select * from assistance.attlog where log::DATE >= %s::DATE and log::DATE <= %s::DATE order by log asc', (initDate, endDate))
+            if cur.rowcount <= 0:
+                return []
+            return [cls._fromResult(r) for r in cur]
+        finally:
+            cur.close()
+
+    @classmethod
     def findByDate(cls, con, date):
         assert con is not None
         assert date is not None
         cur = con.cursor()
         try:
-            cur.execute('select * from assistance.attlog where log = %s', (date,))
+            cur.execute('select * from assistance.attlog where log::DATE = %s::DATE order by log asc', (date,))
             if cur.rowcount <= 0:
                 return []
             return [cls._fromResult(r) for r in cur]
@@ -106,3 +116,7 @@ class Log(JSONSerializable):
     @classmethod
     def findByDate(cls, con, date):
         return cls.dao.findByDate(con, date)
+
+    @classmethod
+    def findByDateRange(cls, con, initDate, endDate):
+        return cls.dao.findByDateRange(con, initDate, endDate)

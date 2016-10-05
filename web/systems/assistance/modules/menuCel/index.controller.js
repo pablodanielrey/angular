@@ -1,18 +1,15 @@
-app.controller('MenuCelCtrl', ["$rootScope", '$scope','$location',
+(function() {
+    'user strict'
 
-  function ($rootScope, $scope, $location) {
+    var app = angular.module('assistance');
+    app.controller('MenuCelCtrl', ['$scope','$location',
+      function ($scope, $location) {
 
-    $scope.selectHome = function() {
+        $scope.selectOrders = function() {
+          $location.path('/main');
+        }
 
-      $location.path('/home');
-    }
+      }
+    ]);
 
-    $scope.selectRequest = function() {
-      $location.path('/request');
-    }
-
-    $scope.selectSchedule = function() {
-      $location.path('/schedule');
-    }
-  }
-]);
+})();

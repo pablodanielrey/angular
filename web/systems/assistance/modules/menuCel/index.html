@@ -2,32 +2,24 @@
 
     <div class="infoMenu">
       <button class="btnMenuCel" ng-click="view.style='expandirMenu'"><i class="fa fa-bars fa-2x"></i> MENU</button>
-      <div class="title"><i class="fa fa-clock-o"></i> Asistencia FCE</div>
+      <div class="title"><i class="fa fa-tags"></i> Asistencia FCE</div>
     </div>
 
     <div class="menuContent">
 
-      <div class="itemMenu" ng-click="selectHome();view.style='ocultarMenu'">
+      <div class="itemMenu" ng-click="selectOrders();view.style='ocultarMenu'">
           <div class="itemTextMenu">
-            <i class="fa fa-caret-right arrowItemsMenu"></i> Inicio
+            <i class="fa fa-caret-right arrowItemsMenu"></i> Marcaciones
           </div>
           <div class="itemIcons" title="Inicio">
-            <i class="fa fa-home iconsMenu" ></i>
+            <i class="fa fa-hand-pointer-o iconsMenu" ></i>
           </div>
       </div>
-      <div class="itemMenu"  ng-click="selectRequest();view.style='ocultarMenu'">
+      <div class="itemMenu" ng-click="selectOrders()">
           <div class="itemTextMenu">
-            <i class="fa fa-caret-right arrowItemsMenu"></i> Solicitudes
+            <i class="fa fa-caret-right arrowItemsMenu"></i> Reportes
           </div>
-          <div class="itemIcons" title="Solicitudes">
-            <i class="fa fa-ticket iconsMenu" ></i>
-          </div>
-      </div>
-      <div class="itemMenu"  ng-click="selectSchedule();view.style='ocultarMenu'">
-          <div class="itemTextMenu">
-            <i class="fa fa-caret-right arrowItemsMenu"></i> Horarios
-          </div>
-          <div class="itemIcons" title="Horarios">
+          <div class="itemIcons" title="Reportes">
             <i class="fa fa-clock-o iconsMenu" ></i>
           </div>
       </div>
