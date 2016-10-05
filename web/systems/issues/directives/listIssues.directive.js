@@ -10,8 +10,9 @@
         var directive = {
             restrict: 'E',
             templateUrl: function(elem, attr) {
+              var template = (attr.template == undefined) ?  'directives/listIssues.html' : attr.template;
               var time = new Date().getTime();
-              return 'directives/listIssues.html?t=' + time;
+              return template + '?t=' + time;
             },
             scope: {},
             link: linkFunc,
