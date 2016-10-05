@@ -48,8 +48,8 @@ class Office(JSONSerializable):
     def findDesignations(self, con):
         pass
 
-    def findChilds(self, con):
-        pass
+    def findChilds(self, con, type=None, tree=False):
+        return OfficeDAO.findChilds(con, self.id, type, tree)
 
     @classmethod
     def getTypes(cls):
@@ -66,6 +66,10 @@ class Office(JSONSerializable):
     @classmethod
     def findByUser(cls, con, userId, tree=False, types=None):
         return OfficeModel.getOfficesByUser(con, userId, tree, types)
+
+    @classmethod
+    def findOfficesUsers(cls, con, oids):
+        return OfficeMode.findOfficesUsers(con, oids)
 
 
 class OfficeDAO(DAO):
@@ -118,6 +122,32 @@ class OfficeDAO(DAO):
 
             return [OfficeDAO._fromResult(o) for o in cur.fetchall()]
 
+        finally:
+            cur.close()
+
+    @classmethod
+    def findChilds(cls, con, oid, types=None, tree=False):
+        cids = set()
+        pids = set()
+        pids.add(oid)
+        if types is not None:
+            assert isinstance(types, list)
+            types = [o['value'] for o in types]
+
+        cur = con.cursor()
+        try:
+            while (len(pids) > 0):
+                pid = pids.pop()
+                if types is None:
+                    cur.execute('select id from offices.offices where parent = %s and removed is null', (pid,))
+                else:
+                    cur.execute('select id from offices.offices where removed is null and type in %s',(tuple(types),))
+                currentIds = [o['id'] for o in cur]
+                cids.update(currentIds)
+                if tree:
+                    pids.update(currentIds)
+
+            return list(cids)
         finally:
             cur.close()
 
@@ -217,6 +247,13 @@ class OfficeModel():
             d.userId = uid
             d.start = datetime.datetime.now()
             d.persist(con)
+
+    @classmethod
+    def findOfficesUsers(cls, con, oids):
+        users = set()
+        for oid in oids:
+            users.update(cls.getUsers())
+        return list(users)
 
     @classmethod
     def getUsers(cls, con, oId):

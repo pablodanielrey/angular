@@ -31,6 +31,9 @@
           privateTransport: null
         }
 
+        vm.aux = {
+          searchTimer: null
+        }
 
 
         // variables de la vista
@@ -114,25 +117,35 @@
           }
         }
 
+
         function searchUsers() {
           if (vm.view.searching) {
             return
           }
-          if (vm.model.search.length < 5) {
+          if (vm.model.search.length < 1) {
             vm.view.searching = false;
             return;
           }
-          vm.view.searching = true;
-          Issues.searchUsers(vm.model.search).then(
-            function(users) {
-              $scope.$apply(function() {
-                vm.view.searching = false;
-                vm.model.users = users;
-              });
-            }, function(error) {
-              messageError(error);
-            }
-          );
+
+          if (vm.aux.searchTimer != null) {
+            $timeout.cancel(vm.aux.searchTimer);
+            vm.aux.searchTimer = null;
+          }
+
+          vm.aux.searchTimer = $timeout(function() {
+            vm.aux.searchTimer = null;
+            vm.view.searching = true;
+            Issues.searchUsers(vm.model.search).then(
+              function(users) {
+                $scope.$apply(function() {
+                  vm.view.searching = false;
+                  vm.model.users = users;
+                });
+              }, function(error) {
+                messageError(error);
+              }
+            );
+          }, 1000);
         }
 
         function selectUser(user) {

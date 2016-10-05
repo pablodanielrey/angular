@@ -290,7 +290,7 @@ class RedmineAPI:
 
     @classmethod
     def getOfficesIssues(cls, con, officeIds):
-        userIds = Office.getOfficesUsers(con, officeIds)
+        userIds = Office.findOfficesUsers(con, officeIds)
         issues = []
         for userId in userIds:
             issues.extend(cls.getMyIssues(con, userId))
@@ -414,20 +414,80 @@ class IssueModel():
 
     @classmethod
     def getSubjectTypes(cls, con, oId):
+        generic = [
+            'Quiero una cuenta institucional de correo',
+            'No tengo usuario y clave',
+            'No me acuerdo mi usuario/clave',
+            'Ingreso mi clave pero me dice acceso denegado/incorrecto',
+            'No tengo acceso a internet',
+            'No puedo enviar correo',
+            'No puedo recibir correo',
+            'Envié correo y no llega a destino',
+            'Me enviaron correo y no lo recibo',
+            'Tengo problemas con la libreta de direcciones'
+        ]
+        systems = [
+            'No puedo entrar al sistema',
+            'No puedo entrar al au24',
+            'No funciona el sistema de Asistencia',
+            'No funciona el sistema de Pedidos',
+            'No funciona el sistema de Inserción Laboral',
+            'No puedo actualizar mis datos',
+            'No puedo subir mi CV',
+            'Error en el sistema'
+        ]
+        net = [
+            'No me puedo conectar a la wifi',
+            'Estoy conectado a wifi pero no navega'
+        ]
+        supp = [
+            'El equipo no enciende',
+            'El equipo anda lento',
+            'El equipo hace mucho ruido',
+            'El equipo se apaga solo',
+            'Error de Windows o Programas',
+            'Problemas con Monitor',
+            'No encuentro un archivo',
+            'Problemas con la nube (archivos)',
+            'Me quede sin espacio en disco',
+            'No puedo imprimir',
+            'Problemas con la impresora',
+            'Virus',
+            'Problema de perfil de usuario'
+        ]
         if oId == cls.ditesiId:
-            return ['No anda el servidor', 'No anda el correo', 'Wifi', 'Swtich', 'Error en el sistema', 'Desarrollar', 'No prende la computadora', 'No puedo iniciar sesión', 'Virus', 'Owncloud', 'No anda la red', 'Crear cuenta', 'Error de Windows', 'No Imprime', 'Problema con el correo', 'Otro']
+            r = []
+            r.extend(generic)
+            r.extend(systems)
+            r.extend(net)
+            r.extend(supp)
+            r.append('Otro')
+            return r
         elif oId == cls.soporteId:
-            return ['No prende la computadora', 'Problema con el correo', 'No puedo iniciar sesión', 'Virus', 'Owncloud', 'No anda la red', 'Crear cuenta', 'Error de Windows', 'No Imprime', 'Otro']
+            r = []
+            r.extend(generic)
+            r.extend(net)
+            r.extend(supp)
+            r.append('Otro')
+            return r
         elif oId == cls.desarroloId:
-            return ['Error en el sistema', 'No puedo iniciar sesión', 'Desarrollar', 'Otro']
+            r = []
+            r.extend(systems)
+            r.append('Otro')
+            return r
         elif oId == cls.servidoresId:
-            return ['No anda el servidor', 'No anda el correo', 'No anda la red', 'Wifi', 'Swtich', 'Otro']
+            r = []
+            r.extend(generic)
+            r.extend(systems)
+            r.extend(net)
+            r.append('Otro')
+            return r
         else:
             return ['Otro']
 
     @classmethod
     def getOffices(cls, con):
-        offices = Office.getOffices(con)
+        offices = Office.findAll(con)
         projects = RedmineAPI.findAllProjects()
         return Office.findByIds(con, [oid for oid in offices if oid in projects])
 
@@ -436,7 +496,7 @@ class IssueModel():
         offs = Office.findByIds(con, [oId])
         if offs is None or len(offs) <= 0:
             return []
-        areas = offs[0].getAreas(con)
+        areas = offs[0].findChilds(con,types=['area'], tree=False)
         return Office.findByIds(con, areas)
 
     @classmethod

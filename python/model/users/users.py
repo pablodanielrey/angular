@@ -94,9 +94,8 @@ class UserDAO(DAO):
         '''
         cur = con.cursor()
         try:
-            cur.execute('select id, version from profile.users')
-            users = [(u['id'], u['version']) for u in cur]
-            return users
+            cur.execute('select id, version from profile.users limit 10')
+            return [(u['id'], u['version']) for u in cur]
         finally:
             cur.close()
 
