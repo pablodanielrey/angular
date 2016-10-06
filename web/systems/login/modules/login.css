@@ -189,6 +189,7 @@ tenia este codigo walter. pero lo comento porque lo hago con ng-show y ng-hide
   -moz-align-items:center; /* mozilla */
   color:#28292D;
   width: 100%;
+  text-align: center;
 }
 
 .login .contentPassword {
@@ -283,6 +284,23 @@ tenia este codigo walter. pero lo comento porque lo hago con ng-show y ng-hide
 .login .inputPassword::-webkit-input-placeholder { color:#ACADB1; padding-top: 4px;}
 .login .inputPassword::-moz-input-placeholder { color:#ACADB1; padding-top: 4px;}
 
+
+.login .contentAvatarAndNAme {
+  display: flex;
+  display: -webkit-flex; /* Safari */
+  display: -moz-flex; /* mozilla */
+  flex-direction: column;
+  -moz-flex-direction: column;
+  -webkit-flex-direction: column;
+  align-items: center;
+  -webkit-align-items:center; /* Safari */
+  -moz-align-items:center; /* mozilla */
+  justify-content: center;
+  -moz-justify-content: center;
+  -webkit-justify-content: center;
+
+
+}
 
 /********************* FOOTER **********************************/
 
