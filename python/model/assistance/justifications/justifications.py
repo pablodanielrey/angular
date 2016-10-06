@@ -3,7 +3,7 @@ import datetime
 import logging
 
 from model.assistance.justifications.status import Status
-from model.serializer.utils import JSONSerializable
+from model.serializer import JSONSerializable
 
 class Justification(JSONSerializable):
 

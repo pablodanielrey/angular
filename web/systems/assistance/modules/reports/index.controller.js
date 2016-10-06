@@ -1,126 +1,117 @@
-var app = angular.module('assistance');
+(function() {
+    'use strict'
+    angular
+      .module('assistance')
+      .controller('ReportsCtrl', ReportsCtrl);
 
-app.controller('ReportsCtrl', ["$rootScope", '$scope',
-  function ($rootScope, $scope) {
+    ReportsCtrl.$inject = ['$scope', 'Assistance', 'Users', '$timeout'];
 
-    var nombres = ['Walter Roberto', 'Pablo Daniel', 'Alejandro Agustin', 'Maximiliano Antonio', 'Ivan Roberto'];
-    var dnis = ['30235984', '28963548', '30001823', '35879562', '36549822'];
-    var cclase = '';
+    function ReportsCtrl($scope, Assistance, Users, $timeout) {
+        var vm = this;
 
-    $scope.logs = [];
-    for (var i = 0; i < 100; i++) {
-      if (i % 2 == 0) {
-        cclase = 'entrada';
-      } else {
-        cclase = 'salida';
-      };
-
-      $scope.logs.push(
-        {
-          clase: cclase,
-          tipo: 'E7',
-          name: nombres[i % nombres.length],
-          lastname: 'Blanco',
-          dni: dnis[i % dnis.length],
-          hora: '10:30 am',
-          dia: '05/08/2026'
-        }
-      );
-    };
-
-    /*
-      repetir solooooo
-
-      $scope.variable = [];
-      for (var i = 0; i < cantidad; i++) {
-        $scope.variable.push('valor a agregar');
-      }
-
-      y en el html usar:
-
-      ng-repeat='i in variable'
-
-    */
-
-
-    /*
-
-      la lista inicial va entre []
-      los valores internos a la lista van entre {}
-      se separan usando ,
-      acordarse al final de la lista poner ;
-      ej:
-
-      $scope.variable = [
-
-        {
-            hora:'sdfdsf',
-            nombre:'sdfdsf',
-            dni:'sdfdsf',
-            lastname:'sdfdsf',
-            tipo:'sdf',
-            clase:'sdf'
-        },
-
-        {
-            hora:'sdfdsf',
-            nombre:'sdfdsf',
-            dni:'sdfdsf',
-            lastname:'sdfdsf',
-            tipo:'sdf',
-            clase:'sdf'
-        },
-
-        {
-            hora:'sdfdsf',
-            nombre:'sdfdsf',
-            dni:'sdfdsf',
-            lastname:'sdfdsf',
-            tipo:'sdf',
-            clase:'sdf'
-        },
-
-        {
-            hora:'sdfdsf',
-            nombre:'sdfdsf',
-            dni:'sdfdsf',
-            lastname:'sdfdsf',
-            tipo:'sdf',
-            clase:'sdf'
-        },
-
-        {
-            hora:'sdfdsf',
-            nombre:'sdfdsf',
-            dni:'sdfdsf',
-            lastname:'sdfdsf',
-            tipo:'sdf',
-            clase:'sdf'
-        },
-
-        {
-            hora:'sdfdsf',
-            nombre:'sdfdsf',
-            dni:'sdfdsf',
-            lastname:'sdfdsf',
-            tipo:'sdf',
-            clase:'sdf'
-        },
-
-        {
-            hora:'sdfdsf',
-            nombre:'sdfdsf',
-            dni:'sdfdsf',
-            lastname:'sdfdsf',
-            tipo:'sdf',
-            clase:'sdf'
+        vm.model = {
+          users: {},
+          statistics: [],
+          search: {
+            start: new Date(),
+            end: new Date()
+          }
         }
 
-    ];
+        vm.findStatistics = findStatistics;
+        vm.getDayOfWeek = getDayOfWeek;
+        vm.getDate = getDate;
+        vm.getHour = getHour;
+        vm.getUserNames = getUserNames;
+        vm.getUserDni = getUserDni;
+        vm.getWorkedHours = getWorkedHours;
 
-    */
+        function getWorkedHours(seconds) {
+          return Math.floor(seconds / 60 / 60) + ':' + Math.floor(seconds / 60 % 60);
+        }
 
+        function getUserNames(uid) {
+          var u = _getUser(uid);
+          return u.name + ' ' + u.lastname;
+        }
 
+        function getUserDni(uid) {
+          return _getUser(uid).dni;
+        }
 
-  }
-]);
+        function _getUser(uid) {
+          for (var i = 0; i < vm.model.users.length; i++) {
+            if (vm.model.users[i].id == uid) {
+              return vm.model.users[i];
+            }
+          }
+          return {
+            name: '',
+            lastname: '',
+            dni: ''
+          }
+        }
+
+        function getDayOfWeek(date) {
+          if (date == null) {
+            return '';
+          }
+          var d = ['Lun', 'Mar', 'Mier', 'Jue', 'Vier', 'Sáb', 'Dom'];
+          return d[date.getDay()];
+        }
+
+        function getDate(date) {
+          if (date == null) {
+            return '';
+          }
+          return Assistance._formatDateDay(date);
+        }
+
+        function getHour(date) {
+          if (date == null) {
+            return '';
+          }
+          return Assistance._formatDateHour(date);
+        }
+
+        function _format(stats) {
+          for (var i = 0; i < stats.length; i++) {
+            stats[i].date = (stats[i].date != null) ? new Date(stats[i].date) : null;
+            stats[i].iin = (stats[i].iin != null) ? new Date(stats[i].iin) : null;
+            stats[i].out = (stats[i].out != null) ? new Date(stats[i].out) : null;
+          }
+        }
+
+        function findStatistics() {
+          var dstart = vm.model.search.start;
+          var dend = vm.model.search.end;
+          vm.model.statistics = [];
+
+          Assistance.getStatistics(dstart, dend, ['89d88b81-fbc0-48fa-badb-d32854d3d93a']).then(function(stats) {
+            console.log(stats);
+            $timeout(function() {
+              var uids = [];
+              for (var uid in stats) {
+                for (var i = 0; i < stats[uid].length; i++) {
+                  uids.push(uid)
+                  var ds = stats[uid][i].dailyStats;
+                  console.log(ds)
+                  vm.model.statistics = vm.model.statistics.concat(ds);
+                }
+              }
+              _format(vm.model.statistics);
+              Users.findById(uids).then(function(users) {
+                $timeout(function() {
+                  vm.model.users = users;
+                });
+              }, function(err) {
+                console.log(err);
+              });
+            });
+          }, function(err) {
+            console.log(err);
+          });
+        }
+    }
+
+})();

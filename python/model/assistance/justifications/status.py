@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from model.serializer.utils import JSONSerializable
+from model.serializer import JSONSerializable
 import dateutil, dateutil.tz, dateutil.parser, datetime, logging
 from dateutil.tz import tzlocal
 import uuid

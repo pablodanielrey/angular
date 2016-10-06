@@ -6,14 +6,14 @@ from dateutil.tz import tzlocal
 import importlib
 from model.assistance.logs import LogDAO, Log
 from model.assistance.schedules import ScheduleDAO, Schedule
-from model.serializer.utils import JSONSerializable
+from model.serializer import JSONSerializable
 
 from model.assistance.justifications import *
 from model.assistance.justifications.justifications import Justification
 from model.assistance.justifications.justifications import Status
 
 from model.positions.positions import Position
-from model.offices.offices import Office
+from model.offices.office import Office
 from model.assistance.statistics import WpStatistics
 from model.assistance.utils import Utils
 

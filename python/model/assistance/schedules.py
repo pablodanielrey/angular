@@ -1,6 +1,6 @@
 
 import datetime
-from model.serializer.utils import JSONSerializable
+from model.serializer import JSONSerializable
 from model.users.users import UserDAO
 from model.assistance.assistanceDao import AssistanceDAO
 from model.assistance.utils import Utils

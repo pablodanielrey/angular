@@ -20,7 +20,7 @@
 
                     <div class="textReports"> REPORTES </div>
 
-                    <div class="btnOrder" title="Restablecer valores por defecto"><i class="fa fa-home"></i></div>
+                    <div class="btnOrder" title="Restablecer valores por defecto" ng-click='vm.findStatistics()'><i class="fa fa-home"></i></div>
 
                     <div class="icoSeach"><i class="fa fa-search"></i></div>
                     <div><input type="search" placeholder="Buscar..."class="inputSearch"></input></div>
@@ -105,9 +105,9 @@
 
                         <div class="contentInputDate">
                           <div> Fecha Inico </div>
-                          <div><input type="date"  class="inputTime "></input></div>
+                          <div><input type="date"  class="inputTime " ng-model='vm.model.search.start'></input></div>
                           <div> Fecha Fin </div>
-                          <div><input type="date" class="inputTime"></input></div>
+                          <div><input type="date" class="inputTime" ng-model='vm.model.search.end'></input></div>
                           <div class="btnSave" ng-click="view.style2 = ''">OK</div>
                         </div>
                     </div>
@@ -206,26 +206,28 @@
 
                 <!-- ---- Accesos ----- -->
                 <div class="listAccess">
-                  <div class="itemListAccess" ng-repeat="i in logs">
-                    <div class="file3">{{i.name}} {{i.lastname}}</div>
-                    <div class="file4">{{i.dni}}</div>
-                    <div class="file5">{{i.tipo}}</div>
-                    <div class="file0">Lun </div>
-                    <div class="file2">{{i.dia}}</div>
+                  <div class="itemListAccess" ng-repeat="i in vm.model.statistics">
+                    <div class="file3">{{vm.getUserNames(i.userId)}}</div>
+                    <div class="file4">{{vm.getUserDni(i.userId)}}</div>
+                    <div class="file5"> </div>
+
+                    <div class="file0">{{vm.getDayOfWeek(i.date)}} </div>
+                    <div class="file2">{{vm.getDate(i.iin)}}</div>
                     <div class="file2b entradaPorHuella">
                         <!-- VARIABLES: entradaPorHuella, entradaPorTeclado -->
-                        <div class="inFinger" title="Marcación por huella"><i class=" icoHuella fa fa-forumbee"></i> {{i.hora}}</div>
-                        <div class="inKeyboard" title="Marcación por teclado"><i class=" icoHuella fa fa-table"></i> {{i.hora}}</div>
+                        <div class="inFinger" title="Marcación por huella"><i class=" icoHuella fa fa-forumbee"></i> {{vm.getHour(i.iin)}}</div>
+                        <div class="inKeyboard" title="Marcación por teclado"><i class=" icoHuella fa fa-table"></i> {{vm.getHour(i.iin)}}</div>
                     </div>
-                    <div class="file0b">Lun </div>
-                    <div class="file2a">{{i.dia}}</div>
+
+                    <div class="file0b">{{vm.getDayOfWeek(i.out)}} </div>
+                    <div class="file2a">{{vm.getDate(i.out)}}</div>
                     <div class="file6 salidaPorTeclado">
                         <!-- VARIABLES: salidaPorHuella, salidaPorTeclado -->
-                        <div class="outFinger" title="Marcación por huella"><i class=" icoHuella fa fa-forumbee" aria-hidden="true"></i> {{i.hora}}</div>
-                        <div class="outKeyboard" title="Marcación por teclado"><i class=" icoHuella fa fa-table" aria-hidden="true"></i> {{i.hora}}</div>
+                        <div class="outFinger" title="Marcación por huella"><i class=" icoHuella fa fa-forumbee" aria-hidden="true"></i> {{vm.getHour(i.out)}}</div>
+                        <div class="outKeyboard" title="Marcación por teclado"><i class=" icoHuella fa fa-table" aria-hidden="true"></i> {{vm.getHour(i.out)}}</div>
                     </div>
-                    <div class="file7">07:15</div>
-                    <div class="file8">Ausente con aviso</div>
+                    <div class="file7">{{vm.getWorkedHours(i.workedSeconds)}}</div>
+                    <div class="file8">{{i.justification}}</div>
                     <div class="file9"><input class="notes" tipe="text" placeholder="Agregar nota"></input></div>
                   </div>
                 </div>

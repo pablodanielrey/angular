@@ -25,9 +25,11 @@
 """
 from model.users.users import UserDAO
 from model.assistance.boss import Boss, BossDAO
+from model.serializer import JSONSerializable
+
 from dateutil.tz import tzlocal
 
-class JustificationStatistics:
+class JustificationStatistics(JSONSerializable):
 
     @staticmethod
     def _create(wp):
@@ -42,7 +44,7 @@ class JustificationStatistics:
             j.status = js.getStatus().status
         return j
 
-class DailyWpStatistics:
+class DailyWpStatistics(JSONSerializable):
     """ estadisticas diarias """
 
     @staticmethod
@@ -117,7 +119,7 @@ class DailyWpStatistics:
         self.justificatedAbsence = False
         self.isBoss = False
 
-class WpStatistics:
+class WpStatistics(JSONSerializable):
 
     def __init__(self):
         self.userId = None
