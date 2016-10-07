@@ -13,28 +13,27 @@
               <div class="btnOrder2" ng-click="vm.view.style3 = 'seleccionarEstado'">Estado</div>
               <div class="contentInputStates">
                   <div class="contentSelectAll">
-                    <div><input type="checkbox"></div>
-                    <div>Seleccionar Todas</div>
+                    <div ng-click='vm.headerStatusSelectAllToggle()'>Cambiar Todas</div>
                   </div>
                   <div class="contentListOffices">
                       <div class="itemOffices">
-                        <div><input type="checkbox"></div>
+                        <div><input type="checkbox" ng-model='vm.model.header.status.open'></div>
                         <div>Abiertas</div>
                       </div>
                       <div class="itemOffices">
-                        <div><input type="checkbox"></div>
+                        <div><input type="checkbox" ng-model='vm.model.header.status.working'></div>
                         <div>En Curso</div>
                       </div>
                       <div class="itemOffices">
-                        <div><input type="checkbox"></div>
+                        <div><input type="checkbox" ng-model='vm.model.header.status.paused'></div>
                         <div>Pausadas</div>
                       </div>
                       <div class="itemOffices">
-                        <div><input type="checkbox"></div>
+                        <div><input type="checkbox" ng-model='vm.model.header.status.rejected'></div>
                         <div>Rechazadas</div>
                       </div>
                       <div class="itemOffices">
-                        <div><input type="checkbox"></div>
+                        <div><input type="checkbox" ng-model='vm.model.header.status.closed'></div>
                         <div>Cerradas</div>
                       </div>
                   </div>

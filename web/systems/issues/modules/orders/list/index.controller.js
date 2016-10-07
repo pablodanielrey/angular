@@ -15,7 +15,28 @@
           userId: null, //usuario logueado
           users: [],
           issues: [],
-          userOffices: []
+          userOffices: [],
+          header: {
+            status:{
+              open: true,
+              working: true,
+              paused: true,
+              rejected: false,
+              closed:false
+            }
+          }
+        }
+
+
+        vm.headerStatusSelectAllToggle = headerStatusSelectAllToggle;
+
+        function headerStatusSelectAllToggle() {
+          var s = !vm.model.header.status.open;
+          vm.model.header.status.open = s;
+          vm.model.header.status.working = s;
+          vm.model.header.status.paused = s;
+          vm.model.header.status.rejected = s;
+          vm.model.header.status.closed = s;
         }
 
         vm.view = {
