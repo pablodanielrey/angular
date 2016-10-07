@@ -53,7 +53,11 @@ class Issue(JSONSerializable):
 
     @classmethod
     def findById(cls, con, id):
-        return RedmineAPI.findById(con, id)
+        return RedmineAPI.findByIds(con, [id])
+
+    @classmethod
+    def findByIds(cls, con, ids):
+        return RedmineAPI.findByIds(con, ids)
 
     @classmethod
     def getOfficesIssues(cls, con, officeIds):
@@ -228,10 +232,24 @@ class RedmineAPI:
                 issue.fromOffice = cls._findOffice(con, issue.fromOfficeId)
 
         if related:
-            issue.children = [cls.findById(con, iss.id) for iss in r.children if iss is not None]
+            childrens = [iss.id for iss in r.children if iss is not None]
+            issue.children = cls.findByIds(con, childrens)
             issue.files = [cls._loadFile(file) for file in r.attachments if file is not None]
 
         return issue
+
+
+    @classmethod
+    def findByIds(cls, con, issuesIds):
+        """ retorna los issues del modelo nuestro identificados por los ids issuesIds """
+        assert isinstance(issuesIds, list)
+        redmine = cls._getRedmineInstance()
+        if redmine is None:
+            return None
+        issues = []
+        for issueId in issuesIds:
+            issues.append(redmine.issue.get(issueId, include='children, attachments'))
+        return [cls._fromResult(con, issue, redmine, True) for issue in issues]
 
 
     @classmethod
@@ -288,14 +306,6 @@ class RedmineAPI:
         dni = userRedmine.login if userRedmine != None and 'login' in dir(userRedmine) else None
         (userId, version) = User.findByDni(con, dni)
         return userId
-
-    @classmethod
-    def findById(cls, con, issue_id):
-        redmine = cls._getRedmineInstance()
-        if redmine is None:
-            return None
-        issue = redmine.issue.get(issue_id, include='children, attachments')
-        return cls._fromResult(con, issue, redmine, True)
 
     @classmethod
     def findAllProjects(cls):

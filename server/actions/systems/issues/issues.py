@@ -67,10 +67,21 @@ class Issues(wamp.SystemComponentSession):
             self.conn.put(con)
 
     @autobahn.wamp.register('issues.find_by_id')
-    def findById(self, issue_id, details):
+    def findById(self, issueid, details):
         con = self.conn.get()
         try:
-            return Issue.findById(con, issue_id)
+            issues = Issue.findByIds(con, [issueid])
+            if issues is None:
+                return None
+            return issues[0]
+        finally:
+            self.conn.put(con)
+
+    @autobahn.wamp.register('issues.find_by_ids')
+    def findByIds(self, issuesIds, details):
+        con = self.conn.get()
+        try:
+            return Issue.findByIds(con, issuesIds)
         finally:
             self.conn.put(con)
 

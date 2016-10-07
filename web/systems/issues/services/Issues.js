@@ -12,6 +12,7 @@
 		  this.getOfficesIssues = getOfficesIssues;
 		  this.getAssignedIssues = getAssignedIssues;
 		  this.findById = findById;
+			this.findAll = findAll;
 		  this.create = create;
 		  this.createComment = createComment;
 		  this.changeStatus = changeStatus;
@@ -51,28 +52,18 @@
 				return Login.getPrivateTransport().call('issues.get_offices_issues');
 			}
 
+			/*
+				busca todos los ids de los pedidos de acuerdo a los filtros pasados como parámetro.
+				statuses = lista de ids de estados
+				froms = lista de ids de oficinas de origen de los pedidos
+				tos = lista de ids de oficinas de destino de los pedidos
+			*/
+			function findAll(statuses, froms, tos) {
+				return Login.getPrivateTransport().call('issues.find_all', [statuses, froms, tos]);
+			}
+
 		  function getAssignedIssues(statuses, froms, tos) {
-				var assignedIssues = $window.sessionStorage.getItem('assignedIssues');
-				if (assignedIssues != null) {
-					var d = $q.defer();
-					var ids = JSON.parse(assignedIssues);
-					d.resolve(_loadIssues(ids));
-					return d.promise;
-				}
-
-
-				return Login.getPrivateTransport().call('issues.get_assigned_issues', [statuses, froms, tos]).then(
-					function(issues) {
-						var ids = [];
-						for (var i = 0; i< issues.length; i++) {
-							var id = issues[i].id;
-							ids.push(id);
-							$window.sessionStorage.setItem(id, JSON.stringify(issues[i]));
-						}
-						$window.sessionStorage.setItem('assignedIssues', JSON.stringify(ids));
-						return issues;
-					}
-				);
+				return Login.getPrivateTransport().call('issues.get_assigned_issues', [statuses, froms, tos]).then(findByIds)
 			}
 
 			function updateIssue(id, status, priority) {
@@ -92,6 +83,10 @@
 
 		  function findById(id) {
 				return Login.getPrivateTransport().call('issues.find_by_id', [id]);
+			}
+
+			function findByIds(ids) {
+				return Login.getPrivateTransport().call('issues.find_by_ids', [ids]);
 			}
 
 
