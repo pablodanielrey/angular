@@ -45,21 +45,12 @@
               <div class="btnOrder2" ng-click="vm.view.style3 = 'seleccionarAreas'">Área</div>
               <div class="contentInputAreas">
                   <div class="contentSelectAll">
-                    <div><input type="checkbox"></div>
-                    <div>Seleccionar Todas</div>
+                      <div ng-click='vm.headerAreaSelectAllToggle()'>Cambiar Todas</div>
                   </div>
                   <div class="contentListOffices">
-                      <div class="itemOffices">
-                        <div><input type="checkbox"></div>
-                        <div>Soporte Técnico</div>
-                      </div>
-                      <div class="itemOffices">
-                        <div><input type="checkbox"></div>
-                        <div>Desarrollo</div>
-                      </div>
-                      <div class="itemOffices">
-                        <div><input type="checkbox"></div>
-                        <div>Redes y Servidores</div>
+                      <div class="itemOffices" ng-repeat='a in vm.model.header.userOffices'>
+                        <div><input type="checkbox" ng-model='a.active'></div>
+                        <div>{{a.name}}</div>
                       </div>
                   </div>
                   <div class="btnSave" ng-click="vm.view.style3 = ''">OK</div>

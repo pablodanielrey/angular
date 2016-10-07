@@ -23,12 +23,21 @@
               paused: true,
               rejected: false,
               closed:false
-            }
+            },
+            userOffices: [ {name:'p', active: false}]
           }
         }
 
 
         vm.headerStatusSelectAllToggle = headerStatusSelectAllToggle;
+        vm.headerAreaSelectAllToggle = headerAreaSelectAllToggle;
+
+        function headerAreaSelectAllToggle() {
+          for (var i = 0; i < vm.model.header.userOffices.length; i++) {
+            var a = vm.model.header.userOffices[i];
+            a.active = !a.active;
+          }
+        }
 
         function headerStatusSelectAllToggle() {
           var s = !vm.model.header.status.open;
