@@ -5,7 +5,7 @@
         <div class="contentTextHeader">
           <div class="textMisPedidos2">PEDIDOS</div>
           <div class="contentBtnOrder">
-            <div class="btnOrder" title="Restablecer valores por defecto"><i class="fa fa-home"></i></div>
+            <div class="btnOrder" title="Buscar" ng-click='vm.loadIssues()'><i class="fa fa-home"></i></div>
           </div>
           <div class="icoSeach"><i class="fa fa-search"></i></div>
           <div class="contentInputSearch"><input type="search" placeholder="Buscar..." class="inputSearch" ng-model="vm.view.search"></div>
@@ -17,23 +17,23 @@
                   </div>
                   <div class="contentListOffices">
                       <div class="itemOffices">
-                        <div><input type="checkbox" ng-model='vm.model.header.status.open'></div>
+                        <div><input type="checkbox" ng-model='vm.model.header.status.open' ng-click='vm.headerInvalidateIssuesCache()'></div>
                         <div>Abiertas</div>
                       </div>
                       <div class="itemOffices">
-                        <div><input type="checkbox" ng-model='vm.model.header.status.working'></div>
+                        <div><input type="checkbox" ng-model='vm.model.header.status.working' ng-click='vm.headerInvalidateIssuesCache()'></div>
                         <div>En Curso</div>
                       </div>
                       <div class="itemOffices">
-                        <div><input type="checkbox" ng-model='vm.model.header.status.paused'></div>
+                        <div><input type="checkbox" ng-model='vm.model.header.status.paused' ng-click='vm.headerInvalidateIssuesCache()'></div>
                         <div>Pausadas</div>
                       </div>
                       <div class="itemOffices">
-                        <div><input type="checkbox" ng-model='vm.model.header.status.rejected'></div>
+                        <div><input type="checkbox" ng-model='vm.model.header.status.rejected' ng-click='vm.headerInvalidateIssuesCache()'></div>
                         <div>Rechazadas</div>
                       </div>
                       <div class="itemOffices">
-                        <div><input type="checkbox" ng-model='vm.model.header.status.closed'></div>
+                        <div><input type="checkbox" ng-model='vm.model.header.status.closed' ng-click='vm.headerInvalidateIssuesCache()'></div>
                         <div>Cerradas</div>
                       </div>
                   </div>
@@ -49,7 +49,7 @@
                   </div>
                   <div class="contentListOffices">
                       <div class="itemOffices" ng-repeat='o in vm.model.header.userOffices'>
-                        <div><input type="checkbox" ng-model='o.active'></div>
+                        <div><input type="checkbox" ng-model='o.active' ng-click='vm.headerInvalidateIssuesCache()'></div>
                         <div>{{o.name}}</div>
                       </div>
                   </div>
@@ -67,7 +67,7 @@
                   </div>
                   <div class="contentListOffices">
                       <div class="itemOffices" ng-repeat='o in vm.model.header.offices'>
-                        <div><input type="checkbox" ng-model='o.active'></div>
+                        <div><input type="checkbox" ng-model='o.active' ng-click='vm.headerInvalidateIssuesCache()'></div>
                         <div>{{o.name}}</div>
                       </div>
                   </div>

@@ -51,7 +51,7 @@
 				return Login.getPrivateTransport().call('issues.get_offices_issues');
 			}
 
-		  function getAssignedIssues() {
+		  function getAssignedIssues(statuses, froms, tos) {
 				var assignedIssues = $window.sessionStorage.getItem('assignedIssues');
 				if (assignedIssues != null) {
 					var d = $q.defer();
@@ -61,7 +61,7 @@
 				}
 
 
-				return Login.getPrivateTransport().call('issues.get_assigned_issues').then(
+				return Login.getPrivateTransport().call('issues.get_assigned_issues', [statuses, froms, tos]).then(
 					function(issues) {
 						var ids = [];
 						for (var i = 0; i< issues.length; i++) {

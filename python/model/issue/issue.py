@@ -64,8 +64,8 @@ class Issue(JSONSerializable):
         return RedmineAPI.getMyIssues(con, userId)
 
     @classmethod
-    def getAssignedIssues(cls, con, userId, oIds):
-        return RedmineAPI.getAssignedIssues(con, userId, oIds)
+    def getAssignedIssues(cls, con, userId, oIds, statuses, froms):
+        return RedmineAPI.getAssignedIssues(con, userId, oIds, statuses, froms)
 
     def changeStatus(self, status):
         return RedmineAPI.changeStatus(self.id, self.projectId, status)
@@ -183,6 +183,13 @@ class RedmineAPI:
         offices = Office.findByIds(con, [id])
         return offices[0] if len(offices) > 0 else None
     """
+
+    @classmethod
+    def _getCreatorOfficeId(cls, r):
+        for cf in r.custom_fields:
+            if cf.id == cls.FROM_FIELD:
+                return cf.value
+        return None
 
     @classmethod
     def _fromResult(cls, con, r, redmine, related=False):
@@ -323,11 +330,23 @@ class RedmineAPI:
 
     @classmethod
     # @do_cprofile
-    def getAssignedIssues(cls, con, userId, oIds):
+    def getAssignedIssues(cls, con, userId, oIds, statuses=None, froms=None):
         redmine = cls._getRedmineInstance(con)
         userRedmine = cls._findUserId(con, redmine, userId)
-        issues = cls._getIssuesByProject(con, oIds, userRedmine, redmine)
-        return [cls._fromResult(con, issue, redmine) for issue in issues]
+        issues = cls._getIssuesByProject(con, oIds, userRedmine, redmine, statuses)
+
+        return [i.id for i in issues]
+        """
+        if froms is None:
+            return [cls._fromResult(con, issue, redmine) for issue in issues]
+
+        assert isinstance(froms, list)
+        if len(froms) > 0:
+            filteredIssues = [i for i in issues if cls._getCreatorOfficeId(i) in froms]
+            return [cls._fromResult(con, issue, redmine) for issue in filteredIssues]
+        else:
+            return [cls._fromResult(con, issue, redmine) for issue in issues]
+        """
 
     """
     def getAssignedIssues(cls, con, userId, oIds):
@@ -338,7 +357,7 @@ class RedmineAPI:
     """
 
     @classmethod
-    def _getIssuesByProject(cls, con, pidentifiers, user, redmine):
+    def _getIssuesByProject(cls, con, pidentifiers, user, redmine, statuses=None):
         if redmine is None:
             return []
         issues = []
@@ -348,8 +367,14 @@ class RedmineAPI:
 
             if pidentifier in projects:
                 issues.extend(redmine.issue.filter(tracker_id=cls.TRACKER_ERROR, project_id=pidentifier, status_id='open'))
-            else:
-                print(pidentifier)
+                """
+                    ignoro el estado por ahora porque solo soporta open o closed
+                if stauses is None:
+                    issues.extend(redmine.issue.filter(tracker_id=cls.TRACKER_ERROR, project_id=pidentifier, status_id='open'))
+                else:
+                    for s in statuses:
+                        issues.extend(redmine.issue.filter(tracker_id=cls.TRACKER_ERROR, project_id=pidentifier, status_id=s))
+                """
         return issues
 
     @classmethod

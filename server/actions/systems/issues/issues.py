@@ -48,12 +48,21 @@ class Issues(wamp.SystemComponentSession):
             self.conn.put(con)
 
     @autobahn.wamp.register('issues.get_assigned_issues')
-    def getAssignedIssues(self, details):
+    def getAssignedIssues(self, statuses, froms, tos, details):
         con = self.conn.get()
         try:
+            logging.info(statuses)
+            logging.info(froms)
+            logging.info(tos)
+            if statuses is None:
+                return []
+            assert isinstance(statuses,list)
+            if len(statuses) <= 0:
+                return None
             userId = self.getUserId(con, details)
             oIds = Office.findByUser(con, userId, False)
-            return Issue.getAssignedIssues(con, userId, oIds)
+            toIds = [oid for oid in oIds if oid in tos]
+            return Issue.getAssignedIssues(con, userId, toIds, statuses, froms)
         finally:
             self.conn.put(con)
 

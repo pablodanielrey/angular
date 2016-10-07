@@ -5,10 +5,10 @@
         .module('issues')
         .controller('OrdersListCtrl', OrdersListCtrl);
 
-    OrdersListCtrl.$inject = ['$scope', '$location', 'Issues', 'Users', '$filter', 'Login', 'Offices', '$timeout'];
+    OrdersListCtrl.$inject = ['$scope', '$location', 'Issues', 'Users', '$filter', 'Login', 'Offices', '$timeout', '$window'];
 
     /* @ngInject */
-    function OrdersListCtrl($scope, $location, Issues, Users, $filter, Login, Offices, $timeout) {
+    function OrdersListCtrl($scope, $location, Issues, Users, $filter, Login, Offices, $timeout, $window) {
         var vm = this;
 
         vm.model = {
@@ -37,8 +37,14 @@
         vm.headerStatusSelectAllToggle = headerStatusSelectAllToggle;
         vm.headerAreaSelectAllToggle = headerAreaSelectAllToggle;
         vm.headerOfficesSelectAllToggle = headerOfficesSelectAllToggle;
+        vm.headerInvalidateIssuesCache = headerInvalidateIssuesCache;
+
+        function headerInvalidateIssuesCache() {
+          $window.sessionStorage.removeItem('assignedIssues');
+        }
 
         function headerAreaSelectAllToggle() {
+          headerInvalidateIssuesCache();
           for (var i = 0; i < vm.model.header.userOffices.length; i++) {
             var a = vm.model.header.userOffices[i];
             a.active = !a.active;
@@ -46,6 +52,7 @@
         }
 
         function headerOfficesSelectAllToggle() {
+          headerInvalidateIssuesCache();
           for (var i = 0; i < vm.model.header.offices.length; i++) {
             var a = vm.model.header.offices[i];
             a.active = !a.active;
@@ -53,6 +60,7 @@
         }
 
         function headerStatusSelectAllToggle() {
+          headerInvalidateIssuesCache();
           var s = !vm.model.header.status.open;
           vm.model.header.status.open = s;
           vm.model.header.status.working = s;
@@ -71,6 +79,46 @@
           }, function(err) {
             console.log(err);
           })
+        }
+
+        function _getHeaderToFilter() {
+          var f = [];
+          for (var i = 0; i < vm.model.header.userOffices.length; i++) {
+            if (vm.model.header.userOffices[i].active) {
+              f.push(vm.model.header.userOffices[i].id);
+            }
+          }
+          return f;
+        }
+
+        function _getHeaderFromFilter() {
+          var f = [];
+          for (var i = 0; i < vm.model.header.offices.length; i++) {
+            if (vm.model.header.offices[i].active) {
+              f.push(vm.model.header.offices[i].id);
+            }
+          }
+          return f;
+        }
+
+        function _getHeaderStatusFilter() {
+          var f = [];
+          if (vm.model.header.status.open) {
+            f.push('open');
+          }
+          if (vm.model.header.status.working) {
+            f.push('working');
+          }
+          if (vm.model.header.status.paused) {
+            // nada
+          }
+          if (vm.model.header.status.rejected) {
+            // nada
+          }
+          if (vm.model.header.status.closed) {
+            f.push('closed');
+          }
+          return f;
         }
 
         ///////////////////////////////////////////////////////////////////////
@@ -93,6 +141,7 @@
           sortedBy: 'status'
         }
 
+        vm.loadIssues = loadIssues;
         vm.sortDate = sortDate;
         vm.sortStatus = sortStatus;
         vm.sortPriority = sortPriority;
@@ -129,10 +178,10 @@
           loadIssues();
         }
 
-        function  loadIssues() {
+        function loadIssues() {
           vm.model.issues = [];
           vm.messageLoading();
-          Issues.getAssignedIssues().then(
+          Issues.getAssignedIssues(_getHeaderStatusFilter(), _getHeaderFromFilter(), _getHeaderToFilter()).then(
             function(issues) {
               for (var i = 0; i < issues.length; i++) {
                 var dateStr = issues[i].start;
