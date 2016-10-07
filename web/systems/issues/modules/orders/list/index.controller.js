@@ -15,8 +15,14 @@
           userId: null, //usuario logueado
           users: [],
           issues: [],
-          userOffices: [],
-          header: {
+          userOffices: []
+        }
+
+
+
+        ///////////////// barra de busqueda. header /////////////////////////////
+
+        vm.model.header = {
             status:{
               open: true,
               working: true,
@@ -24,17 +30,24 @@
               rejected: false,
               closed:false
             },
-            userOffices: [ {name:'p', active: false}]
-          }
+            userOffices: [],
+            offices: []
         }
-
 
         vm.headerStatusSelectAllToggle = headerStatusSelectAllToggle;
         vm.headerAreaSelectAllToggle = headerAreaSelectAllToggle;
+        vm.headerOfficesSelectAllToggle = headerOfficesSelectAllToggle;
 
         function headerAreaSelectAllToggle() {
           for (var i = 0; i < vm.model.header.userOffices.length; i++) {
             var a = vm.model.header.userOffices[i];
+            a.active = !a.active;
+          }
+        }
+
+        function headerOfficesSelectAllToggle() {
+          for (var i = 0; i < vm.model.header.offices.length; i++) {
+            var a = vm.model.header.offices[i];
             a.active = !a.active;
           }
         }
@@ -47,6 +60,22 @@
           vm.model.header.status.rejected = s;
           vm.model.header.status.closed = s;
         }
+
+        function headerLoadOffices() {
+          Offices.findAll().then(function(ids) {
+            Offices.findById(ids).then(function(off) {
+              vm.model.header.offices = off;
+            }, function(err) {
+              console.log(err);
+            });
+          }, function(err) {
+            console.log(err);
+          })
+        }
+
+        ///////////////////////////////////////////////////////////////////////
+
+
 
         vm.view = {
           style1: '',
@@ -89,6 +118,7 @@
             return;
           }
 
+          headerLoadOffices();
           vm.model.userId = Login.getCredentials().userId;
           vm.loadUserOffices(vm.model.userId);
           vm.view.reverseSortDate = true;
@@ -276,6 +306,7 @@
                 function(offices) {
                   $timeout(function() {
                     vm.model.userOffices = [];
+                    vm.model.header.userOffices = offices;
                     if (offices == null || offices.length <= 0) {
                         return;
                     }

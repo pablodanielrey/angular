@@ -48,9 +48,9 @@
                       <div ng-click='vm.headerAreaSelectAllToggle()'>Cambiar Todas</div>
                   </div>
                   <div class="contentListOffices">
-                      <div class="itemOffices" ng-repeat='a in vm.model.header.userOffices'>
-                        <div><input type="checkbox" ng-model='a.active'></div>
-                        <div>{{a.name}}</div>
+                      <div class="itemOffices" ng-repeat='o in vm.model.header.userOffices'>
+                        <div><input type="checkbox" ng-model='o.active'></div>
+                        <div>{{o.name}}</div>
                       </div>
                   </div>
                   <div class="btnSave" ng-click="vm.view.style3 = ''">OK</div>
@@ -63,21 +63,12 @@
 
                   <div><i class="icoSeach2 fa fa-search"></i><input type="search" placeholder="Buscar..." class="inputSearch2"></div>
                   <div class="contentSelectAll">
-                    <div><input type="checkbox"></div>
-                    <div>Seleccionar Todas</div>
+                    <div ng-click='vm.headerOfficesSelectAllToggle()'>Cambiar Todas</div>
                   </div>
                   <div class="contentListOffices">
-                      <div class="itemOffices">
-                        <div><input type="checkbox"></div>
-                        <div>Comunicación Institucional</div>
-                      </div>
-                      <div class="itemOffices">
-                        <div><input type="checkbox"></div>
-                        <div>Dirección de Personal</div>
-                      </div>
-                      <div class="itemOffices">
-                        <div><input type="checkbox"></div>
-                        <div>Economico Financiero</div>
+                      <div class="itemOffices" ng-repeat='o in vm.model.header.offices'>
+                        <div><input type="checkbox" ng-model='o.active'></div>
+                        <div>{{o.name}}</div>
                       </div>
                   </div>
                   <div class="btnSave" ng-click="vm.view.style3 = ''">OK</div>
