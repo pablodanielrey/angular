@@ -4,7 +4,7 @@
       .module('assistance')
       .controller('LogsCtrl', LogsCtrl);
 
-    LogsCtrl.$inject = ['$scope', 'Assistance', 'Users'];
+    LogsCtrl.$inject = ['$scope', 'Assistance', 'Users', 'Login', 'Files'];
 
     function _getDateInTime(hours, minutes, seconds) {
       var d = new Date()
@@ -15,12 +15,13 @@
       return d;
     }
 
-    function LogsCtrl($scope, Assistance, Users) {
+    function LogsCtrl($scope, Assistance, Users, Login, Files) {
         var vm = this;
 
         vm.view = {
           style2: '',
-          style: ''
+          style: '',
+          searchInput: ''
         }
 
         vm.model = {
@@ -31,13 +32,30 @@
             endHour: _getDateInTime(23,59,59)
           },
           logs: [],
+          todayLogs: [],
           status: [],
           inside: 0,
           outside: 0
         };
 
+
+        $scope.$on('wamp.open', function(event, args) {
+          vm.model.privateTransport = Login.getPrivateTransport();
+          activate();
+        });
+
+        activate();
+
+        function activate() {
+          if (Login.getPrivateTransport() == null) {
+            return;
+          }
+          _getTodayLogs();
+        }
+
         vm.resetSearchAndGetLogs = resetSearchAndGetLogs;
         vm.searchLogs = searchLogs;
+        vm.getUserPhoto = getUserPhoto;
 
         function _resetSearch() {
           vm.model.search = {
@@ -59,6 +77,17 @@
           _getLogs();
         }
 
+
+        function getUserPhoto(log) {
+          return log != null && "genre" in log && log.genre != null && (log.genre.toLowerCase() == 'femenino' || log.genre.toLowerCase() == 'mujer') ? "/systems/offices/img/avatarWoman.jpg" : "/systems/offices/img/avatarMan.jpg";
+          /* Comentado pq falta obtener la foto del lado del servidor
+          if (log == null || log.photo == null) {
+            var img = log != null && "genre" in log && log.genre != null && (log.genre.toLowerCase() == 'femenino' || log.genre.toLowerCase() == 'mujer') ? "/systems/offices/img/avatarWoman.jpg" : "/systems/offices/img/avatarMan.jpg";
+            return img;
+          } else {
+            return Files.toDataUri(log.photo);
+          }*/
+        }
 
 
         /////// Estado de los ususarios (si se encuentra afuera o adentro) /////
@@ -109,13 +138,44 @@
               tipo: 'NoDocente',
               name: user.name,
               lastname: user.lastname,
+              photo: user.photo,
+              genre: user.genre,
               dni: user.dni,
-              dia: _formatDateDay(d),
-              hora: _formatDateHour(d)
+              date: d
           }
         }
 
+        function _getTodayLogs() {
+          vm.model.todayLogs = [];
+          var dayMillis = 24 * 60 * 60 * 1000;
+          var start = new Date();
+          start.setHours(0); start.setMinutes(0); start.setSeconds(0);
+          var end = new Date(start.getTime() + (dayMillis) - 1);
+          Assistance.getLogs(start, end).then(function(logs) {
 
+            if (logs.length <= 0) {
+              return;
+            }
+
+            // busco a los usuarios de los logs.
+            var uids = _getUsers(logs);
+            Users.findById(uids).then(function(users) {
+              // seteo los logs y los estados
+              $scope.$apply(function() {
+                var status = [];
+                for (var i = 0; i < logs.length; i++) {
+                  vm.model.todayLogs.push(_parseLog(logs[i], users, status));
+                }
+              });
+
+            }, function(err) {
+              console.log(err);
+            });
+
+          }, function(err) {
+            console.log(err);
+          });
+        }
 
         function _getLogs() {
           vm.model.logs = [];
@@ -153,13 +213,6 @@
 
     };
 
-    function _formatDateDay(d) {
-      return d.getDate() + '/' + d.getMonth() + '/' + d.getFullYear()
-    }
-
-    function _formatDateHour(d) {
-      return d.getHours() + ':' + d.getMinutes() + ':' + d.getSeconds();
-    }
 
     function _findUser(uid, users) {
       for (var i = 0; i < users.length; i++) {

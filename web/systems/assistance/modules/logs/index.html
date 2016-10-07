@@ -14,7 +14,8 @@
                 <div class="contentStatusNew">
                       <div class="cantPerson"><div class="textCantPerson">{{vm.model.inside}} </div>Entradas</div><!-- ---- Cantidad de personas presentes en la sala ----- -->
                       <div class="cantPerson2"><div class="textCantPerson2">{{vm.model.outside}} </div> Entrada/Salida</div> <!-- ---- Cantidad de personas que entraron y salieron ----- -->
-                      <div class="cantPerson3"><div class="textCantPerson3">{{vm.model.logs.length}} </div> Total de Marcaciones</div><!-- ---- total de accesos ----- -->
+                      <!-- <div class="cantPerson3"><div class="textCantPerson3">{{vm.model.logs.length}} </div> Total de Marcaciones</div> total de accesos - -->
+                      <div class="cantPerson3"><div class="textCantPerson3">{{results.length}} </div> Total de Marcaciones</div><!-- ---- total de accesos ----- -->
                 </div>
             </div>
             <!-- ---- Contenedor de ordenamiento y busqueda ----- -->
@@ -35,7 +36,7 @@
                     <div class="subContentSearch">
                         <div class="contentItemSearch">
                           <div class="icoSeach"><i class="fa fa-search"></i></div>
-                          <div><input type="search" placeholder="Buscar..."class="inputSearch"></input></div>
+                          <div><input type="search" placeholder="Buscar..." class="inputSearch" ng-model="vm.view.searchInput"></input></div>
                           <div class=textRanck>
                               <div class="contentRangDate">
                                   <div class="btnOrder2" ng-click="vm.view.style2 = 'rangoFechas'">Rango de Fechas</div>
@@ -70,7 +71,6 @@
 
                 </div>
             </div>
-
             <!-- ---- Listado de accesos ----- -->
             <div class="contentList">
                 <!-- ---- Titulos del listado ----- -->
@@ -85,15 +85,15 @@
                 </div>
                 <!-- ---- Accesos ----- -->
                 <div class="listAccess">
-                  <div class="itemListAccess {{i.clase}}" ng-repeat="i in vm.model.logs">
+                  <div class="itemListAccess {{i.clase}}" ng-repeat="i in vm.model.logs | filter: vm.view.searchInput as results">
                     <!-- VARIABLES: entrada, salida -->
                     <div class="file1b">
                         <i class="inOut fa fa-chevron-circle-left"></i>
                         <div class="inOut in">Entrada</div>
                         <div class="inOut out">Salida</div>
                     </div>
-                    <div class="file2">{{i.dia}}</div>
-                    <div class="file2b">{{i.hora}}</div>
+                    <div class="file2">{{i.date | date: 'dd/MM/yyyy'}}</div>
+                    <div class="file2b">{{i.date | date: 'HH:mm:ss'}}</div>
                     <div class="file3">{{i.name}} {{i.lastname}}</div>
                     <div class="file4">{{i.dni}}</div>
                     <div class="file5">{{i.tipo}}</div>
@@ -112,286 +112,27 @@
         <div class="contentAside">
             <div class="contentListAside">
                 <!-- ---- Ultimo acceso de entrada o salida (MOSTRAR SOLO LOS ULTIMOS 7 ACCESOS) ----- -->
-                <div class="itemAccess entrada">
+                <div class="itemAccess {{log.clase}}" ng-repeat="log in vm.model.todayLogs | orderBy: '-date'">
                     <div class="infoUserAside">
                         <div>
-                          <img class="imgUserAside" src="/systems/biblioteca/img/pablo.jpg">
+                          <!-- <img class="imgUserAside" src="/systems/biblioteca/img/pablo.jpg"> -->
+                          <img class="imgUserAside" ng-src='{{vm.getUserPhoto(log)}}' alt="foto de perfil">
                         </div>
                         <div>
                             <div class="textHora">
                                 <div class="textIn">Entrada</div>
                                 <div class="textOut">Salida</div>
-                                <div><i class="icoClock fa fa-clock-o"></i> 10:36 hs </div>
+                                <div><i class="icoClock fa fa-clock-o"></i> {{log.date | date: 'HH:mm:ss'}} </div>
                             </div>
-                            <div class="textName">Pablo Daniel Rey</div>
-                            <div class="textDNI">29568325</div>
+                            <div class="textName">{{log.name}} {{log.lastname}}</div>
+                            <div class="textDNI">{{log.dni}}</div>
                         </div>
                     </div>
                     <div class="contentArrow">
                       <i class="fa fa-caret-right" aria-hidden="true"></i>
                     </div>
                 </div>
-
-                <div class="itemAccess salida">
-                    <div class="infoUserAside">
-                        <div>
-                          <img class="imgUserAside" src="/systems/biblioteca/img/walter.jpg">
-                        </div>
-                        <div>
-                            <div class="textHora">
-                                <div class="textIn">Entrada</div>
-                                <div class="textOut">Salida</div>
-                                <div><i class="icoClock fa fa-clock-o"></i> 10:35 hs </div>
-                            </div>
-                            <div class="textName">Walter Roberto Blanco</div>
-                            <div class="textDNI">30001823</div>
-                        </div>
-                    </div>
-                    <div class="contentArrow">
-                      <i class="fa fa-caret-right" aria-hidden="true"></i>
-                    </div>
-                </div>
-
-                <div class="itemAccess entrada">
-                    <div class="infoUserAside">
-                        <div>
-                          <img class="imgUserAside" src="/systems/biblioteca/img/maxi.jpg">
-                        </div>
-                        <div>
-                            <div class="textHora">
-                                <div class="textIn">Entrada</div>
-                                <div class="textOut">Salida</div>
-                                <div><i class="icoClock fa fa-clock-o"></i> 10:34 hs </div>
-                            </div>
-                            <div class="textName">Maximiliano Sausedo</div>
-                            <div class="textDNI">30001823</div>
-                        </div>
-                    </div>
-                    <div class="contentArrow">
-                      <i class="fa fa-caret-right" aria-hidden="true"></i>
-                    </div>
-                </div>
-
-                <div class="itemAccess entrada">
-                    <div class="infoUserAside">
-                        <div>
-                          <img class="imgUserAside" src="/systems/biblioteca/img/walter.jpg">
-                        </div>
-                        <div>
-                            <div class="textHora">
-                                <div class="textIn">Entrada</div>
-                                <div class="textOut">Salida</div>
-                                <div><i class="icoClock fa fa-clock-o"></i> 10:35 hs </div>
-                            </div>
-                            <div class="textName">Walter Roberto Blanco</div>
-                            <div class="textDNI">30001823</div>
-                        </div>
-                    </div>
-                    <div class="contentArrow">
-                      <i class="fa fa-caret-right" aria-hidden="true"></i>
-                    </div>
-                </div>
-
-                <div class="itemAccess salida">
-                    <div class="infoUserAside">
-                        <div>
-                          <img class="imgUserAside" src="/systems/biblioteca/img/walter.jpg">
-                        </div>
-                        <div>
-                            <div class="textHora">
-                                <div class="textIn">Entrada</div>
-                                <div class="textOut">Salida</div>
-                                <div><i class="icoClock fa fa-clock-o"></i> 10:35 hs </div>
-                            </div>
-                            <div class="textName">Walter Roberto Blanco</div>
-                            <div class="textDNI">30001823</div>
-                        </div>
-                    </div>
-                    <div class="contentArrow">
-                      <i class="fa fa-caret-right" aria-hidden="true"></i>
-                    </div>
-                </div>
-
-                <div class="itemAccess entrada">
-                    <div class="infoUserAside">
-                        <div>
-                          <img class="imgUserAside" src="/systems/biblioteca/img/walter.jpg">
-                        </div>
-                        <div>
-                            <div class="textHora">
-                                <div class="textIn">Entrada</div>
-                                <div class="textOut">Salida</div>
-                                <div><i class="icoClock fa fa-clock-o"></i> 10:35 hs </div>
-                            </div>
-                            <div class="textName">Walter Roberto Blanco</div>
-                            <div class="textDNI">30001823</div>
-                        </div>
-                    </div>
-                    <div class="contentArrow">
-                      <i class="fa fa-caret-right" aria-hidden="true"></i>
-                    </div>
-                </div>
-
-                <div class="itemAccess salida">
-                    <div class="infoUserAside">
-                        <div>
-                          <img class="imgUserAside" src="/systems/biblioteca/img/walter.jpg">
-                        </div>
-                        <div>
-                            <div class="textHora">
-                                <div class="textIn">Entrada</div>
-                                <div class="textOut">Salida</div>
-                                <div><i class="icoClock fa fa-clock-o"></i> 10:35 hs </div>
-                            </div>
-                            <div class="textName">Walter Roberto Blanco</div>
-                            <div class="textDNI">30001823</div>
-                        </div>
-                    </div>
-                    <div class="contentArrow">
-                      <i class="fa fa-caret-right" aria-hidden="true"></i>
-                    </div>
-                </div>
-
-                <div class="itemAccess entrada">
-                    <div class="infoUserAside">
-                        <div>
-                          <img class="imgUserAside" src="/systems/biblioteca/img/pablo.jpg">
-                        </div>
-                        <div>
-                            <div class="textHora">
-                                <div class="textIn">Entrada</div>
-                                <div class="textOut">Salida</div>
-                                <div><i class="icoClock fa fa-clock-o"></i> 10:36 hs </div>
-                            </div>
-                            <div class="textName">Pablo Daniel Rey</div>
-                            <div class="textDNI">29568325</div>
-                        </div>
-                    </div>
-                    <div class="contentArrow">
-                      <i class="fa fa-caret-right" aria-hidden="true"></i>
-                    </div>
-                </div>
-
-                <div class="itemAccess salida">
-                    <div class="infoUserAside">
-                        <div>
-                          <img class="imgUserAside" src="/systems/biblioteca/img/walter.jpg">
-                        </div>
-                        <div>
-                            <div class="textHora">
-                                <div class="textIn">Entrada</div>
-                                <div class="textOut">Salida</div>
-                                <div><i class="icoClock fa fa-clock-o"></i> 10:35 hs </div>
-                            </div>
-                            <div class="textName">Walter Roberto Blanco</div>
-                            <div class="textDNI">30001823</div>
-                        </div>
-                    </div>
-                    <div class="contentArrow">
-                      <i class="fa fa-caret-right" aria-hidden="true"></i>
-                    </div>
-                </div>
-
-                <div class="itemAccess entrada">
-                    <div class="infoUserAside">
-                        <div>
-                          <img class="imgUserAside" src="/systems/biblioteca/img/maxi.jpg">
-                        </div>
-                        <div>
-                            <div class="textHora">
-                                <div class="textIn">Entrada</div>
-                                <div class="textOut">Salida</div>
-                                <div><i class="icoClock fa fa-clock-o"></i> 10:34 hs </div>
-                            </div>
-                            <div class="textName">Maximiliano Sausedo</div>
-                            <div class="textDNI">30001823</div>
-                        </div>
-                    </div>
-                    <div class="contentArrow">
-                      <i class="fa fa-caret-right" aria-hidden="true"></i>
-                    </div>
-                </div>
-
-                <div class="itemAccess entrada">
-                    <div class="infoUserAside">
-                        <div>
-                          <img class="imgUserAside" src="/systems/biblioteca/img/walter.jpg">
-                        </div>
-                        <div>
-                            <div class="textHora">
-                                <div class="textIn">Entrada</div>
-                                <div class="textOut">Salida</div>
-                                <div><i class="icoClock fa fa-clock-o"></i> 10:35 hs </div>
-                            </div>
-                            <div class="textName">Walter Roberto Blanco</div>
-                            <div class="textDNI">30001823</div>
-                        </div>
-                    </div>
-                    <div class="contentArrow">
-                      <i class="fa fa-caret-right" aria-hidden="true"></i>
-                    </div>
-                </div>
-
-                <div class="itemAccess salida">
-                    <div class="infoUserAside">
-                        <div>
-                          <img class="imgUserAside" src="/systems/biblioteca/img/walter.jpg">
-                        </div>
-                        <div>
-                            <div class="textHora">
-                                <div class="textIn">Entrada</div>
-                                <div class="textOut">Salida</div>
-                                <div><i class="icoClock fa fa-clock-o"></i> 10:35 hs </div>
-                            </div>
-                            <div class="textName">Walter Roberto Blanco</div>
-                            <div class="textDNI">30001823</div>
-                        </div>
-                    </div>
-                    <div class="contentArrow">
-                      <i class="fa fa-caret-right" aria-hidden="true"></i>
-                    </div>
-                </div>
-
-                <div class="itemAccess entrada">
-                    <div class="infoUserAside">
-                        <div>
-                          <img class="imgUserAside" src="/systems/biblioteca/img/walter.jpg">
-                        </div>
-                        <div>
-                            <div class="textHora">
-                                <div class="textIn">Entrada</div>
-                                <div class="textOut">Salida</div>
-                                <div><i class="icoClock fa fa-clock-o"></i> 10:35 hs </div>
-                            </div>
-                            <div class="textName">Walter Roberto Blanco</div>
-                            <div class="textDNI">30001823</div>
-                        </div>
-                    </div>
-                    <div class="contentArrow">
-                      <i class="fa fa-caret-right" aria-hidden="true"></i>
-                    </div>
-                </div>
-
-                <div class="itemAccess salida">
-                    <div class="infoUserAside">
-                        <div>
-                          <img class="imgUserAside" src="/systems/biblioteca/img/walter.jpg">
-                        </div>
-                        <div>
-                            <div class="textHora">
-                                <div class="textIn">Entrada</div>
-                                <div class="textOut">Salida</div>
-                                <div><i class="icoClock fa fa-clock-o"></i> 10:35 hs </div>
-                            </div>
-                            <div class="textName">Walter Roberto Blanco</div>
-                            <div class="textDNI">30001823</div>
-                        </div>
-                    </div>
-                    <div class="contentArrow">
-                      <i class="fa fa-caret-right" aria-hidden="true"></i>
-                    </div>
-                </div>
-
+            
             </div>
         </div>
 
