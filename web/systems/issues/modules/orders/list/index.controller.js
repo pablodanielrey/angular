@@ -15,8 +15,7 @@
           userId: null, //usuario logueado
           users: [],
           issues: [],
-          userOffices: [],
-          privateTransport: null,
+          userOffices: []
         }
 
         vm.view = {
@@ -49,7 +48,6 @@
 
 
         $scope.$on('wamp.open', function(event, args) {
-          vm.model.privateTransport = Login.getPrivateTransport();
           activate();
         });
 
