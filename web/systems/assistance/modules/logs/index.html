@@ -76,16 +76,16 @@
                 <!-- ---- Titulos del listado ----- -->
                 <div class="titleListAccess">
                   <div class="file0">A</div>
-                  <div class="file1">Acceso</div>
-                  <div class="file2">Día</div>
+                  <div class="file1" ng-click="vm.sortAccess()">Acceso</div>
+                  <div class="file2" ng-click="vm.sortDate()">Día</div>
                   <div class="file2b">Hora</div>
-                  <div class="file3">Nombre y Apellido</div>
+                  <div class="file3" ng-click="vm.sortName()">Nombre y Apellido</div>
                   <div class="file4">DNI</div>
                   <div class="file5">Tipo</div>
                 </div>
                 <!-- ---- Accesos ----- -->
                 <div class="listAccess">
-                  <div class="itemListAccess {{i.clase}}" ng-repeat="i in vm.model.logs | filter: vm.view.searchInput as results">
+                  <div class="itemListAccess {{i.clase}}" ng-repeat="i in vm.model.logs | orderBy: vm.view.sort : vm.view.reverse | filter: vm.view.searchInput as results">
                     <!-- VARIABLES: entrada, salida -->
                     <div class="file1b">
                         <i class="inOut fa fa-chevron-circle-left"></i>
@@ -132,7 +132,7 @@
                       <i class="fa fa-caret-right" aria-hidden="true"></i>
                     </div>
                 </div>
-            
+
             </div>
         </div>
 

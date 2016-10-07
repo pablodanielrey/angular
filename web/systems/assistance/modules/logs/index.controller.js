@@ -21,7 +21,9 @@
         vm.view = {
           style2: '',
           style: '',
-          searchInput: ''
+          searchInput: '',
+          sort: '',
+          reverse: true
         }
 
         vm.model = {
@@ -38,6 +40,12 @@
           outside: 0
         };
 
+        vm.resetSearchAndGetLogs = resetSearchAndGetLogs;
+        vm.searchLogs = searchLogs;
+        vm.getUserPhoto = getUserPhoto;
+        vm.sortDate = sortDate;
+        vm.sortAccess = sortAccess;
+        vm.sortName = sortName;
 
         $scope.$on('wamp.open', function(event, args) {
           vm.model.privateTransport = Login.getPrivateTransport();
@@ -51,11 +59,31 @@
             return;
           }
           _getTodayLogs();
+          vm.sortDate();
         }
 
-        vm.resetSearchAndGetLogs = resetSearchAndGetLogs;
-        vm.searchLogs = searchLogs;
-        vm.getUserPhoto = getUserPhoto;
+
+
+        function sortDate() {
+          vm.view.reverse = (vm.view.sort[0] == 'date') ? !vm.view.reverse : true;
+          vm.view.sort = ["date"];
+        }
+
+        function sortName() {
+          vm.view.reverse = (vm.view.sort[0] == "name") ? !vm.view.reverse : false;
+          vm.view.sort = ["name", "lastname", "date"];
+        }
+
+        function sortAccess() {
+          vm.view.reverse = (vm.view.sort[0] == 'clase') ? !vm.view.reverse : true;
+          vm.view.sort = ["clase", "date", "name", "lastname"];
+        }
+
+        function sortDni() {
+          vm.view.reverse = (vm.view.sort[0] == 'dni') ? !vm.view.reverse : true;
+          vm.view.sort = ["dni", "date", "name", "lastname"];
+        }
+
 
         function _resetSearch() {
           vm.model.search = {
@@ -136,8 +164,8 @@
           return {
               clase: cca,
               tipo: 'NoDocente',
-              name: user.name,
-              lastname: user.lastname,
+              name: user.name.trim(),
+              lastname: user.lastname.trim(),
               photo: user.photo,
               genre: user.genre,
               dni: user.dni,
