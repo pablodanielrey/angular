@@ -2,7 +2,7 @@
   'use strict';
 
   angular
-      .module('login',['ngRoute','ngCookies','files'])
+      .module('login',['users','ngRoute','ngCookies'])
 
 /*
   angular

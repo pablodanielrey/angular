@@ -1,6 +1,6 @@
 (function() {
   'user strict'
   angular
-      .module('users',['login']);
+      .module('users',['login','files']);
 
 })();

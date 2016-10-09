@@ -58,22 +58,19 @@ function HeaderCtrl($rootScope, $scope, $window, Login, Users, Files) {
   function loadUser(userId) {
     vm.model.user = null;
     if (userId == null || userId == '') {
-      return
+      return;
     }
-    Users.findById([userId]).then(
+    Users.findById([userId]).then(Users.findPhotos).then(
       function(users) {
-        if (users.length > 0) {
-          $scope.$apply(function() {
-              vm.model.user = users[0];
-          });
-
-          Users.findPhoto(vm.model.user.photo).then(function(photo) {
-            $scope.$apply(function() {
-              vm.model.user.photoSrc = (photo == null) ? '' : Files.toDataUri(photo);
-            });
-          });
-
+        if (users.length <= 0) {
+          return;
         }
+
+        $timeout(function() {
+          var user = users[0];
+          vm.model.user = user;
+          vm.model.user.photoSrc = (user.photo == null) ? '' : Files.toDataUri(user.photo);
+        });
       },
       function(error) {
         console.log(error);

@@ -83,16 +83,14 @@
 
 		  function findById(id) {
 				if (id == null) {
-					return null;
+					return $q.when(null);
 				}
 				return Login.getPrivateTransport().call('issues.find_by_id', [id]);
 			}
 
 			function findByIds(ids) {
 				if (ids.length <= 0) {
-					var d = $q.defer;
-					d.resolve([]);
-					return d.promise;
+					return $q.when([]);
 				}
 				return Login.getPrivateTransport().call('issues.find_by_ids', [ids]);
 			}

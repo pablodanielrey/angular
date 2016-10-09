@@ -22,9 +22,9 @@
     });
 
 
-  LoginCtrl.$inject = ['$scope','$window', '$interval', '$location', 'Login', 'Files', '$q'];
+  LoginCtrl.$inject = ['$scope','$window', '$interval', '$location', 'Login', 'Users', '$q', '$timeout'];
 
-  function LoginCtrl($scope, $window, $interval, $location, Login, Files, $q) {
+  function LoginCtrl($scope, $window, $interval, $location, Login, Users, $q, $timeout) {
 
     /* ---------------------------------------------------
      * --------------------- VARIABLES -------------------
@@ -116,12 +116,23 @@
          $scope.view.classError = classNameNoError;
        }
 
+       //
+
        function sendUsername() {
          Login.getPublicData($scope.model.username).then(
            function(publicData) {
              $scope.model.user = publicData;
-             $scope.view.focus = 'inputPassword';
-             $scope.viewPassword();
+
+             Users.photoToDataUri([$scope.model.user]).then(
+               function(users) {
+                 $timeout(function() {
+                   $scope.view.focus = 'inputPassword';
+                   $scope.viewPassword();
+                 });
+             },
+             function(err) {
+                $scope.viewUserError();
+             });
            },
            function(err) {
              $scope.viewUserError();
@@ -132,7 +143,7 @@
          if ($scope.model.user == null || $scope.model.user.photo == null || $scope.model.user.photo == '') {
            return "modules/img/imgUser.jpg";
          } else {
-           return Files.toDataUri($scope.model.user.photo);
+           return $scope.model.user.photoSrc;
          }
        }
 

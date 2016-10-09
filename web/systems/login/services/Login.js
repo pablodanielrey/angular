@@ -5,7 +5,6 @@
     .module('login')
     .service('Login', Login);
 
-
     function wamp(connection)  {
         var factory = {};
 
