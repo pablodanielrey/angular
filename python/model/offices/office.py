@@ -4,6 +4,7 @@ from model.dao import DAO
 from model.users.users import UserDAO, User
 from model.offices.designation import Designation
 
+import logging
 import datetime
 
 import re
@@ -65,8 +66,12 @@ class Office(JSONSerializable):
         return OfficeDAO.findByIds(con, ids)
 
     @classmethod
-    def findByUser(cls, con, userId, tree=False, types=None):
-        return OfficeModel.getOfficesByUser(con, userId, tree, types)
+    def findByUser(cls, con, userId, types=None, tree=False):
+        return OfficeModel.getOfficesByUser(con, userId, types, tree)
+
+    @classmethod
+    def findChildIds(cls, con, oId):
+        return OfficeDAO.findChilds(con, oId, tree=True)
 
     @classmethod
     def findOfficesUsers(cls, con, oids):
@@ -115,10 +120,9 @@ class OfficeDAO(DAO):
     @classmethod
     def findByIds(cls, con, ids):
         assert ids is not None
-        assert isinstance(ids, list)
 
         if len(ids) <= 0:
-            return None
+            return []
 
         cur = con.cursor()
         try:
@@ -208,17 +212,25 @@ class OfficeModel():
     cache = {}
 
     @classmethod
-    def getOfficesByUser(cls, con, userId, tree=False, types=None):
+    def getOfficesByUser(cls, con, userId, types=None, tree=False):
         idsD = Designation.findAllByUser(con, userId)
         desig = Designation.findByIds(con, idsD)
-        oIds = [d.officeId for d in desig]
-        offices = Office.findByIds(con, oIds)
-        toReturnIds = []
-        for o in offices:
-            toReturnIds.extend(o.findChilds(con, types, tree))
+        oIds = set()
+        oIds.update([d.officeId for d in desig])
 
-        #return [office.id for office in toReturn if office.type in types]
-        return list(set(toReturnIds))
+        if tree:
+            childs = set()
+            for oId in oIds:
+                childs.update(Office.findChildIds(con, oId))
+            oIds.update(childs)
+
+        toRemove = []
+        if types is not None:
+            for off in Office.findByIds(con, oIds):
+                if off.type is None or off.type not in types:
+                    toRemove.append(off.id)
+
+        return [o for o in oIds if o not in toRemove]
 
     @classmethod
     def persistDesignations(cls, con, oid, userIds):

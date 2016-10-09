@@ -592,6 +592,11 @@ class IssueModel():
 
     @classmethod
     def getOffices(cls, con, userId):
+        """
+            retorna las oficinas públicas que están permitidas como destino de pedidos.
+            oficinas públicas.
+            suboficinas de las oficinas a la que pertenece la persona (tipo: direcciones y departamentos).
+        """
         officesIds = Office.findAll(con)
         projects = RedmineAPI.findAllProjects()
         offices = Office.findByIds(con, [oid for oid in officesIds if oid in projects])
@@ -608,6 +613,10 @@ class IssueModel():
 
     @classmethod
     def getAreas(cls, con, oId):
+        """
+            Retorna las suboficinas de oId que tienen tipo área.
+            También se les puede realizar pedidos a las áreas específicas.
+        """
         offs = Office.findByIds(con, [oId])
         if offs is None or len(offs) <= 0:
             return []
@@ -646,7 +655,7 @@ class IssueModel():
         if regex == '':
             return []
 
-        userIds = User.findAll(con)
+        userIds = User.search(con, regex)
 
         users = []
         for u in userIds:
@@ -657,6 +666,8 @@ class IssueModel():
                 cls.cache[uid] = user
             users.append(cls.cache[uid])
 
+        """
+            antes de implementar el search en users se usaba esto.
         m = re.compile(".*{}.*".format(regex), re.I)
         matched = []
 
@@ -669,6 +680,11 @@ class IssueModel():
         ''' busco por nombre y apellido '''
         matched = [ cls._getUserData(con, u) for u in users if m.search(u.name) or m.search(u.lastname) ]
         return matched
+        """
+
+        return [cls._getUserData(con, u) for u in users]
+
+
 
     @classmethod
     def _getUserData(cls, con, user):

@@ -4,15 +4,16 @@
 			.module('offices')
 			.service('Offices', Offices);
 
-		Offices.inject = ['Login'];
+		Offices.inject = ['Login','$q'];
 
-		function Offices(Login) {
+		function Offices(Login, $q) {
 
 			this.subscribe = subscribe;
 		  this.findById = findById;
 			this.searchUsers = searchUsers;
 			this.findUsersByIds = findUsersByIds;
 			this.getOfficeTypes = getOfficeTypes;
+			this.findByUser = findByUser;
 			this.getOfficesByUser = getOfficesByUser;
 			this.findAll = findAll;
 			this.persist = persist;
@@ -24,11 +25,24 @@
 			}
 
 			function findById(ids) {
+				if (ids == null || ids.length <= 0)  {
+					return $q.when([]);
+				}
 				return Login.getPrivateTransport().call('offices.find_by_id',[ids]);
 			}
 
-			function getOfficesByUser(userId, tree) {
+			function findByUser(userId, tree) {
+				if (userId == null) {
+					return [];
+				}
 				return Login.getPrivateTransport().call('offices.find_offices_by_user',[userId, tree]);
+			}
+
+			/*
+				Solo para no romper codigo anterior. ahora es findByUser
+			*/
+			function getOfficesByUser(userId, tree) {
+				return findByUser(userId, tree);
 			}
 
 			function searchUsers(regex) {

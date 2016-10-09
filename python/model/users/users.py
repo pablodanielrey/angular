@@ -86,6 +86,20 @@ class UserDAO(DAO):
         return t
 
     @staticmethod
+    def search(con, regex):
+        """
+            busca todos los usuarios usando POSIX regular expresions sobre los campos :
+                    username, lastname, dni
+        """
+        cur = con.cursor()
+        try:
+            cur.execute('select id, version from profile.users where name ~* %s or lastname ~* %s or dni ~* %s', (regex, regex, regex))
+            return [(u['id'], u['version']) for u in cur]
+        finally:
+            cur.close()
+
+
+    @staticmethod
     def findAll(con):
         '''
             Obtiene todos los usuarios
@@ -658,6 +672,10 @@ class User(JSONSerializable):
 
     def updateType(self, con):
         return self.dao.updateType(con, self.id, self.type)
+
+    @classmethod
+    def search(cls, con, regex):
+        return cls.dao.search(con, regex)
 
     @classmethod
     def findById(cls, con, ids):

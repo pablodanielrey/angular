@@ -62,7 +62,7 @@ class Issues(wamp.SystemComponentSession):
                 return []
 
             userId = self.getUserId(con, details)
-            oIds = Office.findByUser(con, userId, False)
+            oIds = Office.findByUser(con, userId, types=None, tree=True)
             toIds = [oid for oid in oIds if oid in tos]
             return Issue.getAssignedIssues(con, userId, toIds, froms, statuses)
         finally:

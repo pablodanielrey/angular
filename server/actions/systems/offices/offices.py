@@ -36,7 +36,7 @@ class Offices(wamp.SystemComponentSession):
     def findOfficesByUser(self, userId, tree):
         con = self.conn.get()
         try:
-            return Office.findByUser(con, userId, tree)
+            return Office.findByUser(con, userId, types=None, tree=tree)
         finally:
             self.conn.put(con)
 

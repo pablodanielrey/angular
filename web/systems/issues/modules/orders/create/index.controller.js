@@ -94,12 +94,14 @@
           vm.model.offices = [];
           Issues.getOffices().then(
             function(offices) {
-              $scope.$apply(function() {
+              $timeout(function() {
                 vm.model.offices = offices;
               });
             },
             function(error) {
-              messageError(error);
+              $timeout(function() {
+                messageError(error);
+              });
             }
           )
         }
@@ -137,12 +139,14 @@
             vm.view.searching = true;
             Issues.searchUsers(vm.model.search).then(
               function(users) {
-                $scope.$apply(function() {
+                $timeout(function() {
                   vm.view.searching = false;
                   vm.model.users = users;
                 });
               }, function(error) {
-                messageError(error);
+                $timeout(function() {
+                  messageError(error);
+                });
               }
             );
           }, 1000);
@@ -157,26 +161,19 @@
         //***** cargar oficinas del usuario (origen) *****
         function loadUserOffices(userId) {
           vm.model.searchFromOffice = {name:""};
-          vm.model.officesUser = [];
+          vm.model.userOffices = [];
           vm.model.selectedFromOffice = null;
-          Offices.getOfficesByUser(userId, false).then(
-            function(ids) {
-              if (!ids || ids.length <= 0) return;
-
-              Offices.findById(ids).then(
-                function(offices) {
-                  $scope.$apply(function() {
-                    vm.model.officesUser = (!offices || offices.length <= 0) ? [] : offices;
-                    vm.model.selectedFromOffice = (offices.length > 0) ? offices[0] : null;
-                  });
-                }, function(error) {
+          Offices.findByUser(userId, false).then(Offices.findById).then(
+              function(offices) {
+                $timeout(function() {
+                  vm.model.userOffices = offices;
+                  vm.model.selectedFromOffice = (offices.length > 0) ? offices[0] : null;
+                });
+              }, function(error) {
+                $timeout(function() {
                   messageError(error);
-                }
-              )
-            }, function(error) {
-              messageError(error);
-            }
-          );
+                });
+              });
         }
 
         function selectFromOffice(office) {
