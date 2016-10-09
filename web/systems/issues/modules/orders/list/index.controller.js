@@ -38,6 +38,34 @@
         vm.headerAreaSelectAllToggle = headerAreaSelectAllToggle;
         vm.headerOfficesSelectAllToggle = headerOfficesSelectAllToggle;
         vm.headerInvalidateIssuesCache = headerInvalidateIssuesCache;
+        vm.headerSelectTo = headerSelectTo;
+        vm.headerSelectStatus = headerSelectStatus;
+        vm.headerSelectFrom = headerSelectFrom;
+
+
+        function headerSelectStatus() {
+          if (vm.view.style3 == vm.view.styles3[1]) {
+            vm.view.style3 = vm.view.styles3[0];
+          } else {
+            vm.view.style3 = vm.view.styles3[1];
+          }
+        }
+
+        function headerSelectTo() {
+          if (vm.view.style3 == vm.view.styles3[2]) {
+            vm.view.style3 = vm.view.styles3[0];
+          } else {
+            vm.view.style3 = vm.view.styles3[2];
+          }
+        }
+
+        function headerSelectFrom() {
+          if (vm.view.style3 == vm.view.styles3[3]) {
+            vm.view.style3 = vm.view.styles3[0];
+          } else {
+            vm.view.style3 = vm.view.styles3[3];
+          }
+        }
 
         function headerInvalidateIssuesCache() {
           $window.sessionStorage.removeItem('assignedIssues');
@@ -67,6 +95,16 @@
           vm.model.header.status.paused = s;
           vm.model.header.status.rejected = s;
           vm.model.header.status.closed = s;
+        }
+
+        function _processHeaderToOffices(offices) {
+          if (offices == null) {
+            return;
+          }
+          vm.model.header.userOffices = offices;
+          for (var i = 0; i < vm.model.header.userOffices.length; i++) {
+            vm.model.header.userOffices[i].active = true;
+          }
         }
 
         function headerLoadOffices() {
@@ -130,6 +168,8 @@
           styles1: ['','pantallaMensajeAlUsuario'],
           style2: '',
           styles2: ['', 'mensajeCargando', 'mensajeError'],
+          style3: '',
+          styles3: ['','seleccionarEstado','seleccionarAreas','SeleccionarOficinas'],
 
           search: '',
           status: ['','abierta', 'enProgreso', 'cerrada', 'comentarios', 'cerrada', 'rechazada', 'pausada'],
@@ -358,13 +398,16 @@
                 function(offices) {
                   $timeout(function() {
                     vm.model.userOffices = [];
-                    vm.model.header.userOffices = offices;
                     if (offices == null || offices.length <= 0) {
                         return;
                     }
                     for (var i = 0; i < offices.length; i++) {
                       vm.model.userOffices[offices[i].id] = offices[i];
                     }
+
+                    // esto carga en el header el tema de las oficinas de destino del pedido
+                    _processHeaderToOffices(offices);
+
                   });
                 }, function(error) {
                   vm.messageError(error);
