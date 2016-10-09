@@ -41,7 +41,12 @@
         vm.headerSelectTo = headerSelectTo;
         vm.headerSelectStatus = headerSelectStatus;
         vm.headerSelectFrom = headerSelectFrom;
+        vm.headerFindIssues = headerFindIssues;
 
+        function headerFindIssues() {
+          vm.view.style3 = vm.view.styles3[0];
+          loadIssues();
+        }
 
         function headerSelectStatus() {
           if (vm.view.style3 == vm.view.styles3[1]) {
