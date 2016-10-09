@@ -394,14 +394,9 @@
 
         function loadUserOffices(userId) {
           vm.model.userOffices = [];
-          Offices.getOfficesByUser(userId, false).then(
-            function(ids) {
-              if (ids == null || ids.length <= 0) {
-                return;
-              }
-              Offices.findById(ids).then(
-                function(offices) {
-                  $timeout(function() {
+          Offices.findByUser(userId, true).then(Offices.findByIds).then(
+              function(offices) {
+                $timeout(function() {
                     vm.model.userOffices = [];
                     if (offices == null || offices.length <= 0) {
                         return;
@@ -413,15 +408,12 @@
                     // esto carga en el header el tema de las oficinas de destino del pedido
                     _processHeaderToOffices(offices);
 
-                  });
-                }, function(error) {
+                });
+              }, function(error) {
+                $timeout(function() {
                   vm.messageError(error);
-                }
-              )
-            }, function(error) {
-              vm.messageError(error);
-            }
-          );
+                });
+              });
         }
 
     }

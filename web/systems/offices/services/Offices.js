@@ -10,6 +10,7 @@
 
 			this.subscribe = subscribe;
 		  this.findById = findById;
+			this.findByIds = findByIds;
 			this.searchUsers = searchUsers;
 			this.findUsersByIds = findUsersByIds;
 			this.getOfficeTypes = getOfficeTypes;
@@ -26,11 +27,15 @@
 				Login.getPrivateTransport().subscribe(event, func);
 			}
 
-			function findById(ids) {
+			function findByIds(ids) {
 				if (ids == null || ids.length <= 0)  {
 					return $q.when([]);
 				}
 				return Login.getPrivateTransport().call('offices.find_by_id',[ids]);
+			}
+
+			function findById(ids) {
+				return findByIds(ids);
 			}
 
 			function findByUser(userId, tree) {
