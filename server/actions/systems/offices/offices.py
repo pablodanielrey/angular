@@ -33,10 +33,10 @@ class Offices(wamp.SystemComponentSession):
     conn = wamp.getConnectionManager()
 
     @autobahn.wamp.register('offices.find_offices_by_user')
-    def findOfficesByUser(self, userId, tree):
+    def findOfficesByUser(self, userId, types, tree):
         con = self.conn.get()
         try:
-            return Office.findByUser(con, userId, types=None, tree=tree)
+            return Office.findByUser(con, userId, types, tree=tree)
         finally:
             self.conn.put(con)
 

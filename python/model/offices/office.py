@@ -220,14 +220,19 @@ class OfficeModel():
 
         if tree:
             childs = set()
+            logging.info('buscando hijos')
             for oId in oIds:
+                logging.info(oId)
                 childs.update(Office.findChildIds(con, oId))
+                logging.info(childs)
             oIds.update(childs)
 
         toRemove = []
         if types is not None:
             for off in Office.findByIds(con, oIds):
-                if off.type is None or off.type not in types:
+                logging.info('chequeando {}'.format(off))
+                logging.info(off.type)
+                if off.type is None or off.type['value'] not in types:
                     toRemove.append(off.id)
 
         return [o for o in oIds if o not in toRemove]

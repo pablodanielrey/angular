@@ -56,7 +56,7 @@
                             <input class="inputSearch3" type="text" placeholder="Seleccionar Oficina" ng-model="vm.model.searchFromOffice.name">
                         </div>
                         <div class="contentListOffice">
-                            <div class="btnItemOffice" ng-click="vm.selectFromOffice(office)" ng-repeat="office in vm.model.officesUser | filter: vm.model.searchFromOffice">
+                            <div class="btnItemOffice" ng-click="vm.selectFromOffice(office)" ng-repeat="office in vm.model.userOffices | filter: vm.model.searchFromOffice">
                                 <div class="contentImgOffice">
                                     <img class="imgOffice" src="img/empresa.jpg" alt="foto de la oficina">
                                 </div>

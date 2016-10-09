@@ -163,7 +163,11 @@
           vm.model.searchFromOffice = {name:""};
           vm.model.userOffices = [];
           vm.model.selectedFromOffice = null;
-          Offices.findByUser(userId, false).then(Offices.findById).then(
+
+          Offices.runAndConcat([
+            Offices.findByUser(userId, false),
+            Offices.findByUserAndTypes(userId, ['area'], true)])
+            .then(Offices.findById).then(
               function(offices) {
                 $timeout(function() {
                   vm.model.userOffices = offices;

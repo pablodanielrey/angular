@@ -14,11 +14,13 @@
 			this.findUsersByIds = findUsersByIds;
 			this.getOfficeTypes = getOfficeTypes;
 			this.findByUser = findByUser;
+			this.findByUserAndTypes = findByUserAndTypes;
 			this.getOfficesByUser = getOfficesByUser;
 			this.findAll = findAll;
 			this.persist = persist;
 			this.persistWithUsers = persistWithUsers;
 			this.remove = remove;
+			this.runAndConcat = runAndConcat;
 
 			function subscribe(event, func) {
 				Login.getPrivateTransport().subscribe(event, func);
@@ -35,7 +37,29 @@
 				if (userId == null) {
 					return [];
 				}
-				return Login.getPrivateTransport().call('offices.find_offices_by_user',[userId, tree]);
+				return Login.getPrivateTransport().call('offices.find_offices_by_user',[userId, null, tree]);
+			}
+
+			function findByUserAndTypes(userId, types, tree) {
+				if (userId == null) {
+					return [];
+				}
+				return Login.getPrivateTransport().call('offices.find_offices_by_user',[userId, types, tree]);
+			}
+
+			/*
+				ejecuta las promesas y retorna la lista resultante de la concatenacion de los resultados.
+			*/
+			function runAndConcat(promises) {
+				var d = $q.defer()
+				$q.all(promises).then(function(lists) {
+					var listr = [];
+					for (var i = 0; i < lists.length; i++) {
+						listr = listr.concat(lists[i]);
+					}
+					d.resolve(listr);
+				});
+				return d.promise;
 			}
 
 			/*
