@@ -197,6 +197,9 @@ class RedmineAPI:
 
     @classmethod
     def _fromResult(cls, con, r, redmine, related=False):
+
+        logging.info(r)
+
         attrs = dir(r)
         issue = Issue()
         issue.id = r.id
@@ -240,15 +243,27 @@ class RedmineAPI:
 
 
     @classmethod
-    def findByIds(cls, con, issuesIds):
+    def findByIds(cls, con, issuesIds, childrens=False, attachments=False):
         """ retorna los issues del modelo nuestro identificados por los ids issuesIds """
         assert isinstance(issuesIds, list)
+
         redmine = cls._getRedmineInstance()
         if redmine is None:
             return None
+
+        includes = []
+        if childrens:
+            includes.append('childrens')
+        if attachments:
+            includes.append('attachments')
+
         issues = []
         for issueId in issuesIds:
-            issues.append(redmine.issue.get(issueId, include='children, attachments'))
+            if len(includes) > 0:
+                issues.append(redmine.issue.get(issueId, include=','.join(includes)))
+            else:
+                issues.append(redmine.issue.get(issueId))
+
         return [cls._fromResult(con, issue, redmine, True) for issue in issues]
 
 
@@ -340,11 +355,10 @@ class RedmineAPI:
 
     @classmethod
     # @do_cprofile
-    def getAssignedIssues(cls, con, userId, oIds, statuses=None, froms=None):
+    def getAssignedIssues(cls, con, userId, oIds, froms=None, statuses=None):
         redmine = cls._getRedmineInstance(con)
         userRedmine = cls._findUserId(con, redmine, userId)
         issues = cls._getIssuesByProject(con, oIds, userRedmine, redmine, statuses)
-
         return [i.id for i in issues]
         """
         if froms is None:

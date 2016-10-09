@@ -63,7 +63,7 @@
 			}
 
 		  function getAssignedIssues(statuses, froms, tos) {
-				return Login.getPrivateTransport().call('issues.get_assigned_issues', [statuses, froms, tos]).then(findByIds)
+				return Login.getPrivateTransport().call('issues.get_assigned_issues', [statuses, froms, tos]).then(findByIds);
 			}
 
 			function updateIssue(id, status, priority) {
@@ -82,10 +82,18 @@
 			}
 
 		  function findById(id) {
+				if (id == null) {
+					return null;
+				}
 				return Login.getPrivateTransport().call('issues.find_by_id', [id]);
 			}
 
 			function findByIds(ids) {
+				if (ids.length <= 0) {
+					var d = $q.defer;
+					d.resolve([]);
+					return d.promise;
+				}
 				return Login.getPrivateTransport().call('issues.find_by_ids', [ids]);
 			}
 

@@ -62,7 +62,7 @@ class Issues(wamp.SystemComponentSession):
             userId = self.getUserId(con, details)
             oIds = Office.findByUser(con, userId, False)
             toIds = [oid for oid in oIds if oid in tos]
-            return Issue.getAssignedIssues(con, userId, toIds, statuses, froms)
+            return Issue.getAssignedIssues(con, userId, toIds, froms, statuses)
         finally:
             self.conn.put(con)
 
@@ -71,7 +71,7 @@ class Issues(wamp.SystemComponentSession):
         con = self.conn.get()
         try:
             issues = Issue.findByIds(con, [issueid])
-            if issues is None:
+            if issues is None or len(issues) <= 0:
                 return None
             return issues[0]
         finally:
@@ -81,6 +81,9 @@ class Issues(wamp.SystemComponentSession):
     def findByIds(self, issuesIds, details):
         con = self.conn.get()
         try:
+            logging.info(issuesIds)
+            if len(issuesIds) <= 0:
+                return []
             return Issue.findByIds(con, issuesIds)
         finally:
             self.conn.put(con)
