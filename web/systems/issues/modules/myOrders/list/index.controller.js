@@ -24,6 +24,8 @@
           styles1: ['','pantallaMensajeAlUsuario'],
           style2: '',
           styles2: ['', 'mensajeCargando'],
+          style3: '',
+          styles3: ['','mensajeCargando', 'mensajeError', 'mensajeEnviado', 'mensajePedidoCreado'],
 
           status: ['','abierta', 'enProgreso', 'cerrada', 'comentarios', 'rechazada', 'pausada'],
           statusSort: ['','abierta', 'enProgreso', 'pausada', 'rechazada', 'cerrada'],

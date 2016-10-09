@@ -194,13 +194,16 @@
                 vm.loadUser(issues[i].userId);
                 vm.loadUser(issues[i].creatorId);
               }
-              vm.model.issues = issues;
-              vm.sortStatus();
-              vm.closeMessage();
-
+              $timeout(function() {
+                vm.model.issues = issues;
+                vm.sortStatus();
+                vm.closeMessage();
+              });
             },
             function(error) {
-              vm.messageError(error);
+              $timeout(function() {
+                vm.messageError(error);
+              });
             }
           );
         }
