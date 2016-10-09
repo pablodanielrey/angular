@@ -54,11 +54,13 @@ class Issues(wamp.SystemComponentSession):
             logging.info(statuses)
             logging.info(froms)
             logging.info(tos)
+
             if statuses is None:
                 return []
             assert isinstance(statuses,list)
             if len(statuses) <= 0:
-                return None
+                return []
+
             userId = self.getUserId(con, details)
             oIds = Office.findByUser(con, userId, False)
             toIds = [oid for oid in oIds if oid in tos]

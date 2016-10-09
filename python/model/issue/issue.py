@@ -356,49 +356,63 @@ class RedmineAPI:
     @classmethod
     # @do_cprofile
     def getAssignedIssues(cls, con, userId, oIds, froms=None, statuses=None):
+        """
+            Retorna una lista de issues asignados a las oficinas : oIds
+            froms = de quien proviene el Issue. si es [] entonces retorna todos los que NO TENGAN oficina de origen. Si es None no se tiene en cuenta.
+            statuses = estados de los issues. si es None no se tiene en cuenta como filtro.
+        """
+        assert isinstance(oIds,list)
+        if len(oIds) <= 0:
+            return []
+
+        if statuses is not None:
+            assert isinstance(statuses,list)
+            if len(statuses) <= 0:
+                return []
+
         redmine = cls._getRedmineInstance(con)
         userRedmine = cls._findUserId(con, redmine, userId)
-        issues = cls._getIssuesByProject(con, oIds, userRedmine, redmine, statuses)
-        return [i.id for i in issues]
-        """
-        if froms is None:
-            return [cls._fromResult(con, issue, redmine) for issue in issues]
-
-        assert isinstance(froms, list)
-        if len(froms) > 0:
-            filteredIssues = [i for i in issues if cls._getCreatorOfficeId(i) in froms]
-            return [cls._fromResult(con, issue, redmine) for issue in filteredIssues]
-        else:
-            return [cls._fromResult(con, issue, redmine) for issue in issues]
-        """
-
-    """
-    def getAssignedIssues(cls, con, userId, oIds):
-        redmine = cls._getRedmineInstance(con)
-        userRedmine = cls._findUserId(con, redmine, userId)
-        issues = cls._getIssuesByProject(con, oIds, userRedmine, redmine)
-        return [cls._fromResult(con, issue, redmine) for issue in issues if not cls._include(issues,issue)]
-    """
+        issues = cls._getIssuesByProject(con, oIds, froms, statuses, userRedmine, redmine)
+        return [i.id for i in set(issues)]
 
     @classmethod
-    def _getIssuesByProject(cls, con, pidentifiers, user, redmine, statuses=None):
+    def _getIssuesByProject(cls, con, pIds, cIds, statuses, user, redmine):
         if redmine is None:
             return []
         issues = []
         projects = [p.identifier for p in redmine.project.all()]
-        for pidentifier in pidentifiers:
+        for pId in pIds:
             # issues.extend(redmine.issue.filter(tracker_id=cls.TRACKER_ERROR, project_id=pidentifier, subproject_id='!*', status_id='open'))
 
-            if pidentifier in projects:
-                issues.extend(redmine.issue.filter(tracker_id=cls.TRACKER_ERROR, project_id=pidentifier, status_id='open'))
-                """
-                    ignoro el estado por ahora porque solo soporta open o closed
-                if stauses is None:
-                    issues.extend(redmine.issue.filter(tracker_id=cls.TRACKER_ERROR, project_id=pidentifier, status_id='open'))
+            if pId in projects:
+                if cIds is None:
+                    issues.extend(redmine.issue.filter(tracker_id=cls.TRACKER_ERROR, project_id=pId, status_id='open'))
+
+                elif len(cIds) <= 0:
+                    """
+                        no tienen oficina origen
+                    """
+                    logging.info('filtrando por cIds = []')
+                    auxIssues = redmine.issue.filter(tracker_id=cls.TRACKER_ERROR, project_id=pId, status_id='open')
+                    issues.extend([iss for iss in auxIssues if not cls._hasCustomField(iss, RedmineAPI.FROM_FIELD)])
+
                 else:
-                    for s in statuses:
-                        issues.extend(redmine.issue.filter(tracker_id=cls.TRACKER_ERROR, project_id=pidentifier, status_id=s))
-                """
+                    """
+                    No funciona como dice la documentación!!. asi que lo filtro despues de obtenerlos MALISIMOO!!!
+
+                    for cId in cIds:
+                        logging.info('Filtrando por from_field {}'.format(cId))
+                        cFields = [cls._getCustomFieldToFilter(RedmineAPI.FROM_FIELD, cId)]
+                        issues.extend(redmine.issue.filter(tracker_id=cls.TRACKER_ERROR, project_id=pId, custom_fields=cFields, status_id='open'))
+                    """
+
+                    auxIssues = redmine.issue.filter(tracker_id=cls.TRACKER_ERROR, project_id=pId, status_id='open')
+                    filteredIssues = set()
+                    for cId in cIds:
+                        filteredIssues.update([iss for iss in auxIssues if cls._hasCustomFieldValue(iss, RedmineAPI.FROM_FIELD, cId)])
+                    issues.extend(filteredIssues)
+
+        logging.info(issues)
         return issues
 
     @classmethod
@@ -434,14 +448,37 @@ class RedmineAPI:
         cfields = cls.getCustomFields(iss)
         if len(cfields) > 0:
             issue.custom_fields = cfields
-
         issue.uploads = iss.files
-
-        print(issue.__dict__)
-
         issue.save()
 
         return issue.id
+
+
+    """
+        ///////////////////////////// CUSTOM FIELDS //////////////////////////////
+        ////// FROM = oficina de la que viene el pedido
+        ////// CREATOR = quien cargo el pedido
+        ///////////
+    """
+
+    @classmethod
+    def _hasCustomField(cls, issue, customId):
+        for cf in issue.custom_fields:
+            if cf['id'] == customId:
+                if cf['value'] is not None and cf['value'].strip() != '':
+                    return True
+        return False
+
+    @classmethod
+    def _hasCustomFieldValue(cls, issue, customId, value):
+        for cf in issue.custom_fields:
+            if cf['id'] == customId and cf['value'] == value:
+                return True
+        return False
+
+    @classmethod
+    def _getCustomFieldToFilter(cls, customId, value):
+        return {'id':customId, 'value': value}
 
     @classmethod
     def getCustomFields(cls, issue):
@@ -451,6 +488,10 @@ class RedmineAPI:
         if issue.fromOfficeId is not None:
             custom_fields.append({'id': RedmineAPI.FROM_FIELD, 'value': issue.fromOfficeId})
         return custom_fields
+
+    """
+        //////////////////////////////////////////////
+    """
 
     @classmethod
     def changeStatus(cls, issue_id, project_id, status):
