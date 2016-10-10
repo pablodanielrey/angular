@@ -319,7 +319,7 @@ class RedmineAPI:
     def _loadUserByUIdRedmine(cls, con, uid, redmine):
         userRedmine = redmine.user.get(uid)
         dni = userRedmine.login if userRedmine != None and 'login' in dir(userRedmine) else None
-        (userId, version) = User.findByDni(con, dni)
+        (userId, version) = User.findByDni(con, [dni])[0]
         return userId
 
     @classmethod

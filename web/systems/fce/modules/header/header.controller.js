@@ -2,9 +2,9 @@ angular
   .module('fce')
   .controller('HeaderCtrl', HeaderCtrl)
 
-HeaderCtrl.$inject = ['$rootScope', '$scope', '$window', 'Login', 'Users', 'Files'];
+HeaderCtrl.$inject = ['$rootScope', '$scope', '$window', 'Login', 'Users', 'Files','$timeout'];
 
-function HeaderCtrl($rootScope, $scope, $window, Login, Users, Files) {
+function HeaderCtrl($rootScope, $scope, $window, Login, Users, Files, $timeout) {
   var vm = this;
 
   vm.model = {

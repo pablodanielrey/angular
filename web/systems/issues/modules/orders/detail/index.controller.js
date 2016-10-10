@@ -31,13 +31,13 @@
 
 
         // métodos
-        vm.issueStatus = issueStatus; //estado del issue
-        vm.selectStatus = selectStatus; //seleccion de estado
-        vm.setStatus = setStatus; //cambio de estado
+        vm.issueStatus = issueStatus;     // estado del issue
+        vm.selectStatus = selectStatus;   // seleccion de estado
+        vm.setStatus = setStatus;         // cambio de estado
 
-        vm.issuePriority = issuePriority; //estado del issue
-        vm.selectPriority = selectPriority; //seleccion de estado
-        vm.setPriority = setPriority; //cambio de estado
+        vm.issuePriority = issuePriority;     // estado del issue
+        vm.selectPriority = selectPriority;   // seleccion de estado
+        vm.setPriority = setPriority;         // cambio de estado
 
         $scope.$on('wamp.open', function(event, args) {
           vm.model.privateTransport = Login.getPrivateTransport();
@@ -86,7 +86,7 @@
                   });
                 },
                 function(error) {
-                    vm.messageError(error);
+                    messageError(error);
                 });
             }
           });

@@ -14,6 +14,7 @@
       this.findByDni = findByDni;
       this.findAll = findAll;
       this.findPhotos = findPhotos;
+      this.findPhoto = findPhoto;
       this.photoToDataUri = photoToDataUri;
 
 
@@ -61,10 +62,24 @@
         var users = [];
         for (var i = 0; i < ids.length; i++) {
           users[i] = {id: ids[i]};
+          _toUserObject(users[i]);
         }
         var d = $q.defer();
         d.resolve(users);
         return d.promise;
+      }
+
+      /*
+        Usada en la conversión de ids --> usuarios
+      */
+      function _toUserObject(user) {
+        if (!('__json_module__' in user)) {
+          user.__json_module__ =  'model.users.users';
+        }
+
+        if (!('__json_class__' in user)) {
+          user.__json_class__ = 'User';
+        }
       }
 
       /*
@@ -117,6 +132,10 @@
 
       this.removeMail = function(id) {
         return Login.getPrivateTransport().call('users.mails.deleteMail', [id]);
+      }
+
+      function findPhoto(photoId) {
+        return Login.getPrivateTransport().call('users.find_photo', [photoId]);
       }
 
   }

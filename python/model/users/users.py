@@ -13,6 +13,8 @@ from model.dao import DAO
 from model.files.files import File, FileDAO
 
 
+
+
 class UserDAO(DAO):
     ''' DAO para los usuarios '''
 
@@ -140,6 +142,31 @@ class UserDAO(DAO):
             cur.close()
 
     @classmethod
+    def findPhoto(cls, con, pId):
+        f = File.findById(con, pId)
+        if f is not None:
+            content = f.getContent(con).tobytes().decode('utf-8')
+            f.content = content
+        return f
+
+    @classmethod
+    def findPhotos(cls, con, users):
+        if len(users) <= 0:
+            return []
+
+        cur = con.cursor()
+        try:
+            for user in users:
+                cur.execute('select id, photo from profile.users where id = %s', (user.id,))
+                pId = cur.fetchone()['photo']
+                user.photo = cls.findPhoto(con, pId)
+            return users
+        finally:
+            cur.close()
+
+
+
+    @classmethod
     def updateType(cls, con, userId, type):
         assert userId is not None
 
@@ -168,23 +195,21 @@ class UserDAO(DAO):
         finally:
             cur.close()
 
+
     @staticmethod
-    def findByDni(con, dni):
+    def findByDni(con, dnis):
         '''
             Obtiene los datos básicos del usuario
             Retorna:
                 (id, version)
                 None en caso de no existir
         '''
+        if len(dnis) <= 0:
+            return []
         cur = con.cursor()
         try:
-            cur.execute('select id, version from profile.users where dni = %s', (dni,))
-            if cur.rowcount <= 0:
-                return None
-            else:
-                (id, version) = cur.fetchone()
-                return (id, version)
-
+            cur.execute('select id, version from profile.users where dni in %s', (tuple(dnis),))
+            return [(c['id'],c['version']) for c in cur]
         finally:
             cur.close()
 
@@ -255,6 +280,74 @@ class UserDAO(DAO):
         finally:
             cur.close()
 
+
+class User(JSONSerializable):
+    ''' usuario básico del sistema '''
+
+    dao = UserDAO
+
+    def __init__(self):
+        self.id = None
+        self.dni = None
+        self.name = None
+        self.lastname = None
+        self.genre = None
+        self.birthdate = None
+        self.city = None
+        self.country = None
+        self.address = None
+        self.residence_city = None
+        self.created = datetime.datetime.now()
+        self.version = 0
+        self.photo = None
+        self.type = None
+        self.telephones = []
+        self.type = None
+
+    def getAge(self):
+        today = datetime.datetime.now()
+        born = self.birthdate
+        return today.year - born.year - ((today.month, today.day) < (born.month, born.day))
+
+    def persist(self, con):
+        return self.dao.persist(con, self)
+
+    def delete(self, con):
+        return self.dao.deleteById(con, [self.id])
+
+    def updateType(self, con):
+        return self.dao.updateType(con, self.id, self.type)
+
+    @classmethod
+    def search(cls, con, regex):
+        return cls.dao.search(con, regex)
+
+    @classmethod
+    def findById(cls, con, ids):
+        assert cls.dao is not None
+        assert isinstance(ids, list)
+        return cls.dao.findById(con, ids)
+
+    @classmethod
+    def findAll(cls, con):
+        assert cls.dao is not None
+        return cls.dao.findAll(con)
+
+    @classmethod
+    def findByDni(cls, con, dnis):
+        return cls.dao.findByDni(con, dnis)
+
+    @classmethod
+    def findByDnis(cls, con, dnis):
+        return cls.dao.findByDni(con, dnis)
+
+    @classmethod
+    def findPhoto(cls, con, pId):
+        return cls.dao.findPhoto(con, pId)
+
+    @classmethod
+    def findPhotos(cls, con, userIds):
+        return cls.dao.findPhotos(con, userIds)
 
 
 
@@ -636,70 +729,6 @@ class Mail(JSONSerializable):
         return cls.dao.findById(con, eid)
 
 
-class User(JSONSerializable):
-    ''' usuario básico del sistema '''
-
-    dao = UserDAO
-
-    def __init__(self):
-        self.id = None
-        self.dni = None
-        self.name = None
-        self.lastname = None
-        self.genre = None
-        self.birthdate = None
-        self.city = None
-        self.country = None
-        self.address = None
-        self.residence_city = None
-        self.created = datetime.datetime.now()
-        self.version = 0
-        self.photo = None
-        self.type = None
-        self.telephones = []
-        self.type = None
-
-    def getAge(self):
-        today = datetime.datetime.now()
-        born = self.birthdate
-        return today.year - born.year - ((today.month, today.day) < (born.month, born.day))
-
-    def persist(self, con):
-        return self.dao.persist(con, self)
-
-    def delete(self, con):
-        return self.dao.deleteById(con, [self.id])
-
-    def updateType(self, con):
-        return self.dao.updateType(con, self.id, self.type)
-
-    @classmethod
-    def search(cls, con, regex):
-        return cls.dao.search(con, regex)
-
-    @classmethod
-    def findById(cls, con, ids):
-        assert cls.dao is not None
-        assert isinstance(ids, list)
-        return cls.dao.findById(con, ids)
-
-    @classmethod
-    def findAll(cls, con):
-        assert cls.dao is not None
-        return cls.dao.findAll(con)
-
-    @classmethod
-    def findByDni(cls, con, dni):
-        assert cls.dao is not None
-        return cls.dao.findByDni(con, dni)
-
-    @classmethod
-    def findPhoto(cls, con, photoId):
-        f = File.findById(con, photoId)
-        if f is not None:
-            content = f.getContent(con).tobytes().decode('utf-8')
-            f.content = content
-        return f
 
 
 class Telephone(JSONSerializable):

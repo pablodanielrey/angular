@@ -31,6 +31,15 @@ class Users(wamp.SystemComponentSession):
         finally:
             self.conn.put(con)
 
+    @autobahn.wamp.register('users.find_by_dni')
+    def findByDni(self, dnis):
+        con = self.conn.get()
+        try:
+            data = User.findByDni(con, dnis)
+            return [id for (id,version) in data]
+        finally:
+            self.conn.put(con)
+
     @autobahn.wamp.register('users.find_photo')
     def findPhoto(self, pid):
         con = self.conn.get()
@@ -39,6 +48,16 @@ class Users(wamp.SystemComponentSession):
             return data
         finally:
             self.conn.put(con)
+
+    @autobahn.wamp.register('users.find_photos')
+    def findPhotos(self, users):
+        con = self.conn.get()
+        try:
+            data = User.findPhotos(con, users)
+            return data
+        finally:
+            self.conn.put(con)
+
 
     @autobahn.wamp.register('users.find_all')
     def findAll(self):

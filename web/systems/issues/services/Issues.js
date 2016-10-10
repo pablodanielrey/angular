@@ -119,19 +119,19 @@
 			}
 
 		  function create(subject, description, parentId, officeId, fromOfficeId, authorId, files) {
-				return Login.getPrivateTransport().call('issues.create', [subject, description, parentId, officeId, fromOfficeId, authorId, files]).then(_asyncInvalidateCache())
+				return Login.getPrivateTransport().call('issues.create', [subject, description, parentId, officeId, fromOfficeId, authorId, files]).then(_asyncInvalidateCache)
 			}
 
 		  function createComment(subject, description, parentId, officeId, files) {
-				return Login.getPrivateTransport().call('issues.create_comment', [subject, description, parentId, officeId, files]).then(_asyncInvalidateCache());
+				return Login.getPrivateTransport().call('issues.create_comment', [subject, description, parentId, officeId, files]).then(_asyncInvalidateCache);
 			}
 
 		  function changeStatus(issue, status) {
-				return Login.getPrivateTransport().call('issues.change_status', [issue, status]).then(_asyncInvalidateSingleIssueCache());
+				return Login.getPrivateTransport().call('issues.change_status', [issue, status]).then(_asyncInvalidateSingleIssueCache);
 			}
 
 		  function changePriority(issue, priority) {
-				return Login.getPrivateTransport().call('issues.change_priority', [issue, priority]).then(_asyncInvalidateSingleIssueCache());
+				return Login.getPrivateTransport().call('issues.change_priority', [issue, priority]).then(_asyncInvalidateSingleIssueCache);
 			}
 
 			function getOffices() {

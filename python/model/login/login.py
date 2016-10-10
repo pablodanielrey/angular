@@ -167,10 +167,10 @@ class Login:
 
     @classmethod
     def getPublicData(cls, con, dni):
-        print(dni)
-        (userId, version) = User.findByDni(con, dni)
-        if userId is None:
+        users = User.findByDni(con, [dni])
+        if len(users) <= 0:
             return None
+        (userId, version) = users[0]
 
         users = User.findById(con, [userId])
         if users is None or len(users) <= 0:

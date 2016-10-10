@@ -121,7 +121,9 @@
                   if (user.photoSrc == undefined || user.photoSrc == null) {
                     Users.findPhoto(users[0].photo).then(function(photo) {
                       $scope.$apply(function() {
-                        vm.model.users[userId].photoSrc = Files.toDataUri(photo);
+                        if (photo) {
+                          vm.model.users[userId].photoSrc = Files.toDataUri(photo);
+                        }
                       });
                     });
                   }
