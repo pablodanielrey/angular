@@ -116,6 +116,7 @@
           Offices.findAll().then(function(ids) {
             Offices.findById(ids).then(function(off) {
               vm.model.header.offices = off;
+              vm.headerOfficesSelectAllToggle();
             }, function(err) {
               console.log(err);
             });
