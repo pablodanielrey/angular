@@ -161,12 +161,13 @@
           var user = _findUser(log.userId, users);
           var cca = _calcStatus(user.id) ? 'entrada' : 'salida';
           var d = new Date(log.log);
+          var photo = (user.photoSrc != '') ? user.photoSrc : "/systems/issues/img/avatarMan.jpg";
           return {
               clase: cca,
               tipo: 'NoDocente',
               name: user.name.trim(),
               lastname: user.lastname.trim(),
-              photo: user.photo,
+              photoSrc: photo ,
               genre: user.genre,
               dni: user.dni,
               date: d
@@ -187,7 +188,20 @@
 
             // busco a los usuarios de los logs.
             var uids = _getUsers(logs);
-            Users.findById(uids).then(function(users) {
+            Users.findById(uids).then(Users.findPhotos).then(Users.photoToDataUri).then(
+              function(users) {
+                $scope.$apply(function() {
+                  var status = [];
+                  for (var i = 0; i < logs.length; i++) {
+                    vm.model.todayLogs.push(_parseLog(logs[i], users, status));
+                  }
+                });
+              }, function(error) {
+                console.error(error);
+              });
+
+
+            /*Users.findById(uids).then(function(users) {
               // seteo los logs y los estados
               $scope.$apply(function() {
                 var status = [];
@@ -198,12 +212,13 @@
 
             }, function(err) {
               console.log(err);
-            });
+            });*/
 
           }, function(err) {
             console.log(err);
           });
         }
+
 
         function _getLogs() {
           vm.model.logs = [];
