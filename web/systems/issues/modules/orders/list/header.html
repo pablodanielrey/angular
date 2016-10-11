@@ -5,7 +5,7 @@
         <div class="contentTextHeader">
           <div class="textMisPedidos2">PEDIDOS</div>
           <div class="contentBtnOrder">
-            <div class="btnOrder" title="Buscar" ng-click='vm.headerFindIssues()'><i class="fa fa-home"></i></div>
+            <div class="btnOrder" title="Restablecer valores predeterminados" ng-click='vm.headerFindIssues()'><i class="fa fa-home"></i></div>
           </div>
           <div class="icoSeach"><i class="fa fa-search"></i></div>
           <div class="contentInputSearch"><input type="search" placeholder="Buscar..." class="inputSearch" ng-model="vm.view.search"></div>
@@ -73,6 +73,10 @@
                   </div>
                   <div class="btnSave" ng-click="vm.view.style3 = ''">OK</div>
               </div>
+          </div>
+
+          <div class="contentBtnOrder">
+            <div class="btnOrder" title="Acltualizar resultados de búsqueda" ng-click='vm.headerFindIssues()'><i class="fa fa-refresh"></i></div>
           </div>
 
         </div>

@@ -48,7 +48,7 @@
               <div class="itemsOffice" ng-class="{true: 'solicitadoPorEl', false: 'solicitadoPorOtro'}[issue.creatorId == null || issue.creatorId == '']">
                 <div class="textMini">Para:</div>
                 <div class="textDateOrders">{{issue.area.name}}</div>
-                <div class="textDateOrders" >{{issue.office.name}}</div>              
+                <div class="textDateOrders" >{{issue.office.name}}</div>
                 <div class="userUpload">
                   <div class="textMini">Cargado por:&nbsp;  </div>
                   <div class="textName">{{vm.getCreator(issue)}}</div>
@@ -57,9 +57,11 @@
 
           </div>
 
-          <a class="itemActions" ng-href="{{vm.src}}{{issue.id}}">
-            <i class=" fa fa-angle-right" aria-hidden="true"></i>
-          </a>
+          <div>
+              <a class="itemActions" ng-href="{{vm.src}}{{issue.id}}">
+                  <i class=" fa fa-angle-right" aria-hidden="true"></i>
+              </a>
+          </div>
 
       </div>
     </div>
