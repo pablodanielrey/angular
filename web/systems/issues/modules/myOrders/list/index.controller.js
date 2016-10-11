@@ -31,12 +31,12 @@
           statusSort: ['','abierta', 'enProgreso', 'pausada', 'rechazada', 'cerrada'],
           reverseSortDate: true,
           reverseSortStatus: true,
-          sortedBy: 'status'
+          sortedBy: 'status',
+          src: '#/myOrdersDetail/'
         }
 
         vm.sortStatus = sortStatus;
         vm.sortDate = sortDate;
-        vm.viewDetail = viewDetail;
         vm.loadUserOffices = loadUserOffices;
 
         function messageLoading() {
@@ -159,10 +159,6 @@
               }
             );
           }
-        }
-
-        function viewDetail(issueId) {
-            $location.path('/myOrdersDetail/' + issueId + '&t=' + new Date().getTime());
         }
 
 

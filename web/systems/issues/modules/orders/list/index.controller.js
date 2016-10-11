@@ -183,7 +183,8 @@
           reverseSortDate: true,
           reverseSortStatus: true,
           reverseSortPriority: false,
-          sortedBy: 'status'
+          sortedBy: 'status',
+          src: '#/ordersDetail/'
         }
 
         vm.loadIssues = loadIssues;
@@ -196,7 +197,6 @@
         vm.messageLoading = messageLoading;
         vm.messageError = messageError;
 
-        vm.viewDetail = viewDetail;
         vm.loadUserOffices = loadUserOffices;
 
 
@@ -333,11 +333,6 @@
           } else {
             vm.model.issues = $filter('orderBy')(vm.model.issues, ['priority', '-start', 'statusPosition'], false);
           }
-        }
-
-
-        function viewDetail(issueId) {
-          $location.path('/ordersDetail/' + issueId);
         }
 
 

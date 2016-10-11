@@ -22,7 +22,7 @@
               issues: '=issues',
               users: '=users',
               search: '=search',
-              detail: '&onDetail'
+              src: '=src'
             }
         };
 
@@ -40,7 +40,6 @@
         vm.getDate = getDate;
         vm.getDiffDay = getDiffDay;
         vm.getFullName = getFullName;
-        vm.viewDetail = viewDetail;
         vm.getStatus = getStatus;
         vm.getCreator = getCreator;
         vm.getPriority = getPriority;
@@ -50,9 +49,6 @@
           priorities: ['baja', 'normal', 'alta', 'alta', 'alta'] //solo se maneja el estilo alta, si esta como urgente o inmediata se lo toma solo como alta
         }
 
-        function viewDetail(issue) {
-          vm.detail({issueId: issue.id});
-        }
 
         activate();
 
