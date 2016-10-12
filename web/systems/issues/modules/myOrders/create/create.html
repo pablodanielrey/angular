@@ -19,8 +19,8 @@
               <div class="contentSelectedOffice">
                 <div class="textMini">Enviar desde</div>
                 <div class="contentSelectOffice" ng-click="vm.view.style2 = 'verMisOficinas'">
-                    <div>{{vm.model.selectedFromOffice.name}}</div>
-                    <div><i class="fa fa-caret-down" aria-hidden="true"></i></div>
+                    <div>{{vm.model.selectedFromOffice.name}} </div>
+                    <div class="arrowButton"><i class="fa fa-caret-down" aria-hidden="true"></i></div>
                 </div>
                 <div class="contentListOffices">
                   <div class="itemsOffice2"  ng-repeat="office in vm.getFromOffices()" ng-click="vm.selectFromOffice(office)"> {{office.name}}</div>
@@ -71,13 +71,22 @@
             <div class="subtitleNewOrder2">MENSAJE</div>
             <div><textarea class="textareaNewOrder" ng-model="vm.model.description"></textarea></div>
 
+            <div>
+                <input type="file" e-on-read-file-binary-string="vm.addFile(fileName,fileContent, fileType, fileSize)" class="" />
+            </div>
+
+            <div class="contentAdds">
+                <div ng-repeat="file in vm.model.files"> <i class="fa fa-file-o"></i> {{file.name}} <button class="btnTrashAdd" ng-click="vm.removeFile(file)"><i class="fa fa-trash-o" aria-hidden="true"></i></button></div>
+            </div>
+
+<!--
             <div class="addMenssage2">
                 <div><button class="btnAdd" title="Adjuntar Archivo"><i class="fa fa-paperclip" aria-hidden="true"></i> Subir Archivo</button></div>
                 <div class="ArchivesAdd">
                   <input type="file" e-on-read-file-binary-string="vm.addFile(fileName,fileContent, fileType, fileSize)" class="inputFile" />
                   <span ng-repeat="file in vm.model.files"> <i class="fa fa-file-o"></i> {{file.name}} <button class="btnTrashAdd" ng-click="vm.removeFile(file)"><i class="fa fa-trash-o" aria-hidden="true"></i></button></span>
                 </div>
-            </div>
+            </div> -->
 
 
           </div>
