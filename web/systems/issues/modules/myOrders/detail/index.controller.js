@@ -76,7 +76,7 @@
               if (issue.fromOfficeId != undefined) {
                 loadOffice(issue.fromOfficeId);
               }
-              $scope.$apply(function() {
+              $timeout(function() {
                 vm.model.issue = issue;
                 closeMessage();
               });
@@ -92,9 +92,22 @@
             var parentId = params[0];
             var commentId = params[1];
             if (vm.model.issue.id == parentId) {
+              // chequeo que ya no exista. por duplicación de eventos.
+              for (var i = 0; i < vm.model.issue.children.length; i++) {
+                if (vm.model.issue.children[i].id == commentId) {
+                  return;
+                }
+              }
+
               Issues.findById(commentId).then(
                 function(comment) {
-                  $scope.$apply(function() {
+                  $timeout(function() {
+                    // chequeo que ya no exista. por duplicación de eventos.
+                    for (var i = 0; i < vm.model.issue.children.length; i++) {
+                      if (vm.model.issue.children[i].id == comment.id) {
+                        return;
+                      }
+                    }
                     vm.model.issue.children.push(comment);
                     if (comment.user == undefined) {
                       loadUser(comment.userId);
@@ -106,6 +119,18 @@
                 });
             }
           });
+
+          // params: [id, status, priority]
+          Issues.subscribe('issues.updated_event', function(params) {
+            Issues.updateIssue(params[0], params[1], params[2]);
+            if (params[0] == vm.model.issue.id) {
+              $timeout(function() {
+                vm.model.issue.statusId = params[1];
+                vm.model.issue.priority = params[2];
+              });
+            }
+
+          });
         }
 
         function loadUser(userId) {
@@ -115,12 +140,12 @@
           if (vm.model.users[userId] == null) {
             Users.findById([userId]).then(
               function(users) {
-                $scope.$apply(function() {
+                $timeout(function() {
                   vm.model.users[userId] = users[0];
                   var user = vm.model.users[userId];
                   if (user.photoSrc == undefined || user.photoSrc == null) {
                     Users.findPhoto(users[0].photo).then(function(photo) {
-                      $scope.$apply(function() {
+                      $timeout(function() {
                         if (photo) {
                           vm.model.users[userId].photoSrc = Files.toDataUri(photo);
                         }

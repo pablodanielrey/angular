@@ -5,7 +5,7 @@ import re
 import logging
 import psycopg2
 
-from twisted.internet.defer import inlineCallbacks
+from twisted.internet.defer import inlineCallbacks, returnValue
 
 from model.issue.issue import Issue, RedmineAPI, Attachment, IssueModel
 from model.offices.office import Office
@@ -37,7 +37,7 @@ class Issues(wamp.SystemComponentSession):
         con = self.conn.get()
         try:
             userId = self.getUserId(con, details)
-            return Issue.getMyIssues(con, userId)
+            return Issue.getMyIssues(con, userId, statuses, froms, tos)
         finally:
             self.conn.put(con)
 
