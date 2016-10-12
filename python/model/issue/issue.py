@@ -382,7 +382,7 @@ class RedmineAPI:
         redmine = cls._getRedmineInstance(con)
         userRedmine = cls._findUserId(con, redmine, userId)
         issues = cls._getIssuesByProject(con, oIds, froms, statuses, userRedmine, redmine)
-        return [i.id for i in set(issues)]
+        return list(set([i.id for i in issues]))
 
     @classmethod
     def _getIssuesByProject(cls, con, pIds, cIds, statuses, user, redmine):
