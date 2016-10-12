@@ -5,10 +5,10 @@
         .module('issues')
         .controller('OrdersListCtrl', OrdersListCtrl);
 
-    OrdersListCtrl.$inject = ['$scope', '$location', 'Issues', 'Users', '$filter', 'Login', 'Offices', '$timeout', '$window'];
+    OrdersListCtrl.$inject = ['$scope', '$location', 'Issues', 'Users', '$filter', 'Login', 'Offices', '$timeout', '$window', '$q'];
 
     /* @ngInject */
-    function OrdersListCtrl($scope, $location, Issues, Users, $filter, Login, Offices, $timeout, $window) {
+    function OrdersListCtrl($scope, $location, Issues, Users, $filter, Login, Offices, $timeout, $window, $q) {
         var vm = this;
 
         vm.model = {
@@ -113,16 +113,16 @@
         }
 
         function headerLoadOffices() {
-          Offices.findAll().then(function(ids) {
-            Offices.findById(ids).then(function(off) {
+          var d = $q.defer();
+
+          Offices.findAll().then(Offices.findById).then(
+            function(off) {
               vm.model.header.offices = off;
               vm.headerOfficesSelectAllToggle();
-            }, function(err) {
-              console.log(err);
+              d.resolve();
             });
-          }, function(err) {
-            console.log(err);
-          })
+
+          return d.promise;
         }
 
         function _getHeaderToFilter() {
@@ -207,13 +207,16 @@
 
         activate();
 
+        function preLoad() {
+
+        }
+
 
         function activate() {
           if (Login.getPrivateTransport() == null) {
             return;
           }
 
-          headerLoadOffices();
           vm.model.userId = Login.getCredentials().userId;
           vm.loadUserOffices(vm.model.userId);
           vm.view.reverseSortDate = true;
@@ -221,7 +224,9 @@
           vm.view.reverseSortPriority = false;
           vm.view.search = '';
           registerEventManagers();
-          loadIssues();
+          headerLoadOffices().then(function() {
+            loadIssues();
+          });
         }
 
         function loadIssues() {

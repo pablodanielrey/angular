@@ -115,12 +115,12 @@
           if (vm.model.users[userId] == null) {
             Users.findById([userId]).then(
               function(users) {
-                $scope.$apply(function() {
+                $timeout(function() {
                   vm.model.users[userId] = users[0];
                   var user = vm.model.users[userId];
                   if (user.photoSrc == undefined || user.photoSrc == null) {
                     Users.findPhoto(users[0].photo).then(function(photo) {
-                      $scope.$apply(function() {
+                      $timeout(function() {
                         if (photo) {
                           vm.model.users[userId].photoSrc = Files.toDataUri(photo);
                         }

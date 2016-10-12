@@ -58,9 +58,12 @@
 
 			function updateIssue(id, status, priority) {
 				var item = JSON.parse($window.sessionStorage.getItem(id));
-				item.statusId = status;
-				item.priority = priority;
-				$window.sessionStorage.setItem(id, JSON.stringify(item));
+				if (item != null) {
+					item.statusId = status;
+					item.priority = priority;
+					$window.sessionStorage.setItem(id, JSON.stringify(item));
+				}
+
 			}
 
 		  function findById(id) {
@@ -188,8 +191,17 @@
 				Invalida la cache de los issues asignados a la persona y los que realizó.
 			*/
 			function _asyncInvalidateCache(issueId) {
-				$window.sessionStorage.removeItem('assignedIssues');
-				$window.sessionStorage.removeItem('myIssues');
+				try {
+					if ($window.sessionStorage.getItem('assignedIssues') != null) {
+						$window.sessionStorage.removeItem('assignedIssues');
+					}
+					if ($window.sessionStorage.getItem('myIssues') != null) {
+						$window.sessionStorage.removeItem('myIssues');
+					}
+					;
+				} catch(err) {
+					console.log(err);
+				}
 				return $q.when(issueId);
 			}
 
@@ -197,8 +209,14 @@
 				Invalida un issue en particular.
 			*/
 			function _asyncInvalidateSingleIssueCache(issue) {
-				$window.sessionStorage.removeItem(issue.id);
-				return $q.when(issueId);
+				try {
+					if ($window.sessionStorage.getItem(issue.id) != null) {
+						$window.sessionStorage.removeItem(issue.id);
+					}
+				} catch(err) {
+					console.log(err);
+				}
+				return $q.when(issue);
 			}
 
 			//////////////////////////////////
