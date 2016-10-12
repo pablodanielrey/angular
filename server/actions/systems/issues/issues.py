@@ -29,7 +29,11 @@ class Issues(wamp.SystemComponentSession):
         return autobahn.wamp.RegisterOptions(details_arg='details')
 
     @autobahn.wamp.register('issues.get_my_issues')
-    def getMyIssues(self, details):
+    def getMyIssues(self, statuses, froms, tos, details):
+        """
+            Obtiene los issues que realizó la oficina de la persona.
+            TODO: implementar los filtros.
+        """
         con = self.conn.get()
         try:
             userId = self.getUserId(con, details)
@@ -49,6 +53,9 @@ class Issues(wamp.SystemComponentSession):
 
     @autobahn.wamp.register('issues.get_assigned_issues')
     def getAssignedIssues(self, statuses, froms, tos, details):
+        """
+            Retorna los issues asignados a las oficinas a las que pertenece la persona.
+        """
         con = self.conn.get()
         try:
             logging.info(statuses)
