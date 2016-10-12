@@ -52,7 +52,9 @@
 				return Login.getPrivateTransport().call('issues.get_assigned_issues', [statuses, froms, tos]).then(_findFromCacheOrLoad).then(_cacheIssues);
 			}
 
-			function getMyIssues(statuses, froms, tos) {
+			function getMyIssues(statuses) {
+				var froms = [];
+				var tos = [];
 				return Login.getPrivateTransport().call('issues.get_my_issues', [statuses, froms, tos]).then(_findFromCacheOrLoad).then(_cacheIssues);
 			}
 

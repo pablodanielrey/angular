@@ -5,10 +5,10 @@
         .module('issues')
         .controller('MyOrdersListCtrl', MyOrdersListCtrl);
 
-    MyOrdersListCtrl.$inject = ['$scope', '$location', '$timeout', '$filter', 'Login', 'Issues', 'Users', 'Offices', 'Files'];
+    MyOrdersListCtrl.$inject = ['$scope', '$location', '$window', '$timeout', '$filter', 'Login', 'Issues', 'Users', 'Offices', 'Files'];
 
     /* @ngInject */
-    function MyOrdersListCtrl($scope, $location, $timeout, $filter, Login, Issues, Users, Offices, Files) {
+    function MyOrdersListCtrl($scope, $location, $window, $timeout, $filter, Login, Issues, Users, Offices, Files) {
         var vm = this;
 
         vm.model = {
@@ -19,13 +19,83 @@
           privateTransport: null
         }
 
+        ///////////////// barra de busqueda. header /////////////////////////////
+
+        vm.model.header = {
+            status:{
+              open: true,
+              working: true,
+              paused: true,
+              rejected: false,
+              closed:false
+            }
+        }
+
+        vm.headerStatusSelectAllToggle = headerStatusSelectAllToggle;
+        vm.headerInvalidateIssuesCache = headerInvalidateIssuesCache;
+        vm.headerSelectStatus = headerSelectStatus;
+        vm.headerFindIssues = headerFindIssues;
+
+        function headerFindIssues() {
+          vm.view.style3 = vm.view.styles3[0];
+          getMyIssues();
+        }
+
+        function headerSelectStatus() {
+          if (vm.view.style3 == vm.view.styles3[5]) {
+            vm.view.style3 = vm.view.styles3[0];
+          } else {
+            vm.view.style3 = vm.view.styles3[5];
+          }
+        }
+
+        function headerInvalidateIssuesCache() {
+          $window.sessionStorage.removeItem('assignedIssues');
+        }
+
+        function headerStatusSelectAllToggle() {
+          headerInvalidateIssuesCache();
+          var s = !vm.model.header.status.open;
+          vm.model.header.status.open = s;
+          vm.model.header.status.working = s;
+          vm.model.header.status.paused = s;
+          vm.model.header.status.rejected = s;
+          vm.model.header.status.closed = s;
+        }
+
+        function _getHeaderStatusFilter() {
+          var f = [];
+          if (vm.model.header.status.open) {
+            f.push(1);
+          }
+          if (vm.model.header.status.working) {
+            f.push(2);
+          }
+          if (vm.model.header.status.paused) {
+            f.push(7);
+          }
+          if (vm.model.header.status.rejected) {
+            f.push(6);
+          }
+          if (vm.model.header.status.closed) {
+            f.push(3);
+          }
+          return f;
+        }
+
+        ///////////////////////////////////////////////////////////////////////
+
+
+
+
+
         vm.view = {
           style1: '',
           styles1: ['','pantallaMensajeAlUsuario'],
           style2: '',
           styles2: ['', 'mensajeCargando'],
           style3: '',
-          styles3: ['','mensajeCargando', 'mensajeError', 'mensajeEnviado', 'mensajePedidoCreado'],
+          styles3: ['','mensajeCargando', 'mensajeError', 'mensajeEnviado', 'mensajePedidoCreado', 'seleccionarEstado'],
 
           status: ['','abierta', 'enProgreso', 'cerrada', 'comentarios', 'rechazada', 'pausada'],
           statusSort: ['','abierta', 'enProgreso', 'pausada', 'rechazada', 'cerrada'],
@@ -86,7 +156,7 @@
 
         function getMyIssues() {
           messageLoading();
-          Issues.getMyIssues().then(
+          Issues.getMyIssues(_getHeaderStatusFilter()).then(
             function(issues) {
                 for (var i = 0; i < issues.length; i++) {
                   var dateStr = issues[i].start;

@@ -27,6 +27,8 @@
         };
 
         vm.view = {
+          style2: '',
+          styles2: ['','verMisOficinas'],
           style3: '',
           styles3: ['','pantallaMensajeAlUsuario'],
           style4: '',
@@ -43,6 +45,8 @@
         vm.displaySearchOffice = displaySearchOffice;
         vm.displaySearchArea = displaySearchArea;
         vm.getFromOffices = getFromOffices;
+        vm.displaySelectFromOffice = displaySelectFromOffice;
+        vm.selectFromOffice = selectFromOffice;
 
 
         $scope.$on('wamp.open', function(event, args) {
@@ -103,7 +107,27 @@
         }
 
         function getFromOffices() {
-          return vm.model.offices.concat(vm.model.userOffices)
+          var offs = vm.model.offices.concat(vm.model.userOffices);
+          var addedIds = [];
+          var roffs = [];
+          for (var i = 0; i < offs.length; i++) {
+            if (offs[i].type.value != 'area') {
+              if (addedIds.indexOf(offs[i].id) == -1) {
+                addedIds.push(offs[i].id);
+                roffs.push(offs[i]);
+              }
+            }
+          }
+          return roffs;
+        }
+
+        function selectFromOffice(office) {
+          vm.view.style2 = vm.view.styles2[0];
+          vm.model.selectedFromOffice = office;
+        }
+
+        function displaySelectFromOffice() {
+          vm.view.style2 = vm.view.styles2[1];
         }
 
         function selectOffice(office) {
