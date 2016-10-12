@@ -148,19 +148,19 @@
         function _getHeaderStatusFilter() {
           var f = [];
           if (vm.model.header.status.open) {
-            f.push('open');
+            f.push(1);
           }
           if (vm.model.header.status.working) {
-            f.push('working');
+            f.push(2);
           }
           if (vm.model.header.status.paused) {
-            // nada
+            f.push(7);
           }
           if (vm.model.header.status.rejected) {
-            // nada
+            f.push(6);
           }
           if (vm.model.header.status.closed) {
-            f.push('closed');
+            f.push(3);
           }
           return f;
         }

@@ -87,7 +87,7 @@ function HeaderCtrl($rootScope, $scope, $window, Login, Users, Files, $timeout) 
 
   function getUserPhoto(issue) {
     if (vm.model.user == null || vm.model.user.photo == null || vm.model.user.photoSrc == '') {
-      var img = (vm.model.user == null || vm.model.user.genre == undefined || vm.model.user.genre == 'Masculino' || vm.model.user.genre == 'Hombre') ? "img/avatarMan.jpg" : "img/avatarWoman.jpg";
+      var img = (vm.model.user == null || vm.model.user.genre == undefined || vm.model.user.genre == 'Masculino' || vm.model.user.genre == 'Hombre') ? "/systems/fce/img/avatar.jpg" : "img/avatarWoman.jpg";
       return img;
     } else {
       return vm.model.user.photoSrc;

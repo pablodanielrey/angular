@@ -5,7 +5,7 @@ import re
 import logging
 import psycopg2
 
-from twisted.internet.defer import inlineCallbacks
+from twisted.internet.defer import inlineCallbacks, returnValue
 
 from model.issue.issue import Issue, RedmineAPI, Attachment, IssueModel
 from model.offices.office import Office

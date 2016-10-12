@@ -356,7 +356,14 @@ class RedmineAPI:
     def _getIssuesByUser(cls, con, userId, statuses, froms, tos, redmine):
         if redmine is None:
             return []
-        issues = redmine.issue.filter(author_id=userId, status_id='open')
+
+        issues = []
+        if statuses is not None and len(statuses) > 0:
+            for s in statuses:
+                issues.extend(redmine.issue.filter(author_id=userId, status_id=s))
+        else:
+            issues.extend(redmine.issue.filter(author_id=userId, status_id='*'))
+
         """ elimino las que tienen padre """
         rissues = [issue.id for issue in issues if 'parent' not in dir(issue)]
         #return [issue.id for issue in issues]
@@ -382,7 +389,7 @@ class RedmineAPI:
         redmine = cls._getRedmineInstance(con)
         userRedmine = cls._findUserId(con, redmine, userId)
         issues = cls._getIssuesByProject(con, oIds, froms, statuses, userRedmine, redmine)
-        return [i.id for i in set(issues)]
+        return list(set([i.id for i in issues]))
 
     @classmethod
     def _getIssuesByProject(cls, con, pIds, cIds, statuses, user, redmine):
@@ -395,14 +402,14 @@ class RedmineAPI:
 
             if pId in projects:
                 if cIds is None:
-                    issues.extend(redmine.issue.filter(tracker_id=cls.TRACKER_ERROR, project_id=pId, status_id='open'))
+                    issues.extend(redmine.issue.filter(tracker_id=cls.TRACKER_ERROR, project_id=pId, status_id='*'))
 
                 elif len(cIds) <= 0:
                     """
                         no tienen oficina origen
                     """
                     logging.info('filtrando por cIds = []')
-                    auxIssues = redmine.issue.filter(tracker_id=cls.TRACKER_ERROR, project_id=pId, status_id='open')
+                    auxIssues = redmine.issue.filter(tracker_id=cls.TRACKER_ERROR, project_id=pId, status_id='*')
                     issues.extend([iss for iss in auxIssues if not cls._hasCustomField(iss, RedmineAPI.FROM_FIELD)])
 
                 else:
@@ -415,13 +422,15 @@ class RedmineAPI:
                         issues.extend(redmine.issue.filter(tracker_id=cls.TRACKER_ERROR, project_id=pId, custom_fields=cFields, status_id='open'))
                     """
 
-                    auxIssues = redmine.issue.filter(tracker_id=cls.TRACKER_ERROR, project_id=pId, status_id='open')
+                    auxIssues = redmine.issue.filter(tracker_id=cls.TRACKER_ERROR, project_id=pId, status_id='*')
                     filteredIssues = set()
                     for cId in cIds:
                         filteredIssues.update([iss for iss in auxIssues if cls._hasCustomFieldValue(iss, RedmineAPI.FROM_FIELD, cId)])
                     issues.extend(filteredIssues)
 
-        logging.info(issues)
+        if statuses is not None and len(statuses) > 0:
+            issues = [i for i in issues if i.status.id in statuses]
+
         return issues
 
     @classmethod
