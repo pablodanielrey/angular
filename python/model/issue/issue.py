@@ -64,8 +64,8 @@ class Issue(JSONSerializable):
         return RedmineAPI.getOfficesIssues(con, officeIds)
 
     @classmethod
-    def getMyIssues(cls, con, userId):
-        return RedmineAPI.getMyIssues(con, userId)
+    def getMyIssues(cls, con, userId, statuses, froms, tos):
+        return RedmineAPI.getMyIssues(con, userId, statuses, froms, tos)
 
     @classmethod
     def getAssignedIssues(cls, con, userId, oIds, statuses, froms):
@@ -259,11 +259,16 @@ class RedmineAPI:
 
         issues = []
         for issueId in issuesIds:
-            if len(includes) > 0:
-                issues.append(redmine.issue.get(issueId, include=','.join(includes)))
-            else:
-                issues.append(redmine.issue.get(issueId))
-
+            try:
+                if len(includes) > 0:
+                    issues.append(redmine.issue.get(issueId, include=','.join(includes)))
+                else:
+                    issues.append(redmine.issue.get(issueId))
+            except Exception as e:
+                logging.exception(e)
+                logging.error('------------------------------------')
+                logging.error('error obteniendo issue {}'.format(issueId))
+                logging.error('------------------------------------')
         return [cls._fromResult(con, issue, redmine, True) for issue in issues]
 
 
@@ -340,18 +345,22 @@ class RedmineAPI:
         return [issue for issue in issues if not cls._include(issues,issue)]
 
     @classmethod
-    def getMyIssues(cls, con, userId):
+    def getMyIssues(cls, con, userId, statuses, froms, tos):
         redmine = cls._getRedmineInstance()
         user = cls._findUserId(con, redmine, userId)
-        issues = cls._getIssuesByUser(con, user, redmine)
-        return [cls._fromResult(con, issue, redmine) for issue in issues if not cls._include(issues,issue)]
+        issues = cls._getIssuesByUser(con, user, statuses, froms, tos, redmine)
+        return [issue for issue in issues]
+        #return [cls._fromResult(con, issue, redmine) for issue in issues if not cls._include(issues,issue)]
 
     @classmethod
-    def _getIssuesByUser(cls, con, userId, redmine):
+    def _getIssuesByUser(cls, con, userId, statuses, froms, tos, redmine):
         if redmine is None:
             return []
-        issues = redmine.issue.filter(author_id=userId, status_id='*')
-        return issues
+        issues = redmine.issue.filter(author_id=userId, status_id='open')
+        """ elimino las que tienen padre """
+        rissues = [issue.id for issue in issues if 'parent' not in dir(issue)]
+        #return [issue.id for issue in issues]
+        return rissues
 
     @classmethod
     # @do_cprofile

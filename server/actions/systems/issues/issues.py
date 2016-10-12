@@ -37,7 +37,7 @@ class Issues(wamp.SystemComponentSession):
         con = self.conn.get()
         try:
             userId = self.getUserId(con, details)
-            return Issue.getMyIssues(con, userId)
+            return Issue.getMyIssues(con, userId, statuses, froms, tos)
         finally:
             self.conn.put(con)
 
