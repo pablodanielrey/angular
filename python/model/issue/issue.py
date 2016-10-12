@@ -358,8 +358,11 @@ class RedmineAPI:
             return []
 
         issues = []
-        for s in statuses:
-            issues.extend(redmine.issue.filter(author_id=userId, status_id=s))
+        if statuses is not None and len(statuses) > 0:
+            for s in statuses:
+                issues.extend(redmine.issue.filter(author_id=userId, status_id=s))
+        else:
+            issues.extend(redmine.issue.filter(author_id=userId, status_id='*'))
 
         """ elimino las que tienen padre """
         rissues = [issue.id for issue in issues if 'parent' not in dir(issue)]
