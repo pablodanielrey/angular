@@ -5,7 +5,7 @@ import re
 import logging
 import psycopg2
 
-from twisted.internet.defer import inlineCallbacks
+from twisted.internet.defer import inlineCallbacks, returnValue
 
 from model.issue.issue import Issue, RedmineAPI, Attachment, IssueModel
 from model.offices.office import Office
@@ -29,7 +29,6 @@ class Issues(wamp.SystemComponentSession):
         return autobahn.wamp.RegisterOptions(details_arg='details')
 
     @autobahn.wamp.register('issues.get_my_issues')
-    @inlineCallbacks
     def getMyIssues(self, statuses, froms, tos, details):
         """
             Obtiene los issues que realizó la oficina de la persona.
@@ -43,7 +42,6 @@ class Issues(wamp.SystemComponentSession):
             self.conn.put(con)
 
     @autobahn.wamp.register('issues.get_offices_issues')
-    @inlineCallbacks
     def getOfficesIssues(self, details):
         con = self.conn.get()
         try:
@@ -54,7 +52,6 @@ class Issues(wamp.SystemComponentSession):
             self.conn.put(con)
 
     @autobahn.wamp.register('issues.get_assigned_issues')
-    @inlineCallbacks
     def getAssignedIssues(self, statuses, froms, tos, details):
         """
             Retorna los issues asignados a las oficinas a las que pertenece la persona.
@@ -79,7 +76,6 @@ class Issues(wamp.SystemComponentSession):
             self.conn.put(con)
 
     @autobahn.wamp.register('issues.find_by_id')
-    @inlineCallbacks
     def findById(self, issueid, details):
         con = self.conn.get()
         try:
@@ -91,7 +87,6 @@ class Issues(wamp.SystemComponentSession):
             self.conn.put(con)
 
     @autobahn.wamp.register('issues.find_by_ids')
-    @inlineCallbacks
     def findByIds(self, issuesIds, details):
         con = self.conn.get()
         try:
@@ -150,7 +145,6 @@ class Issues(wamp.SystemComponentSession):
         return issue
 
     @autobahn.wamp.register('issues.get_offices')
-    @inlineCallbacks
     def getOffices(self, details):
         con = self.conn.get()
         try:
@@ -160,7 +154,6 @@ class Issues(wamp.SystemComponentSession):
             self.conn.put(con)
 
     @autobahn.wamp.register('issues.search_users')
-    @inlineCallbacks
     def searchUsers(self, regex, details):
         con = self.conn.get()
         try:
@@ -169,7 +162,6 @@ class Issues(wamp.SystemComponentSession):
             self.conn.put(con)
 
     @autobahn.wamp.register('issues.get_office_subjects')
-    @inlineCallbacks
     def getOfficeSubjects(self, officeId, details):
         con = self.conn.get()
         try:
@@ -178,7 +170,6 @@ class Issues(wamp.SystemComponentSession):
             self.conn.put(con)
 
     @autobahn.wamp.register('issues.get_areas')
-    @inlineCallbacks
     def getAreas(self, oId, details):
         con = self.conn.get()
         try:
