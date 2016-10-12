@@ -79,9 +79,22 @@
             var parentId = params[0];
             var commentId = params[1];
             if (vm.model.issue.id == parentId) {
+              // chequeo que ya no exista. por duplicación de eventos.
+              for (var i = 0; i < vm.model.issue.children.length; i++) {
+                if (vm.model.issue.children[i].id == commentId) {
+                  return;
+                }
+              }
+
               IssuesDD.issueDetail(commentId).then(
                 function(issue) {
-                  $scope.$apply(function() {
+                  $timeout(function() {
+                    // chequeo que ya no exista. por duplicación de eventos.
+                    for (var i = 0; i < vm.model.issue.children.length; i++) {
+                      if (vm.model.issue.children[i].id == issue.id) {
+                        return;
+                      }
+                    }
                     vm.model.issue.children.push(issue);
                   });
                 },
