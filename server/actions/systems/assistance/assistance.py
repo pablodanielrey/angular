@@ -36,13 +36,15 @@ class Assistance(wamp.SystemComponentSession):
         return ldate
 
     @autobahn.wamp.register('assistance.get_logs')
-    def getLogs(self, initDate, endDate, details):
+    def getLogs(self, initDate, endDate, initHours, endHours, details):
         iDate = self._parseDate(initDate)
         eDate = self._parseDate(endDate)
+        iHours = self._parseDate(initHours)
+        eHours = self._parseDate(endHours)
 
         con = self.conn.get()
         try:
-            logs = Log.findByDateRange(con, iDate, eDate)
+            logs = Log.findByDateRange(con, iDate, eDate, iHours, eHours)
             return logs
         finally:
             self.conn.put(con)

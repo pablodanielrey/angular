@@ -26,10 +26,12 @@
 	    }
 
 
-      function getLogs(initDate, endDate) {
+      function getLogs(initDate, endDate, initHour, endHour) {
         var di = initDate.toISOString();
 				var de = endDate.toISOString();
-        return Login.getPrivateTransport().call('assistance.get_logs', [di,de]);
+				var hi = initHour.toISOString();
+				var he = endHour.toISOString();
+        return Login.getPrivateTransport().call('assistance.get_logs', [di,de, hi, he]);
       }
 
 			function getStatistics(initDate, endDate, userIds) {

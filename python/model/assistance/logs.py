@@ -51,13 +51,16 @@ class LogDAO(DAO):
             cur.close()
 
     @classmethod
-    def findByDateRange(cls, con, initDate, endDate):
+    def findByDateRange(cls, con, initDate, endDate, initHours=None, endHours=None):
         assert con is not None
         assert initDate is not None
         assert endDate is not None
         cur = con.cursor()
         try:
-            cur.execute('select * from assistance.attlog where log::DATE >= %s::DATE and log::DATE <= %s::DATE order by log asc', (initDate, endDate))
+            if initHours is None or endHours is None:
+                cur.execute('select * from assistance.attlog where log::DATE BETWEEN %s::DATE and %s::DATE order by log asc', (initDate, endDate))
+            else:
+                cur.execute('select * from assistance.attlog where log::DATE BETWEEN %s::DATE and %s::DATE and log::TIME BETWEEN %s::TIME and %s::TIME order by log asc', (initDate, endDate, initHours, endHours))
             if cur.rowcount <= 0:
                 return []
             return [cls._fromResult(r) for r in cur]
@@ -118,5 +121,5 @@ class Log(JSONSerializable):
         return cls.dao.findByDate(con, date)
 
     @classmethod
-    def findByDateRange(cls, con, initDate, endDate):
-        return cls.dao.findByDateRange(con, initDate, endDate)
+    def findByDateRange(cls, con, initDate, endDate, initHours=None, endHours=None):
+        return cls.dao.findByDateRange(con, initDate, endDate, initHours, endHours)

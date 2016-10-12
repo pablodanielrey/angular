@@ -31,7 +31,7 @@
             initDate: new Date(),
             endDate: new Date(),
             initHour: _getDateInTime(0,0,0),
-            endHour: _getDateInTime(23,59,59)
+            endHour: _getDateInTime(23,59)
           },
           logs: [],
           todayLogs: [],
@@ -60,6 +60,7 @@
           }
           _getTodayLogs();
           vm.sortDate();
+          _resetSearch();
         }
 
 
@@ -95,9 +96,10 @@
             initDate: new Date(),
             endDate: new Date(),
             initHour: _getDateInTime(0,0,0),
-            endHour: _getDateInTime(23,59,59)
+            endHour: _getDateInTime(23,59,0)
           }
         }
+
 
         function searchLogs() {
           vm.view.style2 = '';
@@ -203,8 +205,8 @@
           var dayMillis = 24 * 60 * 60 * 1000;
           var start = new Date();
           start.setHours(0); start.setMinutes(0); start.setSeconds(0);
-          var end = new Date(start.getTime() + (dayMillis) - 1);
-          Assistance.getLogs(start, end).then(Assistance.findUsersByLogs).then(Assistance.findUserPhotos).then(Assistance.photoToDataUri).then(
+          var end = new Date(start.getTime() + (dayMillis) - 1000);
+          Assistance.getLogs(start, end, start, end).then(Assistance.findUsersByLogs).then(Assistance.findUserPhotos).then(Assistance.photoToDataUri).then(
             function(logs) {
               $timeout(function () {
                 for (var i = 0; i < logs.length; i++) {
@@ -224,7 +226,9 @@
 
           var s = vm.model.search;
           vm.view.style = 'cargando';
-          Assistance.getLogs(s.initDate, s.endDate).then(Assistance.findUsersByLogs).then(function(logs){
+          var sHour = (s.initHour == null) ? _getDateInTime(0,0,0) : s.initHour;
+          var eHour = (s.endHour == null) ? _getDateInTime(23,59,59) : s.endHour;
+          Assistance.getLogs(s.initDate, s.endDate, sHour, eHour).then(Assistance.findUsersByLogs).then(function(logs){
             $timeout(function () {
               for (var i = 0; i < logs.length; i++) {
                 vm.model.logs.push(_parseAll(logs[i]));
@@ -235,6 +239,7 @@
             console.log(err);
           })
         }
+
 
     };
 
