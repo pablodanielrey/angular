@@ -107,7 +107,7 @@
         }
 
         function getFromOffices() {
-          var offs = vm.model.offices.concat(vm.model.userOffices);
+          var offs = vm.model.userOffices;
           var addedIds = [];
           var roffs = [];
           for (var i = 0; i < offs.length; i++) {
