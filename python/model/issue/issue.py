@@ -428,6 +428,9 @@ class RedmineAPI:
                         filteredIssues.update([iss for iss in auxIssues if cls._hasCustomFieldValue(iss, RedmineAPI.FROM_FIELD, cId)])
                     issues.extend(filteredIssues)
 
+                    """ agrego los pedidos que no tienen oficinas. si no se presta a confusión """
+                    issues.extend([iss for iss in auxIssues if not cls._hasCustomField(iss, RedmineAPI.FROM_FIELD)])
+
         if statuses is not None and len(statuses) > 0:
             issues = [i for i in issues if i.status.id in statuses]
 
