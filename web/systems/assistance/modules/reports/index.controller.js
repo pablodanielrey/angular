@@ -27,7 +27,8 @@
         vm.getWorkedHours = getWorkedHours;
 
         function getWorkedHours(seconds) {
-          return Math.floor(seconds / 60 / 60) + ':' + Math.floor(seconds / 60 % 60);
+          var minutes = ('0' + Math.floor(seconds / 60 % 60)).substr(-2, 2);
+          return Math.floor(seconds / 60 / 60) + ':' + minutes;
         }
 
         function getUserNames(uid) {
@@ -87,7 +88,7 @@
           var dend = vm.model.search.end;
           vm.model.statistics = [];
 
-          Assistance.getStatistics(dstart, dend, ['89d88b81-fbc0-48fa-badb-d32854d3d93a']).then(function(stats) {
+          Assistance.getStatistics(dstart, dend, [], ['117ae745-acb3-48df-9005-343538f85403']).then(function(stats) {
             console.log(stats);
             $timeout(function() {
               var uids = [];

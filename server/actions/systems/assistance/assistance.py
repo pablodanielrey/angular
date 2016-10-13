@@ -50,14 +50,14 @@ class Assistance(wamp.SystemComponentSession):
             self.conn.put(con)
 
     @autobahn.wamp.register('assistance.get_statistics')
-    def getStatistics(self, initDate, endDate, userIds, details):
+    def getStatistics(self, initDate, endDate, userIds, officeIds, details):
         iDate = self._parseDate(initDate)
         eDate = self._parseDate(endDate)
 
         con = self.conn.get()
         try:
             logging.info('calculando estadisticas')
-            statistics = self.assistanceModel.getStatistics(con, userIds, iDate, eDate)
+            statistics = self.assistanceModel.getStatistics(con, userIds, iDate, eDate, officeIds)
             logging.info(statistics)
             return statistics
         finally:

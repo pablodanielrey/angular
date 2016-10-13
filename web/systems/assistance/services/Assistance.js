@@ -34,10 +34,10 @@
         return Login.getPrivateTransport().call('assistance.get_logs', [di,de, hi, he]);
       }
 
-			function getStatistics(initDate, endDate, userIds) {
+			function getStatistics(initDate, endDate, userIds, officeIds) {
 				var di = initDate.toISOString();
 				var de = endDate.toISOString();
-				return Login.getPrivateTransport().call('assistance.get_statistics', [di,de,userIds])
+				return Login.getPrivateTransport().call('assistance.get_statistics', [di,de,userIds, officeIds])
 			}
 
 			/*

@@ -278,7 +278,7 @@ class OfficeModel():
     def findOfficesUsers(cls, con, oids):
         users = set()
         for oid in oids:
-            users.update(cls.getUsers())
+            users.update(cls.getUsers(con, oid))
         return list(users)
 
     @classmethod

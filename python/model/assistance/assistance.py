@@ -13,7 +13,7 @@ from model.assistance.justifications.justifications import Justification
 from model.assistance.justifications.justifications import Status
 
 from model.positions.positions import Position
-from model.offices.office import Office
+from model.offices.office import Office, OfficeModel
 from model.assistance.statistics import WpStatistics
 from model.assistance.utils import Utils
 
@@ -362,7 +362,11 @@ class AssistanceModel:
 
         return wpss
 
-    def getStatistics(self, con, userIds, start, end):
+    def getStatistics(self, con, userIds, start, end, officeIds=[]):
+        # si no se le pasa usuarios busca en el listado de oficinas
+        if userIds is None or len(userIds) <= 0:
+            userIds = OfficeModel.findOfficesUsers(con, officeIds)
+
         wpss = self.getWorkPeriods(con, userIds, start, end)
         totalStats = []
         for uid in wpss.keys():
