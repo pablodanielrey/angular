@@ -4,7 +4,7 @@
       .module('assistance')
       .controller('LogsCtrl', LogsCtrl);
 
-    LogsCtrl.$inject = ['$scope', 'Assistance', 'Users', 'Login', 'Files', '$timeout'];
+    LogsCtrl.$inject = ['$scope', 'Assistance', 'Users', 'Login', 'Files', '$timeout', '$window', '$filter'];
 
     function _getDateInTime(hours, minutes, seconds) {
       var d = new Date()
@@ -15,7 +15,7 @@
       return d;
     }
 
-    function LogsCtrl($scope, Assistance, Users, Login, Files, $timeout) {
+    function LogsCtrl($scope, Assistance, Users, Login, Files, $timeout, $window, $filter) {
         var vm = this;
 
         vm.view = {
@@ -62,7 +62,6 @@
             return;
           }
           _getTodayLogs();
-          vm.sortDate();
           resetSearchAndGetLogs();
         }
 
@@ -70,34 +69,114 @@
         /* ********************************************************************************
                               MÉTODOS DE ORDENACIÓN
          * ******************************************************************************** */
+       /*
+         Dispara la ordenación del listado.
+       */
+       function sortIssues() {
+         var order = $window.sessionStorage.getItem('listSortLogs');
+         if (order == null) {
+           order = ['-date'];
+           $window.sessionStorage.setItem('listSortLogs', JSON.stringify(order));
+         } else {
+           order = JSON.parse(order);
+         }
+         vm.model.logs = $filter('orderBy')(vm.model.logs, order, false);
+       }
+
+       /*
+         retorna el valor de orden inverso o order normal. y almacena el inverso.
+         solo se usa cuando se clickea el ordenamiento explícitamente.
+         no cuando se ordena el listado.
+       */
+       function _processSortRev() {
+         var rev = $window.sessionStorage.getItem('reverseSortLogs');
+         if (rev == null) {
+           rev = false;
+           $window.sessionStorage.setItem('reverseSortLogs', JSON.stringify(!rev));
+         } else {
+           rev = JSON.parse(rev);
+         }
+
+         // almaceno el orden a inverso.
+         if (rev) {
+           $window.sessionStorage.setItem('reverseSortLogs', JSON.stringify(!rev));
+         } else {
+           $window.sessionStorage.setItem('reverseSortLogs', JSON.stringify(!rev));
+         }
+
+         return rev;
+       }
+
         function sortDate() {
-          vm.view.reverse = (vm.view.sort[0] == 'date') ? !vm.view.reverse : false;
-          vm.view.sort = ["date"];
+          var order = null;
+          var rev = _processSortRev();
+          if (rev) {
+            order = ['-date'];
+          } else {
+            order = ['date'];
+          }
+          $window.sessionStorage.setItem('listSortLogs', JSON.stringify(order));
+          sortIssues();
         }
 
         function sortHours() {
-          vm.view.reverse = (vm.view.sort[0] == 'date.getHours()') ? !vm.view.reverse : false;
-          vm.view.sort = ["date.getHours()","date.getMinutes()", "date.getSeconds()"];
+          var order = null;
+          var rev = _processSortRev();
+          if (rev) {
+            order = ["date.getHours()","date.getMinutes()", "date.getSeconds()"];
+          } else {
+            order = ["-date.getHours()","-date.getMinutes()", "-date.getSeconds()"];
+          }
+          $window.sessionStorage.setItem('listSortLogs', JSON.stringify(order));
+          sortIssues();
         }
 
         function sortName() {
-          vm.view.reverse = (vm.view.sort[0] == "name") ? !vm.view.reverse : false;
-          vm.view.sort = ["name", "lastname", "date"];
+          var order = null;
+          var rev = _processSortRev();
+          if (rev) {
+            order = ["name", "lastname", "date"];
+          } else {
+            order = ["-name", "-lastname", "date"];
+          }
+          $window.sessionStorage.setItem('listSortLogs', JSON.stringify(order));
+          sortIssues();
         }
 
         function sortAccess() {
-          vm.view.reverse = (vm.view.sort[0] == 'clase') ? !vm.view.reverse : false;
-          vm.view.sort = ["clase", "date", "name", "lastname"];
+          var order = null;
+          var rev = _processSortRev();
+          if (rev) {
+            order = ["clase", "date", "name", "lastname"];
+          } else {
+            order = ["-clase", "date", "name", "lastname"];
+          }
+          $window.sessionStorage.setItem('listSortLogs', JSON.stringify(order));
+          sortIssues();
         }
 
         function sortDni() {
-          vm.view.reverse = (vm.view.sort[0] == 'dni') ? !vm.view.reverse : false;
-          vm.view.sort = ["dni", "date"];
+          var order = null;
+          var rev = _processSortRev();
+          if (rev) {
+            order = ["dni", "date"];
+          } else {
+            order = ["-dni", "date"];
+          }
+          $window.sessionStorage.setItem('listSortLogs', JSON.stringify(order));
+          sortIssues();
         }
 
         function sortType() {
-          vm.view.reverse = (vm.view.sort[0] == 'tipo') ? !vm.view.reverse : false;
-          vm.view.sort = ["tipo", "date"];
+          var order = null;
+          var rev = _processSortRev();
+          if (rev) {
+            order = ["tipo", "date"];
+          } else {
+            order = ["-tipo", "date"];
+          }
+          $window.sessionStorage.setItem('listSortLogs', JSON.stringify(order));
+          sortIssues();
         }
 
 
@@ -247,6 +326,7 @@
                 vm.model.logs.push(_parseAll(logs[i]));
               }
               vm.view.style = '';
+              sortIssues();
             });
           }, function(err) {
             console.log(err);
