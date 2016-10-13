@@ -75,13 +75,13 @@
             <div class="contentList">
                 <!-- ---- Titulos del listado ----- -->
                 <div class="titleListAccess">
-                  <div class="file0">A</div>
+                  <div class="file0" ng-click="vm.sortAccess()">A</div>
                   <div class="file1" ng-click="vm.sortAccess()">Acceso</div>
                   <div class="file2" ng-click="vm.sortDate()">Día</div>
-                  <div class="file2b">Hora</div>
+                  <div class="file2b" ng-click="vm.sortHours()">Hora</div>
                   <div class="file3" ng-click="vm.sortName()">Nombre y Apellido</div>
-                  <div class="file4">DNI</div>
-                  <div class="file5">Tipo</div>
+                  <div class="file4" ng-click="vm.sortDni()">DNI</div>
+                  <div class="file5" ng-click="vm.sortType()">Tipo</div>
                 </div>
                 <!-- ---- Accesos ----- -->
                 <div class="listAccess">

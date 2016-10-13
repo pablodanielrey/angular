@@ -46,6 +46,9 @@
         vm.sortDate = sortDate;
         vm.sortAccess = sortAccess;
         vm.sortName = sortName;
+        vm.sortHours = sortHours;
+        vm.sortDni = sortDni;
+        vm.sortType = sortType;
 
         $scope.$on('wamp.open', function(event, args) {
           vm.model.privateTransport = Login.getPrivateTransport();
@@ -68,8 +71,13 @@
                               MÉTODOS DE ORDENACIÓN
          * ******************************************************************************** */
         function sortDate() {
-          vm.view.reverse = (vm.view.sort[0] == 'date') ? !vm.view.reverse : true;
+          vm.view.reverse = (vm.view.sort[0] == 'date') ? !vm.view.reverse : false;
           vm.view.sort = ["date"];
+        }
+
+        function sortHours() {
+          vm.view.reverse = (vm.view.sort[0] == 'date.getHours()') ? !vm.view.reverse : false;
+          vm.view.sort = ["date.getHours()","date.getMinutes()", "date.getSeconds()"];
         }
 
         function sortName() {
@@ -78,13 +86,18 @@
         }
 
         function sortAccess() {
-          vm.view.reverse = (vm.view.sort[0] == 'clase') ? !vm.view.reverse : true;
+          vm.view.reverse = (vm.view.sort[0] == 'clase') ? !vm.view.reverse : false;
           vm.view.sort = ["clase", "date", "name", "lastname"];
         }
 
         function sortDni() {
-          vm.view.reverse = (vm.view.sort[0] == 'dni') ? !vm.view.reverse : true;
-          vm.view.sort = ["dni", "date", "name", "lastname"];
+          vm.view.reverse = (vm.view.sort[0] == 'dni') ? !vm.view.reverse : false;
+          vm.view.sort = ["dni", "date"];
+        }
+
+        function sortType() {
+          vm.view.reverse = (vm.view.sort[0] == 'tipo') ? !vm.view.reverse : false;
+          vm.view.sort = ["tipo", "date"];
         }
 
 
