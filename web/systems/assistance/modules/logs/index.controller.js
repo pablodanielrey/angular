@@ -60,7 +60,7 @@
           }
           _getTodayLogs();
           vm.sortDate();
-          _resetSearch();
+          resetSearchAndGetLogs();
         }
 
 
