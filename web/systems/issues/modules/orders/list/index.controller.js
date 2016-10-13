@@ -74,32 +74,33 @@
 
         function headerInvalidateIssuesCache() {
           $window.sessionStorage.removeItem('assignedIssues');
+          _persistHeaderFilters();
         }
 
         function headerAreaSelectAllToggle() {
-          headerInvalidateIssuesCache();
           for (var i = 0; i < vm.model.header.userOffices.length; i++) {
             var a = vm.model.header.userOffices[i];
             a.active = !a.active;
           }
+          _persistHeaderFilters();
         }
 
         function headerOfficesSelectAllToggle() {
-          headerInvalidateIssuesCache();
           for (var i = 0; i < vm.model.header.offices.length; i++) {
             var a = vm.model.header.offices[i];
             a.active = !a.active;
           }
+          _persistHeaderFilters();
         }
 
         function headerStatusSelectAllToggle() {
-          headerInvalidateIssuesCache();
           var s = !vm.model.header.status.open;
           vm.model.header.status.open = s;
           vm.model.header.status.working = s;
           vm.model.header.status.paused = s;
           vm.model.header.status.rejected = s;
           vm.model.header.status.closed = s;
+          _persistHeaderFilters();
         }
 
         function _processHeaderToOffices(offices) {
@@ -118,7 +119,6 @@
           Offices.findAll().then(Offices.findById).then(
             function(off) {
               vm.model.header.offices = off;
-              vm.headerOfficesSelectAllToggle();
               d.resolve();
             });
 
@@ -126,6 +126,7 @@
         }
 
         function _getHeaderToFilter() {
+          _loadHeaderFilters();
           var f = [];
           for (var i = 0; i < vm.model.header.userOffices.length; i++) {
             if (vm.model.header.userOffices[i].active) {
@@ -136,6 +137,7 @@
         }
 
         function _getHeaderFromFilter() {
+          _loadHeaderFilters();
           var f = [];
           for (var i = 0; i < vm.model.header.offices.length; i++) {
             if (vm.model.header.offices[i].active) {
@@ -146,6 +148,7 @@
         }
 
         function _getHeaderStatusFilter() {
+          _loadHeaderFilters();
           var f = [];
           if (vm.model.header.status.open) {
             f.push(1);
@@ -163,6 +166,43 @@
             f.push(3);
           }
           return f;
+        }
+
+
+        function _persistHeaderFilters() {
+          $window.sessionStorage.setItem('hfo',JSON.stringify(vm.model.header.status.open));
+          $window.sessionStorage.setItem('hfw',JSON.stringify(vm.model.header.status.working));
+          $window.sessionStorage.setItem('hfp',JSON.stringify(vm.model.header.status.paused));
+          $window.sessionStorage.setItem('hfr',JSON.stringify(vm.model.header.status.rejected));
+          $window.sessionStorage.setItem('hfc',JSON.stringify(vm.model.header.status.closed));
+
+          for (var i = 0; i < vm.model.header.offices.length; i++) {
+            $window.sessionStorage.setItem('hFromOffices_' + vm.model.header.offices[i].id, JSON.stringify(vm.model.header.offices[i].active));
+          }
+
+          for (var i = 0; i < vm.model.header.userOffices.length; i++) {
+            $window.sessionStorage.setItem('hUserOffices_' + vm.model.header.userOffices[i].id, JSON.stringify(vm.model.header.userOffices[i].active));
+          }
+        }
+
+        function _loadHeaderFilters() {
+            vm.model.header.status.open = JSON.parse($window.sessionStorage.getItem('hfo'));
+            vm.model.header.status.working = JSON.parse($window.sessionStorage.getItem('hfw'));
+            vm.model.header.status.paused = JSON.parse($window.sessionStorage.getItem('hfp'));
+            vm.model.header.status.rejected = JSON.parse($window.sessionStorage.getItem('hfr'));
+            vm.model.header.status.closed = JSON.parse($window.sessionStorage.getItem('hfc'));
+
+            for (var i = 0; i < vm.model.header.offices.length; i++) {
+              var id = vm.model.header.offices[i].id;
+              var a = JSON.parse($window.sessionStorage.getItem('hFromOffices_' + id));
+              vm.model.header.offices[i].active = a;
+            }
+
+            for (var i = 0; i < vm.model.header.userOffices.length; i++) {
+              var id = vm.model.header.userOffices[i].id;
+              var a = JSON.parse($window.sessionStorage.getItem('hUserOffices_' + id));
+              vm.model.header.userOffices[i].active = a;
+            }
         }
 
         ///////////////////////////////////////////////////////////////////////

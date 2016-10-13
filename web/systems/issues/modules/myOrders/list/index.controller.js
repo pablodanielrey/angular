@@ -51,6 +51,23 @@
 
         function headerInvalidateIssuesCache() {
           $window.sessionStorage.removeItem('assignedIssues');
+          _persistHeaderFilters();
+        }
+
+        function _persistHeaderFilters() {
+          $window.sessionStorage.setItem('hfo',JSON.stringify(vm.model.header.status.open));
+          $window.sessionStorage.setItem('hfw',JSON.stringify(vm.model.header.status.working));
+          $window.sessionStorage.setItem('hfp',JSON.stringify(vm.model.header.status.paused));
+          $window.sessionStorage.setItem('hfr',JSON.stringify(vm.model.header.status.rejected));
+          $window.sessionStorage.setItem('hfc',JSON.stringify(vm.model.header.status.closed));
+        }
+
+        function _loadHeaderFilters() {
+            vm.model.header.status.open = JSON.parse($window.sessionStorage.getItem('hfo'));
+            vm.model.header.status.working = JSON.parse($window.sessionStorage.getItem('hfw'));
+            vm.model.header.status.paused = JSON.parse($window.sessionStorage.getItem('hfp'));
+            vm.model.header.status.rejected = JSON.parse($window.sessionStorage.getItem('hfr'));
+            vm.model.header.status.closed = JSON.parse($window.sessionStorage.getItem('hfc'));
         }
 
         function headerStatusSelectAllToggle() {
@@ -61,9 +78,11 @@
           vm.model.header.status.paused = s;
           vm.model.header.status.rejected = s;
           vm.model.header.status.closed = s;
+          _persistHeaderFilters();
         }
 
         function _getHeaderStatusFilter() {
+          _loadHeaderFilters();
           var f = [];
           if (vm.model.header.status.open) {
             f.push(1);
