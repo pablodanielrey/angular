@@ -181,10 +181,6 @@
           status: ['','abierta', 'enProgreso', 'cerrada', 'comentarios', 'cerrada', 'rechazada', 'pausada'],
           statusSort: ['','abierta', 'enProgreso', 'pausada', 'rechazada', 'cerrada'],
           priorities: ['baja', 'normal', 'alta', 'alta', 'alta'], //solo se maneja el estilo alta, si esta como urgente o inmediata se lo toma solo como alta
-          reverseSortDate: true,
-          reverseSortStatus: true,
-          reverseSortPriority: false,
-          sortedBy: 'status',
           src: '#/ordersDetail/'
         }
 

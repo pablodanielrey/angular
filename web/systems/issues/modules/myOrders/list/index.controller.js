@@ -99,9 +99,6 @@
 
           status: ['','abierta', 'enProgreso', 'cerrada', 'comentarios', 'rechazada', 'pausada'],
           statusSort: ['','abierta', 'enProgreso', 'pausada', 'rechazada', 'cerrada'],
-          reverseSortDate: true,
-          reverseSortStatus: true,
-          sortedBy: 'status',
           src: '#/myOrdersDetail/'
         }
 
@@ -171,8 +168,8 @@
                 }
                 $timeout(function() {
                   vm.model.issues = issues;
-                  sortStatus();
                   closeMessage();
+                  sortIssues();
                 });
             },
             function(err) {
@@ -182,38 +179,111 @@
         }
 
 
+        //////////////////////// ORDENAMIENTO DEL LISTADO //////////////////////////
 
-
-        function sortStatus() {
-          vm.view.reverseSortStatus = !vm.view.reverseSortStatus;
-          vm.view.sortedBy = 'status';
-          vm.view.reverseSortDate = true;
-          orderByStatus();
+        /*
+          Dispara la ordenación del listado.
+        */
+        function sortIssues() {
+          var order = $window.sessionStorage.getItem('listSort');
+          if (order == null) {
+            order = ['start', '-priority', 'statusPosition'];
+            $window.sessionStorage.setItem('listSort', JSON.stringify(order));
+          } else {
+            order = JSON.parse(order);
+          }
+          vm.model.issues = $filter('orderBy')(vm.model.issues, order, false);
         }
 
-        function orderByStatus() {
-          if (vm.view.reverseSortStatus) {
-            vm.model.issues = $filter('orderBy')(vm.model.issues, ['-statusPosition', '-start'], false);
+        /*
+          retorna el valor de orden inverso o order normal. y almacena el inverso.
+          solo se usa cuando se clickea el ordenamiento explícitamente.
+          no cuando se ordena el listado.
+        */
+        function _processSortRev() {
+          var rev = $window.sessionStorage.getItem('reverseSort');
+          if (rev == null) {
+            rev = false;
+            $window.sessionStorage.setItem('reverseSort', JSON.stringify(!rev));
           } else {
-            vm.model.issues = $filter('orderBy')(vm.model.issues, ['statusPosition', '-start'], false);
+            rev = JSON.parse(rev);
           }
 
+          // almaceno el orden a inverso.
+          if (rev) {
+            $window.sessionStorage.setItem('reverseSort', JSON.stringify(!rev));
+          } else {
+            $window.sessionStorage.setItem('reverseSort', JSON.stringify(!rev));
+          }
+
+          return rev;
         }
 
         function sortDate() {
-          vm.view.reverseSortDate = !vm.view.reverseSortDate;
+          var order = null;
+          var rev = _processSortRev();
+          if (rev) {
+            order = ['start', '-priority', 'statusPosition'];
+          } else {
+            order = ['-start', '-priority', 'statusPosition'];
+          }
+          $window.sessionStorage.setItem('listSort', JSON.stringify(order));
+          sortIssues();
+
+          /*
           vm.view.sortedBy = 'date';
+          vm.view.reverseSortDate = !vm.view.reverseSortDate;
           vm.view.reverseSortStatus = true;
+          vm.view.reverseSortPriority = false;
           orderByDate();
+          */
         }
 
-        function orderByDate() {
-          if (vm.view.reverseSortDate) {
-            vm.model.issues = $filter('orderBy')(vm.model.issues, ['start', 'statusPosition'], false);
+
+        function sortStatus() {
+          var order = null;
+          var rev = _processSortRev();
+          if (rev) {
+            order = ['statusPosition', '-priority', 'start'];
           } else {
-            vm.model.issues = $filter('orderBy')(vm.model.issues, ['-start', 'statusPosition'], false);
+            order = ['-statusPosition', '-priority', '-start'];
           }
+          $window.sessionStorage.setItem('listSort', JSON.stringify(order));
+          sortIssues();
+
+          /*
+          vm.view.sortedBy = 'status';
+          vm.view.reverseSortStatus = !vm.view.reverseSortStatus;
+          vm.view.reverseSortDate = true;
+          vm.view.reverseSortPriority = false;
+          orderByStatus();
+          */
         }
+
+
+        function sortPriority() {
+          var order = null;
+          var rev = _processSortRev();
+          if (rev) {
+            order = ['-priority', '-start', 'statusPosition'];
+          } else {
+            order = ['priority', '-start', 'statusPosition'];
+          }
+          $window.sessionStorage.setItem('listSort', JSON.stringify(order));
+          sortIssues();
+
+          /*
+          vm.view.sortedBy = 'priority';
+          vm.view.reverseSortPriority = !vm.view.reverseSortPriority;
+          vm.view.reverseSortDate = true;
+          vm.view.reverseSortStatus = true;
+          orderByPriority();
+          */
+        }
+
+        ///////////////////////////////////////////////////////////
+
+
 
 
         //***** cargar usuario en vm.model.users *****
@@ -254,12 +324,8 @@
                     loadUser(issue.creatorId);
                     $timeout(function() {
                       vm.model.issues.push(issue);
+                      sortIssues();
                     });
-                    if (vm.view.sortedBy == 'status') {
-                      orderByStatus();
-                    } else {
-                      orderByDate();
-                    }
                   }
                 },
                 function(error) {
