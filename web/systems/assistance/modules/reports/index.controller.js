@@ -76,6 +76,16 @@
             sTime: new Date(),
             eTime: new Date()
           }
+          vm.model.search.sTime.setHours(0);
+          vm.model.search.sTime.setMinutes(0);
+          vm.model.search.sTime.setSeconds(0);
+          vm.model.search.sTime.setMilliseconds(0);
+
+          vm.model.search.eTime.setHours(23);
+          vm.model.search.eTime.setMinutes(59);
+          vm.model.search.eTime.setSeconds(0);
+          vm.model.search.eTime.setMilliseconds(0);
+
           vm.model.header.columns = [];
         }
 

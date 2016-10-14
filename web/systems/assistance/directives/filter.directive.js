@@ -53,6 +53,7 @@
         vm.selectAllOffices = selectAllOffices;
         vm.displayOffices = displayOffices;
         vm.displayDate = displayDate;
+        vm.displayTime = displayTime;
         vm.isSelectedOffice = isSelectedOffice;
         vm.selectOffice = selectOffice;
         vm.findAndClose = findAndClose;
@@ -105,6 +106,10 @@
 
         function displayDate() {
           vm.view.style = (vm.view.style == "rangoFechas") ? '' : "rangoFechas";
+        }
+
+        function displayTime() {          
+          vm.view.style = (vm.view.style == "rangoHorario") ? '' : "rangoHorario";
         }
 
 

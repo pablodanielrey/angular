@@ -364,20 +364,6 @@
 
 
 
-.reports.rangoHorario .contentInputTime {
-  display: block;
-  position: absolute;
-  background-color: #3A3C44;
-  padding: 20px;
-  z-index: 999;
-
-}
-
-
-.reports .contentInputTime {
-  display: none;
-}
-
 .reports .btnSave {
   background-color: #92AD17;
   color:white;
@@ -927,17 +913,7 @@
   .reports .headerContentList {
     height: 40px;
   }
-  .reports.rangoHorario .contentInputTime {
-    display: block;
-    position: absolute;
-    background-color: #3A3C44;
-    padding: 20px;
-    width: 100%;
-    height: 150%;
-    top:0;
-    left: 0;
-    zoom:2;
-  }
+
 
 
 
