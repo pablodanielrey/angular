@@ -67,8 +67,11 @@
         }
 
         function resetFilters() {
-          vm.search = vm.model.search;
+          vm.search.offices = vm.model.search.offices ;
+          vm.search.start = vm.model.search.start;
+          vm.search.end = vm.model.search.end;
           vm.columns = vm.model.columns;
+          vm.find();
         }
 
         function selectAllOffices() {
