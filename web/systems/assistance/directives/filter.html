@@ -33,15 +33,15 @@
 
         <!-- SELECCINAR FECHAS -->
         <div class="contentRangDate">
-            <div class="btnOrder2" ng-click="view.style2 = 'rangoFechas'">Rango de Fechas</div>
-            <div class="btnOrder3" ng-click="view.style2 = 'rangoFechas'"><i class="fa fa-calendar-o"></i></div>
+            <div class="btnOrder2" ng-click="vm.displayDate()">Rango de Fechas</div>
+            <div class="btnOrder3" ng-click="vm.displayDate()"><i class="fa fa-calendar-o"></i></div>
 
             <div class="contentInputDate">
               <div> Fecha Inico </div>
-              <div><input type="date"  class="inputTime " ng-model='vm.model.search.start'></input></div>
+              <div><input type="date"  class="inputTime " ng-model='vm.search.start'></input></div>
               <div> Fecha Fin </div>
-              <div><input type="date" class="inputTime" ng-model='vm.model.search.end'></input></div>
-              <div class="btnSave" ng-click="view.style2 = ''">OK</div>
+              <div><input type="date" class="inputTime" ng-model='vm.search.end'></input></div>
+              <div class="btnSave" ng-click="vm.findAndClose()">OK</div>
             </div>
         </div>
 

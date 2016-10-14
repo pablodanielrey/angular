@@ -362,13 +362,7 @@
 }
 
 
-.reports.rangoFechas .contentInputDate {
-  display: block;
-  position: absolute;
-  z-index: 999;
-  background-color: #3A3C44;
-  padding: 20px;
-}
+
 
 .reports.rangoHorario .contentInputTime {
   display: block;
@@ -379,9 +373,6 @@
 
 }
 
-.reports .contentInputDate {
-  display: none;
-}
 
 .reports .contentInputTime {
   display: none;

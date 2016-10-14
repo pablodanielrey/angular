@@ -52,6 +52,7 @@
         vm.resetFilters = resetFilters;
         vm.selectAllOffices = selectAllOffices;
         vm.displayOffices = displayOffices;
+        vm.displayDate = displayDate;
         vm.isSelectedOffice = isSelectedOffice;
         vm.selectOffice = selectOffice;
         vm.findAndClose = findAndClose;
@@ -75,7 +76,7 @@
             var offices = vm.getOffices();
             for (var i = 0; i < offices.length; i++) {
               if (!isSelectedOffice(offices[i])) {
-                vm.search.offices.push(offices[i].id);  
+                vm.search.offices.push(offices[i].id);
               }
             }
           } else {
@@ -107,6 +108,10 @@
 
         function displayOffices() {
           vm.view.style = (vm.view.style == "seleccionarOficinas") ? '' : "seleccionarOficinas";
+        }
+
+        function displayDate() {
+          vm.view.style = (vm.view.style == "rangoFechas") ? '' : "rangoFechas";
         }
 
 
