@@ -4,27 +4,103 @@
       .module('assistance')
       .controller('ReportsCtrl', ReportsCtrl);
 
-    ReportsCtrl.$inject = ['$scope', 'Assistance', 'Users', '$timeout'];
+    ReportsCtrl.$inject = ['$scope', 'Assistance', 'Users', '$timeout', 'Login', '$window', 'Offices'];
 
-    function ReportsCtrl($scope, Assistance, Users, $timeout) {
+    function ReportsCtrl($scope, Assistance, Users, $timeout, Login, $window, Offices) {
         var vm = this;
 
         vm.model = {
           users: {},
           statistics: [],
+
           search: {
             start: new Date(),
-            end: new Date()
+            end: new Date(),
+            offices: [],
+            text: '',
+            sTime: new Date(),
+            eTime: new Date()
+          },
+          header: {
+            columns:[],
+            offices: []
           }
         }
 
+        vm.view = {
+          style: ''
+        }
+
         vm.findStatistics = findStatistics;
+        vm.print = print;
+        vm.download = download;
+
+        // metodos visuales
+        vm.getOffices = getOffices;
+
         vm.getDayOfWeek = getDayOfWeek;
         vm.getDate = getDate;
         vm.getHour = getHour;
         vm.getUserNames = getUserNames;
         vm.getUserDni = getUserDni;
         vm.getWorkedHours = getWorkedHours;
+
+        $scope.$on('wamp.open', function(event, args) {
+          activate();
+        });
+
+        activate();
+
+
+
+        function activate() {
+          if (Login.getPrivateTransport() == null) {
+            return
+          }
+          _initializeFilters();
+        }
+
+
+
+        // ************************************************************************
+        //                    FILTROS
+        // ************************************************************************
+        function _initializeFilters() {
+          vm.model.search = {
+            start: new Date(),
+            end: new Date(),
+            offices: [],
+            text: '',
+            sTime: new Date(),
+            eTime: new Date()
+          }
+          vm.model.header.columns = [];
+          _loadOffices();
+        }
+
+        function _loadOffices() {
+          vm.model.header.offices = [];
+          Offices.findAll().then(Offices.findById).then(
+            function(off) {
+              vm.model.header.offices = off;
+            });
+        }
+
+        function getOffices() {
+          return vm.model.header.offices;
+        }
+
+        function print() {
+          $window.print();
+        }
+
+        function download() {
+
+        }
+
+
+        // ***********************************************************************
+
 
         function getWorkedHours(seconds) {
           var minutes = ('0' + Math.floor(seconds / 60 % 60)).substr(-2, 2);
@@ -88,7 +164,7 @@
           var dend = vm.model.search.end;
           vm.model.statistics = [];
 
-          Assistance.getStatistics(dstart, dend, [], ['117ae745-acb3-48df-9005-343538f85403']).then(function(stats) {
+          Assistance.getStatistics(dstart, dend, [], vm.model.search.offices).then(function(stats) {
             console.log(stats);
             $timeout(function() {
               var uids = [];

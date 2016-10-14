@@ -1,0 +1,119 @@
+<!-- ---- Header----- -->
+<div class="contentSearch {{vm.view.style}}">
+
+    <div class="contentSearchLeft">
+
+        <div class="textReports"> REPORTES </div>
+
+        <div class="btnOrder" title="Restablecer valores por defecto" ng-click='vm.find()'><i class="fa fa-home"></i></div>
+
+        <div class="icoSeach"><i class="fa fa-search"></i></div>
+        <div><input type="search" placeholder="Buscar..." class="inputSearch" ng-model="vm.search.text"></input></div>
+
+        <!-- SELECCINAR OFICINAS -->
+        <div>
+          <div class="btnOrder2" ng-click="vm.displayOffices()">Oficinas</div>
+              <div class="contentInputOffices">
+                <div><i class="icoSeach2 fa fa-search"></i><input type="search" ng-model="vm.view.officeSearch" placeholder="Buscar..." class="inputSearch"></input></div>
+                <div class="contentSelectAll">
+                  <div><input type="checkbox" ng-checked="vm.isAllOffices()" ng-click="vm.selectAllOffices()"></div>
+                  <div>Seleccionar Todas</div>
+                </div>
+                <div class="contentListOffices">
+                    <div class="itemOffices" ng-repeat="office in vm.getOffices() | filter: vm.view.officeSearch | orderBy: name">
+                      <div><input type="checkbox" ng-checked="vm.isSelectedOffice(office)" ng-click="vm.selectOffice(office)"></div>
+                      <div>{{office.name}}</div>
+                    </div>
+
+                </div>
+
+                <div class="btnSave" ng-click="vm.findAndClose()">OK</div>
+              </div>
+        </div>
+
+        <!-- SELECCINAR FECHAS -->
+        <div class="contentRangDate">
+            <div class="btnOrder2" ng-click="view.style2 = 'rangoFechas'">Rango de Fechas</div>
+            <div class="btnOrder3" ng-click="view.style2 = 'rangoFechas'"><i class="fa fa-calendar-o"></i></div>
+
+            <div class="contentInputDate">
+              <div> Fecha Inico </div>
+              <div><input type="date"  class="inputTime " ng-model='vm.model.search.start'></input></div>
+              <div> Fecha Fin </div>
+              <div><input type="date" class="inputTime" ng-model='vm.model.search.end'></input></div>
+              <div class="btnSave" ng-click="view.style2 = ''">OK</div>
+            </div>
+        </div>
+
+        <!-- SELECCIONAR HORARIO -->
+        <div>
+            <div class="btnOrder2" ng-click="view.style2 = 'rangoHorario'">Rango Horario</div>
+            <div class="btnOrder3" ng-click="view.style2 = 'rangoHorario'"><i class="fa fa-clock-o"></i></div>
+
+            <div class="contentInputTime">
+              <div> Hora de Inicio </div>
+              <div><input type="time"  class="inputTime "></input></div>
+              <div> Hora Fin </div>
+              <div><input type="time" class="inputTime"></input></div>
+              <div class="btnSave" ng-click="view.style2 = ''">OK</div>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="contentSearchRigth">
+      <div>
+        <div class="btnOrder" title="Seleccionar Columnas" ng-click="view.style2 = 'seleccionarColumnas'"><i class="fa fa-columns"></i></div>
+            <div class="contentColumns">
+              <div class="contentListOffices">
+                    <div class="itemOffices">
+                      <div><input type="checkbox"></div>
+                      <div>Nombre y Apellido</div>
+                    </div>
+                    <div class="itemOffices">
+                      <div><input type="checkbox"></div>
+                      <div>DNI</div>
+                    </div>
+                    <div class="itemOffices">
+                      <div><input type="checkbox"></div>
+                      <div>Cargo</div>
+                    </div>
+                    <div class="itemOffices">
+                      <div><input type="checkbox"></div>
+                      <div>Día de entrada</div>
+                    </div>
+                    <div class="itemOffices">
+                      <div><input type="checkbox"></div>
+                      <div>Fecha de entrada</div>
+                    </div>
+                    <div class="itemOffices">
+                      <div><input type="checkbox" ng-click="view.style3 = 'verDiaSalida'"></div>
+                      <div>Día de salida</div>
+                    </div>
+                    <div class="itemOffices">
+                      <div><input type="checkbox" ng-click="view.style4 = 'verFechaSalida'"></div>
+                      <div>Fecha de salida</div>
+                    </div>
+                    <div class="itemOffices">
+                      <div><input type="checkbox"></div>
+                      <div>Horas trabajadas</div>
+                    </div>
+                    <div class="itemOffices">
+                      <div><input type="checkbox"></div>
+                      <div>Justificaciones</div>
+                    </div>
+                    <div class="itemOffices">
+                      <div><input type="checkbox"></div>
+                      <div>Notas</div>
+                    </div>
+
+                </div>
+
+                <div class="btnSave" ng-click="view.style2 = ''">OK</div>
+            </div>
+      </div>
+      <div class="btnOrder" title="Imprimir Lista" ng-click="vm.print()"><i class="fa fa-print"></i></div>
+      <div class="btnOrder" title="Descargar Lista"><i class="fa fa-download"></i></div>
+    </div>
+
+</div>

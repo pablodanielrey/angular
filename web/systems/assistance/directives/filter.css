@@ -1,0 +1,11 @@
+.contentSearch .contentInputOffices {
+  display: none;
+}
+
+.contentSearch.seleccionarOficinas .contentInputOffices {
+  display: block;
+  position: absolute;
+  background-color: #3A3C44;
+  padding: 20px;
+  z-index: 999;
+}

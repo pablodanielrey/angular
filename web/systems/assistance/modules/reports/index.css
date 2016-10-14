@@ -361,15 +361,6 @@
   margin-right: 0px;
 }
 
-.reports.seleccionarOficinas .contentInputOffices {
-  display: block;
-  position: absolute;
-  background-color: #3A3C44;
-  padding: 20px;
-  z-index: 999;
-
-}
-
 
 .reports.rangoFechas .contentInputDate {
   display: block;
@@ -386,10 +377,6 @@
   padding: 20px;
   z-index: 999;
 
-}
-
-.reports .contentInputOffices {
-  display: none;
 }
 
 .reports .contentInputDate {
