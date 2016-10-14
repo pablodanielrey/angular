@@ -23,7 +23,8 @@
               getOffices: '&getOffices',
               find: '&find',
               print: '&print',
-              download: '&download'
+              download: '&download',
+              resetFilters: '&reset'
             }
         };
 
@@ -49,7 +50,6 @@
           style: ''
         }
 
-        vm.resetFilters = resetFilters;
         vm.selectAllOffices = selectAllOffices;
         vm.displayOffices = displayOffices;
         vm.displayDate = displayDate;
@@ -61,17 +61,7 @@
         activate();
 
         function activate() {
-          angular.copy(vm.search, vm.model.search);
-          angular.copy(vm.columns, vm.model.columns);
           vm.view.officeSearch = '';
-        }
-
-        function resetFilters() {
-          vm.search.offices = vm.model.search.offices ;
-          vm.search.start = vm.model.search.start;
-          vm.search.end = vm.model.search.end;
-          vm.columns = vm.model.columns;
-          vm.find();
         }
 
         function selectAllOffices() {

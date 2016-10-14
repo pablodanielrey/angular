@@ -23,7 +23,8 @@
           },
           header: {
             columns:[],
-            offices: []
+            offices: [],
+            officeIds: []
           }
         }
 
@@ -37,6 +38,7 @@
 
         // metodos visuales
         vm.getOffices = getOffices;
+        vm.resetFilters = resetFilters;
 
         vm.getDayOfWeek = getDayOfWeek;
         vm.getDate = getDate;
@@ -57,7 +59,7 @@
           if (Login.getPrivateTransport() == null) {
             return
           }
-          _initializeFilters();
+          _loadOffices();
         }
 
 
@@ -69,21 +71,31 @@
           vm.model.search = {
             start: new Date(),
             end: new Date(),
-            offices: [],
+            offices: vm.model.header.officeIds,
             text: '',
             sTime: new Date(),
             eTime: new Date()
           }
           vm.model.header.columns = [];
-          _loadOffices();
         }
 
         function _loadOffices() {
           vm.model.header.offices = [];
           Offices.findAll().then(Offices.findById).then(
             function(off) {
+              vm.model.header.officeIds = [];
               vm.model.header.offices = off;
+              for (var i = 0; i < off.length; i++) {
+                vm.model.header.officeIds.push(off[i].id);
+              }
+              _initializeFilters();
+              vm.findStatistics();
             });
+        }
+
+        function resetFilters() {
+          _initializeFilters();
+          vm.findStatistics();
         }
 
         function getOffices() {

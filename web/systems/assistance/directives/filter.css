@@ -6,6 +6,10 @@
   display: none;
 }
 
+.contentSearch .contentColumns {
+  display: none;
+}
+
 .contentSearch.seleccionarOficinas .contentInputOffices {
   display: block;
   position: absolute;
@@ -20,4 +24,15 @@
   z-index: 999;
   background-color: #3A3C44;
   padding: 20px;
+}
+
+
+.contentSearch.seleccionarColumnas .contentColumns {
+  display: block;
+  position: absolute;
+  background-color: #3A3C44;
+  padding: 20px;
+  z-index: 999;
+  width: 140px;
+  left: calc(100% - 187px)
 }
