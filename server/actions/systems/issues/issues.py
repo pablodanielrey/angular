@@ -29,7 +29,6 @@ class Issues(wamp.SystemComponentSession):
     def _readOnly(self, conn):
         conn.set_isolation_level(psycopg2.extensions.ISOLATION_LEVEL_AUTOCOMMIT)
 
-
     def getRegisterOptions(self):
         return autobahn.wamp.RegisterOptions(details_arg='details')
 
@@ -76,10 +75,6 @@ class Issues(wamp.SystemComponentSession):
         con = self.conn.get()
         self._readOnly(con)
         try:
-            logging.info(statuses)
-            logging.info(froms)
-            logging.info(tos)
-
             if statuses is None:
                 return []
             assert isinstance(statuses,list)

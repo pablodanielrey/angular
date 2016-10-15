@@ -87,6 +87,9 @@ from model.login.login import Login
 
 class SystemComponentSession(ApplicationSession):
 
+    def getLogger(self):
+        return logging.getLogger('{}.{}'.format(self.__module__ self.__class__.__name__))
+
     def getUserId(self, con, details):
         wampSessionId = details.caller
         username = details.caller_authid
