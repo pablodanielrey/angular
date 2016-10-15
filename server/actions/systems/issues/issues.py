@@ -6,6 +6,7 @@ import logging
 import psycopg2
 
 from twisted.internet.defer import inlineCallbacks, returnValue
+from twisted.internet import threads
 
 from model.issue.issue import Issue, RedmineAPI, Attachment, IssueModel
 from model.offices.office import Office
@@ -25,25 +26,37 @@ class Issues(wamp.SystemComponentSession):
 
     conn = wamp.getConnectionManager()
 
+    def _readOnly(self, conn):
+        conn.set_isolation_level(psycopg2.extensions.ISOLATION_LEVEL_AUTOCOMMIT)
+
+
     def getRegisterOptions(self):
         return autobahn.wamp.RegisterOptions(details_arg='details')
 
-    @autobahn.wamp.register('issues.get_my_issues')
-    def getMyIssues(self, statuses, froms, tos, details):
+    def _getMyIssues(self, statuses, froms, tos, details):
         """
             Obtiene los issues que realizó la oficina de la persona.
             TODO: implementar los filtros.
         """
         con = self.conn.get()
+        self._readOnly(con)
         try:
             userId = self.getUserId(con, details)
             return Issue.getMyIssues(con, userId, statuses, froms, tos)
         finally:
             self.conn.put(con)
 
-    @autobahn.wamp.register('issues.get_offices_issues')
-    def getOfficesIssues(self, details):
+
+    @autobahn.wamp.register('issues.get_my_issues')
+    @inlineCallbacks
+    def getMyIssues(self, statuses, froms, tos, details):
+        logging.getLogger().setLevel(logging.DEBUG)
+        r = yield threads.deferToThread(self._getMyIssues, statuses, froms, tos, details)
+        returnValue(r)
+
+    def _getOfficesIssues(self, details):
         con = self.conn.get()
+        self._readOnly(con)
         try:
             userId = self.getUserId(con, details)
             oIds = Office.getOfficesByUser(con, userId, False)
@@ -51,12 +64,18 @@ class Issues(wamp.SystemComponentSession):
         finally:
             self.conn.put(con)
 
-    @autobahn.wamp.register('issues.get_assigned_issues')
-    def getAssignedIssues(self, statuses, froms, tos, details):
+    @autobahn.wamp.register('issues.get_offices_issues')
+    @inlineCallbacks
+    def getOfficesIssues(self, details):
+        r = yield threads.deferToThread(self._getOfficesIssues, details)
+        returnValue(r)
+
+    def _getAssignedIssues(self, statuses, froms, tos, details):
         """
             Retorna los issues asignados a las oficinas a las que pertenece la persona.
         """
         con = self.conn.get()
+        self._readOnly(con)
         try:
             logging.info(statuses)
             logging.info(froms)
@@ -75,9 +94,15 @@ class Issues(wamp.SystemComponentSession):
         finally:
             self.conn.put(con)
 
-    @autobahn.wamp.register('issues.find_by_id')
-    def findById(self, issueid, details):
+    @autobahn.wamp.register('issues.get_assigned_issues')
+    @inlineCallbacks
+    def getAssignedIssues(self, statuses, froms, tos, details):
+        r = yield threads.deferToThread(self._getAssignedIssues, statuses, froms, tos, details)
+        returnValue(r)
+
+    def _findById(self, issueid, details):
         con = self.conn.get()
+        self._readOnly(con)
         try:
             issues = Issue.findByIds(con, [issueid])
             if issues is None or len(issues) <= 0:
@@ -86,9 +111,15 @@ class Issues(wamp.SystemComponentSession):
         finally:
             self.conn.put(con)
 
-    @autobahn.wamp.register('issues.find_by_ids')
-    def findByIds(self, issuesIds, details):
+    @autobahn.wamp.register('issues.find_by_id')
+    @inlineCallbacks
+    def findById(self, issueid, details):
+        r = yield threads.deferToThread(self._findById, issueid, details)
+        returnValue(r)
+
+    def _findByIds(self, issuesIds, details):
         con = self.conn.get()
+        self._readOnly(con)
         try:
             logging.info(issuesIds)
             if len(issuesIds) <= 0:
@@ -97,9 +128,13 @@ class Issues(wamp.SystemComponentSession):
         finally:
             self.conn.put(con)
 
-    @autobahn.wamp.register('issues.create')
+    @autobahn.wamp.register('issues.find_by_ids')
     @inlineCallbacks
-    def create(self, subject, description, parentId, officeId, fromOfficeId, authorId, files, details):
+    def findByIds(self, issuesIds, details):
+        r = yield threads.deferToThread(self._findByIds, issuesIds, details)
+        returnValue(r)
+
+    def _create(self, subject, description, parentId, officeId, fromOfficeId, authorId, files, details):
         con = self.conn.get()
         try:
             print('create issue')
@@ -108,8 +143,25 @@ class Issues(wamp.SystemComponentSession):
             tracker = IssueModel.TRACKER_ERROR
             issueId = IssueModel.create(con, parentId, officeId, authorId, subject, description, fromOfficeId, userId, files, tracker)
             con.commit()
-            print(issueId)
-            yield self.publish('issues.issue_created_event', issueId, authorId, fromOfficeId, officeId)
+            return issueId
+
+        finally:
+            self.conn.put(con)
+
+    @autobahn.wamp.register('issues.create')
+    @inlineCallbacks
+    def create(self, subject, description, parentId, officeId, fromOfficeId, authorId, files, details):
+        issueId = yield threads.deferToThread(self._create, subject, description, parentId, officeId, fromOfficeId, authorId, files, details)
+        self.publish('issues.issue_created_event', issueId, authorId, fromOfficeId, officeId)
+        returnValue(issueId)
+
+    def _createComment(self, subject, description, parentId, projectId, files, details):
+        con = self.conn.get()
+        try:
+            userId = self.getUserId(con, details)
+            tracker = IssueModel.TRACKER_COMMENT
+            issueId = IssueModel.create(con, parentId, projectId, userId, subject, description, '', '', files, tracker)
+            con.commit()
             return issueId
         finally:
             self.conn.put(con)
@@ -117,18 +169,9 @@ class Issues(wamp.SystemComponentSession):
     @autobahn.wamp.register('issues.create_comment')
     @inlineCallbacks
     def createComment(self, subject, description, parentId, projectId, files, details):
-        con = self.conn.get()
-        try:
-            self.log.info('createComment')
-            userId = self.getUserId(con, details)
-            tracker = IssueModel.TRACKER_COMMENT
-            issueId = IssueModel.create(con, parentId, projectId, userId, subject, description, '', '', files, tracker)
-            con.commit()
-            yield self.publish('issues.comment_created_event', parentId, issueId)
-            return issueId
-
-        finally:
-            self.conn.put(con)
+            issueId = yield threads.deferToThread(self._createComment, subject, description, parentId, projectId, files, details)
+            self.publish('issues.comment_created_event', parentId, issueId)
+            returnValue(issueId)
 
     @autobahn.wamp.register('issues.change_status')
     @inlineCallbacks
