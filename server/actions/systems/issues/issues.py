@@ -50,7 +50,6 @@ class Issues(wamp.SystemComponentSession):
     @autobahn.wamp.register('issues.get_my_issues')
     @inlineCallbacks
     def getMyIssues(self, statuses, froms, tos, details):
-        logging.getLogger().setLevel(logging.DEBUG)
         r = yield threads.deferToThread(self._getMyIssues, statuses, froms, tos, details)
         returnValue(r)
 
@@ -187,8 +186,7 @@ class Issues(wamp.SystemComponentSession):
         yield self.publish('issues.updated_event', issue.id, issue.statusId, priority)
         return issue
 
-    @autobahn.wamp.register('issues.get_offices')
-    def getOffices(self, details):
+    def _getOffices(self, details):
         con = self.conn.get()
         try:
             userId = self.getUserId(con, details)
@@ -196,26 +194,47 @@ class Issues(wamp.SystemComponentSession):
         finally:
             self.conn.put(con)
 
-    @autobahn.wamp.register('issues.search_users')
-    def searchUsers(self, regex, details):
+    @autobahn.wamp.register('issues.get_offices')
+    @inlineCallbacks
+    def getOffices(self, details):
+        offices = yield threads.deferToThread(self._getOffices, details)
+        returnValue(offices)
+
+    def _searchUsers(self, regex, details):
         con = self.conn.get()
         try:
             return IssueModel.searchUsers(con, regex)
         finally:
             self.conn.put(con)
 
-    @autobahn.wamp.register('issues.get_office_subjects')
-    def getOfficeSubjects(self, officeId, details):
+    @autobahn.wamp.register('issues.search_users')
+    @inlineCallbacks
+    def searchUsers(self, regex, details):
+        users = yield threads.deferToThread(self._searchUsers, regex, details)
+        returnValue(users)
+
+    def _getOfficeSubjects(self, officeId, details):
         con = self.conn.get()
         try:
             return IssueModel.getSubjectTypes(con, officeId)
         finally:
             self.conn.put(con)
 
-    @autobahn.wamp.register('issues.get_areas')
-    def getAreas(self, oId, details):
+    @autobahn.wamp.register('issues.get_office_subjects')
+    @inlineCallbacks
+    def getOfficeSubjects(self, officeId, details):
+        sub = yield threads.deferToThread(self._getOfficeSubjects, officeId, details)
+        returnValue(sub)
+
+    def _getAreas(self, oId, details):
         con = self.conn.get()
         try:
             return IssueModel.getAreas(con, oId)
         finally:
             self.conn.put(con)
+
+    @autobahn.wamp.register('issues.get_areas')
+    @inlineCallbacks
+    def getAreas(self, oId, details):
+        areas = yield threads.deferToThread(self._getAreas, oId, details)
+        returnValue(areas)
