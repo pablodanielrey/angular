@@ -5,8 +5,8 @@ from wamp import SystemComponentSession
 from model.serializer import JSONSerializable
 from model.login.login import Login
 
-#from model.serializer import ditesiSerializer
-#ditesiSerializer.register()
+from twisted.internet.defer import inlineCallbacks, returnValue
+from twisted.internet import threads
 
 
 class LoginPublicSession(SystemComponentSession):
@@ -16,6 +16,7 @@ class LoginPublicSession(SystemComponentSession):
     @autobahn.wamp.register('login.get_public_data')
     def getPublicData(self, dni):
         con = self.conn.get()
+        self.conn.readOnly(con)
         try:
             return Login.getPublicData(con, dni)
         finally:
@@ -28,7 +29,6 @@ class LoginSession(SystemComponentSession):
 
     @autobahn.wamp.register('login.get_registered_systems')
     def getRegisteredSystems(self, details=None):
-        print(details)
         systems = {
             'registered': [
                 {
