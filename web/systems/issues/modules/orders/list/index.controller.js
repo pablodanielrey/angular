@@ -270,6 +270,8 @@
           vm.messageLoading();
           Issues.getAssignedIssues(_getHeaderStatusFilter(), _getHeaderFromFilter(), _getHeaderToFilter()).then(
             function(issues) {
+              var users = [];
+              var uid = null;
               for (var i = 0; i < issues.length; i++) {
                 var dateStr = issues[i].start;
                 issues[i].date = new Date(dateStr);
@@ -278,8 +280,17 @@
                 var item = vm.view.status[issues[i].statusId];
                 issues[i].statusPosition = vm.view.statusSort.indexOf(item);
 
-                vm.loadUser(issues[i].userId);
-                vm.loadUser(issues[i].creatorId);
+                uid = issues[i].userId;
+                if (vm.model.users[uid] == null) {
+                  users.push(uid);
+                }
+                uid = issues[i].creatorId
+                if (vm.model.users[uid] == null) {
+                  users.push(uid);
+                }
+              }
+              if (users.length > 0) {
+                loadUsers(users);
               }
               $timeout(function() {
                 vm.model.issues = issues;
@@ -313,6 +324,8 @@
           vm.view.style2 = vm.view.styles2[1];
         }
 
+        //////////////// carga de usuarios refereciados por los issues ////////////////
+
         function loadUser(userId) {
           if (userId == null || userId == '') {
             return
@@ -328,6 +341,19 @@
           }
         }
 
+        function loadUsers(userIds) {
+          Users.findById(userIds).then(
+            function(users) {
+              $timeout(function() {
+                for (var i = 0; i < users.length; i++) {
+                  vm.model.users[users[i].id] = users[i];
+                }
+              });
+            }
+          );
+        }
+
+        ///////////////////////////////////////////////////
         //////////////////////// ORDENAMIENTO DEL LISTADO //////////////////////////
 
         /*

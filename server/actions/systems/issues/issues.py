@@ -26,9 +26,6 @@ class Issues(wamp.SystemComponentSession):
 
     conn = wamp.getConnectionManager()
 
-    def _readOnly(self, conn):
-        conn.set_isolation_level(psycopg2.extensions.ISOLATION_LEVEL_AUTOCOMMIT)
-
     def getRegisterOptions(self):
         return autobahn.wamp.RegisterOptions(details_arg='details')
 
@@ -38,7 +35,7 @@ class Issues(wamp.SystemComponentSession):
             TODO: implementar los filtros.
         """
         con = self.conn.get()
-        self._readOnly(con)
+        self.conn.readOnly(con)
         try:
             userId = self.getUserId(con, details)
             return Issue.getMyIssues(con, userId, statuses, froms, tos)
@@ -54,7 +51,7 @@ class Issues(wamp.SystemComponentSession):
 
     def _getOfficesIssues(self, details):
         con = self.conn.get()
-        self._readOnly(con)
+        self.conn.readOnly(con)
         try:
             userId = self.getUserId(con, details)
             oIds = Office.getOfficesByUser(con, userId, False)
@@ -73,7 +70,7 @@ class Issues(wamp.SystemComponentSession):
             Retorna los issues asignados a las oficinas a las que pertenece la persona.
         """
         con = self.conn.get()
-        self._readOnly(con)
+        self.conn.readOnly(con)
         try:
             if statuses is None:
                 return []
@@ -96,7 +93,7 @@ class Issues(wamp.SystemComponentSession):
 
     def _findById(self, issueid, details):
         con = self.conn.get()
-        self._readOnly(con)
+        self.conn.readOnly(con)
         try:
             issues = Issue.findByIds(con, [issueid])
             if issues is None or len(issues) <= 0:
@@ -113,7 +110,7 @@ class Issues(wamp.SystemComponentSession):
 
     def _findByIds(self, issuesIds, details):
         con = self.conn.get()
-        self._readOnly(con)
+        self.conn.readOnly(con)
         try:
             logging.info(issuesIds)
             if len(issuesIds) <= 0:
@@ -183,6 +180,7 @@ class Issues(wamp.SystemComponentSession):
 
     def _getOffices(self, details):
         con = self.conn.get()
+        self.conn.readOnly(con)
         try:
             userId = self.getUserId(con, details)
             return IssueModel.getOffices(con, userId)
@@ -197,6 +195,7 @@ class Issues(wamp.SystemComponentSession):
 
     def _searchUsers(self, regex, details):
         con = self.conn.get()
+        self.conn.readOnly(con)
         try:
             return IssueModel.searchUsers(con, regex)
         finally:
@@ -210,6 +209,7 @@ class Issues(wamp.SystemComponentSession):
 
     def _getOfficeSubjects(self, officeId, details):
         con = self.conn.get()
+        self.conn.readOnly(con)
         try:
             return IssueModel.getSubjectTypes(con, officeId)
         finally:
@@ -223,6 +223,7 @@ class Issues(wamp.SystemComponentSession):
 
     def _getAreas(self, oId, details):
         con = self.conn.get()
+        self.conn.readOnly(con)
         try:
             return IssueModel.getAreas(con, oId)
         finally:

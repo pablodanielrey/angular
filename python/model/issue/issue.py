@@ -197,9 +197,6 @@ class RedmineAPI:
 
     @classmethod
     def _fromResult(cls, con, r, redmine, related=False):
-
-        logging.info(r)
-
         attrs = dir(r)
         issue = Issue()
         issue.id = r.id
@@ -408,7 +405,6 @@ class RedmineAPI:
                     """
                         no tienen oficina origen
                     """
-                    logging.info('filtrando por cIds = []')
                     auxIssues = redmine.issue.filter(tracker_id=cls.TRACKER_ERROR, project_id=pId, status_id='*')
                     issues.extend([iss for iss in auxIssues if not cls._hasCustomField(iss, RedmineAPI.FROM_FIELD)])
 

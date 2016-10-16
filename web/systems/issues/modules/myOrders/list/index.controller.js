@@ -174,6 +174,8 @@
           messageLoading();
           Issues.getMyIssues(_getHeaderStatusFilter()).then(
             function(issues) {
+                var users = [];
+                var uid = null;
                 for (var i = 0; i < issues.length; i++) {
                   var dateStr = issues[i].start;
                   issues[i].date = new Date(dateStr);
@@ -182,8 +184,17 @@
                   var status = vm.view.status[issues[i].statusId];
                   issues[i].statusPosition = vm.view.statusSort.indexOf(status);
 
-                  loadUser(issues[i].userId);
-                  loadUser(issues[i].creatorId);
+                  uid = issues[i].userId;
+                  if (vm.model.users[uid] == null) {
+                    users.push(uid);
+                  }
+                  uid = issues[i].creatorId
+                  if (vm.model.users[uid] == null) {
+                    users.push(uid);
+                  }
+                }
+                if (users.length > 0) {
+                  loadUsers(users);
                 }
                 $timeout(function() {
                   vm.model.issues = issues;
@@ -320,6 +331,18 @@
           }
         }
 
+        function loadUsers(userIds) {
+          Users.findById(userIds).then(
+            function(users) {
+              $timeout(function() {
+                for (var i = 0; i < users.length; i++) {
+                  vm.model.users[users[i].id] = users[i];
+                }
+              });
+            }
+          );
+        }
+        //////////////////////////////
 
 
       function registerEventManagers() {

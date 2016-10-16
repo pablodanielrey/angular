@@ -26,7 +26,6 @@ def getConnectionManager():
         conn = Connection(crossbar)
     return conn
 
-
 """
     Se define un componente que puede ser cargado por corssbar.io en la config.
     Las clases componentes deben extender de SystemComponentSession
@@ -88,7 +87,7 @@ from model.login.login import Login
 class SystemComponentSession(ApplicationSession):
 
     def getLogger(self):
-        return logging.getLogger('{}.{}'.format(self.__module__ self.__class__.__name__))
+        return logging.getLogger('{}.{}'.format(self.__module__, self.__class__.__name__))
 
     def getUserId(self, con, details):
         wampSessionId = details.caller
