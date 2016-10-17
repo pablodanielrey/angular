@@ -121,9 +121,13 @@
               <div>
                   <input type="file" e-on-read-file-binary-string="vm.addFile(fileName,fileContent, fileType, fileSize)" class="" />
               </div>
-
               <div class="contentAdds">
-                  <div ng-repeat="file in vm.model.files"> <i class="fa fa-file-o"></i> {{file.name}} <button class="btnTrashAdd" ng-click="vm.removeFile(file)"><i class="fa fa-trash-o" aria-hidden="true"></i></button></div>
+                  <div ng-repeat="file in vm.model.files">
+                    <i class="fa fa-file-o"></i> {{file.name}}
+                    <button class="btnTrashAdd" ng-click="vm.removeFile(file)">
+                    <i class="fa fa-trash-o" aria-hidden="true"></i>
+                    </button>
+                  </div>
               </div>
 
               <!-- <div class="addMenssage2">

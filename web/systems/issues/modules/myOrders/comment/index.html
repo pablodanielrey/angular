@@ -8,6 +8,19 @@
               </div>
               <div class="textMessage">
                 <textarea class="textareaMenssage" ng-model="vm.model.replyDescription"></textarea>
+
+                <div>
+                    <input type="file" e-on-read-file-binary-string="vm.addFile(fileName,fileContent, fileType, fileSize)" class="" />
+                </div>
+                <div class="contentAdds">
+                    <div ng-repeat="file in vm.model.files">
+                      <i class="fa fa-file-o"></i> {{file.name}}
+                      <button class="btnTrashAdd" ng-click="vm.removeFile(file)">
+                      <i class="fa fa-trash-o" aria-hidden="true"></i>
+                      </button>
+                    </div>
+                </div>
+                <!--
                 <div class="addMenssage2">
                     <div><button class="btnAdd" title="Adjuntar Archivo"><i class="fa fa-paperclip" aria-hidden="true"></i> Subir Archivo</button></div>
                     <div class="ArchivesAdd">
@@ -15,6 +28,7 @@
                       <span ng-repeat="file in vm.model.files"> <i class="fa fa-file-o"></i> {{file.name}} <button class="btnTrashAdd" ng-click="vm.removeFile(file)"><i class="fa fa-trash-o" aria-hidden="true"></i></button></span>
                     </div>
                 </div>
+                -->
               </div>
               <div class="actionMessage" ng-show="vm.model.issue != null">
                 <button class="btnAceptMennsage" ng-click="vm.createComment()">ACEPTAR</button>
