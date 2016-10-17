@@ -39,7 +39,7 @@
           statusToday: [],
           inside: 0,
           outside: 0,
-          privateTransport: null
+          activate: false //para saber si ya se ejecuto el activate. Solucion a que el wamp open se ejecuta tres veces el wamp.open
         };
 
         vm.resetSearchAndGetLogs = resetSearchAndGetLogs;
@@ -52,19 +52,16 @@
         vm.sortType = sortType;
 
         $scope.$on('wamp.open', function(event, args) {
-          if (vm.model.privateTransport != null) {
-            return
-          }
-          vm.model.privateTransport = Login.getPrivateTransport();
           activate();
         });
 
         activate();
 
         function activate() {
-          if (vm.model.privateTransport == null) {
+          if (vm.model.activate || Login.getPrivateTransport() == null) {
             return;
           }
+          vm.model.activate = true;
           _getTodayLogs();
           resetSearchAndGetLogs();
         }
