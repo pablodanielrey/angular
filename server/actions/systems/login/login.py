@@ -102,6 +102,11 @@ class LoginSession(SystemComponentSession):
                     'ticket': 'fnfwfewfewfmewfklemflfdlskmfsd'
                 },
                 {
+                    'domain': 'assistance.econo.unlp.edu.ar',
+                    'relative': '/systems/assistance/',
+                    'ticket': 'fnfwfewfewfmewfklemflfdlskmfsd'
+                },
+                {
                     'domain': 'www.asistencia.econo.unlp.edu.ar',
                     'relative': '/systems/assistance/',
                     'ticket': 'fnfwfewfewfmewfklemflfdlskmfsd'
