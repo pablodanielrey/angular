@@ -42,7 +42,6 @@ class Issues(wamp.SystemComponentSession):
         finally:
             self.conn.put(con)
 
-
     @autobahn.wamp.register('issues.get_my_issues')
     @inlineCallbacks
     def getMyIssues(self, statuses, froms, tos, details):
