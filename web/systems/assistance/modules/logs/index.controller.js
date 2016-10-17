@@ -38,7 +38,8 @@
           status: [],
           statusToday: [],
           inside: 0,
-          outside: 0
+          outside: 0,
+          privateTransport: null
         };
 
         vm.resetSearchAndGetLogs = resetSearchAndGetLogs;
@@ -51,6 +52,9 @@
         vm.sortType = sortType;
 
         $scope.$on('wamp.open', function(event, args) {
+          if (vm.model.privateTransport != null) {
+            return
+          }
           vm.model.privateTransport = Login.getPrivateTransport();
           activate();
         });
@@ -58,7 +62,7 @@
         activate();
 
         function activate() {
-          if (Login.getPrivateTransport() == null) {
+          if (vm.model.privateTransport == null) {
             return;
           }
           _getTodayLogs();
