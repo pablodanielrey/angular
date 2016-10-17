@@ -18,7 +18,7 @@
             <div class="contentList">
                 <!-- ---- Titulos del listado ----- -->
                 <div class="titleListAccess">
-                  <div class="file3 cursor"> <i class="icoOrdination fa fa-sort"></i> <b>Nombre y Apellido</b></div>
+                  <div class="file3 cursor" ng-click="vm.sortName()"> <i class="icoOrdination fa fa-sort"></i> <b>Nombre y Apellido</b></div>
                   <div class="file4 cursor"> <i class="icoOrdination fa fa-sort"></i> <b>DNI</b> </div>
                   <div class="file5 cursor"> <i class="icoOrdination fa fa-sort"></i> <b>Cargo</b> </div>
                   <div class="file0 cursor"> <i class="icoOrdination fa fa-sort"></i> <b>Día</b> </div>
@@ -29,15 +29,15 @@
                   <div class="file6 cursor"> <i class="icoOrdination fa fa-sort"></i> <b>Salida </b> </div>
                   <div class="file7 cursor"> <i class="icoOrdination fa fa-sort"></i> <b>Horas</b> </div>
                   <div class="file8 cursor"> <i class="icoOrdination fa fa-sort"></i> <b>Justificaciones </b></div>
-                    <div class="file9 cursor"> <i class="icoOrdination fa fa-sort"></i> <b>Notas</b> </div>
+                  <div class="file9 cursor"> <i class="icoOrdination fa fa-sort"></i> <b>Notas</b> </div>
                 </div>
 
 
                 <!-- ---- Accesos ----- -->
                 <div class="listAccess">
                   <div class="itemListAccess" ng-repeat="i in vm.model.statistics | filter: vm.model.search.text">
-                    <div class="file3">{{vm.getUserNames(i.userId)}}</div>
-                    <div class="file4">{{vm.getUserDni(i.userId)}}</div>
+                    <div class="file3">{{i.user.name}} {{i.user.lastname}}</div>
+                    <div class="file4">{{i.user.dni}}</div>
                     <div class="file5"> </div>
 
                     <div class="file0">{{vm.getDayOfWeek(i.date)}} </div>

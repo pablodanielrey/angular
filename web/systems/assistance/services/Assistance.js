@@ -17,6 +17,8 @@
 			this.findUserPhotos = findUserPhotos;
 			this.photoToDataUri = photoToDataUri;
 
+			this.findUsersByStatics = findUsersByStatics;
+
 			function _formatDateDay(d) {
 	      return d.getDate() + '/' + d.getMonth() + '/' + d.getFullYear()
 	    }
@@ -34,11 +36,6 @@
         return Login.getPrivateTransport().call('assistance.get_logs', [di,de, hi, he]);
       }
 
-			function getStatistics(initDate, endDate, userIds, officeIds) {
-				var di = initDate.toISOString();
-				var de = endDate.toISOString();
-				return Login.getPrivateTransport().call('assistance.get_statistics', [di,de,userIds, officeIds])
-			}
 
 			/*
 				Setea los usuarios a los logs
@@ -120,6 +117,58 @@
 					);
 				}
 
+				/* ***********************************************************************************
+																					ESTADISTICAS
+				 * *********************************************************************************** */
+
+				/*
+				stats= [{date: "2016-10-17T00:00:00+00:00",
+								logStart: "2016-10-17T09:14:42+00:00",
+							  logEnd: "2016-10-17T15:14:42+00:00",
+								scheduleStart: "2016-10-17T06:00:00+00:00",
+								scheduleEnd: "2016-10-17T13:00:00+00:00",
+								userId: userId1,
+								position: 'E5',
+								workedSeconds: 23134,
+								justification: {
+
+								}
+							]
+
+					*/
+
+				function getStatistics(initDate, endDate, userIds, officeIds, initTime, endTime) {
+					var di = initDate.toISOString();
+					var de = endDate.toISOString();
+					var ti = initTime.toISOString();
+					var te = endTime.toISOString();
+					return Login.getPrivateTransport().call('assistance.get_statistics', [di,de,userIds, officeIds, ti, te])
+				}
+
+				/*
+					Setea los usuarios a las estadisticas
+					Ej: [{userId:id1},{userId:id2}]
+					retorna: [{userId:id1, user: user1}, {userId: id2, user: user2}]
+				*/
+				function findUsersByStatics(stats) {
+					var uids = [];
+		      for (var i = 0; i < stats.length; i++) {
+						uids.push(stats[i].userId);
+					}
+					return Users.findById(uids).then(
+						function(users) {
+							for (var i = 0; i < stats.length; i++) {
+								for(var j = 0; j < users.length; j++) {
+									if (stats[i].userId == users[j].id) {
+										stats[i].user = users[j];
+										break;
+									}
+								}
+							}
+							return stats;
+						}
+					);
+				}
 
     }
 })();

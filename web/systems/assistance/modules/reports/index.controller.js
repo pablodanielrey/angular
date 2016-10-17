@@ -25,7 +25,8 @@
             columns:[],
             offices: [],
             officeIds: []
-          }
+          },
+          activate: false //para saber si ya se ejecuto el activate. Solucion a que el wamp open se ejecuta tres veces el wamp.open
         }
 
         vm.view = {
@@ -43,8 +44,6 @@
         vm.getDayOfWeek = getDayOfWeek;
         vm.getDate = getDate;
         vm.getHour = getHour;
-        vm.getUserNames = getUserNames;
-        vm.getUserDni = getUserDni;
         vm.getWorkedHours = getWorkedHours;
 
         $scope.$on('wamp.open', function(event, args) {
@@ -56,17 +55,19 @@
 
 
         function activate() {
-          if (Login.getPrivateTransport() == null) {
-            return
+          if (vm.model.activate || Login.getPrivateTransport() == null) {
+            return;
           }
+          vm.model.activate = true;
           _loadOffices();
         }
 
 
 
-        // ************************************************************************
-        //                    FILTROS
-        // ************************************************************************
+// ************************************************************************
+//                    FILTROS
+// ************************************************************************
+
         function _initializeFilters() {
           vm.model.search = {
             start: new Date(),
@@ -76,17 +77,17 @@
             sTime: new Date(),
             eTime: new Date()
           }
-          vm.model.search.sTime.setHours(0);
-          vm.model.search.sTime.setMinutes(0);
-          vm.model.search.sTime.setSeconds(0);
-          vm.model.search.sTime.setMilliseconds(0);
-
-          vm.model.search.eTime.setHours(23);
-          vm.model.search.eTime.setMinutes(59);
-          vm.model.search.eTime.setSeconds(0);
-          vm.model.search.eTime.setMilliseconds(0);
+          _initTime(vm.model.search.sTime, 0, 0, 0);
+          _initTime(vm.model.search.eTime, 23, 59, 0);
 
           vm.model.header.columns = [];
+        }
+
+        function _initTime(date, hours, minutes, seconds) {
+          date.setHours(hours);
+          date.setMinutes(minutes);
+          date.setSeconds(seconds);
+          date.setMilliseconds(0);
         }
 
         function _loadOffices() {
@@ -121,7 +122,7 @@
         }
 
 
-        // ***********************************************************************
+// ***********************************************************************
 
 
         function getWorkedHours(seconds) {
@@ -129,14 +130,6 @@
           return Math.floor(seconds / 60 / 60) + ':' + minutes;
         }
 
-        function getUserNames(uid) {
-          var u = _getUser(uid);
-          return u.name + ' ' + u.lastname;
-        }
-
-        function getUserDni(uid) {
-          return _getUser(uid).dni;
-        }
 
         function _getUser(uid) {
           for (var i = 0; i < vm.model.users.length; i++) {
@@ -181,36 +174,53 @@
           }
         }
 
-        function findStatistics() {
-          var dstart = vm.model.search.start;
-          var dend = vm.model.search.end;
-          vm.model.statistics = [];
+/* **************************************************************************
+                PARSEO DE ESTADISTICAS
+ * ************************************************************************** */
 
-          Assistance.getStatistics(dstart, dend, [], vm.model.search.offices).then(function(stats) {
+        function _parseStatic(stat) {
+          return {
+            date: (stat.date != null) ? new Date(stat.date) : null,
+            iin: (stat.logStart != null) ? new Date(stat.logStart) : null,
+            out: (stat.logEnd != null) ? new Date(stat.logEnd) : null,
+            start: (stat.scheduleStart != null) ? new Date(stat.scheduleStart) : null,
+            end: (stat.scheduleEnd != null) ? new Date(stat.scheduleEnd) : null,
+            user: stat.user,
+            position: stat.position,
+            userId: stat.userId,
+            workedSeconds: stat.workedSeconds,
+            justification: stat.justification
+          }
+        }
+
+/* **************************************************************************
+                BUSQUEDAS DE ESTADISTICAS
+ * ************************************************************************** */
+
+        function findStatistics() {
+          var initDate = angular.copy(vm.model.search.start);
+          var endDate = angular.copy(vm.model.search.end);
+          var initTime = vm.model.search.sTime;
+          var endTime = vm.model.search.eTime;
+          vm.model.statistics = [];
+          _initTime(initDate, 0, 0, 0);
+          _initTime(endDate, 23, 59, 59);
+
+          Assistance.getStatistics(initDate, endDate, [], vm.model.search.offices, initTime, endTime).then(Assistance.findUsersByStatics).then(function(stats) {
             console.log(stats);
             $timeout(function() {
               var uids = [];
-              for (var uid in stats) {
-                for (var i = 0; i < stats[uid].length; i++) {
-                  uids.push(uid)
-                  var ds = stats[uid][i].dailyStats;
-                  console.log(ds)
-                  vm.model.statistics = vm.model.statistics.concat(ds);
-                }
+              for (var i = 0; i < stats.length; i++) {
+                uids.push(stats[i].userId);
+                vm.model.statistics.push(_parseStatic(stats[i]));
               }
-              _format(vm.model.statistics);
-              Users.findById(uids).then(function(users) {
-                $timeout(function() {
-                  vm.model.users = users;
-                });
-              }, function(err) {
-                console.log(err);
-              });
             });
           }, function(err) {
             console.log(err);
           });
         }
     }
+
+
 
 })();
