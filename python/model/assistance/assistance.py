@@ -32,21 +32,39 @@ class ScheduleData(JSONSerializable):
         self.hours = sum([int(s.getScheduleSeconds() / 60 /60) for s in schedules])
 
 
+
 class WorkedAssistanceData(JSONSerializable):
 
     def __init__(self, ds = None):
         if (ds is None):
             self._initialize()
         else:
-            self._initialize(ds.date, ds.iin, ds.out, ds.start, ds.end)
+            self._initialize(ds)
 
 
-    def _initialize(self, date = None, logStart = None, logEnd = None, scheduleStart = None, scheduleEnd = None):
-        self.date = date
-        self.logStart = Utils._localizeLocal(logStart) if Utils._isNaive(logStart) else logStart
-        self.logEnd = Utils._localizeLocal(logEnd) if Utils._isNaive(logEnd) else logEnd
-        self.scheduleStart = Utils._localizeLocal(scheduleStart) if Utils._isNaive(scheduleStart) else scheduleStart
-        self.scheduleEnd = Utils._localizeLocal(scheduleEnd) if Utils._isNaive(scheduleEnd) else scheduleEnd
+    def _initialize(self, ds):
+        self.date = ds.date
+        self.logStart = Utils._localizeLocal(ds.iin) if Utils._isNaive(ds.iin) else ds.iin
+        self.logEnd = Utils._localizeLocal(ds.out) if Utils._isNaive(ds.out) else ds.out
+        self.scheduleStart = Utils._localizeLocal(ds.start) if Utils._isNaive(ds.start) else ds.start
+        self.scheduleEnd = Utils._localizeLocal(ds.end) if Utils._isNaive(ds.end) else ds.end
+
+
+class StaticData(WorkedAssistanceData):
+
+    def __init__(self, ds = None, position = None):
+        super().__init__(ds)
+        self.position = position
+
+    def _initialize(self, ds):
+        super()._initialize(ds)
+        self.userId = ds.userId
+        self.workedSeconds = ds.workedSeconds
+        self.justification = ds.justification
+        # self.notes = ds.notes
+
+
+
 
 
 class AssistanceData(JSONSerializable):
@@ -362,11 +380,7 @@ class AssistanceModel:
 
         return wpss
 
-    def getStatistics(self, con, userIds, start, end, officeIds=[]):
-        # si no se le pasa usuarios busca en el listado de oficinas
-        if userIds is None or len(userIds) <= 0:
-            userIds = OfficeModel.findOfficesUsers(con, officeIds)
-
+    def getStatistics(self, con, userIds, start, end):
         wpss = self.getWorkPeriods(con, userIds, start, end)
         totalStats = []
         for uid in wpss.keys():
@@ -498,3 +512,34 @@ class AssistanceModel:
             s.end = sc['end'] * 60
             s.daily = False
             s.persist(con)
+
+
+    def getStatisticsData(self, con, userIds, start, end, officeIds=[], initTime= None, endTime=None):
+        # si no se le pasa usuarios busca en el listado de oficinas
+        if userIds is None or len(userIds) <= 0:
+            userIds = OfficeModel.findOfficesUsers(con, officeIds)
+
+        stats = self.getStatistics(con, userIds, start, end)
+        aData = []
+        for uid in userIds:
+            sts = stats[uid]
+            for s in sts:
+                aData.extend([StaticData(ds, s.position) for ds in s.dailyStats if self._verifiedTime(ds, initTime, endTime)])
+        return aData
+
+    import pytz
+    timezone = pytz.timezone('America/Argentina/Buenos_Aires')
+
+    # verifico que los logos o el horario este entre los horarios pasados como parámetros
+    def _verifiedTime(self, ds, initTime, endTime):
+        if initTime == None or endTime == None:
+            return True
+
+        out = [None if ds.out is None else Utils._localizeUtc(ds.out).astimezone(self.timezone)][0]
+        start = [None if ds.iin is None else Utils._localizeUtc(ds.iin).astimezone(self.timezone)][0]
+
+        if not(out is None or start is None) and not(out < initTime or start > endTime):
+            return True
+
+        if not(ds.start is None or ds.end is None) and not(ds.end < initTime or ds.start > endTime):
+            return True
