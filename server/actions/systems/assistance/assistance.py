@@ -8,7 +8,9 @@ import psycopg2
 from dateutil.parser import parse
 import pytz
 
-from twisted.internet.defer import inlineCallbacks
+from twisted.internet.defer import inlineCallbacks, returnValue
+from twisted.internet import threads
+
 import autobahn
 import wamp
 
@@ -35,13 +37,11 @@ class Assistance(wamp.SystemComponentSession):
         ldate = Utils._localizeUtc(date).astimezone(self.timezone)
         return ldate
 
-    @autobahn.wamp.register('assistance.get_logs')
-    def getLogs(self, initDate, endDate, initHours, endHours, details):
+    def _getLogs(self, initDate, endDate, initHours, endHours, details):
         iDate = self._parseDate(initDate)
         eDate = self._parseDate(endDate)
         iHours = self._parseDate(initHours)
         eHours = self._parseDate(endHours)
-
         con = self.conn.get()
         try:
             logs = Log.findByDateRange(con, iDate, eDate, iHours, eHours)
@@ -49,8 +49,13 @@ class Assistance(wamp.SystemComponentSession):
         finally:
             self.conn.put(con)
 
-    @autobahn.wamp.register('assistance.get_statistics')
-    def getStatistics(self, initDate, endDate, userIds, officeIds, details):
+    @autobahn.wamp.register('assistance.get_logs')
+    @inlineCallbacks
+    def getLogs(self, initDate, endDate, initHours, endHours, details):
+        r = yield threads.deferToThread(self._getLogs, initDate, endDate, initHours, endHours, details)
+        returnValue(r)
+
+    def _getStatistics(self, initDate, endDate, userIds, officeIds, details):
         iDate = self._parseDate(initDate)
         eDate = self._parseDate(endDate)
 
@@ -62,3 +67,9 @@ class Assistance(wamp.SystemComponentSession):
             return statistics
         finally:
             self.conn.put(con)
+
+    @autobahn.wamp.register('assistance.get_statistics')
+    @inlineCallbacks
+    def getStatistics(self, initDate, endDate, userIds, officeIds, details):
+        r = yield threads.deferToThread(self._getStatistics, initDate, endDate, userIds, officeIds, details)
+        returnValue(r)

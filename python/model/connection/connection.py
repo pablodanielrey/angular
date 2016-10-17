@@ -57,12 +57,10 @@ class Connection:
         self.password = registry.get('password')
         self.pool = psycopg2.pool.ThreadedConnectionPool(1, 50, host=self.host, database=self.database, user=self.user, password=self.password, cursor_factory=DictCursor)
 
-    @do_traceback
     def get(self):
         self.logging.debug('obteniendo conexion a la base')
         return self.pool.getconn()
 
-    @do_traceback
     def put(self, conn):
         self.logging.debug('retornando la conexion al pool')
         self.pool.putconn(conn)
