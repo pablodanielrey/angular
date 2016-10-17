@@ -100,7 +100,7 @@
                 vm.model.header.officeIds.push(off[i].id);
               }
               _initializeFilters();
-              vm.findStatistics();
+              //vm.findStatistics();
             });
         }
 
@@ -118,7 +118,18 @@
         }
 
         function download() {
+          var initDate = angular.copy(vm.model.search.start);
+          var endDate = angular.copy(vm.model.search.end);
+          var initTime = vm.model.search.sTime;
+          var endTime = vm.model.search.eTime;
+          _initTime(initDate, 0, 0, 0);
+          _initTime(endDate, 23, 59, 59);
 
+          Assistance.exportStatistics(initDate, endDate, [], vm.model.search.offices, initTime, endTime).then(function(stats) {
+            console.log(stats);
+          }, function(err) {
+            console.log(err);
+          });
         }
 
 

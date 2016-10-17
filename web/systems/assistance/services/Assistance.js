@@ -9,7 +9,9 @@
 		function Assistance(Login, Users) {
 
       this.getLogs = getLogs;
+			this.exportLogs = exportLogs;
 			this.getStatistics = getStatistics;
+			this.exportStatistics = exportStatistics;
 			this._formatDateDay = _formatDateDay;
 			this._formatDateHour = _formatDateHour;
 
@@ -33,7 +35,15 @@
 				var de = endDate.toISOString();
 				var hi = initHour.toISOString();
 				var he = endHour.toISOString();
-        return Login.getPrivateTransport().call('assistance.get_logs', [di,de, hi, he]);
+        return Login.getPrivateTransport().call('assistance.get_logs', [di, de, hi, he]);
+      }
+
+			function exportLogs(initDate, endDate, initHour, endHour) {
+        var di = initDate.toISOString();
+				var de = endDate.toISOString();
+				var hi = initHour.toISOString();
+				var he = endHour.toISOString();
+        return Login.getPrivateTransport().call('assistance.export_logs', [di, de, hi, he]);
       }
 
 
@@ -120,6 +130,14 @@
 				/* ***********************************************************************************
 																					ESTADISTICAS
 				 * *********************************************************************************** */
+
+				 function exportStatistics(initDate, endDate, userIds, officeIds, initTime, endTime) {
+						var di = initDate.toISOString();
+						var de = endDate.toISOString();
+						var ti = initTime.toISOString();
+						var te = endTime.toISOString();
+						return Login.getPrivateTransport().call('assistance.export_statistics', [di,de, userIds, officeIds, ti, te])
+				 }
 
 				/*
 				stats= [{date: "2016-10-17T00:00:00+00:00",

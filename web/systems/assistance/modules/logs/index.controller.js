@@ -50,6 +50,7 @@
         vm.sortHours = sortHours;
         vm.sortDni = sortDni;
         vm.sortType = sortType;
+        vm.download = download;
 
         $scope.$on('wamp.open', function(event, args) {
           activate();
@@ -329,6 +330,18 @@
               vm.view.style = '';
               sortIssues();
             });
+          }, function(err) {
+            console.log(err);
+          })
+        }
+
+        // obtiene los logs
+        function download() {
+          var s = vm.model.search;
+          var sHour = (s.initHour == null) ? _getDateInTime(0,0,0) : s.initHour;
+          var eHour = (s.endHour == null) ? _getDateInTime(23,59,59) : s.endHour;
+          Assistance.exportLogs(s.initDate, s.endDate, sHour, eHour).then(function(file) {
+            console.log(file);
           }, function(err) {
             console.log(err);
           })

@@ -55,6 +55,54 @@ class Assistance(wamp.SystemComponentSession):
         r = yield threads.deferToThread(self._getLogs, initDate, endDate, initHours, endHours, details)
         returnValue(r)
 
+    @inlineCallbacks
+    def _exportLogs(self, initDate, endDate, initHours, endHours, details):
+        logs = self._getLogs(initDate, endDate, initHours, endHours, details)
+        userIds = [l.userId for l in logs if l.userId is not None]
+        usersData = yield self.call('users.find_by_id', userIds)
+        classfiedUsersData = {}
+        for user in usersData:
+            classfiedUsersData[user.id] = user
+
+        import uuid
+        import pyoo
+        try:
+            calc = pyoo.Desktop('163.10.56.57', 2002)
+            doc = calc.create_spreadsheet()
+            try:
+                sheet = doc.sheets[0]
+                i = 0
+                for log in logs:
+                    user = classfiedUsersData[log.userId]
+                    sheet[i,1].value = user.name
+                    sheet[i,2].value = user.lastname
+                    sheet[i,3].value = user.dni
+                    sheet[i,4].value = log.verifyMode
+                    sheet[i,5].value = Utils._naiveFromLocalAware(log.log) if log.log is not None else ''
+                    sheet[i,6].value = Utils._naiveFromLocalAware(log.log) if log.log is not None else ''
+                    i = i + 1
+
+                fn = '{}/{}.xlsx'.format('/tmp',str(uuid.uuid4()))
+                logging.info('salvando : {}'.format(fn))
+                doc.save(fn, pyoo.FILTER_EXCEL_2007)
+                returnValue(fn)
+
+            finally:
+                doc.close()
+
+        except Exception as e:
+            logging.error('No se puede conectar al servidor de exportación')
+            raise e
+
+    @autobahn.wamp.register('assistance.export_logs')
+    @inlineCallbacks
+    def exportLogs(self, initDate, endDate, initHours, endHours, details):
+        r = yield self._exportLogs( initDate, endDate, initHours, endHours, details)
+        #r = yield threads.deferToThread(self._exportStatistics, initDate, endDate, userIds, officeIds, initTime, endTime, details)
+        returnValue(r)
+
+
+
     def _getStatistics(self, initDate, endDate, userIds, officeIds, initTime, endTime, details):
         iDate = self._parseDate(initDate)
         eDate = self._parseDate(endDate)
@@ -76,61 +124,56 @@ class Assistance(wamp.SystemComponentSession):
         r = yield threads.deferToThread(self._getStatistics, initDate, endDate, userIds, officeIds, initTime, endTime, details)
         returnValue(r)
 
-    def exortStatistics(self, initDate, endDate, userIds, officeIds, details):
-        stats = self._getStatistics(initDate, endDate, userIds, officeIds, details)
+    @inlineCallbacks
+    def _exportStatistics(self,  initDate, endDate, userIds, officeIds, initTime, endTime, details):
+        import datetime
 
-        stat = stats[user.id][0]
+        stats = self._getStatistics( initDate, endDate, userIds, officeIds, initTime, endTime, details)
+
+        userIds = [s.userId for s in stats if s.userId is not None]
+        usersData = yield self.call('users.find_by_id', userIds)
+        classfiedUsersData = {}
+        for user in usersData:
+            classfiedUsersData[user.id] = user
+
         justifications = {}
 
         import uuid
         import pyoo
-        calc = pyoo.Desktop('localhost', 2002)
-        doc = calc.open_spreadsheet('templateUserStats.ods')
         try:
-            sheet = doc.sheets[0]
-            sheet[0,1].value = user.dni
-            sheet[1,1].value = user.name
-            sheet[2,1].value = user.lastname
-            sheet[3,1].value = stat.position
+            calc = pyoo.Desktop('163.10.56.57', 2002)
+            doc = calc.create_spreadsheet()
+            try:
+                sheet = doc.sheets[0]
+                i = 0
+                for stat in stats:
+                    user = classfiedUsersData[stat.userId]
+                    sheet[i,1].value = user.name
+                    sheet[i,2].value = user.lastname
+                    sheet[i,3].value = user.dni
+                    sheet[i,4].value = stat.position
+                    sheet[i,5].value = Utils._naiveFromLocalAware(Utils.toLocalFromAware(stat.scheduleStart)) if stat.scheduleStart is not None else ''
+                    sheet[i,6].value = Utils._naiveFromLocalAware(Utils.toLocalFromAware(stat.scheduleEnd)) if stat.scheduleEnd is not None else ''
+                    sheet[i,7].value = Utils._naiveFromLocalAware(Utils.toLocalFromAware(stat.logStart)) if stat.logStart is not None else ''
+                    sheet[i,8].value = Utils._naiveFromLocalAware(Utils.toLocalFromAware(stat.logEnd)) if stat.logEnd is not None else ''
+                    sheet[i,9].value = datetime.timedelta(seconds=stat.workedSeconds)
+                    i = i + 1
 
-            i = 5
-            for ds in stat.dailyStats:
-                sheet[i,2].value = ds.date if ds.date is not None else ''
-                sheet[i,3].value = Utils._naiveFromLocalAware(Utils.toLocalFromAware(ds.start)) if ds.start is not None else ''
-                sheet[i,4].value = Utils._naiveFromLocalAware(Utils.toLocalFromAware(ds.end)) if ds.end is not None else ''
-                sheet[i,5].value = datetime.timedelta(seconds=ds.periodSeconds) if ds.start is not None else ''
-                sheet[i,6].value = ds.iin if ds.iin is not None else ''
-                sheet[i,7].value = ds.out if ds.out is not None else ''
-                sheet[i,8].value = datetime.timedelta(seconds=ds.workedSeconds) if ds.iin is not None else ''
-                #sheet[i,9].value = datetime.timedelta(seconds=ds.workedSeconds - ds.periodSeconds) if ds.start is not None or ds.iin is not None else ''
-                sheet[i,10].value = datetime.timedelta(seconds=ds.lateSeconds) if ds.lateSeconds > 0 else ''
-                sheet[i,11].value = datetime.timedelta(seconds=ds.earlySeconds) if ds.earlySeconds > 0 else ''
-                sheet[i,12].value = ds.justification.identifier if ds.justification is not None else ''
-                sheet[i,13].value = Status.getIdentifier(ds.justification.status) if ds.justification is not None else ''
+                fn = '{}/{}.xlsx'.format('/tmp',str(uuid.uuid4()))
+                logging.info('salvando : {}'.format(fn))
+                doc.save(fn, pyoo.FILTER_EXCEL_2007)
+                returnValue(fn)
 
-                if ds.justification is not None and ds.justification.status == 2:
-                    if ds.justification.identifier not in justifications:
-                        justifications[ds.justification.identifier] = 1
-                    else:
-                        justifications[ds.justification.identifier] = justifications[ds.justification.identifier] + 1
+            finally:
+                doc.close()
 
-                i = i + 1
-
-            i = i + 2
-            for j in justifications.keys():
-                sheet[i,0].value = j
-                sheet[i,1].value = justifications[j]
-                i = i + 1
-
-            fn = '{}/{}-{}-{}.xlsx'.format(rp, user.lastname, user.name, user.dni)
-            logging.info('salvando : {}'.format(fn))
-            doc.save(fn, pyoo.FILTER_EXCEL_2007)
-
-        finally:
-            doc.close()
+        except Exception as e:
+            logging.error('No se puede conectar al servidor de exportación')
+            raise e
 
     @autobahn.wamp.register('assistance.export_statistics')
     @inlineCallbacks
-    def exportStatistics(self, initDate, endDate, userIds, officeIds, details):
-        r = yield threads.deferToThread(self._exportStatistics, initDate, endDate, userIds, officeIds, details)
+    def exportStatistics(self, initDate, endDate, userIds, officeIds, initTime, endTime, details):
+        r = yield self._exportStatistics(initDate, endDate, userIds, officeIds, initTime, endTime, details)
+        #r = yield threads.deferToThread(self._exportStatistics, initDate, endDate, userIds, officeIds, initTime, endTime, details)
         returnValue(r)
