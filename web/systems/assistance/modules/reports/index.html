@@ -44,7 +44,7 @@
                     <div class="file0 capitalize">{{i.date | date: 'EEE'}} </div>
                     <div class="file2">{{i.iin | date: 'dd/MM/yyyy'}}</div>
                     <div class="file2">{{i.start | date: 'HH:mm'}}-{{i.end | date: 'HH:mm'}}</div>
-                    <div class="file2b entradaPorHuella">
+                    <div class="file2b {{vm.getInMode(i)}}">
                         <!-- VARIABLES: entradaPorHuella, entradaPorTeclado -->
                         <div class="inFinger" title="Marcación por huella"><i class=" icoHuella fa fa-forumbee"></i> {{i.iin | date: 'HH:mm:ss'}}</div>
                         <div class="inKeyboard" title="Marcación por teclado"><i class=" icoHuella fa fa-table"></i> {{i.iin | date: 'HH:mm:ss'}}</div>
@@ -52,7 +52,7 @@
 
                     <div class="file0b">{{i.out | date: 'EEE'}} </div>
                     <div class="file2a">{{i.out | date: 'dd/MM/yyyy'}}</div>
-                    <div class="file6 salidaPorTeclado">
+                    <div class="file6 {{vm.getOutMode(i)}}">
                         <!-- VARIABLES: salidaPorHuella, salidaPorTeclado -->
                         <div class="outFinger" title="Marcación por huella"><i class=" icoHuella fa fa-forumbee" aria-hidden="true"></i> {{i.out | date: 'HH:mm:ss'}}</div>
                         <div class="outKeyboard" title="Marcación por teclado"><i class=" icoHuella fa fa-table" aria-hidden="true"></i> {{i.out | date: 'HH:mm:ss'}}</div>

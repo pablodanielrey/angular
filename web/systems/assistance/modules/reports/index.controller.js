@@ -41,6 +41,9 @@
         vm.getOffices = getOffices;
         vm.resetFilters = resetFilters;
 
+        vm.getInMode = getInMode;
+        vm.getOutMode = getOutMode;
+
         vm.getWorkedHours = getWorkedHours;
 
         $scope.$on('wamp.open', function(event, args) {
@@ -96,8 +99,7 @@
               for (var i = 0; i < off.length; i++) {
                 vm.model.header.officeIds.push(off[i].id);
               }
-              _initializeFilters();
-              //vm.findStatistics();
+              resetFilters();
             });
         }
 
@@ -139,26 +141,22 @@
         }
 
 
-        function _getUser(uid) {
-          for (var i = 0; i < vm.model.users.length; i++) {
-            if (vm.model.users[i].id == uid) {
-              return vm.model.users[i];
-            }
+        function getInMode(i) {
+          if (i.startMode == null || i.startMode == 'UNDEFINED') {
+            return '';
           }
-          return {
-            name: '',
-            lastname: '',
-            dni: ''
-          }
+
+          return (i.startMode == 1) ? 'entradaPorHuella' : 'entradaPorTeclado';
         }
 
-        function _format(stats) {
-          for (var i = 0; i < stats.length; i++) {
-            stats[i].date = (stats[i].date != null) ? new Date(stats[i].date) : null;
-            stats[i].iin = (stats[i].iin != null) ? new Date(stats[i].iin) : null;
-            stats[i].out = (stats[i].out != null) ? new Date(stats[i].out) : null;
+        function getOutMode(i) {
+          if (i.endMode == null || i.endMode == 'UNDEFINED') {
+            return '';
           }
+
+          return (i.endMode == 1) ? 'salidaPorHuella' : 'salidaPorTeclado';
         }
+
 
 /* **************************************************************************
                 PARSEO DE ESTADISTICAS
@@ -169,6 +167,8 @@
           return {
             date: (stat.date != null) ? new Date(stat.date) : null,
             iin: (stat.logStart != null) ? new Date(stat.logStart) : null,
+            startMode: stat.startMode,
+            endMode: stat.endMode,
             out: (stat.logEnd != null) ? new Date(stat.logEnd) : null,
             start: (stat.scheduleStart != null) ? new Date(stat.scheduleStart) : null,
             end: (stat.scheduleEnd != null) ? new Date(stat.scheduleEnd) : null,

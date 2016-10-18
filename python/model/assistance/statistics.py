@@ -62,7 +62,9 @@ class DailyWpStatistics(JSONSerializable):
         ds.start = wp.getStartDate()
         ds.end = wp.getEndDate()
         ds.iin = None if wp.getStartLog() is None else wp.getStartLog().log.astimezone(tzlocal()).replace(tzinfo=None)
+        ds.iMode = None if wp.getStartLog() is None else wp.getStartLog().verifyMode
         ds.out = None if wp.getEndLog() is None else wp.getEndLog().log.astimezone(tzlocal()).replace(tzinfo=None)
+        ds.oMode = None if wp.getEndLog() is None else wp.getEndLog().verifyMode        
         ds.justification = JustificationStatistics._create(wp)
         ds._calculatePeriodSeconds(wp, stats)
         ds._caculateWorkedSeconds(wp, stats)

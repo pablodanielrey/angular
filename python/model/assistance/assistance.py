@@ -62,6 +62,8 @@ class StaticData(WorkedAssistanceData):
         self.userId = ds.userId
         self.workedSeconds = ds.workedSeconds
         self.justification = ds.justification
+        self.startMode = ds.iMode        
+        self.endMode = ds.oMode
         # self.notes = ds.notes
 
 
