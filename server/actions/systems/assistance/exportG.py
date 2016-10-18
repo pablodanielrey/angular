@@ -50,6 +50,8 @@ class ExportModel(ExportModelBase):
             apt-get install python3-google-apputils python3-googleapi python3-googlecloudapis
             pip3 install google-oauth
 
+            pip3 install google-api-python-client google-oauth
+
         y tener dentro del home del ususario que correo el proceso las credenciales de google para la api.
         dentro de :
             $HOME/.credentials/credentials.json
