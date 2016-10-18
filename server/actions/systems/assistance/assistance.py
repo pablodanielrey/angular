@@ -63,10 +63,10 @@ class Assistance(wamp.SystemComponentSession):
         returnValue(r)
 
     def _getStatistics(self, initDate, endDate, userIds, officeIds, initTime, endTime, details):
-        iDate = self._parseDate(initDate)
-        eDate = self._parseDate(endDate)
-        iTime = self._parseDate(initTime)
-        eTime = self._parseDate(endTime)
+        iDate = None if initDate is None else self._parseDate(initDate)
+        eDate = None if endDate is None else  self._parseDate(endDate)
+        iTime = None if initTime is None else  self._parseDate(initTime)
+        eTime = None if endTime is None else  self._parseDate(endTime)
 
         con = self.conn.get()
         try:

@@ -156,10 +156,10 @@
 					*/
 
 				function getStatistics(initDate, endDate, userIds, officeIds, initTime, endTime) {
-					var di = initDate.toISOString();
-					var de = endDate.toISOString();
-					var ti = initTime.toISOString();
-					var te = endTime.toISOString();
+					var di = (initDate == null) ? null : initDate.toISOString();
+					var de = (endDate == null) ? null : endDate.toISOString();
+					var ti = (initTime == null) ? null : initTime.toISOString();
+					var te = (endTime == null) ? null : endTime.toISOString();
 					return Login.getPrivateTransport().call('assistance.get_statistics', [di,de,userIds, officeIds, ti, te])
 				}
 
