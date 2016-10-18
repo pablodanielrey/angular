@@ -3,6 +3,7 @@ import logging
 import json
 import datetime
 from dateutil.tz import tzlocal
+import pytz
 import importlib
 from model.assistance.logs import LogDAO, Log
 from model.assistance.schedules import ScheduleDAO, Schedule
@@ -216,6 +217,8 @@ class WorkPeriod(JSONSerializable):
 
 
 class AssistanceModel:
+
+    timezone = pytz.timezone('America/Argentina/Buenos_Aires')
 
     @staticmethod
     def _classifyByUserId(data):
@@ -527,8 +530,6 @@ class AssistanceModel:
                 aData.extend([StaticData(ds, s.position) for ds in s.dailyStats if self._verifiedTime(ds, initTime, endTime)])
         return aData
 
-    import pytz
-    timezone = pytz.timezone('America/Argentina/Buenos_Aires')
 
     # verifico que los logos o el horario este entre los horarios pasados como parámetros
     def _verifiedTime(self, ds, initTime, endTime):
@@ -538,8 +539,8 @@ class AssistanceModel:
         out = [None if ds.out is None else Utils._localizeUtc(ds.out).astimezone(self.timezone)][0]
         start = [None if ds.iin is None else Utils._localizeUtc(ds.iin).astimezone(self.timezone)][0]
 
-        if not(out is None or start is None) and not(out < initTime or start > endTime):
+        if not(out is None or start is None) and not(out.time() < initTime.time() or start.time() > endTime.time()):
             return True
 
-        if not(ds.start is None or ds.end is None) and not(ds.end < initTime or ds.start > endTime):
+        if not(ds.start is None or ds.end is None) and not(ds.end.time() < initTime.time() or ds.start.time() > endTime.time()):
             return True

@@ -41,9 +41,6 @@
         vm.getOffices = getOffices;
         vm.resetFilters = resetFilters;
 
-        vm.getDayOfWeek = getDayOfWeek;
-        vm.getDate = getDate;
-        vm.getHour = getHour;
         vm.getWorkedHours = getWorkedHours;
 
         $scope.$on('wamp.open', function(event, args) {
@@ -155,28 +152,6 @@
           }
         }
 
-        function getDayOfWeek(date) {
-          if (date == null) {
-            return '';
-          }
-          var d = ['Lun', 'Mar', 'Mier', 'Jue', 'Vier', 'Sáb', 'Dom'];
-          return d[date.getDay()];
-        }
-
-        function getDate(date) {
-          if (date == null) {
-            return '';
-          }
-          return Assistance._formatDateDay(date);
-        }
-
-        function getHour(date) {
-          if (date == null) {
-            return '';
-          }
-          return Assistance._formatDateHour(date);
-        }
-
         function _format(stats) {
           for (var i = 0; i < stats.length; i++) {
             stats[i].date = (stats[i].date != null) ? new Date(stats[i].date) : null;
@@ -190,6 +165,7 @@
  * ************************************************************************** */
 
         function _parseStatic(stat) {
+          console.log(stat);
           return {
             date: (stat.date != null) ? new Date(stat.date) : null,
             iin: (stat.logStart != null) ? new Date(stat.logStart) : null,
@@ -218,7 +194,6 @@
           _initTime(endDate, 23, 59, 59);
 
           Assistance.getStatistics(initDate, endDate, [], vm.model.search.offices, initTime, endTime).then(Assistance.findUsersByStatics).then(function(stats) {
-            console.log(stats);
             $timeout(function() {
               var uids = [];
               for (var i = 0; i < stats.length; i++) {

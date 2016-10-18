@@ -14,6 +14,10 @@
   color: #5C5F69;
 }
 
+.reports .capitalize {
+  text-transform: capitalize;
+}
+
 .reports .contentLibrary {
   width: 100%;
   height: 100%;
