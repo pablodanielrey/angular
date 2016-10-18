@@ -9,9 +9,7 @@ class ExportModel(ExportModelBase):
 
     @classmethod
     def exportStatistics(cls, stats, usersData):
-        classfiedUsersData = {}
-        for user in usersData:
-            classfiedUsersData[user.id] = user
+        classfiedUsersData = cls.classifyUserData(usersData)
 
         justifications = {}
 
@@ -49,9 +47,7 @@ class ExportModel(ExportModelBase):
 
     @classmethod
     def exportLogs(cls, logs, usersData):
-        classfiedUsersData = {}
-        for user in usersData:
-            classfiedUsersData[user.id] = user
+        classfiedUsersData = cls.classifyUserData(usersData)
 
         try:
             calc = pyoo.Desktop('163.10.56.57', 2002)

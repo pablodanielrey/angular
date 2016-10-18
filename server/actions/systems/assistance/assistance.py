@@ -18,9 +18,9 @@ from model.assistance.utils import Utils
 from model.assistance.assistance import AssistanceModel
 
 ######## para activar exportación a LibreOffice #############
-from actions.systems.assistance.exportOO import ExportModel
+## from actions.systems.assistance.exportOO import ExportModel
 ####### para activar la exportación a google spreadsheets #############
-### from actions.systems.assistance.exportG import ExportModel
+from actions.systems.assistance.exportG import ExportModel
 
 logging.getLogger().setLevel(logging.INFO)
 
