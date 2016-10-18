@@ -88,7 +88,7 @@ class ExportModel(ExportModelBase):
         spId = r['spreadsheetId']
 
         ''' actualizo los logs '''
-        i = 1
+        rows = []
         for log in logs:
             user = classfiedUsersData[log.userId]
             row = [
@@ -96,21 +96,20 @@ class ExportModel(ExportModelBase):
                 user.lastname,
                 user.dni,
                 log.verifyMode,
-                str(log.log) if log.log is not None else '',
-                str(log.log) if log.log is not None else ''
+                str(log.log.date()) if log.log is not None else '',
+                str(log.log.time()) if log.log is not None else ''
             ]
+            rows.append(row)
 
-            valueRange = {
-                'majorDimension': cls.majorDimension['rows'],
-                'values': [row]
-            }
+        valueRange = {
+            'majorDimension': cls.majorDimension['rows'],
+            'values': rows
+        }
 
-            service.spreadsheets().values().append(spreadsheetId=spId,
-                            range='A{}'.format(i),
-                            valueInputOption=cls.inputOption['user'],
-                            body=valueRange).execute()
-            i = i + 1
-
+        service.spreadsheets().values().append(spreadsheetId=spId,
+                        range='A1',
+                        valueInputOption=cls.inputOption['user'],
+                        body=valueRange).execute()
         return ''
 
     @classmethod
