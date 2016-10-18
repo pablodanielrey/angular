@@ -20,15 +20,15 @@ from model.assistance.assistance import AssistanceModel
 ######## para activar exportación a LibreOffice #############
 ## from actions.systems.assistance.exportOO import ExportModel
 ####### para activar la exportación a google spreadsheets #############
-## from actions.systems.assistance.exportG import ExportModel
+from actions.systems.assistance.exportG import ExportModel
 
 logging.getLogger().setLevel(logging.INFO)
 
 
 class Assistance(wamp.SystemComponentSession):
 
-    exportModel = None
-    #exportModel = ExportModel
+    #exportModel = None
+    exportModel = ExportModel
     assistanceModel = inject.attr(AssistanceModel)
     timezone = pytz.timezone('America/Argentina/Buenos_Aires')
     conn = wamp.getConnectionManager()
