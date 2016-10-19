@@ -15,6 +15,11 @@
          controller: 'ReportsCtrl',
          controllerAs: 'vm'
       })
+      .when('/schedules', {
+         templateUrl: 'modules/schedules/schedules.html',
+         controller: 'SchedulesCtrl',
+         controllerAs: 'vm'
+      })
 
       .otherwise({
         redirectTo: '/logs'

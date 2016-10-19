@@ -12,6 +12,9 @@
           $location.path('/reports');
         }
 
+        $scope.selectSchedules = function() {
+          $location.path('schedules');
+        }
       }
     ]);
 
