@@ -87,10 +87,14 @@ class Assistance(wamp.SystemComponentSession):
 
     @inlineCallbacks
     def _exportLogs(self, initDate, endDate, initHours, endHours, details):
+        ###### HACK HORRIBLE!!! ver como se mejora de una forma eficiente #################
+        ownerId = details.caller_authid
+        ###################################################
+
         logs = self._getLogs(initDate, endDate, initHours, endHours, details)
         userIds = [l.userId for l in logs if l.userId is not None]
         usersData = yield self.call('users.find_by_id', userIds)
-        r = self.exportModel.exportLogs(logs, usersData)
+        r = self.exportModel.exportLogs(ownerId, logs, usersData)
         returnValue(r)
 
     @autobahn.wamp.register('assistance.export_logs')
@@ -102,10 +106,14 @@ class Assistance(wamp.SystemComponentSession):
 
     @inlineCallbacks
     def _exportStatistics(self,  initDate, endDate, userIds, officeIds, initTime, endTime, details):
+        ###### HACK HORRIBLE!!! ver como se mejora de una forma eficiente #################
+        ownerId = details.caller_authid
+        ###################################################
+
         stats = self._getStatistics( initDate, endDate, userIds, officeIds, initTime, endTime, details)
         userIds = [s.userId for s in stats if s.userId is not None]
         usersData = yield self.call('users.find_by_id', userIds)
-        r = self.exportModel.exportStatistics(stats, usersData)
+        r = self.exportModel.exportStatistics(ownerId, stats, usersData)
         returnValue(r)
 
     @autobahn.wamp.register('assistance.export_statistics')

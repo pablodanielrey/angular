@@ -13,9 +13,9 @@ class ExportModelBase:
         return classifiedUsersData
 
     @classmethod
-    def exportLogs(cls, logs, usersData):
+    def exportLogs(cls, ownerId, logs, usersData):
         raise Exception('not implemented')
 
     @classmethod
-    def exportStatistics(cls, stats, usersData):
+    def exportStatistics(cls, ownerId, stats, usersData):
         raise Exception('not implemented')

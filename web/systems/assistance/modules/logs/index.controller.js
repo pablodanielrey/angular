@@ -341,7 +341,13 @@
           var sHour = (s.initHour == null) ? _getDateInTime(0,0,0) : s.initHour;
           var eHour = (s.endHour == null) ? _getDateInTime(23,59,59) : s.endHour;
           Assistance.exportLogs(s.initDate, s.endDate, sHour, eHour).then(function(file) {
-            console.log(file);
+            if (file != null && file != '') {
+              console.log(file);
+              var url = "https://docs.google.com/spreadsheets/d/" + file;
+              $window.open(url, "_blank");
+            } else {
+              alert('error de generación');
+            }
           }, function(err) {
             console.log(err);
           })

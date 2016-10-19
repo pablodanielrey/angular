@@ -122,8 +122,14 @@
           _initTime(initDate, 0, 0, 0);
           _initTime(endDate, 23, 59, 59);
 
-          Assistance.exportStatistics(initDate, endDate, [], vm.model.search.offices, initTime, endTime).then(function(stats) {
-            console.log(stats);
+          Assistance.exportStatistics(initDate, endDate, [], vm.model.search.offices, initTime, endTime).then(function(file) {
+            if (file != null && file != '') {
+              console.log(file);
+              var url = "https://docs.google.com/spreadsheets/d/" + file;
+              $window.open(url, "_blank");
+            } else {
+              alert('error de generación');
+            }
           }, function(err) {
             console.log(err);
           });

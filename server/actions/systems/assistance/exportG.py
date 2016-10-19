@@ -3,7 +3,7 @@ from model.assistance.utils import Utils
 
 import uuid
 import logging
-
+import datetime
 import httplib2
 import os
 
@@ -20,7 +20,7 @@ class GAuthSheets:
               'https://www.googleapis.com/auth/drive']
 
     @classmethod
-    def getCredentials(cls):
+    def getCredentials(cls, username):
             home_dir = os.path.expanduser('~')
             credential_dir = os.path.join(home_dir, '.credentials')
             if not os.path.exists(credential_dir):
@@ -30,13 +30,13 @@ class GAuthSheets:
             credentials = ServiceAccountCredentials.from_json_keyfile_name(credential_path, cls.SCOPES)
 
             ''' uso una cuenta de admin del dominio '''
-            admin_credentials = credentials.create_delegated('27294557@econo.unlp.edu.ar')
+            admin_credentials = credentials.create_delegated(username)
 
             return admin_credentials
 
     @classmethod
-    def getService(cls):
-        credentials = cls.getCredentials()
+    def getService(cls, username):
+        credentials = cls.getCredentials(username)
         http = credentials.authorize(httplib2.Http())
         service = discovery.build('sheets', 'v4', http=http)
         return service
@@ -68,13 +68,15 @@ class ExportModel(ExportModelBase):
     }
 
     @classmethod
-    def exportLogs(cls, logs, usersData):
-        classfiedUsersData = cls.classifyUserData(usersData)
-        justifications = {}
+    def _getDate(cls, date):
+        pass
 
-        spId = str(uuid.uuid4())
-        service = GAuthSheets.getService()
+    @classmethod
+    def _getTime(cls, date):
+        pass
 
+    @classmethod
+    def createSpreadsheet(cls, service, spId):
         ''' creo la hoja de calculo '''
 
         logging.info('Creando hoja de calculo {}'.format(spId))
@@ -87,7 +89,16 @@ class ExportModel(ExportModelBase):
         }
         r = service.spreadsheets().create(body=body).execute()
         logging.info(r)
-        spId = r['spreadsheetId']
+        return r['spreadsheetId']
+
+    @classmethod
+    def exportLogs(cls, ownerId, logs, usersData):
+        classfiedUsersData = cls.classifyUserData(usersData)
+        justifications = {}
+
+        spId = str(uuid.uuid4())
+        service = GAuthSheets.getService('{}@econo.unlp.edu.ar'.format(ownerId))
+        spId = cls.createSpreadsheet(service, spId)
 
         ''' actualizo los logs '''
         rows = []
@@ -112,9 +123,45 @@ class ExportModel(ExportModelBase):
                         range='A1',
                         valueInputOption=cls.inputOption['user'],
                         body=valueRange).execute()
-        return ''
+        return spId
 
     @classmethod
-    def exportStatistics(cls, stats, usersData):
-        classfiedUsersData = cls.cls.classifyUserData(usersData)
-        return ''
+    def exportStatistics(cls, ownerId, stats, usersData):
+        classfiedUsersData = cls.classifyUserData(usersData)
+        justifications = {}
+
+        spId = str(uuid.uuid4())
+        service = GAuthSheets.getService('{}@econo.unlp.edu.ar'.format(ownerId))
+        spId = cls.createSpreadsheet(service, spId)
+
+        ''' actualizo los logs '''
+        rows = []
+        for stat in stats:
+            user = classfiedUsersData[stat.userId]
+            row = [
+                user.name,
+                user.lastname,
+                user.dni,
+                stat.position,
+                str(stat.scheduleStart.date()) if stat.scheduleStart is not None else '',
+                str(stat.scheduleStart.time()) if stat.scheduleStart is not None else '',
+                str(stat.scheduleEnd.date()) if stat.scheduleEnd is not None else '',
+                str(stat.scheduleEnd.time()) if stat.scheduleEnd is not None else '',
+                str(stat.logStart.date()) if stat.logStart is not None else '',
+                str(stat.logStart.time()) if stat.logStart is not None else '',
+                str(stat.logEnd.date()) if stat.logEnd is not None else '',
+                str(stat.logEnd.time()) if stat.logEnd is not None else '',
+                str(datetime.timedelta(seconds=stat.workedSeconds))
+            ]
+            rows.append(row)
+
+        valueRange = {
+            'majorDimension': cls.majorDimension['rows'],
+            'values': rows
+        }
+
+        service.spreadsheets().values().append(spreadsheetId=spId,
+                        range='A1',
+                        valueInputOption=cls.inputOption['user'],
+                        body=valueRange).execute()
+        return spId

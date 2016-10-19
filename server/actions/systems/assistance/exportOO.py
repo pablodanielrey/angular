@@ -8,7 +8,7 @@ import uuid
 class ExportModel(ExportModelBase):
 
     @classmethod
-    def exportStatistics(cls, stats, usersData):
+    def exportStatistics(cls, ownerId, stats, usersData):
         classfiedUsersData = cls.classifyUserData(usersData)
 
         justifications = {}
@@ -46,7 +46,7 @@ class ExportModel(ExportModelBase):
 
 
     @classmethod
-    def exportLogs(cls, logs, usersData):
+    def exportLogs(cls, ownerId, logs, usersData):
         classfiedUsersData = cls.classifyUserData(usersData)
 
         try:
