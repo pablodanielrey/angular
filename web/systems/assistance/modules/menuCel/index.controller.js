@@ -8,6 +8,12 @@
         $scope.selectOrders = function() {
           $location.path('/main');
         }
+        $scope.selectReports = function() {
+          $location.path('/reports');
+        }
+        $scope.selectSchedules = function() {
+          $location.path('/schedules');
+        }
 
       }
     ]);

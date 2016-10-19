@@ -4,9 +4,9 @@
       .module('assistance')
       .controller('ReportsCtrl', ReportsCtrl);
 
-    ReportsCtrl.$inject = ['$scope', 'Assistance', 'Users', '$timeout', 'Login', '$window', 'Offices'];
+    ReportsCtrl.$inject = ['$scope', 'Assistance', 'Users', '$timeout', 'Login', '$window', 'Offices', '$filter'];
 
-    function ReportsCtrl($scope, Assistance, Users, $timeout, Login, $window, Offices) {
+    function ReportsCtrl($scope, Assistance, Users, $timeout, Login, $window, Offices, $filter) {
         var vm = this;
 
         vm.model = {
@@ -41,7 +41,12 @@
         vm.getOffices = getOffices;
         vm.resetFilters = resetFilters;
 
+        vm.getInMode = getInMode;
+        vm.getOutMode = getOutMode;
+
         vm.getWorkedHours = getWorkedHours;
+
+        vm.setNote = setNote;
 
         $scope.$on('wamp.open', function(event, args) {
           activate();
@@ -77,7 +82,27 @@
           _initTime(vm.model.search.sTime, 0, 0, 0);
           _initTime(vm.model.search.eTime, 23, 59, 0);
 
-          vm.model.header.columns = [];
+          vm.model.header.columns = [
+              {value:'name', visible: true, display: 'Nombre y Apellido'},
+              {value:'dni', visible: true, display: 'DNI'},
+              {value:'position', visible: true, display: 'Cargo'},
+              {value:'dayStartSchedule', visible: true, display: 'Día horario ent.'},
+              {value:'dateStartSchedule', visible: true, display: 'Fecha horario ent.'},
+              {value:'startSchedule', visible: false, display: 'Horario de ent.'},
+              {value:'dayEndSchedule', visible: false, display: 'Día horario sal.'},
+              {value:'dateEndSchedule', visible: false, display: 'Fecha horario sal.'},
+              {value:'endSchedule', visible: false, display: 'Horario de sal.'},
+              {value:'shortSchedule', visible: true, display: 'Horario'},
+              {value:'dayStart', visible: false, display: 'Día de entrada'},
+              {value:'dateStart', visible: true, display: 'Fecha de entrada'},
+              {value:'start', visible: false, display: 'Hora de entrada'},
+              {value:'dayEnd', visible: false, display: 'Día de salida'},
+              {value:'dateEnd', visible: true, display: 'Fecha de salida'},
+              {value:'end', visible: false, display: 'Hora de salida'},
+              {value:'hours', visible: true, display: 'Horas trabajadas'},
+              {value:'justifications', visible: true, display: 'Justificaciones'},
+              {value:'notes', visible: true, display: 'Notas'}
+            ];
         }
 
         function _initTime(date, hours, minutes, seconds) {
@@ -96,8 +121,7 @@
               for (var i = 0; i < off.length; i++) {
                 vm.model.header.officeIds.push(off[i].id);
               }
-              _initializeFilters();
-              //vm.findStatistics();
+              resetFilters();
             });
         }
 
@@ -135,6 +159,113 @@
           });
         }
 
+        /* ********************************************************************************
+                              MÉTODOS DE ORDENACIÓN
+         * ******************************************************************************** */
+       /*
+         Dispara la ordenación del listado.
+       */
+       function sortReports() {
+         var order = $window.sessionStorage.getItem('listSortReports');
+         if (order == null) {
+           order = ['user.name', 'user.lastname', 'user.date'];
+           $window.sessionStorage.setItem('listSortReports', JSON.stringify(order));
+         } else {
+           order = JSON.parse(order);
+         }
+         if (order[0] == 'user.dni' || order[0] == '-user.dni') {
+           vm.model.statistics = $filter('orderBy')(vm.model.statistics, order, false, dniComparator);
+         } else {
+           vm.model.statistics = $filter('orderBy')(vm.model.statistics, order, false, localeSensitiveComparator);
+         }
+       }
+
+       /*
+         retorna el valor de orden inverso o order normal. y almacena el inverso.
+         solo se usa cuando se clickea el ordenamiento explícitamente.
+         no cuando se ordena el listado.
+       */
+       function _processSortRev() {
+         var rev = $window.sessionStorage.getItem('reverseSortReports');
+         if (rev == null) {
+           rev = false;
+           $window.sessionStorage.setItem('reverseSortReports', JSON.stringify(!rev));
+         } else {
+           rev = JSON.parse(rev);
+         }
+
+         // almaceno el orden a inverso.
+         if (rev) {
+           $window.sessionStorage.setItem('reverseSortReports', JSON.stringify(!rev));
+         } else {
+           $window.sessionStorage.setItem('reverseSortReports', JSON.stringify(!rev));
+         }
+
+         return rev;
+       }
+
+       function localeSensitiveComparator(v1, v2) {
+         // If we don't get strings, just compare by index
+         if (v1.type !== 'string' || v2.type !== 'string') {
+           return (v1.index < v2.index) ? -1 : 1;
+         }
+
+         // Compare strings alphabetically, taking locale into account
+         return v1.value.localeCompare(v2.value);
+       };
+
+       function dniComparator(v1, v2) {
+         // If we don't get strings, just compare by index
+         if (v1.type !== 'string' || v2.type !== 'string') {
+           return (v1.index < v2.index) ? -1 : 1;
+         }
+
+         // Compare strings alphabetically, taking locale into account
+         if (v1.value.length == v2.value.length) {
+           return v1.value.localeCompare(v2.value);
+         }
+         return (v1.value.length < v2.value.length) ? -1 : 1;
+       };
+
+       vm.sortName = sortName;
+       vm.sortDni = sortDni;
+       vm.sortPosition = sortPosition;
+
+        function sortName() {
+          var order = null;
+          var rev = _processSortRev();
+          if (rev) {
+            order = ['user.name', 'user.lastname', 'user.date'];
+          } else {
+            order = ['-user.name', '-user.lastname', 'user.date'];
+          }
+          $window.sessionStorage.setItem('listSortReports', JSON.stringify(order));
+          sortReports();
+        }
+
+        function sortDni() {
+          var order = null;
+          var rev = _processSortRev();
+          if (rev) {
+            order = ['user.dni', 'user.date'];
+          } else {
+            order = ['-user.dni', 'user.date'];
+          }
+          $window.sessionStorage.setItem('listSortReports', JSON.stringify(order));
+          sortReports();
+        }
+
+        function sortPosition() {
+          var order = null;
+          var rev = _processSortRev();
+          if (rev) {
+            order = ['position','user.name', 'user.lastname', 'user.date'];
+          } else {
+            order = ['-position','user.name', 'user.lastname', 'user.date'];
+          }
+          $window.sessionStorage.setItem('listSortReports', JSON.stringify(order));
+          sortReports();
+        }
 
 // ***********************************************************************
 
@@ -145,36 +276,34 @@
         }
 
 
-        function _getUser(uid) {
-          for (var i = 0; i < vm.model.users.length; i++) {
-            if (vm.model.users[i].id == uid) {
-              return vm.model.users[i];
-            }
+        function getInMode(i) {
+          if (i.startMode == null || i.startMode == 'UNDEFINED') {
+            return '';
           }
-          return {
-            name: '',
-            lastname: '',
-            dni: ''
-          }
+
+          return (i.startMode == 1) ? 'entradaPorHuella' : 'entradaPorTeclado';
         }
 
-        function _format(stats) {
-          for (var i = 0; i < stats.length; i++) {
-            stats[i].date = (stats[i].date != null) ? new Date(stats[i].date) : null;
-            stats[i].iin = (stats[i].iin != null) ? new Date(stats[i].iin) : null;
-            stats[i].out = (stats[i].out != null) ? new Date(stats[i].out) : null;
+        function getOutMode(i) {
+          if (i.endMode == null || i.endMode == 'UNDEFINED') {
+            return '';
           }
+
+          return (i.endMode == 1) ? 'salidaPorHuella' : 'salidaPorTeclado';
         }
+
 
 /* **************************************************************************
                 PARSEO DE ESTADISTICAS
  * ************************************************************************** */
 
         function _parseStatic(stat) {
-          console.log(stat);
+          var justification = (stat.justification != null && stat.justification.status == 2) ? stat.justification : null;
           return {
             date: (stat.date != null) ? new Date(stat.date) : null,
             iin: (stat.logStart != null) ? new Date(stat.logStart) : null,
+            startMode: stat.startMode,
+            endMode: stat.endMode,
             out: (stat.logEnd != null) ? new Date(stat.logEnd) : null,
             start: (stat.scheduleStart != null) ? new Date(stat.scheduleStart) : null,
             end: (stat.scheduleEnd != null) ? new Date(stat.scheduleEnd) : null,
@@ -182,7 +311,8 @@
             position: stat.position,
             userId: stat.userId,
             workedSeconds: stat.workedSeconds,
-            justification: stat.justification
+            justification: justification,
+            notes: stat.notes
           }
         }
 
@@ -206,13 +336,28 @@
                 uids.push(stats[i].userId);
                 vm.model.statistics.push(_parseStatic(stats[i]));
               }
+              sortReports();
             });
           }, function(err) {
             console.log(err);
           });
         }
-    }
 
+    /* **************************************************************************
+                                    NOTAS
+     * ************************************************************************** */
 
+     function setNote(stat) {
+       Assistance.setWorkedNote(stat.userId, stat.date, stat.notes).then(function(data) {
+         console.log("Ok");
+       }, function(error) {
+         console.error(error);
+         $timeout(function () {
+           stat.notes = '';
+         }, 0);
+       })
+     }
+
+  }
 
 })();

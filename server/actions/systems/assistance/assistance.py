@@ -63,10 +63,10 @@ class Assistance(wamp.SystemComponentSession):
         returnValue(r)
 
     def _getStatistics(self, initDate, endDate, userIds, officeIds, initTime, endTime, details):
-        iDate = self._parseDate(initDate)
-        eDate = self._parseDate(endDate)
-        iTime = self._parseDate(initTime)
-        eTime = self._parseDate(endTime)
+        iDate = None if initDate is None else self._parseDate(initDate)
+        eDate = None if endDate is None else  self._parseDate(endDate)
+        iTime = None if initTime is None else  self._parseDate(initTime)
+        eTime = None if endTime is None else  self._parseDate(endTime)
 
         con = self.conn.get()
         try:
@@ -81,6 +81,25 @@ class Assistance(wamp.SystemComponentSession):
     @inlineCallbacks
     def getStatistics(self, initDate, endDate, userIds, officeIds, initTime, endTime, details):
         r = yield threads.deferToThread(self._getStatistics, initDate, endDate, userIds, officeIds, initTime, endTime, details)
+        returnValue(r)
+
+    def _setWorkedNote(self, userId, date, text, details):
+        if (userId is None or date is None):
+            return None
+
+        con = self.conn.get()
+        try:
+            date = self._parseDate(date).date()
+            wp = self.assistanceModel.setWorkedNote(con, userId, date, text)
+            con.commit()
+            return wp
+        finally:
+            self.conn.put(con)
+
+    @autobahn.wamp.register('assistance.set_worked_note')
+    @inlineCallbacks
+    def setWorkedNote(self, userId, date, text, details):
+        r = yield threads.deferToThread(self._setWorkedNote,userId, date, text, details)
         returnValue(r)
 
     ############################# EXPORTACIONES #######################################

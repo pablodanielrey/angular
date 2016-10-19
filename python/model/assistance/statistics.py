@@ -28,6 +28,8 @@ from model.assistance.boss import Boss, BossDAO
 from model.serializer import JSONSerializable
 
 from dateutil.tz import tzlocal
+import logging
+logging.getLogger().setLevel(logging.INFO)
 
 class JustificationStatistics(JSONSerializable):
 
@@ -62,7 +64,9 @@ class DailyWpStatistics(JSONSerializable):
         ds.start = wp.getStartDate()
         ds.end = wp.getEndDate()
         ds.iin = None if wp.getStartLog() is None else wp.getStartLog().log.astimezone(tzlocal()).replace(tzinfo=None)
+        ds.iMode = None if wp.getStartLog() is None else wp.getStartLog().verifyMode
         ds.out = None if wp.getEndLog() is None else wp.getEndLog().log.astimezone(tzlocal()).replace(tzinfo=None)
+        ds.oMode = None if wp.getEndLog() is None else wp.getEndLog().verifyMode
         ds.justification = JustificationStatistics._create(wp)
         ds._calculatePeriodSeconds(wp, stats)
         ds._caculateWorkedSeconds(wp, stats)
@@ -244,5 +248,71 @@ class WpStatisticsDAO:
                 cur.execute('delete from assistance.wp_daily_statistics where user_id = %s and sdate = %s', (ds.userId, ds.date))
                 cur.execute('insert into assistance.wp_daily_statistics (user_id, sdate, sstart, send, work, sin, sout, worked, late, early)'
                             'values (%(userId)s, %(date)s, %(start)s, %(end)s, %(periodSeconds)s, %(iin)s, %(out)s, %(workedSeconds)s, %(lateSeconds)s, %(earlySeconds)s)', ds.__dict__)
+        finally:
+            cur.close()
+
+class WorkedNote(JSONSerializable):
+
+    def __init__(self):
+        self.userId = ''
+        self.date = ''
+        self.notes = ''
+
+    @classmethod
+    def find(cls, con, userId, date):
+        return WorkedNotesDAO.find(con, userId, date)
+
+    def persist(self, con):
+        WorkedNotesDAO.persist(con, self.userId, self.date, self.notes)
+        return self
+
+class WorkedNotesDAO:
+
+    dependencies = [UserDAO]
+
+    @classmethod
+    def _createSchema(cls, con):
+        cur = con.cursor()
+        try:
+            cur.execute("""
+                create schema if not exists assistance;
+                create table IF NOT EXISTS assistance.worked_notes (
+                    user_id varchar not null references profile.users (id),
+                    sdate date not null,
+                    notes varchar,
+                    created timestamptz default now(),
+                    unique (user_id, sdate)
+                );
+            """)
+        finally:
+            cur.close()
+
+    @staticmethod
+    def _fromResult(r):
+        note = WorkedNote()
+        note.userId = r['user_id']
+        note.date = r['sdate']
+        note.notes = r['notes']
+        return note
+
+    @classmethod
+    def find(cls, con, userId, date):
+        cur = con.cursor()
+        try:
+            cur.execute('select * from assistance.worked_notes where user_id = %s and sdate = %s', (userId, date))
+            return [ cls._fromResult(c) for c in cur ]
+
+        finally:
+            cur.close()
+
+    @classmethod
+    def persist(cls, con, userId, date, notes):
+        cur = con.cursor()
+        try:
+            logging.info('persist nota userId:{} date {} nota:{}'.format(userId, date, notes))
+
+            cur.execute('delete from assistance.worked_notes where user_id = %s and sdate = %s', (userId, date))
+            if notes is not None and notes.strip() != '':
+                cur.execute('insert into assistance.worked_notes (user_id, sdate, notes) values (%s, %s, %s)', (userId, date, notes))
         finally:
             cur.close()

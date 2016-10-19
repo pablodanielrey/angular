@@ -20,6 +20,7 @@
 			this.photoToDataUri = photoToDataUri;
 
 			this.findUsersByStatics = findUsersByStatics;
+			this.setWorkedNote = setWorkedNote;
 
 			function _formatDateDay(d) {
 	      return d.getDate() + '/' + d.getMonth() + '/' + d.getFullYear()
@@ -139,6 +140,10 @@
 						return Login.getPrivateTransport().call('assistance.export_statistics', [di,de, userIds, officeIds, ti, te])
 				 }
 
+				 function setWorkedNote(userId, date, text) {
+					 return Login.getPrivateTransport().call('assistance.set_worked_note', [userId, date, text])
+				 }
+
 				/*
 				stats= [{date: "2016-10-17T00:00:00+00:00",
 								logStart: "2016-10-17T09:14:42+00:00",
@@ -156,10 +161,10 @@
 					*/
 
 				function getStatistics(initDate, endDate, userIds, officeIds, initTime, endTime) {
-					var di = initDate.toISOString();
-					var de = endDate.toISOString();
-					var ti = initTime.toISOString();
-					var te = endTime.toISOString();
+					var di = (initDate == null) ? null : initDate.toISOString();
+					var de = (endDate == null) ? null : endDate.toISOString();
+					var ti = (initTime == null) ? null : initTime.toISOString();
+					var te = (endTime == null) ? null : endTime.toISOString();
 					return Login.getPrivateTransport().call('assistance.get_statistics', [di,de,userIds, officeIds, ti, te])
 				}
 

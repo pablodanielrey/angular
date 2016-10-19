@@ -58,6 +58,7 @@
         vm.selectOffice = selectOffice;
         vm.findAndClose = findAndClose;
         vm.isAllOffices = isAllOffices;
+        vm.displayColumns = displayColumns;
 
         activate();
 
@@ -108,8 +109,12 @@
           vm.view.style = (vm.view.style == "rangoFechas") ? '' : "rangoFechas";
         }
 
-        function displayTime() {          
+        function displayTime() {
           vm.view.style = (vm.view.style == "rangoHorario") ? '' : "rangoHorario";
+        }
+
+        function displayColumns() {
+          vm.view.style = (vm.view.style == 'seleccionarColumnas') ? '' : 'seleccionarColumnas';
         }
 
 

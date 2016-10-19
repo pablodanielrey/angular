@@ -63,53 +63,17 @@
 
     <div class="contentSearchRigth">
       <div>
-        <div class="btnOrder" title="Seleccionar Columnas" ng-click="vm.view.style = 'seleccionarColumnas'"><i class="fa fa-columns"></i></div>
+        <div class="btnOrder" title="Seleccionar Columnas" ng-click="vm.displayColumns()"><i class="fa fa-columns"></i></div>
             <div class="contentColumns">
               <div class="contentListOffices">
-                    <div class="itemOffices">
-                      <div><input type="checkbox"></div>
-                      <div>Nombre y Apellido</div>
-                    </div>
-                    <div class="itemOffices">
-                      <div><input type="checkbox"></div>
-                      <div>DNI</div>
-                    </div>
-                    <div class="itemOffices">
-                      <div><input type="checkbox"></div>
-                      <div>Cargo</div>
-                    </div>
-                    <div class="itemOffices">
-                      <div><input type="checkbox"></div>
-                      <div>Día de entrada</div>
-                    </div>
-                    <div class="itemOffices">
-                      <div><input type="checkbox"></div>
-                      <div>Fecha de entrada</div>
-                    </div>
-                    <div class="itemOffices">
-                      <div><input type="checkbox" ng-click="view.style3 = 'verDiaSalida'"></div>
-                      <div>Día de salida</div>
-                    </div>
-                    <div class="itemOffices">
-                      <div><input type="checkbox" ng-click="view.style4 = 'verFechaSalida'"></div>
-                      <div>Fecha de salida</div>
-                    </div>
-                    <div class="itemOffices">
-                      <div><input type="checkbox"></div>
-                      <div>Horas trabajadas</div>
-                    </div>
-                    <div class="itemOffices">
-                      <div><input type="checkbox"></div>
-                      <div>Justificaciones</div>
-                    </div>
-                    <div class="itemOffices">
-                      <div><input type="checkbox"></div>
-                      <div>Notas</div>
+                    <div class="itemOffices" ng-repeat="column in vm.columns">
+                      <div><input type="checkbox" ng-model="column.visible"></div>
+                      <div>{{column.display}}</div>
                     </div>
 
                 </div>
 
-                <div class="btnSave" ng-click="view.style2 = ''">OK</div>
+                <div class="btnSave" ng-click="vm.displayColumns()">OK</div>
             </div>
       </div>
       <div class="btnOrder" title="Imprimir Lista" ng-click="vm.print()"><i class="fa fa-print"></i></div>
