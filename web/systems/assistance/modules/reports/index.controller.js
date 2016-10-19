@@ -4,9 +4,9 @@
       .module('assistance')
       .controller('ReportsCtrl', ReportsCtrl);
 
-    ReportsCtrl.$inject = ['$scope', 'Assistance', 'Users', '$timeout', 'Login', '$window', 'Offices'];
+    ReportsCtrl.$inject = ['$scope', 'Assistance', 'Users', '$timeout', 'Login', '$window', 'Offices', '$filter'];
 
-    function ReportsCtrl($scope, Assistance, Users, $timeout, Login, $window, Offices) {
+    function ReportsCtrl($scope, Assistance, Users, $timeout, Login, $window, Offices, $filter) {
         var vm = this;
 
         vm.model = {
@@ -133,6 +133,113 @@
           });
         }
 
+        /* ********************************************************************************
+                              MÉTODOS DE ORDENACIÓN
+         * ******************************************************************************** */
+       /*
+         Dispara la ordenación del listado.
+       */
+       function sortReports() {
+         var order = $window.sessionStorage.getItem('listSortReports');
+         if (order == null) {
+           order = ['user.name', 'user.lastname', 'user.date'];
+           $window.sessionStorage.setItem('listSortReports', JSON.stringify(order));
+         } else {
+           order = JSON.parse(order);
+         }
+         if (order[0] == 'user.dni' || order[0] == '-user.dni') {
+           vm.model.statistics = $filter('orderBy')(vm.model.statistics, order, false, dniComparator);
+         } else {
+           vm.model.statistics = $filter('orderBy')(vm.model.statistics, order, false, localeSensitiveComparator);
+         }
+       }
+
+       /*
+         retorna el valor de orden inverso o order normal. y almacena el inverso.
+         solo se usa cuando se clickea el ordenamiento explícitamente.
+         no cuando se ordena el listado.
+       */
+       function _processSortRev() {
+         var rev = $window.sessionStorage.getItem('reverseSortReports');
+         if (rev == null) {
+           rev = false;
+           $window.sessionStorage.setItem('reverseSortReports', JSON.stringify(!rev));
+         } else {
+           rev = JSON.parse(rev);
+         }
+
+         // almaceno el orden a inverso.
+         if (rev) {
+           $window.sessionStorage.setItem('reverseSortReports', JSON.stringify(!rev));
+         } else {
+           $window.sessionStorage.setItem('reverseSortReports', JSON.stringify(!rev));
+         }
+
+         return rev;
+       }
+
+       function localeSensitiveComparator(v1, v2) {
+         // If we don't get strings, just compare by index
+         if (v1.type !== 'string' || v2.type !== 'string') {
+           return (v1.index < v2.index) ? -1 : 1;
+         }
+
+         // Compare strings alphabetically, taking locale into account
+         return v1.value.localeCompare(v2.value);
+       };
+
+       function dniComparator(v1, v2) {
+         // If we don't get strings, just compare by index
+         if (v1.type !== 'string' || v2.type !== 'string') {
+           return (v1.index < v2.index) ? -1 : 1;
+         }
+
+         // Compare strings alphabetically, taking locale into account
+         if (v1.value.length == v2.value.length) {
+           return v1.value.localeCompare(v2.value);
+         }
+         return (v1.value.length < v2.value.length) ? -1 : 1;
+       };
+
+       vm.sortName = sortName;
+       vm.sortDni = sortDni;
+       vm.sortPosition = sortPosition;
+
+        function sortName() {
+          var order = null;
+          var rev = _processSortRev();
+          if (rev) {
+            order = ['user.name', 'user.lastname', 'user.date'];
+          } else {
+            order = ['-user.name', '-user.lastname', 'user.date'];
+          }
+          $window.sessionStorage.setItem('listSortReports', JSON.stringify(order));
+          sortReports();
+        }
+
+        function sortDni() {
+          var order = null;
+          var rev = _processSortRev();
+          if (rev) {
+            order = ['user.dni', 'user.date'];
+          } else {
+            order = ['-user.dni', 'user.date'];
+          }
+          $window.sessionStorage.setItem('listSortReports', JSON.stringify(order));
+          sortReports();
+        }
+
+        function sortPosition() {
+          var order = null;
+          var rev = _processSortRev();
+          if (rev) {
+            order = ['position','user.name', 'user.lastname', 'user.date'];
+          } else {
+            order = ['-position','user.name', 'user.lastname', 'user.date'];
+          }
+          $window.sessionStorage.setItem('listSortReports', JSON.stringify(order));
+          sortReports();
+        }
 
 // ***********************************************************************
 
@@ -165,7 +272,7 @@
  * ************************************************************************** */
 
         function _parseStatic(stat) {
-          console.log(stat);
+          var justification = (stat.justification != null && stat.justification.status == 2) ? stat.justification : null;
           return {
             date: (stat.date != null) ? new Date(stat.date) : null,
             iin: (stat.logStart != null) ? new Date(stat.logStart) : null,
@@ -178,7 +285,7 @@
             position: stat.position,
             userId: stat.userId,
             workedSeconds: stat.workedSeconds,
-            justification: stat.justification,
+            justification: justification,
             notes: stat.notes
           }
         }
@@ -203,6 +310,7 @@
                 uids.push(stats[i].userId);
                 vm.model.statistics.push(_parseStatic(stats[i]));
               }
+              sortReports();
             });
           }, function(err) {
             console.log(err);
