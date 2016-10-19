@@ -20,6 +20,7 @@
 			this.photoToDataUri = photoToDataUri;
 
 			this.findUsersByStatics = findUsersByStatics;
+			this.setWorkedNote = setWorkedNote;
 
 			function _formatDateDay(d) {
 	      return d.getDate() + '/' + d.getMonth() + '/' + d.getFullYear()
@@ -137,6 +138,10 @@
 						var ti = initTime.toISOString();
 						var te = endTime.toISOString();
 						return Login.getPrivateTransport().call('assistance.export_statistics', [di,de, userIds, officeIds, ti, te])
+				 }
+
+				 function setWorkedNote(userId, date, text) {
+					 return Login.getPrivateTransport().call('assistance.set_worked_note', [userId, date, text])
 				 }
 
 				/*

@@ -83,6 +83,25 @@ class Assistance(wamp.SystemComponentSession):
         r = yield threads.deferToThread(self._getStatistics, initDate, endDate, userIds, officeIds, initTime, endTime, details)
         returnValue(r)
 
+    def _setWorkedNote(self, userId, date, text, details):
+        if (userId is None or date is None):
+            return None
+
+        con = self.conn.get()
+        try:
+            date = self._parseDate(date).date()
+            wp = self.assistanceModel.setWorkedNote(con, userId, date, text)
+            con.commit()
+            return wp
+        finally:
+            self.conn.put(con)
+
+    @autobahn.wamp.register('assistance.set_worked_note')
+    @inlineCallbacks
+    def setWorkedNote(self, userId, date, text, details):
+        r = yield threads.deferToThread(self._setWorkedNote,userId, date, text, details)
+        returnValue(r)
+
     ############################# EXPORTACIONES #######################################
 
     @inlineCallbacks

@@ -59,7 +59,7 @@
                     </div>
                     <div class="file7">{{vm.getWorkedHours(i.workedSeconds)}}</div>
                     <div class="file8">{{i.justification.identifier}}</div>
-                    <div class="file9"><input class="notes" tipe="text" placeholder="Agregar nota"></input></div>
+                    <div class="file9"><input class="notes" tipe="text" placeholder="Agregar nota" ng-model="i.notes" ng-model-options="{ debounce: 1000 }" ng-change="vm.setNote(i)"></input></div>
                   </div>
                 </div>
 

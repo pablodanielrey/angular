@@ -15,7 +15,7 @@ from model.assistance.justifications.justifications import Status
 
 from model.positions.positions import Position
 from model.offices.office import Office, OfficeModel
-from model.assistance.statistics import WpStatistics
+from model.assistance.statistics import WpStatistics, WorkedNote
 from model.assistance.utils import Utils
 
 class ScheduleObject(JSONSerializable):
@@ -53,18 +53,19 @@ class WorkedAssistanceData(JSONSerializable):
 
 class StaticData(WorkedAssistanceData):
 
-    def __init__(self, ds = None, position = None):
+    def __init__(self, ds = None, position = None, notes = ''):
         super().__init__(ds)
         self.position = position
+        self.notes = notes
 
     def _initialize(self, ds):
         super()._initialize(ds)
         self.userId = ds.userId
         self.workedSeconds = ds.workedSeconds
         self.justification = ds.justification
-        self.startMode = ds.iMode        
+        self.startMode = ds.iMode
         self.endMode = ds.oMode
-        # self.notes = ds.notes
+        self.notes = ''
 
 
 
@@ -529,8 +530,13 @@ class AssistanceModel:
         for uid in userIds:
             sts = stats[uid]
             for s in sts:
-                aData.extend([StaticData(ds, s.position) for ds in s.dailyStats if self._verifiedTime(ds, initTime, endTime)])
+                aData.extend([self._createStaticData(con, ds, s.position) for ds in s.dailyStats if self._verifiedTime(ds, initTime, endTime)])
         return aData
+
+    def _createStaticData(self, con, ds, position):
+        noteObj = WorkedNote.find(con, ds.userId, ds.date)
+        notes = '' if len(noteObj) <= 0 else noteObj[0].notes
+        return StaticData(ds, position, notes)
 
 
     # verifico que los logos o el horario este entre los horarios pasados como parámetros
@@ -546,3 +552,10 @@ class AssistanceModel:
 
         if not(ds.start is None or ds.end is None) and not(ds.end.time() < initTime.time() or ds.start.time() > endTime.time()):
             return True
+
+    def setWorkedNote(self, con, userId, date, text):
+        wn = WorkedNote()
+        wn.userId = userId
+        wn.date = date
+        wn.notes = text
+        return wn.persist(con)

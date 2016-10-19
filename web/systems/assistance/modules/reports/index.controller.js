@@ -46,6 +46,8 @@
 
         vm.getWorkedHours = getWorkedHours;
 
+        vm.setNote = setNote;
+
         $scope.$on('wamp.open', function(event, args) {
           activate();
         });
@@ -176,7 +178,8 @@
             position: stat.position,
             userId: stat.userId,
             workedSeconds: stat.workedSeconds,
-            justification: stat.justification
+            justification: stat.justification,
+            notes: stat.notes
           }
         }
 
@@ -205,8 +208,22 @@
             console.log(err);
           });
         }
-    }
 
+    /* **************************************************************************
+                                    NOTAS
+     * ************************************************************************** */
 
+     function setNote(stat) {
+       Assistance.setWorkedNote(stat.userId, stat.date, stat.notes).then(function(data) {
+         console.log("Ok");
+       }, function(error) {
+         console.error(error);
+         $timeout(function () {
+           stat.notes = '';
+         }, 0);
+       })
+     }
+
+  }
 
 })();
