@@ -102,6 +102,14 @@ class ExportModel(ExportModelBase):
 
         ''' actualizo los logs '''
         rows = []
+        rows.append([
+            'Nombre',
+            'Apellido',
+            'Dni',
+            'Modo de Verificación',
+            'Fecha Marcación',
+            'Hora Marcación'
+        ])
         for log in logs:
             user = classfiedUsersData[log.userId]
             row = [
@@ -136,6 +144,22 @@ class ExportModel(ExportModelBase):
 
         ''' actualizo los logs '''
         rows = []
+        rows.append([
+            'Nombre',
+            'Apellido',
+            'Dni',
+            'Cargo',
+            'Fecha Entrada',
+            'Hora Entrada',
+            'Fecha Salida',
+            'Hora Salida',
+            'Fecha Marcación Entrada',
+            'Hora Marcación Entrada',
+            'Fecha Marcación Salida',
+            'Hora Marcación Salida',
+            'Cantidad de Horas Trabajadas',
+            'Justificación'
+        ])
         for stat in stats:
             user = classfiedUsersData[stat.userId]
             row = [
@@ -151,7 +175,8 @@ class ExportModel(ExportModelBase):
                 str(stat.logStart.time()) if stat.logStart is not None else '',
                 str(stat.logEnd.date()) if stat.logEnd is not None else '',
                 str(stat.logEnd.time()) if stat.logEnd is not None else '',
-                str(datetime.timedelta(seconds=stat.workedSeconds))
+                str(datetime.timedelta(seconds=stat.workedSeconds)),
+                stat.justification.identifier if stat.justification is not None else ''
             ]
             rows.append(row)
 
