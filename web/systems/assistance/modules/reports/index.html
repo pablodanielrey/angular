@@ -19,8 +19,8 @@
                 <!-- ---- Titulos del listado ----- -->
                 <div class="titleListAccess">
                   <div class="file3 cursor" ng-click="vm.sortName()"> <i class="icoOrdination fa fa-sort"></i> <b>Nombre y Apellido</b></div>
-                  <div class="file4 cursor"> <i class="icoOrdination fa fa-sort"></i> <b>DNI</b> </div>
-                  <div class="file5 cursor"> <i class="icoOrdination fa fa-sort"></i> <b>Cargo</b> </div>
+                  <div class="file4 cursor" ng-click="vm.sortDni()"> <i class="icoOrdination fa fa-sort"></i> <b>DNI</b> </div>
+                  <div class="file5 cursor" ng-click="vm.sortPosition()"> <i class="icoOrdination fa fa-sort"></i> <b>Cargo</b> </div>
                   <div class="file0 cursor"> <i class="icoOrdination fa fa-sort"></i> <b>Día</b> </div>
                   <div class="file2 cursor"> <i class="icoOrdination fa fa-sort"></i> <b>Fecha</b> </div>
                   <div class="file2b cursor"> <i class="icoOrdination fa fa-sort"></i> <b>Horario</b> </div>
@@ -42,7 +42,7 @@
                     <div class="file5">{{i.position}}</div>
 
                     <div class="file0 capitalize">{{i.date | date: 'EEE'}} </div>
-                    <div class="file2">{{i.iin | date: 'dd/MM/yyyy'}}</div>
+                    <div class="file2">{{i.date | date: 'dd/MM/yyyy'}}</div>
                     <div class="file2">{{i.start | date: 'HH:mm'}}-{{i.end | date: 'HH:mm'}}</div>
                     <div class="file2b {{vm.getInMode(i)}}">
                         <!-- VARIABLES: entradaPorHuella, entradaPorTeclado -->
