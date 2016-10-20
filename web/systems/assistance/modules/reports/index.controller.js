@@ -109,6 +109,7 @@
         function resetFilters() {
           _initializeFilters();
           $window.sessionStorage.removeItem('columnsReports');
+          $window.sessionStorage.removeItem('listSortReports');
           $window.sessionStorage.removeItem('reverseSortReports');
           _initColumns();
           vm.findStatistics();
