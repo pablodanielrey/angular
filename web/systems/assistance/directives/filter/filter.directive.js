@@ -11,7 +11,7 @@
             restrict: 'E',
             templateUrl: function(elem, attr) {
               var time = new Date().getTime();
-              return 'directives/filter.html?t=' + time;
+              return 'directives/filter/filter.html?t=' + time;
             },
             scope: {},
             link: linkFunc,
