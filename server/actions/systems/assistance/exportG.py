@@ -1,5 +1,6 @@
 from actions.systems.assistance.export import ExportModelBase
 from model.assistance.utils import Utils
+from model.assistance.justifications.status import Status
 
 import uuid
 import logging
@@ -158,10 +159,20 @@ class ExportModel(ExportModelBase):
             'Fecha Marcación Salida',
             'Hora Marcación Salida',
             'Cantidad de Horas Trabajadas',
-            'Justificación'
+            'Justificación',
+            'Estado de Justificación'
         ])
+
+        ### TODO: hack porque no funcina el tema de las zonas locales.
+        import pytz
+        timezone = pytz.timezone('America/Argentina/Buenos_Aires')
+
         for stat in stats:
             user = classfiedUsersData[stat.userId]
+
+            logStartDate = Utils._naiveFromLocalAware(stat.logStart.astimezone(timezone)) if stat.logStart is not None else None
+            logEndDate = Utils._naiveFromLocalAware(stat.logEnd.astimezone(timezone)) if stat.logEnd is not None else None
+
             row = [
                 user.name,
                 user.lastname,
@@ -171,12 +182,13 @@ class ExportModel(ExportModelBase):
                 str(stat.scheduleStart.time()) if stat.scheduleStart is not None else '',
                 str(stat.scheduleEnd.date()) if stat.scheduleEnd is not None else '',
                 str(stat.scheduleEnd.time()) if stat.scheduleEnd is not None else '',
-                str(stat.logStart.date()) if stat.logStart is not None else '',
-                str(stat.logStart.time()) if stat.logStart is not None else '',
-                str(stat.logEnd.date()) if stat.logEnd is not None else '',
-                str(stat.logEnd.time()) if stat.logEnd is not None else '',
+                str(logStartDate.date()) if logStartDate is not None else '',
+                str(logStartDate.time()) if logStartDate is not None else '',
+                str(logEndDate.date()) if logEndDate is not None else '',
+                str(logEndDate.time()) if logEndDate is not None else '',
                 str(datetime.timedelta(seconds=stat.workedSeconds)),
-                stat.justification.identifier if stat.justification is not None else ''
+                stat.justification.identifier if stat.justification is not None else '',
+                Status.getIdentifier(stat.justification.status) if stat.justification is not None else ''
             ]
             rows.append(row)
 
