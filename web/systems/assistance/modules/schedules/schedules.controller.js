@@ -12,6 +12,14 @@
           users: []
         }
 
+        vm.view = {
+          style:'',
+          displayPerson: 'mostarPersona',
+          displayHistory: 'mostrarHistorial',
+          displayPersonAndHistory: 'mostrarPerson mostrarHistorial',
+          displayError: 'mensaje error'
+        }
+
         vm.selectUser = selectUser;
         activate();
 
@@ -36,6 +44,7 @@
 
         function selectUser(user) {
           console.log(user);
+          vm.view.style = vm.view.displayPersonAndHistory;
         }
 
     }

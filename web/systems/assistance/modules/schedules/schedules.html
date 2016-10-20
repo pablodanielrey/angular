@@ -1,16 +1,16 @@
-<div class="schedules">
+<div class="schedules {{vm.view.style}}">
 
     <div class="contentOne">
         <e-person-assistance users="vm.model.users" select="vm.selectUser(user)"></e-person-assistance>
     </div>
 
-    <div class="contentTwo">
+    <div class="contentTwo" ng-click="vm.view.style = 'mostrar error'">
         <div class="contentUser">
             2
         </div>
     </div>
 
-    <div class="contentTheree">
+    <div class="contentTheree"  ng-click="vm.view.style = ''">
         <div class="contentUser">
             3
         </div>
