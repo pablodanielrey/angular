@@ -44,6 +44,26 @@
         vm.getInMode = getInMode;
         vm.getOutMode = getOutMode;
 
+        vm.sortName = sortName;
+        vm.sortDni = sortDni;
+        vm.sortPosition = sortPosition;
+        vm.sortDayStartSchedule = sortDayStartSchedule;
+        vm.sortDateStartSchedule = sortDateStartSchedule;
+        vm.sortStartSchedule = sortStartSchedule;
+        vm.sortDayEndSchedule = sortDayEndSchedule;
+        vm.sortDateEndSchedule = sortDateEndSchedule;
+        vm.sortEndSchedule = sortEndSchedule;
+        vm.sortSchedule = sortSchedule;
+        vm.sortDayStart = sortDayStart;
+        vm.sortDateStart = sortDateStart;
+        vm.sortStart = sortStart;
+        vm.sortDayEnd = sortDayEnd;
+        vm.sortDateEnd = sortDateEnd;
+        vm.sortEnd = sortEnd;
+        vm.sortHours = sortHours;
+        vm.sortJustifications = sortJustifications;
+        vm.sortNotes = sortNotes;
+
         vm.getWorkedHours = getWorkedHours;
         vm.isHidden = isHidden;
         vm.updateColumns = updateColumns;
@@ -190,9 +210,12 @@
        }
 
        function localeSensitiveComparator(v1, v2) {
+         if (v1.type === 'number' || v2.type === 'number') {
+           return (v1.value < v2.value) ? -1 : (v1.value == v2.value) ? 0 : 1;
+         }
          // If we don't get strings, just compare by index
          if (v1.type !== 'string' || v2.type !== 'string') {
-           return (v1.index < v2.index) ? -1 : 1;
+           return (v1.index < v2.index) ? -1 : (v1.index == v2.index) ? 0 : 1;
          }
 
          // Compare strings alphabetically, taking locale into account
@@ -202,27 +225,20 @@
        function dniComparator(v1, v2) {
          // If we don't get strings, just compare by index
          if (v1.type !== 'string' || v2.type !== 'string') {
-           return (v1.index < v2.index) ? -1 : 1;
+           return (v1.index < v2.index) ? -1 : (v1.index == v2.index) ? 0 : 1;
          }
 
-         // Compare strings alphabetically, taking locale into account
-         if (v1.value.length == v2.value.length) {
-           return v1.value.localeCompare(v2.value);
-         }
-         return (v1.value.length < v2.value.length) ? -1 : 1;
+         return (v1.value.length == v2.value.length) ? v1.value.localeCompare(v2.value) : (v1.value.length < v2.value.length) ? -1 : 1;
        };
 
-       vm.sortName = sortName;
-       vm.sortDni = sortDni;
-       vm.sortPosition = sortPosition;
 
         function sortName() {
           var order = null;
           var rev = _processSortRev();
           if (rev) {
-            order = ['user.name', 'user.lastname', 'user.date'];
+            order = ['user.name', 'user.lastname', 'date'];
           } else {
-            order = ['-user.name', '-user.lastname', 'user.date'];
+            order = ['-user.name', '-user.lastname', 'date'];
           }
           $window.sessionStorage.setItem('listSortReports', JSON.stringify(order));
           sortReports();
@@ -232,9 +248,9 @@
           var order = null;
           var rev = _processSortRev();
           if (rev) {
-            order = ['user.dni', 'user.date'];
+            order = ['user.dni', 'date'];
           } else {
-            order = ['-user.dni', 'user.date'];
+            order = ['-user.dni', 'date'];
           }
           $window.sessionStorage.setItem('listSortReports', JSON.stringify(order));
           sortReports();
@@ -244,12 +260,84 @@
           var order = null;
           var rev = _processSortRev();
           if (rev) {
-            order = ['position','user.name', 'user.lastname', 'user.date'];
+            order = ['position','user.name', 'user.lastname', 'date'];
           } else {
-            order = ['-position','user.name', 'user.lastname', 'user.date'];
+            order = ['-position','user.name', 'user.lastname', 'date'];
           }
           $window.sessionStorage.setItem('listSortReports', JSON.stringify(order));
           sortReports();
+        }
+
+        function sortDayStartSchedule() {
+          var order = null;
+          var rev = _processSortRev();
+          if (rev) {
+            order = ["day", 'user.name', 'user.lastname', 'date'];
+          } else {
+            order = ["-day", 'user.name', 'user.lastname', 'date'];
+          }
+          $window.sessionStorage.setItem('listSortReports', JSON.stringify(order));
+          sortReports();
+        }
+
+        function sortDateStartSchedule() {
+
+        }
+
+        function sortStartSchedule() {
+
+        }
+
+        function sortDayEndSchedule() {
+
+        }
+
+        function sortDateEndSchedule() {
+
+        }
+
+        function sortEndSchedule() {
+
+        }
+
+        function sortSchedule() {
+
+        }
+
+        function sortDayStart() {
+
+        }
+
+        function sortDateStart() {
+
+        }
+
+        function sortStart() {
+
+        }
+
+        function sortDayEnd() {
+
+        }
+
+        function sortDateEnd() {
+
+        }
+
+        function sortEnd() {
+
+        }
+
+        function sortHours() {
+
+        }
+
+        function sortJustifications() {
+
+        }
+
+        function sortNotes() {
+
         }
 
 /* **************************************************************************
@@ -337,6 +425,7 @@
           var justification = (stat.justification != null && stat.justification.status == 2) ? stat.justification : null;
           return {
             date: (stat.date != null) ? new Date(stat.date) : null,
+            day: (stat.date != null) ? (new Date(stat.date)).getDay() : null,
             iin: (stat.logStart != null) ? new Date(stat.logStart) : null,
             startMode: stat.startMode,
             endMode: stat.endMode,
