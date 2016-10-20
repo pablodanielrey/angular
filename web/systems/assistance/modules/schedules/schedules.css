@@ -16,6 +16,11 @@
   border-right: 1px solid #e2e2e2;
 }
 
+.schedules .listUsers {
+  /*background-color: red;*/
+  height: 100%;
+}
+
 .schedules .searchUsers {
   color:#5C5F69;
 }
@@ -29,6 +34,11 @@
   padding: 10px;
   width: calc(100% - 40px);
   margin: 10px 0 10px 0;
+}
+
+.schedules .contentList {
+  height: calc(100% - 102px);
+  overflow-y: auto;
 }
 
 .schedules .itemUser {
