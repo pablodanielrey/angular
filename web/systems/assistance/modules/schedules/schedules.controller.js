@@ -25,21 +25,25 @@
 
         function activate() {
           vm.model.users = [];
-          vm.model.users.push({name: 'Walter Roberto', lastname: 'Blanco', img: 'img/avatarWoman.jpg'});
-          vm.model.users.push({name: 'Emanuel Joaquín', lastname: 'Pais', img: 'img/avatarMan.jpg'});
-          vm.model.users.push({name: 'Walter Roberto', lastname: 'Blanco', img: 'img/avatarWoman.jpg'});
-          vm.model.users.push({name: 'Walter Roberto', lastname: 'Blanco', img: 'img/avatarWoman.jpg'});
-          vm.model.users.push({name: 'Emanuel Joaquín', lastname: 'Pais', img: 'img/avatarMan.jpg'});
-          vm.model.users.push({name: 'Walter Roberto', lastname: 'Blanco', img: 'img/avatarWoman.jpg'});
-          vm.model.users.push({name: 'Walter Roberto', lastname: 'Blanco', img: 'img/avatarWoman.jpg'});
-          vm.model.users.push({name: 'Emanuel Joaquín', lastname: 'Pais', img: 'img/avatarMan.jpg'});
-          vm.model.users.push({name: 'Walter Roberto', lastname: 'Blanco', img: 'img/avatarWoman.jpg'});
-          vm.model.users.push({name: 'Walter Roberto', lastname: 'Blanco', img: 'img/avatarWoman.jpg'});
-          vm.model.users.push({name: 'Emanuel Joaquín', lastname: 'Pais', img: 'img/avatarMan.jpg'});
-          vm.model.users.push({name: 'Walter Roberto', lastname: 'Blanco', img: 'img/avatarWoman.jpg'});
-          vm.model.users.push({name: 'Walter Roberto', lastname: 'Blanco', img: 'img/avatarWoman.jpg'});
-          vm.model.users.push({name: 'Emanuel Joaquín', lastname: 'Pais', img: 'img/avatarMan.jpg'});
-          vm.model.users.push({name: 'Walter Roberto', lastname: 'Blanco', img: 'img/avatarWoman.jpg'});
+          vm.model.users.push({dni: '30112124', name: 'Walter Roberto', lastname: 'Blanco', img: 'img/avatarMan.jpg'});
+          vm.model.users.push({dni: '30112124', name: 'Walter Roberto', lastname: 'Blanco', img: 'img/avatarMan.jpg'});
+          vm.model.users.push({dni: '30112124', name: 'Walter Roberto', lastname: 'Blanco', img: 'img/avatarMan.jpg'});
+          vm.model.users.push({dni: '30112124', name: 'Walter Roberto', lastname: 'Blanco', img: 'img/avatarMan.jpg'});
+          vm.model.users.push({dni: '30112124', name: 'Walter Roberto', lastname: 'Blanco', img: 'img/avatarMan.jpg'});
+          vm.model.users.push({dni: '30112124', name: 'Walter Roberto', lastname: 'Blanco', img: 'img/avatarMan.jpg'});
+          vm.model.users.push({dni: '30112124', name: 'Walter Roberto', lastname: 'Blanco', img: 'img/avatarMan.jpg'});
+          vm.model.users.push({dni: '30112124', name: 'Walter Roberto', lastname: 'Blanco', img: 'img/avatarMan.jpg'});
+          vm.model.users.push({dni: '30112124', name: 'Walter Roberto', lastname: 'Blanco', img: 'img/avatarMan.jpg'});
+          vm.model.users.push({dni: '30112124', name: 'Walter Roberto', lastname: 'Blanco', img: 'img/avatarMan.jpg'});
+          vm.model.users.push({dni: '30112124', name: 'Walter Roberto', lastname: 'Blanco', img: 'img/avatarMan.jpg'});
+          vm.model.users.push({dni: '30112124', name: 'Walter Roberto', lastname: 'Blanco', img: 'img/avatarMan.jpg'});
+          vm.model.users.push({dni: '30112124', name: 'Walter Roberto', lastname: 'Blanco', img: 'img/avatarMan.jpg'});
+          vm.model.users.push({dni: '30112124', name: 'Walter Roberto', lastname: 'Blanco', img: 'img/avatarMan.jpg'});
+          vm.model.users.push({dni: '30112124', name: 'Walter Roberto', lastname: 'Blanco', img: 'img/avatarMan.jpg'});
+          vm.model.users.push({dni: '30112124', name: 'Walter Roberto', lastname: 'Blanco', img: 'img/avatarMan.jpg'});
+          vm.model.users.push({dni: '30112124', name: 'Walter Roberto', lastname: 'Blanco', img: 'img/avatarMan.jpg'});
+          vm.model.users.push({dni: '30112124', name: 'Walter Roberto', lastname: 'Blanco', img: 'img/avatarMan.jpg'});
+
         }
 
         function selectUser(user) {

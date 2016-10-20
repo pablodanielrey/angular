@@ -16,125 +16,21 @@
   border-right: 1px solid #e2e2e2;
 }
 
-.schedules .listUsers {
-  /*background-color: red;*/
-  height: 100%;
-}
-
-.schedules .searchUsers {
-  color:#5C5F69;
-}
-
-.schedules .input {
-  border-radius: 3px;
-  -moz-border-radius: 3px;
-  -webkit-border-radius: 3px;
-  font-size: 16px;
-  border: 1px solid #c9cbd3;
-  padding: 10px;
-  width: calc(100% - 40px);
-  margin: 10px 0 10px 0;
-}
-
-.schedules .contentList {
-  height: calc(100% - 102px);
-  overflow-y: auto;
-}
-
-.schedules .itemUser {
-  display: flex;
-  display: -webkit-flex;
-  display: -moz-flex;
-  flex-direction: row;
-  -webkit-flex-direction: row;
-  -moz-flex-direction: row;
-  justify-content: space-between;
-  -webkit-justify-content: space-between;
-  -moz-justify-content: space-between;
-  width: 98%;
-  height: 55px;
-  border-radius: 3px;
-  -moz-border-radius: 3px;
-  -webkit-border-radius: 3px;
-  background-color: white;
-  margin: 5px 0 5px 0;
-  border: 1px solid #c9cbd3;
-  font-size: 14px;
-}
-
-.schedules .dataUser {
-  display: flex;
-  display: -webkit-flex; /* Safari */
-  display: -moz-flex; /* mozilla */
-  flex-direction:row;
-  -webkit-flex-direction:row; /* Safari */
-  -moz-flex-direction:row; /* mozilla */
-  align-items: center;
-  -webkit-align-items: center;
-  -moz-align-items: center;
-}
-
-.schedules .imgUser {
-  width: 45px;
-  height: 45px;
-  border-radius: 50%;
-  -moz-border-radius: 50%;
-  -webkit-border-radius: 50%;
-  margin-left: 10px;
-  margin-top: 3px;
-}
-
-.schedules .infoUser {
-  margin-left: 10px;
-}
-
-.schedules .textName {
-  font-size: 12px;
-}
-
-.schedules .textDNI {
-  font-size: 10px;
-}
-
-
-.schedules .selectUser {
-  width: 50px;
-  height: 100%;
-  background-color: #e5e5e5;
-  color: #5C5F69;
-  display: flex;
-  display: -webkit-flex;
-  display: -moz-flex;
-  flex-direction: row;
-  -webkit-flex-direction: row;
-  -moz-flex-direction: row;
-  justify-content: center;
-  -webkit-justify-content: center;
-  -moz-justify-content: center;
-  align-items: center;
-  -webkit-align-items: center;
-  -moz-align-items: center;
-  border-radius: 2px 0px 0px 2px;
-  -moz-border-radius: 2px 0px 0px 2px;
-  -webkit-border-radius: 2px 0px 0px 2px;
-}
-
-.schedules .selectUser:hover {
-  color: white;
-  background-color: #804080;
-  cursor: pointer;
-}
-
 .schedules .contentTwo {
   width: calc(33% - 20px);
   padding: 10px;
-  background-color: orange;
+  border-right: 1px solid #e2e2e2;
 }
+
+.schedules .title {
+  color:#5C5F69;
+}
+
+
 
 .schedules .contentTheree {
   width: calc(33% - 20px);
   padding: 10px;
-  background-color: green;
 }
 
 
