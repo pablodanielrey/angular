@@ -171,6 +171,10 @@
 
 }
 
+.reports .contentList .hidden {
+  display: none
+}
+
 .reports .headerContentList {
   display: flex;
   display: -webkit-flex;

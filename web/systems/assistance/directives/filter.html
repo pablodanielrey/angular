@@ -67,7 +67,7 @@
             <div class="contentColumns">
               <div class="contentListOffices">
                     <div class="itemOffices" ng-repeat="column in vm.columns">
-                      <div><input type="checkbox" ng-model="column.visible"></div>
+                      <div><input type="checkbox" ng-model="column.visible" ng-change="vm.updateColumns()"></div>
                       <div>{{column.display}}</div>
                     </div>
 

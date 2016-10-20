@@ -20,6 +20,7 @@
             bindToController: {
               search: '=search',
               columns: '=columns',
+              updateColumns: '&updateColumns',
               getOffices: '&getOffices',
               find: '&find',
               print: '&print',

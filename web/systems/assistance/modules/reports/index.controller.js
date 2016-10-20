@@ -45,6 +45,8 @@
         vm.getOutMode = getOutMode;
 
         vm.getWorkedHours = getWorkedHours;
+        vm.isHidden = isHidden;
+        vm.updateColumns = updateColumns;
 
         vm.setNote = setNote;
 
@@ -61,6 +63,7 @@
             return;
           }
           vm.model.activate = true;
+          _initColumns();
           _loadOffices();
         }
 
@@ -81,28 +84,6 @@
           }
           _initTime(vm.model.search.sTime, 0, 0, 0);
           _initTime(vm.model.search.eTime, 23, 59, 0);
-
-          vm.model.header.columns = [
-              {value:'name', visible: true, display: 'Nombre y Apellido'},
-              {value:'dni', visible: true, display: 'DNI'},
-              {value:'position', visible: true, display: 'Cargo'},
-              {value:'dayStartSchedule', visible: true, display: 'Día horario ent.'},
-              {value:'dateStartSchedule', visible: true, display: 'Fecha horario ent.'},
-              {value:'startSchedule', visible: false, display: 'Horario de ent.'},
-              {value:'dayEndSchedule', visible: false, display: 'Día horario sal.'},
-              {value:'dateEndSchedule', visible: false, display: 'Fecha horario sal.'},
-              {value:'endSchedule', visible: false, display: 'Horario de sal.'},
-              {value:'shortSchedule', visible: true, display: 'Horario'},
-              {value:'dayStart', visible: false, display: 'Día de entrada'},
-              {value:'dateStart', visible: true, display: 'Fecha de entrada'},
-              {value:'start', visible: false, display: 'Hora de entrada'},
-              {value:'dayEnd', visible: false, display: 'Día de salida'},
-              {value:'dateEnd', visible: true, display: 'Fecha de salida'},
-              {value:'end', visible: false, display: 'Hora de salida'},
-              {value:'hours', visible: true, display: 'Horas trabajadas'},
-              {value:'justifications', visible: true, display: 'Justificaciones'},
-              {value:'notes', visible: true, display: 'Notas'}
-            ];
         }
 
         function _initTime(date, hours, minutes, seconds) {
@@ -127,6 +108,8 @@
 
         function resetFilters() {
           _initializeFilters();
+          $window.sessionStorage.removeItem('columnsReports');
+          _initColumns();
           vm.findStatistics();
         }
 
@@ -267,8 +250,59 @@
           sortReports();
         }
 
-// ***********************************************************************
+/* **************************************************************************
+                        MANEJO DE LAS COLUMNAS
+ * ************************************************************************** */
 
+        function updateColumns() {
+          $window.sessionStorage.setItem('columnsReports', JSON.stringify(vm.model.header.columns));
+        }
+
+        function isHidden(value) {
+          for (var i = 0; i < vm.model.header.columns.length; i++) {
+            var e = vm.model.header.columns[i];
+            if (e.value == value) {
+              return !e.visible;
+            }
+          }
+        }
+
+        function _initColumns() {
+          var columns = $window.sessionStorage.getItem('columnsReports');
+          if (columns == null) {
+            columns = defaultColumns();
+            $window.sessionStorage.setItem('columnsReports', JSON.stringify(columns));
+          } else {
+            columns = JSON.parse(columns);
+          }
+          vm.model.header.columns = columns;
+        }
+
+        function defaultColumns() {
+           return [
+              {value:'name', visible: true, display: 'Nombre y Apellido'},
+              {value:'dni', visible: true, display: 'DNI'},
+              {value:'position', visible: true, display: 'Cargo'},
+              {value:'dayStartSchedule', visible: true, display: 'Día horario ent.'},
+              {value:'dateStartSchedule', visible: true, display: 'Fecha horario ent.'},
+              {value:'startSchedule', visible: false, display: 'Horario de ent.'},
+              {value:'dayEndSchedule', visible: false, display: 'Día horario sal.'},
+              {value:'dateEndSchedule', visible: false, display: 'Fecha horario sal.'},
+              {value:'endSchedule', visible: false, display: 'Horario de sal.'},
+              {value:'shortSchedule', visible: true, display: 'Horario'},
+              {value:'dayStart', visible: false, display: 'Día de entrada'},
+              {value:'dateStart', visible: false, display: 'Fecha de entrada'},
+              {value:'start', visible: true, display: 'Hora de entrada'},
+              {value:'dayEnd', visible: false, display: 'Día de salida'},
+              {value:'dateEnd', visible: false, display: 'Fecha de salida'},
+              {value:'end', visible: true, display: 'Hora de salida'},
+              {value:'hours', visible: true, display: 'Horas trabajadas'},
+              {value:'justifications', visible: true, display: 'Justificaciones'},
+              {value:'notes', visible: true, display: 'Notas'}
+            ];
+        }
+
+// ***********************************************************************
 
         function getWorkedHours(seconds) {
           var minutes = ('0' + Math.floor(seconds / 60 % 60)).substr(-2, 2);
