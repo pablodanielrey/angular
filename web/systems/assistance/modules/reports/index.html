@@ -71,8 +71,8 @@
                         <div class="inKeyboard" title="Marcación por teclado"><i class=" icoHuella fa fa-table"></i> {{i.iin | date: 'HH:mm:ss'}}</div>
                     </div>
 
-                    <div class="file0 capitalize" ng-class="{true:'hidden'}[vm.isHidden('dayEnd')]">{{i.end | date: 'EEE'}} </div>
-                    <div class="file2" ng-class="{true:'hidden'}[vm.isHidden('dateEnd')]">{{i.end | date: 'dd/MM/yyyy'}}</div>
+                    <div class="file0 capitalize" ng-class="{true:'hidden'}[vm.isHidden('dayEnd')]">{{i.out | date: 'EEE'}} </div>
+                    <div class="file2" ng-class="{true:'hidden'}[vm.isHidden('dateEnd')]">{{i.out | date: 'dd/MM/yyyy'}}</div>
                     <div class="file6 {{vm.getOutMode(i)}}" ng-class="{true:'hidden'}[vm.isHidden('end')]">
                         <!-- VARIABLES: salidaPorHuella, salidaPorTeclado -->
                         <div class="outFinger" title="Marcación por huella"><i class=" icoHuella fa fa-forumbee" aria-hidden="true"></i> {{i.out | date: 'HH:mm:ss'}}</div>
