@@ -6,8 +6,46 @@
 
     <div class="contentTwo">
         <div class="title">
-          <i class="fa fa-clock-o" aria-hidden="true"></i> HORARIO
+            <i class="fa fa-clock-o" aria-hidden="true"></i> HORARIO
         </div>
+        <div class="contentUserSelected">
+            <div class="imgUSer"><img class="imgUser" src="./img/walter.jpg" alt="foto de perfil"></div>
+            <div class="dataUserSelected">
+                <div class="userName"> Walter Blanco</div>
+                <div class="userDNI"> 30001823</div>
+            </div>
+        </div>
+
+        <div class="contentSchedules">
+            <!-- CONTENEDOR DE MI HORARIO -->
+            <div class="currentSchedule">
+                  <div class="contentCurrentSchedule">
+                      <div class="headerCurrentSchedule">
+                          <div>Semana laboral</div>
+                          <div><b>35</b> horas semanales</div>
+                      </div>
+                      <div class="itemDay"> <div class="day">Lunes</div><div>10:00</div><div>a</div><div>17:00</div> </div>
+                      <div class="itemDay"> <div class="day">Martes</div><div>10:00</div><div>a</div><div>17:00</div> </div>
+                      <div class="itemDay"> <div class="day">Miercoles</div><div>10:00</div><div>a</div><div>17:00</div> </div>
+                      <div class="itemDay"> <div class="day">Jueves</div><div>10:00</div><div>a</div><div>17:00</div> </div>
+                      <div class="itemDay"> <div class="day">Viernes</div><div>10:00</div><div>a</div><div>17:00</div> </div>
+                      <div class="itemDay"> <div class="day">Sabado</div><div>10:00</div><div>a</div><div>17:00</div> </div>
+                      <div class="itemDay"> <div class="day">Domingo</div><div>10:00</div><div>a</div><div>17:00</div> </div>
+                  </div>
+                  <div class="actionCurrentSchedule">
+                      <div class="btn" ng-click="vm.view.style = 'verPreguntaDeHorario'">
+                          <div class="text1Btn">Modificar</div>
+                          <div class="text2Btn">HORARIO SEMANAL</div>
+                      </div>
+                      <div class="btn">
+                          <div class="text1Btn">Agregar</div>
+                          <div class="text2Btn">HORARIO ESPECIAL</div>
+                      </div>
+                  </div>
+            </div>
+
+        </div>
+
     </div>
 
     <div class="contentTheree"  ng-click="vm.view.style = ''">

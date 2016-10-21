@@ -15,9 +15,6 @@
         vm.view = {
           style:'',
           displayPerson: 'mostarPersona',
-          displayHistory: 'mostrarHistorial',
-          displayPersonAndHistory: 'mostrarPerson mostrarHistorial',
-          displayError: 'mensaje error'
         }
 
         vm.selectUser = selectUser;
@@ -48,8 +45,10 @@
 
         function selectUser(user) {
           console.log(user);
-          vm.view.style = vm.view.displayPersonAndHistory;
+          vm.view.style = vm.view.verPreguntaDeHorario;
         }
+
+
 
     }
 
