@@ -14,6 +14,8 @@
   width: calc(33% - 20px);
   padding: 10px;
   border-right: 1px solid #e2e2e2;
+  animation-name: opacidad;
+   animation-duration: .7s;
 }
 
 .schedules .contentTwo {
@@ -21,6 +23,8 @@
   height: calc(100% - 110px);
   padding: 10px;
   border-right: 1px solid #e2e2e2;
+  animation-name: opacidad;
+   animation-duration: .7s;
 }
 
 .schedules .title {
@@ -66,6 +70,8 @@
 
 .schedules .currentSchedule {
   /*display: none;*/
+  animation-name: opacidad;
+   animation-duration: .7s;
 }
 
 .schedules .contentCurrentSchedule {
@@ -76,6 +82,7 @@
   background-color: white;
   margin: 10px 0 5px 0;
   border: 1px solid #c9cbd3;
+
 }
 
 .schedules .headerCurrentSchedule {
@@ -175,6 +182,8 @@
 .schedules .questions {
   display: none;
   width: 95%;
+  animation-name: opacidad;
+   animation-duration: .7s;
 }
 
 .schedules .btnBack {
@@ -204,15 +213,19 @@
 }
 
 .schedules .newCurrentSchedule2 {
-  /*display: none;*/
+  display: none;
   width: 100%;
   margin-top: 15px;
+  animation-name: opacidad;
+   animation-duration: .7s;
 }
 
 .schedules .newCurrentSchedule {
-  /*display: none;*/
+  display: none;
   width: 100%;
   margin-top: 15px;
+  animation-name: opacidad;
+   animation-duration: .7s;
 }
 
 .schedules .btnBack2 {
@@ -370,6 +383,8 @@
   width: calc(33% - 20px);
   height: calc(100% - 50px);
   padding: 10px;
+  animation-name: opacidad;
+   animation-duration: .7s;
 }
 
 .schedules .contentHistory {
@@ -455,10 +470,49 @@
 
 }
 
-.schedules.user .contentOne {
+
+/*NAVEGACION*/
+
+.schedules.usuarioNormal .contentOne {
   display: none;
 }
 
 .schedules.verPreguntaDeHorario .currentSchedule {
   display: none;
+}
+
+.schedules.verPreguntaDeHorario .questions {
+  display: block;
+}
+
+.schedules.agregarHorarioEspecial .newCurrentSchedule2 {
+  display: block;
+}
+
+.schedules.agregarHorarioEspecial .currentSchedule {
+  display: none;
+}
+
+.schedules.nuevoHorarioSemanal .newCurrentSchedule {
+  display: block;
+}
+
+.schedules.nuevoHorarioSemanal .currentSchedule {
+  display: none;
+}
+
+.schedules.nuevoHorarioSemanalSerenos .newCurrentSchedule2 {
+  display: block;
+}
+
+.schedules.nuevoHorarioSemanalSerenos .currentSchedule {
+  display: none;
+}
+
+
+
+
+@keyframes opacidad {
+  0% {opacity: 0}
+  100% {opacity: 1}
 }
