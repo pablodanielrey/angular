@@ -48,7 +48,7 @@
 
                 <!-- ---- Accesos ----- -->
                 <div class="listAccess">
-                  <div class="itemListAccess" ng-repeat="i in vm.model.statistics | filter: vm.model.search.text">
+                  <div class="itemListAccess" ng-repeat="i in vm.model.statistics | filter: vm.model.search.text : vm.view.localeCompare">
                     <div class="file3" ng-class="{true:'hidden'}[vm.isHidden('name')]">{{i.user.name}} {{i.user.lastname}}</div>
                     <div class="file4" ng-class="{true:'hidden'}[vm.isHidden('dni')]" >{{i.user.dni}}</div>
                     <div class="file5" ng-class="{true:'hidden'}[vm.isHidden('position')]" >{{i.position}}</div>

@@ -4,7 +4,7 @@
       .module('assistance')
       .controller('LogsCtrl', LogsCtrl);
 
-    LogsCtrl.$inject = ['$scope', 'Assistance', 'Users', 'Login', 'Files', '$timeout', '$window', '$filter'];
+    LogsCtrl.$inject = ['$scope', 'Assistance', 'Users', 'Login', 'Files', '$timeout', '$window', '$filter', 'AssistanceUtils'];
 
     function _getDateInTime(hours, minutes, seconds) {
       var d = new Date()
@@ -15,7 +15,7 @@
       return d;
     }
 
-    function LogsCtrl($scope, Assistance, Users, Login, Files, $timeout, $window, $filter) {
+    function LogsCtrl($scope, Assistance, Users, Login, Files, $timeout, $window, $filter, AssistanceUtils) {
         var vm = this;
 
         vm.view = {
@@ -23,7 +23,8 @@
           style: '',
           searchInput: '',
           sort: '',
-          reverse: true
+          reverse: true,
+          localeCompare: AssistanceUtils.localeSensitiveComparator
         }
 
         vm.model = {
@@ -110,75 +111,39 @@
        }
 
         function sortDate() {
-          var order = null;
-          var rev = _processSortRev();
-          if (rev) {
-            order = ['-date'];
-          } else {
-            order = ['date'];
-          }
-          $window.sessionStorage.setItem('listSortLogs', JSON.stringify(order));
-          sortIssues();
+          var order = (AssistanceUtils.processSortRev("reverseSortLogs")) ? ['date'] : ['-date'];
+          AssistanceUtils.clearSort('listSortLogs');
+          vm.model.logs = AssistanceUtils.sort(vm.model.logs, 'listSortLogs', order, null);
         }
 
         function sortHours() {
-          var order = null;
-          var rev = _processSortRev();
-          if (rev) {
-            order = ["date.getHours()","date.getMinutes()", "date.getSeconds()"];
-          } else {
-            order = ["-date.getHours()","-date.getMinutes()", "-date.getSeconds()"];
-          }
-          $window.sessionStorage.setItem('listSortLogs', JSON.stringify(order));
-          sortIssues();
+          var order = (AssistanceUtils.processSortRev("reverseSortLogs")) ? ["date | date: 'HH:mm:ss'"] : ["-date | date: 'HH:mm:ss'"];
+          AssistanceUtils.clearSort('listSortLogs');
+          vm.model.logs = AssistanceUtils.sort(vm.model.logs, 'listSortLogs', order, null);
         }
 
         function sortName() {
-          var order = null;
-          var rev = _processSortRev();
-          if (rev) {
-            order = ["name", "lastname", "date"];
-          } else {
-            order = ["-name", "-lastname", "date"];
-          }
-          $window.sessionStorage.setItem('listSortLogs', JSON.stringify(order));
-          sortIssues();
+          var order = (AssistanceUtils.processSortRev("reverseSortLogs")) ? ['name', 'lastname', 'date'] : ['-name', '-lastname', 'date'];
+          AssistanceUtils.clearSort('listSortLogs');
+          vm.model.logs = AssistanceUtils.sort(vm.model.logs, 'listSortLogs', order, "localeSensitiveComparator");
         }
 
         function sortAccess() {
-          var order = null;
-          var rev = _processSortRev();
-          if (rev) {
-            order = ["clase", "date", "name", "lastname"];
-          } else {
-            order = ["-clase", "date", "name", "lastname"];
-          }
-          $window.sessionStorage.setItem('listSortLogs', JSON.stringify(order));
-          sortIssues();
+          var order = (AssistanceUtils.processSortRev("reverseSortLogs")) ? ["clase", "date", "name", "lastname"] : ["-clase", "date", "name", "lastname"];
+          AssistanceUtils.clearSort('listSortLogs');
+          vm.model.logs = AssistanceUtils.sort(vm.model.logs, 'listSortLogs', order, null);
         }
 
         function sortDni() {
-          var order = null;
-          var rev = _processSortRev();
-          if (rev) {
-            order = ["dni", "date"];
-          } else {
-            order = ["-dni", "date"];
-          }
-          $window.sessionStorage.setItem('listSortLogs', JSON.stringify(order));
-          sortIssues();
+          var order = (AssistanceUtils.processSortRev("reverseSortLogs")) ? ['dni', 'date'] : ['-dni', 'date'];
+          AssistanceUtils.clearSort('listSortLogs');
+          vm.model.logs = AssistanceUtils.sort(vm.model.logs, 'listSortLogs', order, "dniComparator");
         }
 
         function sortType() {
-          var order = null;
-          var rev = _processSortRev();
-          if (rev) {
-            order = ["tipo", "date"];
-          } else {
-            order = ["-tipo", "date"];
-          }
-          $window.sessionStorage.setItem('listSortLogs', JSON.stringify(order));
-          sortIssues();
+          var order = (AssistanceUtils.processSortRev("reverseSortLogs")) ? ["tipo", "date"] : ["-tipo", "date"];
+          AssistanceUtils.clearSort('listSortLogs');
+          vm.model.logs = AssistanceUtils.sort(vm.model.logs, 'listSortLogs', order, null);
         }
 
 
@@ -204,6 +169,8 @@
           vm.view.style2 = '';
           _resetSearch();
           _getLogs();
+          AssistanceUtils.clearSort("listSortLogs");
+          AssistanceUtils.clearReverse("reverseSortLogs");
         }
 
         /* ********************************************************************************
@@ -328,7 +295,8 @@
                 vm.model.logs.push(_parseAll(logs[i]));
               }
               vm.view.style = '';
-              sortIssues();
+              var order = (AssistanceUtils.processSortRev("reverseSortLogs")) ? ['date'] : ['-date'];
+              vm.model.logs = AssistanceUtils.sort(vm.model.logs, 'listSortLogs', order, null);
             });
           }, function(err) {
             console.log(err);

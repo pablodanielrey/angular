@@ -85,7 +85,7 @@
                 </div>
                 <!-- ---- Accesos ----- -->
                 <div class="listAccess">
-                  <div class="itemListAccess {{i.clase}}" ng-repeat="i in vm.model.logs | filter: vm.view.searchInput as results">
+                  <div class="itemListAccess {{i.clase}}" ng-repeat="i in vm.model.logs | filter: vm.view.searchInput as results : vm.view.localeCompare">
                     <!-- VARIABLES: entrada, salida -->
                     <div class="file1b">
                         <i class="inOut fa fa-chevron-circle-left"></i>

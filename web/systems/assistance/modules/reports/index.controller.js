@@ -4,9 +4,9 @@
       .module('assistance')
       .controller('ReportsCtrl', ReportsCtrl);
 
-    ReportsCtrl.$inject = ['$scope', 'Assistance', 'Users', '$timeout', 'Login', '$window', 'Offices', '$filter'];
+    ReportsCtrl.$inject = ['$scope', 'Assistance', 'Users', '$timeout', 'Login', '$window', 'Offices', '$filter', 'AssistanceUtils'];
 
-    function ReportsCtrl($scope, Assistance, Users, $timeout, Login, $window, Offices, $filter) {
+    function ReportsCtrl($scope, Assistance, Users, $timeout, Login, $window, Offices, $filter, AssistanceUtils) {
         var vm = this;
 
         vm.model = {
@@ -30,7 +30,8 @@
         }
 
         vm.view = {
-          style: ''
+          style: '',
+          localeCompare: AssistanceUtils.localeSensitiveComparator
         }
 
         vm.findStatistics = findStatistics;
@@ -157,8 +158,8 @@
         function resetFilters() {
           $window.sessionStorage.removeItem('filtersReports');
           $window.sessionStorage.removeItem('columnsReports');
-          $window.sessionStorage.removeItem('listSortReports');
-          $window.sessionStorage.removeItem('reverseSortReports');
+          AssistanceUtils.clearSort('listSortReports');
+          AssistanceUtils.clearReverse("reverseSortReports");
           _initColumns();
           _initializeFilters();
           vm.findStatistics();
@@ -196,215 +197,59 @@
         /* ********************************************************************************
                               MÉTODOS DE ORDENACIÓN
          * ******************************************************************************** */
-       /*
-         Dispara la ordenación del listado.
-       */
-       function sortReports() {
-         var order = $window.sessionStorage.getItem('listSortReports');
-         if (order == null) {
-           order = ['user.name', 'user.lastname', 'user.date'];
-           $window.sessionStorage.setItem('listSortReports', JSON.stringify(order));
-           $window.sessionStorage.setItem('comparator', "localeSensitiveComparator");
-         } else {
-           order = JSON.parse(order);
-         }
-
-         var comparator = $window.sessionStorage.getItem('comparator');
-         if (comparator == null) {
-           comparator = "localeSensitiveComparator";
-           $window.sessionStorage.setItem('comparator', comparator);
-         }
-
-         vm.model.statistics = $filter('orderBy')(vm.model.statistics, order, false, eval(comparator));
-
-       }
-
-       /*
-         retorna el valor de orden inverso o order normal. y almacena el inverso.
-         solo se usa cuando se clickea el ordenamiento explícitamente.
-         no cuando se ordena el listado.
-       */
-       function _processSortRev() {
-         var rev = $window.sessionStorage.getItem('reverseSortReports');
-         if (rev == null) {
-           rev = false;
-           $window.sessionStorage.setItem('reverseSortReports', JSON.stringify(!rev));
-         } else {
-           rev = JSON.parse(rev);
-         }
-
-         // almaceno el orden a inverso.
-         if (rev) {
-           $window.sessionStorage.setItem('reverseSortReports', JSON.stringify(!rev));
-         } else {
-           $window.sessionStorage.setItem('reverseSortReports', JSON.stringify(!rev));
-         }
-
-         return rev;
-       }
-
-       /*
-        En caso de que sea string utiliza el localeCompare, para que ordene correctamente los acentos
-       */
-       function localeSensitiveComparator(v1, v2) {
-         if (v1.type === 'number' && v2.type === 'number') {
-           return (v1.value < v2.value) ? -1 : (v1.value == v2.value) ? 0 : 1;
-         }
-
-         if (v1.value == undefined || v2.value == undefined) {
-           return (v1.value == undefined) ? -1 : 1;
-         }
-
-         if (v1.type !== 'string' || v2.type !== 'string') {
-           return (v1.value < v2.value) ? -1 : (v1.value == v2.value) ? 0 : 1;
-         }
-
-         // Compare strings alphabetically, taking locale into account
-         return v1.value.localeCompare(v2.value);
-       };
-
-       /*
-        Esta comparacion tiene en cuenta la longitud del string
-       */
-       function dniComparator(v1, v2) {
-         // If we don't get strings, just compare by index
-         if (v1.type !== 'string' || v2.type !== 'string') {
-           return (v1.index < v2.index) ? -1 : (v1.index == v2.index) ? 0 : 1;
-         }
-
-         return (v1.value.length == v2.value.length) ? v1.value.localeCompare(v2.value) : (v1.value.length < v2.value.length) ? -1 : 1;
-       };
-
-       function dayComparator(v1, v2) {
-         if (v1.type === 'object' && !isNaN(v1.value) && v2.type === 'object' && !isNaN(v2.value)) {
-           var d1 = new Date(v1.value).getDay();
-           var d2 = new Date(v2.value).getDay();
-           return (d1 < d2) ? -1 : (d1 == d2) ? 0 : 1;
-         }
-
-         if (v1.value == "null" || v2.value == 'null') {
-           return (v1.value == "null") ? -1 : 1;
-         }
-
-         return localeSensitiveComparator(v1, v2)
-       };
-
 
         function sortName() {
-          var order = null;
-          var rev = _processSortRev();
-          if (rev) {
-            order = ['user.name', 'user.lastname', 'date'];
-          } else {
-            order = ['-user.name', '-user.lastname', 'date'];
-          }
-          $window.sessionStorage.setItem('listSortReports', JSON.stringify(order));
-          $window.sessionStorage.setItem('comparator', "localeSensitiveComparator");
-          sortReports();
+          var order = (AssistanceUtils.processSortRev("reverseSortReports")) ? ['user.name', 'user.lastname', 'date'] : ['-user.name', '-user.lastname', 'date'];
+          AssistanceUtils.clearSort('listSortReports');
+          vm.model.statistics = AssistanceUtils.sort(vm.model.statistics, 'listSortReports', order, "localeSensitiveComparator");
         }
 
         function sortDni() {
-          var order = null;
-          var rev = _processSortRev();
-          if (rev) {
-            order = ['user.dni', 'date'];
-          } else {
-            order = ['-user.dni', 'date'];
-          }
-          $window.sessionStorage.setItem('listSortReports', JSON.stringify(order));
-          $window.sessionStorage.setItem('comparator', "dniComparator");
-          sortReports();
+          var order = (AssistanceUtils.processSortRev("reverseSortReports")) ? ['user.dni', 'date'] : ['-user.dni', 'date'];
+          AssistanceUtils.clearSort('listSortReports');
+          vm.model.statistics = AssistanceUtils.sort(vm.model.statistics, 'listSortReports', order, "dniComparator");
         }
 
         function sortPosition() {
-          var order = null;
-          var rev = _processSortRev();
-          if (rev) {
-            order = ['position','user.name', 'user.lastname', 'date'];
-          } else {
-            order = ['-position','user.name', 'user.lastname', 'date'];
-          }
-          $window.sessionStorage.setItem('listSortReports', JSON.stringify(order));
-          $window.sessionStorage.setItem('comparator', "localeSensitiveComparator");
-          sortReports();
+          var order = (AssistanceUtils.processSortRev("reverseSortReports")) ? ['position','user.name', 'user.lastname', 'date'] : ['-position','user.name', 'user.lastname', 'date'];
+          AssistanceUtils.clearSort('listSortReports');
+          vm.model.statistics = AssistanceUtils.sort(vm.model.statistics, 'listSortReports', order, "localeSensitiveComparator");
         }
 
         function sortDayStartSchedule() {
-          var order = null;
-          var rev = _processSortRev();
-          if (rev) {
-            order = ["date", 'user.name', 'user.lastname', 'date'];
-          } else {
-            order = ["-date", 'user.name', 'user.lastname', 'date'];
-          }
-          $window.sessionStorage.setItem('listSortReports', JSON.stringify(order));
-          $window.sessionStorage.setItem('comparator', "dayComparator");
-          sortReports();
+          var order = (AssistanceUtils.processSortRev("reverseSortReports")) ? ["date", 'user.name', 'user.lastname', 'date'] : ["-date", 'user.name', 'user.lastname', 'date'];
+          AssistanceUtils.clearSort('listSortReports');
+          vm.model.statistics = AssistanceUtils.sort(vm.model.statistics, 'listSortReports', order, "dayComparator");
         }
 
         function sortDateStartSchedule() {
-          var order = null;
-          var rev = _processSortRev();
-          if (rev) {
-            order = ["date | date: 'dd/MM/yyyy'", 'user.name', 'user.lastname'];
-          } else {
-            order = ["-date | date: 'dd/MM/yyyy'", 'user.name', 'user.lastname'];
-          }
-          $window.sessionStorage.setItem('listSortReports', JSON.stringify(order));
-          $window.sessionStorage.setItem('comparator', "localeSensitiveComparator");
-          sortReports();
+          var order = (AssistanceUtils.processSortRev("reverseSortReports")) ? ["date | date: 'dd/MM/yyyy'", 'user.name', 'user.lastname'] : ["-date | date: 'dd/MM/yyyy'", 'user.name', 'user.lastname'];
+          AssistanceUtils.clearSort('listSortReports');
+          vm.model.statistics = AssistanceUtils.sort(vm.model.statistics, 'listSortReports', order, "localeSensitiveComparator");
         }
 
         function sortStartSchedule() {
-          var order = null;
-          var rev = _processSortRev();
-          if (rev) {
-            order = ["start | date: 'HH:mm'", "end | date: 'HH:mm'", "start | date: 'dd/MM/yyyy'",'user.name', 'user.lastname'];
-          } else {
-            order = ["-start | date: 'HH:mm'", "end | date: 'HH:mm'", "start | date: 'dd/MM/yyyy'", 'user.name', 'user.lastname'];
-          }
-          $window.sessionStorage.setItem('listSortReports', JSON.stringify(order));
-          $window.sessionStorage.setItem('comparator', "localeSensitiveComparator");
-          sortReports();
+          var order = (AssistanceUtils.processSortRev("reverseSortReports")) ? ["start | date: 'HH:mm'", "end | date: 'HH:mm'", "start | date: 'dd/MM/yyyy'",'user.name', 'user.lastname'] : ["-start | date: 'HH:mm'", "end | date: 'HH:mm'", "start | date: 'dd/MM/yyyy'",'user.name', 'user.lastname'];
+          AssistanceUtils.clearSort('listSortReports');
+          vm.model.statistics = AssistanceUtils.sort(vm.model.statistics, 'listSortReports', order, "localeSensitiveComparator");
         }
 
         function sortDayEndSchedule() {
-          var order = null;
-          var rev = _processSortRev();
-          if (rev) {
-            order = ["end", 'user.name', 'user.lastname', 'end'];
-          } else {
-            order = ["-end", 'user.name', 'user.lastname', 'end'];
-          }
-          $window.sessionStorage.setItem('listSortReports', JSON.stringify(order));
-          $window.sessionStorage.setItem('comparator', "dayComparator");
-          sortReports();
+          var order = (AssistanceUtils.processSortRev("reverseSortReports")) ? ["end", 'user.name', 'user.lastname', 'end'] : ["-end", 'user.name', 'user.lastname', 'end'];
+          AssistanceUtils.clearSort('listSortReports');
+          vm.model.statistics = AssistanceUtils.sort(vm.model.statistics, 'listSortReports', order, "dayComparator");
         }
 
         function sortDateEndSchedule() {
-          var order = null;
-          var rev = _processSortRev();
-          if (rev) {
-            order = ["end | date: 'dd/MM/yyyy'", 'user.name', 'user.lastname'];
-          } else {
-            order = ["-end | date: 'dd/MM/yyyy'", 'user.name', 'user.lastname'];
-          }
-          $window.sessionStorage.setItem('listSortReports', JSON.stringify(order));
-          $window.sessionStorage.setItem('comparator', "localeSensitiveComparator");
-          sortReports();
+          var order = (AssistanceUtils.processSortRev("reverseSortReports")) ? ["end | date: 'dd/MM/yyyy'", 'user.name', 'user.lastname'] : ["-end | date: 'dd/MM/yyyy'", 'user.name', 'user.lastname'];
+          AssistanceUtils.clearSort('listSortReports');
+          vm.model.statistics = AssistanceUtils.sort(vm.model.statistics, 'listSortReports', order, "localeSensitiveComparator");
         }
 
         function sortEndSchedule() {
-          var order = null;
-          var rev = _processSortRev();
-          if (rev) {
-            order = ["end | date: 'HH:mm'", "end | date: 'dd/MM/yyyy'",'user.name', 'user.lastname'];
-          } else {
-            order = ["-end | date: 'HH:mm'", "end | date: 'dd/MM/yyyy'", 'user.name', 'user.lastname'];
-          }
-          $window.sessionStorage.setItem('listSortReports', JSON.stringify(order));
-          $window.sessionStorage.setItem('comparator', "localeSensitiveComparator");
-          sortReports();
+          var order = (AssistanceUtils.processSortRev("reverseSortReports")) ? ["end | date: 'HH:mm'", "end | date: 'dd/MM/yyyy'",'user.name', 'user.lastname'] : ["-end | date: 'HH:mm'", "end | date: 'dd/MM/yyyy'", 'user.name', 'user.lastname'];
+          AssistanceUtils.clearSort('listSortReports');
+          vm.model.statistics = AssistanceUtils.sort(vm.model.statistics, 'listSortReports', order, "localeSensitiveComparator");
         }
 
         function sortSchedule() {
@@ -412,120 +257,57 @@
         }
 
         function sortDayStart() {
-          var order = null;
-          var rev = _processSortRev();
-          if (rev) {
-            order = ["iin", 'user.name', 'user.lastname', 'iin'];
-          } else {
-            order = ["-iin", 'user.name', 'user.lastname', 'iin'];
-          }
-          $window.sessionStorage.setItem('listSortReports', JSON.stringify(order));
-          $window.sessionStorage.setItem('comparator', "dayComparator");
-          sortReports();
+          var order = (AssistanceUtils.processSortRev("reverseSortReports")) ? ["iin", 'user.name', 'user.lastname', 'iin'] : ["-iin", 'user.name', 'user.lastname', 'iin'];
+          AssistanceUtils.clearSort('listSortReports');
+          vm.model.statistics = AssistanceUtils.sort(vm.model.statistics, 'listSortReports', order, "dayComparator");
         }
 
         function sortDateStart() {
-          var order = null;
-          var rev = _processSortRev();
-          if (rev) {
-            order = ["iin | date: 'dd/MM/yyyy'", 'user.name', 'user.lastname'];
-          } else {
-            order = ["-iin | date: 'dd/MM/yyyy'", 'user.name', 'user.lastname'];
-          }
-          $window.sessionStorage.setItem('listSortReports', JSON.stringify(order));
-          $window.sessionStorage.setItem('comparator', "localeSensitiveComparator");
-          sortReports();
+          var order = (AssistanceUtils.processSortRev("reverseSortReports")) ? ["iin | date: 'dd/MM/yyyy'", 'user.name', 'user.lastname'] : ["-iin | date: 'dd/MM/yyyy'", 'user.name', 'user.lastname'];
+          AssistanceUtils.clearSort('listSortReports');
+          vm.model.statistics = AssistanceUtils.sort(vm.model.statistics, 'listSortReports', order, "localeSensitiveComparator");
         }
 
         function sortStart() {
-          var order = null;
-          var rev = _processSortRev();
-          if (rev) {
-            order = ["iin | date: 'HH:mm'", "iin | date: 'dd/MM/yyyy'",'user.name', 'user.lastname'];
-          } else {
-            order = ["-iin | date: 'HH:mm'", "iin | date: 'dd/MM/yyyy'", 'user.name', 'user.lastname'];
-          }
-          $window.sessionStorage.setItem('listSortReports', JSON.stringify(order));
-          $window.sessionStorage.setItem('comparator', "localeSensitiveComparator");
-          sortReports();
+          var order = (AssistanceUtils.processSortRev("reverseSortReports")) ? ["iin | date: 'HH:mm'", "iin | date: 'dd/MM/yyyy'",'user.name', 'user.lastname'] : ["-iin | date: 'HH:mm'", "iin | date: 'dd/MM/yyyy'", 'user.name', 'user.lastname'];
+          AssistanceUtils.clearSort('listSortReports');
+          vm.model.statistics = AssistanceUtils.sort(vm.model.statistics, 'listSortReports', order, "localeSensitiveComparator");
         }
 
         function sortDayEnd() {
-          var order = null;
-          var rev = _processSortRev();
-          if (rev) {
-            order = ["out", 'user.name', 'user.lastname', 'out'];
-          } else {
-            order = ["-out", 'user.name', 'user.lastname', 'out'];
-          }
-          $window.sessionStorage.setItem('listSortReports', JSON.stringify(order));
-          $window.sessionStorage.setItem('comparator', "dayComparator");
-          sortReports();
+          var order = (AssistanceUtils.processSortRev("reverseSortReports")) ? ["out", 'user.name', 'user.lastname', 'out'] : ["-out", 'user.name', 'user.lastname', 'out'];
+          AssistanceUtils.clearSort('listSortReports');
+          vm.model.statistics = AssistanceUtils.sort(vm.model.statistics, 'listSortReports', order, "dayComparator");
         }
 
         function sortDateEnd() {
-          var order = null;
-          var rev = _processSortRev();
-          if (rev) {
-            order = ["out | date: 'dd/MM/yyyy'", 'user.name', 'user.lastname'];
-          } else {
-            order = ["-out | date: 'dd/MM/yyyy'", 'user.name', 'user.lastname'];
-          }
-          $window.sessionStorage.setItem('listSortReports', JSON.stringify(order));
-          $window.sessionStorage.setItem('comparator', "localeSensitiveComparator");
-          sortReports();
+          var order = (AssistanceUtils.processSortRev("reverseSortReports")) ? ["out | date: 'dd/MM/yyyy'", 'user.name', 'user.lastname'] : ["-out | date: 'dd/MM/yyyy'", 'user.name', 'user.lastname'];
+          AssistanceUtils.clearSort('listSortReports');
+          vm.model.statistics = AssistanceUtils.sort(vm.model.statistics, 'listSortReports', order, "localeSensitiveComparator");
         }
 
         function sortEnd() {
-          var order = null;
-          var rev = _processSortRev();
-          if (rev) {
-            order = ["out | date: 'HH:mm'", "out | date: 'dd/MM/yyyy'",'user.name', 'user.lastname'];
-          } else {
-            order = ["-out | date: 'HH:mm'", "out | date: 'dd/MM/yyyy'", 'user.name', 'user.lastname'];
-          }
-          $window.sessionStorage.setItem('listSortReports', JSON.stringify(order));
-          $window.sessionStorage.setItem('comparator', "localeSensitiveComparator");
-          sortReports();
+          var order = (AssistanceUtils.processSortRev("reverseSortReports")) ? ["out | date: 'HH:mm'", "out | date: 'dd/MM/yyyy'",'user.name', 'user.lastname'] : ["-out | date: 'HH:mm'", "out | date: 'dd/MM/yyyy'", 'user.name', 'user.lastname'];
+          AssistanceUtils.clearSort('listSortReports');
+          vm.model.statistics = AssistanceUtils.sort(vm.model.statistics, 'listSortReports', order, "localeSensitiveComparator");
         }
 
         function sortHours() {
-          var order = null;
-          var rev = _processSortRev();
-          if (rev) {
-            order = ["workedSeconds",'user.name', 'user.lastname'];
-          } else {
-            order = ["-workedSeconds", 'user.name', 'user.lastname'];
-          }
-          $window.sessionStorage.setItem('listSortReports', JSON.stringify(order));
-          $window.sessionStorage.setItem('comparator', "localeSensitiveComparator");
-          sortReports();
+          var order = (AssistanceUtils.processSortRev("reverseSortReports")) ? ["workedSeconds",'user.name', 'user.lastname'] : ["-workedSeconds", 'user.name', 'user.lastname'];
+          AssistanceUtils.clearSort('listSortReports');
+          vm.model.statistics = AssistanceUtils.sort(vm.model.statistics, 'listSortReports', order, "localeSensitiveComparator");
         }
 
         function sortJustifications() {
-          var order = null;
-          var rev = _processSortRev();
-          if (rev) {
-            order = ["justification.identifier",'user.name', 'user.lastname', 'date'];
-          } else {
-            order = ["-justification.identifier", 'user.name', 'user.lastname', 'date'];
-          }
-          $window.sessionStorage.setItem('listSortReports', JSON.stringify(order));
-          $window.sessionStorage.setItem('comparator', "localeSensitiveComparator");
-          sortReports();
+          var order = (AssistanceUtils.processSortRev("reverseSortReports")) ? ["justification.identifier",'user.name', 'user.lastname', 'date'] : ["-justification.identifier", 'user.name', 'user.lastname', 'date'];
+          AssistanceUtils.clearSort('listSortReports');
+          vm.model.statistics = AssistanceUtils.sort(vm.model.statistics, 'listSortReports', order, "localeSensitiveComparator");
         }
 
         function sortNotes() {
-          var order = null;
-          var rev = _processSortRev();
-          if (rev) {
-            order = ["notes",'user.name', 'user.lastname', 'date'];
-          } else {
-            order = ["-notes", 'user.name', 'user.lastname', 'date'];
-          }
-          $window.sessionStorage.setItem('listSortReports', JSON.stringify(order));
-          $window.sessionStorage.setItem('comparator', "localeSensitiveComparator");
-          sortReports();
+          var order = (AssistanceUtils.processSortRev("reverseSortReports")) ? ["notes",'user.name', 'user.lastname', 'date'] : ["-notes", 'user.name', 'user.lastname', 'date'];
+          AssistanceUtils.clearSort('listSortReports');
+          vm.model.statistics = AssistanceUtils.sort(vm.model.statistics, 'listSortReports', order, "localeSensitiveComparator");
         }
 
 /* **************************************************************************
@@ -649,7 +431,8 @@
                 uids.push(stats[i].userId);
                 vm.model.statistics.push(_parseStatic(stats[i]));
               }
-              sortReports();
+              var order = (AssistanceUtils.processSortRev("reverseSortReports")) ? ['user.name', 'user.lastname', 'date'] : ['-user.name', '-user.lastname', 'date'];
+              vm.model.statistics = AssistanceUtils.sort(vm.model.statistics, 'listSortReports', order, "localeSensitiveComparator");
             });
           }, function(err) {
             console.log(err);
