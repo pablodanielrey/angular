@@ -158,6 +158,7 @@
           $window.sessionStorage.removeItem('filtersReports');
           $window.sessionStorage.removeItem('columnsReports');
           AssistanceUtils.clearSort('listSortReports');
+          AssistanceUtils.clearReverse("reverseSortReports");
           _initColumns();
           _initializeFilters();
           vm.findStatistics();

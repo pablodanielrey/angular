@@ -11,6 +11,7 @@
     function AssistanceUtils($window, $filter) {
         this.sort = sort;
         this.clearSort = clearSort;
+        this.clearReverse = clearReverse;
         this.processSortRev = processSortRev;
         /*
         Dispara la ordenación del listado.
@@ -71,6 +72,10 @@
           var keyComp = key + 'Comparator';
           $window.sessionStorage.removeItem(keyComp);
           $window.sessionStorage.removeItem(key);
+        }
+
+        function clearReverse(reverse) {
+          $window.sessionStorage.removeItem(reverse);          
         }
 
         /*
