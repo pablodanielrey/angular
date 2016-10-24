@@ -65,7 +65,7 @@
 }
 
 .schedules .currentSchedule {
-
+  /*display: none;*/
 }
 
 .schedules .contentCurrentSchedule {
@@ -115,7 +115,7 @@
   justify-content: space-around;
   -webkit-justify-content: space-around;
   -moz-justify-content: space-around;
-  width: 95%;
+  width: 100%;
   font-size: 13px;
   margin: 0 0 5px 0 ;
 }
@@ -172,12 +172,279 @@
 }
 
 
+.schedules .questions {
+  display: none;
+  width: 95%;
+}
 
+.schedules .btnBack {
+  margin-top: 15px;
+  color: #5C5F69;
+  background-color: #E5E5E5;
+  border-radius: 3px;
+  -moz-border-radius: 3px;
+  -webkit-border-radius: 3px;
+  padding: 15px;
+  width: 95%;
+}
+
+.schedules .btnBack:hover {
+  cursor: pointer;
+  background-color: #c9c9c9;
+}
+
+.schedules .textQuestions {
+  margin: 15px 0 15px 0;
+  text-align: center;
+}
+
+.schedules .btnQuestion {
+  width: calc(100% - 10px);
+  padding: 10px;
+}
+
+.schedules .newCurrentSchedule2 {
+  /*display: none;*/
+  width: 100%;
+  margin-top: 15px;
+}
+
+.schedules .newCurrentSchedule {
+  /*display: none;*/
+  width: 100%;
+  margin-top: 15px;
+}
+
+.schedules .btnBack2 {
+  margin-top: 15px;
+  color: #5C5F69;
+  background-color: #E5E5E5;
+  border-radius: 3px;
+  -moz-border-radius: 3px;
+  -webkit-border-radius: 3px;
+  padding: 15px;
+  width: 90%;
+}
+
+.schedules .btnBack2:hover {
+  cursor: pointer;
+  background-color: #c9c9c9;
+}
+
+.schedules .inputDate {
+  border: none;
+  border-radius: 3px;
+  -moz-border-radius: 3px;
+  -webkit-border-radius: 3px;
+  background-color: #E5E5E5;
+  padding: 3px;
+}
+
+
+.schedules .contentSelectDay {
+  display: flex;
+  display: -webkit-flex; /* Safari */
+  display: -moz-flex; /* mozilla */
+  flex-direction:row;
+  -webkit-flex-direction:row; /* Safari */
+  -moz-flex-direction:row; /* mozilla */
+  align-items: center;
+  -webkit-align-items: center;
+  -moz-align-items: center;
+  justify-content: space-between;
+  padding: 10px 0 5px 10px;
+  font-size: 13px;
+  width: 95%;
+}
+
+.schedules .newDay {
+  width: 65px;
+}
+
+.schedules .inputTime {
+  border: none;
+  border-radius: 3px;
+  -moz-border-radius: 3px;
+  -webkit-border-radius: 3px;
+  background-color: #E5E5E5;
+}
+
+.schedules .btnDeleteSchedule2,
+.schedules .btnCutSchedule2,
+.schedules .btnDeleteSchedule,
+.schedules .btnCutSchedule {
+  border-radius: 3px;
+  -moz-border-radius: 3px;
+  -webkit-border-radius: 3px;
+  border: 1px solid #c9cbd3;
+  background-color: #e5e5e5;
+  color: #5C5F69;
+  padding: 0 3px 0 3px;
+}
+
+.schedules .btnDeleteSchedule2:hover,
+.schedules .btnDeleteSchedule:hover {
+  cursor: pointer;
+  color: white;
+  background-color: #E43E46;
+  border: 1px solid #E43E46;
+}
+
+.schedules .btnCutSchedule2:hover,
+.schedules .btnCutSchedule:hover {
+  cursor: pointer;
+  color: white;
+  background-color: #804080;
+  border: 1px solid #804080;
+}
+
+.schedules .itemDay.horarioNormal .btnDeleteSchedule {
+  display: none;
+}
+
+.schedules .itemDay.horarioCortado .btnCutSchedule {
+  display: none;
+}
+
+.schedules .itemDay.primerHorario .btnDeleteSchedule2 {
+  display: none;
+}
+
+.schedules .itemDay.otroHorario .btnCutSchedule2 {
+  display: none;
+}
+
+.schedules .btnSave {
+  display: flex;
+  display: -webkit-flex; /* Safari */
+  display: -moz-flex; /* mozilla */
+  flex-direction:row;
+  -webkit-flex-direction:row; /* Safari */
+  -moz-flex-direction:row; /* mozilla */
+  align-items: center;
+  -webkit-align-items: center;
+  -moz-align-items: center;
+  justify-content: center;
+  -webkit-justify-content: center;
+  -moz-justify-content: center;
+  padding: 10px;
+  width: 94%;
+  text-align: center;
+  margin-left: 0px;
+  margin-top: 10px;
+}
+
+.schedules .selectDay {
+  border: none;
+  border-radius: 3px;
+  -moz-border-radius: 3px;
+  -webkit-border-radius: 3px;
+  background-color: #E5E5E5;
+
+  padding: 3px;
+}
+
+.schedules .inputNumber {
+  border: none;
+  border-radius: 3px;
+  -moz-border-radius: 3px;
+  -webkit-border-radius: 3px;
+  background-color: #E5E5E5;
+  width: 40px;
+  padding: 3px;
+}
+
+
+.schedules .newSpecialSchedule {
+  display: none;
+}
+
+.schedules .line {
+  border-bottom: 1px solid #c9cbd3;
+  width: 95%;
+  margin: 5px 0 10px 10px;
+}
 
 
 .schedules .contentTheree {
   width: calc(33% - 20px);
+  height: calc(100% - 50px);
   padding: 10px;
+}
+
+.schedules .contentHistory {
+  height: 100%;
+  overflow-y: auto;
+}
+
+.schedules .itemHistory {
+  display: flex;
+  display: -webkit-flex; /* Safari */
+  display: -moz-flex; /* mozilla */
+  flex-direction:row;
+  -webkit-flex-direction:row; /* Safari */
+  -moz-flex-direction:row; /* mozilla */
+  align-items: center;
+  -webkit-align-items: center;
+  -moz-align-items: center;
+  justify-content: space-between;
+  -webkit-justify-content: space-between;
+  -moz-justify-content: space-between;
+  border-radius: 3px;
+    -moz-border-radius: 3px;
+    -webkit-border-radius: 3px;
+    background-color: white;
+    margin: 10px 0 5px 0;
+    border: 1px solid #c9cbd3;
+    font-size: 12px;
+}
+
+.schedules .dataItem {
+  display: flex;
+  display: -webkit-flex; /* Safari */
+  display: -moz-flex; /* mozilla */
+  flex-direction:row;
+  -webkit-flex-direction:row; /* Safari */
+  -moz-flex-direction:row; /* mozilla */
+  align-items: center;
+  -webkit-align-items: center;
+  -moz-align-items: center;
+  justify-content: center;
+  -moz-justify-content: center;
+  -webkit-justify-content: center;
+
+}
+
+.schedules .textDate {
+  font-size: 10px;
+  margin: 0 10px 0 10px;
+}
+
+.schedules .actionBtn {
+  display: flex;
+  display: -webkit-flex; /* Safari */
+  display: -moz-flex; /* mozilla */
+  flex-direction:row;
+  -webkit-flex-direction:row; /* Safari */
+  -moz-flex-direction:row; /* mozilla */
+}
+
+.schedules .btnMax {
+  padding: 10px;
+  background-color: #dbdbdb;
+  color: #3A3C44;
+}
+
+.schedules .btnMax:hover{
+  background-color: #804080;
+  color: white;
+  cursor: pointer;
+}
+
+.schedules .btnDeleteItem {
+  background-color: #E5E5E5;
+  padding: 10px;
+  color: #3A3C44;
 }
 
 
