@@ -2,10 +2,10 @@
 
     <!-- VARIABLES 0: usuarioNormal (Si es un usuario comun no se muestra la pantalla de usuarios)
          VARIABLES 1: pantallaUsuarios, pantallaEdicion, pantallaHistorial
-         VARIABLES 2: verHorario, verPreguntaDeHorario, nuevoHorarioSemanal, nuevoHorarioSemanalSerenos -->
+         VARIABLES 2: verHorario, verPreguntaDeHorario, nuevoHorarioSemanal, nuevoHorarioSemanalSerenos, nuevoHorarioEspecial -->
 
 
-    <div class="contentOne">
+    <div class="contentOne" ng-click="vm.view.style1 = 'pantallaEdicion'">
         <e-person-assistance users="vm.model.users" select="vm.selectUser(user)"></e-person-assistance>
     </div>
 
@@ -42,7 +42,7 @@
                           <div class="text1Btn">Modificar</div>
                           <div class="text2Btn">HORARIO SEMANAL</div>
                       </div>
-                      <div class="btn" ng-click="vm.view.style2 = 'agregarHorarioEspecial'">
+                      <div class="btn" ng-click="vm.view.style2 = 'nuevoHorarioEspecial'">
                           <div class="text1Btn">Agregar</div>
                           <div class="text2Btn">HORARIO ESPECIAL</div>
                       </div>

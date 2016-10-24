@@ -12,6 +12,7 @@
 
 .schedules .contentOne {
   width: calc(33% - 20px);
+    height: calc(100% - 20px);
   padding: 10px;
   border-right: 1px solid #e2e2e2;
   animation-name: opacidad;
@@ -463,11 +464,43 @@
 }
 
 
-@media (min-width: 1800px){
-.schedules {
-    zoom: 1.3;
+/******************** MEDIA QUERIS ***************************/
+
+@media (max-width: 719px){
+
+  .schedules.pantallaUsuarios .contentTwo,
+  .schedules.pantallaUsuarios .contentTheree {
+    display: none;
+  }
+
+  .schedules.pantallaUsuarios .contentOne {
+    width: 100%;
+  }
+
+  .schedules.pantallaEdicion .contentOne,
+  .schedules.pantallaEdicion .contentTheree {
+    display: none;
+  }
+
+  .schedules.pantallaEdicion .contentTwo {
+    width: 100%;
+  }
+
+  .schedules.pantallaHistorial .contentOne,
+  .schedules.pantallaHistorial .contentTwo {
+    display: none;
+  }
+
+  .schedules.pantallaHistorial .contentTheree {
+    width: 100%;
+  }
+
 }
 
+@media (min-width: 1800px){
+  .schedules {
+      zoom: 1.3;
+  }
 }
 
 
@@ -485,12 +518,12 @@
   display: block;
 }
 
-.schedules.agregarHorarioEspecial .newCurrentSchedule2 {
-  display: block;
+.schedules.nuevoHorarioEspecial .currentSchedule {
+  display: none;
 }
 
-.schedules.agregarHorarioEspecial .currentSchedule {
-  display: none;
+.schedules.nuevoHorarioEspecial .newSpecialSchedule {
+  display: block;
 }
 
 .schedules.nuevoHorarioSemanal .newCurrentSchedule {
