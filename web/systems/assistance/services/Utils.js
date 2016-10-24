@@ -42,9 +42,7 @@
         }
 
         /*
-          retorna el valor de orden inverso o order normal. y almacena el inverso.
-          solo se usa cuando se clickea el ordenamiento explícitamente.
-          no cuando se ordena el listado.
+          retorna el valor de orden inverso u orden normal. y almacena el inverso.
         */
         function processSortRev(key) {
           var rev = $window.sessionStorage.getItem(key);
@@ -75,7 +73,7 @@
         }
 
         function clearReverse(reverse) {
-          $window.sessionStorage.removeItem(reverse);          
+          $window.sessionStorage.removeItem(reverse);
         }
 
         /*

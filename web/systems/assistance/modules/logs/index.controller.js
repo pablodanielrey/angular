@@ -23,7 +23,8 @@
           style: '',
           searchInput: '',
           sort: '',
-          reverse: true
+          reverse: true,
+          localeCompare: AssistanceUtils.localeSensitiveComparator
         }
 
         vm.model = {

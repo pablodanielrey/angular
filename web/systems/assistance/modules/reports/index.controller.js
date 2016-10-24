@@ -30,7 +30,8 @@
         }
 
         vm.view = {
-          style: ''
+          style: '',
+          localeCompare: AssistanceUtils.localeSensitiveComparator
         }
 
         vm.findStatistics = findStatistics;
