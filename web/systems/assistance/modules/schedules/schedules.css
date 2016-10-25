@@ -8,6 +8,7 @@
   -webkit-flex-direction:row; /* Safari */
   -moz-flex-direction:row; /* mozilla */
   background-color: #EEEEEE;
+  overflow-y: scroll;
 }
 
 .schedules .contentOne {
@@ -70,12 +71,46 @@
 }
 
 .schedules .currentSchedule {
+  display: flex;
+  display: -webkit-flex; /* Safari */
+  display: -moz-flex; /* mozilla */
+  flex-direction:column;
+  -webkit-flex-direction:column; /* Safari */
+  -moz-flex-direction:column; /* mozilla */
+  justify-content: space-between;
   /*display: none;*/
   animation-name: opacidad;
    animation-duration: .7s;
+   /*background-color: red;*/
+   height:  100%;
 }
 
 .schedules .contentCurrentSchedule {
+  /*display: none;*/
+  width: 99%;
+  border-radius: 3px;
+  -moz-border-radius: 3px;
+  -webkit-border-radius: 3px;
+  background-color: white;
+  margin: 10px 0 5px 0;
+  border: 1px solid #c9cbd3;
+
+}
+
+.schedules .contentCurrentScheduleClasic {
+  /*display: none;*/
+  width: 99%;
+  border-radius: 3px;
+  -moz-border-radius: 3px;
+  -webkit-border-radius: 3px;
+  background-color: white;
+  margin: 10px 0 5px 0;
+  border: 1px solid #c9cbd3;
+
+}
+
+.schedules .contentCurrentScheduleSpecial {
+  /*display: none;*/
   width: 99%;
   border-radius: 3px;
   -moz-border-radius: 3px;
@@ -181,10 +216,9 @@
 
 
 .schedules .questions {
-  display: none;
   width: 95%;
   animation-name: opacidad;
-   animation-duration: .7s;
+  animation-duration: .7s;
 }
 
 .schedules .btnBack {
@@ -214,7 +248,6 @@
 }
 
 .schedules .newCurrentSchedule2 {
-  display: none;
   width: 100%;
   margin-top: 15px;
   animation-name: opacidad;
@@ -222,7 +255,6 @@
 }
 
 .schedules .newCurrentSchedule {
-  display: none;
   width: 100%;
   margin-top: 15px;
   animation-name: opacidad;
@@ -370,7 +402,6 @@
 
 
 .schedules .newSpecialSchedule {
-  display: none;
 }
 
 .schedules .line {
@@ -463,6 +494,15 @@
   color: #3A3C44;
 }
 
+.schedules .btnBackCel {
+  display: none;
+}
+
+
+@keyframes opacidad {
+  0% {opacity: 0}
+  100% {opacity: 1}
+}
 
 /******************** MEDIA QUERIS ***************************/
 
@@ -495,6 +535,19 @@
     width: 100%;
   }
 
+  .schedules.usuarioAdmin.pantallaEdicion .btnBackCel {
+    display: block;
+  }
+
+  .schedules .currentSchedule {
+     /*background-color: red;*/
+     height:  90%;
+  }
+
+  .schedules.usuarioAdmin .btnBackCel {
+    display: block;
+  }
+
 }
 
 @media (min-width: 1800px){
@@ -504,48 +557,55 @@
 }
 
 
-/*NAVEGACION*/
+/* NAVEGACION DE PANTALLAS */
 
 .schedules.usuarioNormal .contentOne {
   display: none;
 }
 
-.schedules.verPreguntaDeHorario .currentSchedule {
-  display: none;
-}
 
-.schedules.verPreguntaDeHorario .questions {
-  display: block;
-}
-
-.schedules.nuevoHorarioEspecial .currentSchedule {
-  display: none;
-}
-
-.schedules.nuevoHorarioEspecial .newSpecialSchedule {
-  display: block;
-}
-
-.schedules.nuevoHorarioSemanal .newCurrentSchedule {
-  display: block;
-}
-
-.schedules.nuevoHorarioSemanal .currentSchedule {
-  display: none;
-}
-
-.schedules.nuevoHorarioSemanalSerenos .newCurrentSchedule2 {
-  display: block;
-}
-
-.schedules.nuevoHorarioSemanalSerenos .currentSchedule {
+.schedules.verHorario .questions,
+.schedules.verHorario .newCurrentSchedule,
+.schedules.verHorario .newCurrentSchedule2,
+.schedules.verHorario .newSpecialSchedule {
   display: none;
 }
 
 
+.schedules.verPreguntaDeHorario .currentSchedule,
+.schedules.verPreguntaDeHorario .newCurrentSchedule,
+.schedules.verPreguntaDeHorario .newCurrentSchedule2,
+.schedules.verPreguntaDeHorario .newSpecialSchedule {
+  display: none;
+}
+
+.schedules.nuevoHorarioSemanal .currentSchedule,
+.schedules.nuevoHorarioSemanal .newCurrentSchedule2,
+.schedules.nuevoHorarioSemanal .questions,
+.schedules.nuevoHorarioSemanal .newSpecialSchedule {
+  display: none;
+}
+
+.schedules.nuevoHorarioSemanalSerenos .currentSchedule,
+.schedules.nuevoHorarioSemanalSerenos .newCurrentSchedule,
+.schedules.nuevoHorarioSemanalSerenos .questions,
+.schedules.nuevoHorarioSemanalSerenos .newSpecialSchedule {
+  display: none;
+}
+
+.schedules.nuevoHorarioEspecial .currentSchedule,
+.schedules.nuevoHorarioEspecial .newCurrentSchedule,
+.schedules.nuevoHorarioEspecial .questions,
+.schedules.nuevoHorarioEspecial .newCurrentSchedule2 {
+  display: none;
+}
 
 
-@keyframes opacidad {
-  0% {opacity: 0}
-  100% {opacity: 1}
+
+.schedules .currentSchedule.horarioSemanalClasico .contentCurrentScheduleSpecial {
+  display: none;
+}
+
+.schedules .currentSchedule.horarioSemanalEspecial .contentCurrentScheduleClasic {
+  display: none;
 }
