@@ -24,10 +24,11 @@ class Schedule(JSONSerializable):
         self.start = None
         self.end = None
         self.daily = False
+        self.special = False
         self.id = None
 
     def isValid(self, date):
-        if not self.daily:
+        if self.special:
             return date == self.date
         return (self.date <= date) and (self.weekday == date.weekday())
 
@@ -107,6 +108,7 @@ class ScheduleDAO(AssistanceDAO):
                     send bigint,
                     weekday integer,
                     daily boolean default false,
+                    special boolean default false,
                     created timestamptz default now()
                 );
             """)
@@ -123,6 +125,7 @@ class ScheduleDAO(AssistanceDAO):
         s.date = r['sdate']
         s.weekday = r['weekday']
         s.daily = r['daily']
+        s.special = r['special']
         return s
 
     @staticmethod
