@@ -8,7 +8,6 @@
   -webkit-flex-direction:row; /* Safari */
   -moz-flex-direction:row; /* mozilla */
   background-color: #EEEEEE;
-  overflow-y: scroll;
 }
 
 .schedules .contentOne {
@@ -109,6 +108,18 @@
 
 }
 
+.schedules .contentCurrentScheduleClasicHistory {
+  /*display: none;*/
+  width: 99%;
+  border-radius: 3px;
+  -moz-border-radius: 3px;
+  -webkit-border-radius: 3px;
+  background-color: white;
+  margin: 0px 0 5px 0;
+  border: 1px solid #c9cbd3;
+
+}
+
 .schedules .contentCurrentScheduleSpecial {
   /*display: none;*/
   width: 99%;
@@ -120,6 +131,32 @@
   border: 1px solid #c9cbd3;
 
 }
+
+.schedules .contentCurrentScheduleSpecialHistory {
+  /*display: none;*/
+  width: 99%;
+  border-radius: 3px;
+  -moz-border-radius: 3px;
+  -webkit-border-radius: 3px;
+  background-color: white;
+  margin: 0px 0 5px 0;
+  border: 1px solid #c9cbd3;
+
+}
+
+
+.schedules .contentScheduleSpecialHistory {
+  /*display: none;*/
+  width: 99%;
+  border-radius: 3px;
+  -moz-border-radius: 3px;
+  -webkit-border-radius: 3px;
+  background-color: white;
+  margin: 0px 0 5px 0;
+  border: 1px solid #c9cbd3;
+
+}
+
 
 .schedules .headerCurrentSchedule {
   display: flex;
@@ -425,6 +462,17 @@
 }
 
 .schedules .itemHistory {
+
+  border-radius: 3px;
+    -moz-border-radius: 3px;
+    -webkit-border-radius: 3px;
+    background-color: white;
+    margin: 10px 0 5px 0;
+    border: 1px solid #c9cbd3;
+    font-size: 12px;
+}
+
+.schedules .infoItem {
   display: flex;
   display: -webkit-flex; /* Safari */
   display: -moz-flex; /* mozilla */
@@ -437,13 +485,6 @@
   justify-content: space-between;
   -webkit-justify-content: space-between;
   -moz-justify-content: space-between;
-  border-radius: 3px;
-    -moz-border-radius: 3px;
-    -webkit-border-radius: 3px;
-    background-color: white;
-    margin: 10px 0 5px 0;
-    border: 1px solid #c9cbd3;
-    font-size: 12px;
 }
 
 .schedules .dataItem {
@@ -493,6 +534,27 @@
   padding: 10px;
   color: #3A3C44;
 }
+
+.schedules .btnDeleteItem:hover {
+  background-color: #E43E46;
+  color: white;
+  cursor: pointer;
+}
+
+.schedules .infoMaxHistory {
+  display: none;
+  background-color: #E5E5E5;
+  border-top: 1px solid #c9cbd3;
+  padding: 10px;
+  color: #28292D;
+  animation-name: opacidad;
+   animation-duration: .7s
+}
+
+.schedules .textSubTitleHistory {
+  margin-left: 5px;
+}
+
 
 .schedules .btnBackCel {
   display: none;
@@ -607,5 +669,49 @@
 }
 
 .schedules .currentSchedule.horarioSemanalEspecial .contentCurrentScheduleClasic {
+  display: none;
+}
+
+
+
+.schedules .itemHistory.expandirHistorial .infoMaxHistory {
+  display: block;
+}
+
+.schedules .itemHistory.minimizarHistorial .infoMaxHistory {
+  display: none;
+}
+
+.schedules .itemHistory.expandirHistorial .btnDown {
+  display: none;
+}
+
+.schedules .itemHistory.minimizarHistorial .btnUp {
+  display: none;
+}
+
+
+.schedules .itemHistory.historialHorarioSemanal .textHourSpecial,
+.schedules .itemHistory.historialHorarioSemanalSerenos .textHourSpecial {
+  display: none;
+}
+
+.schedules .itemHistory.historialHorarioEspecial .textHourWeekly {
+  display: none;
+}
+
+
+.schedules .itemHistory.historialHorarioSemanal .contentCurrentScheduleSpecialHistory,
+.schedules .itemHistory.historialHorarioSemanal .contentScheduleSpecialHistory {
+  display: none;
+}
+
+.schedules .itemHistory.historialHorarioSemanalSerenos .contentCurrentScheduleClasicHistory,
+.schedules .itemHistory.historialHorarioSemanalSerenos .contentScheduleSpecialHistory {
+  display: none;
+}
+
+.schedules .itemHistory.historialHorarioEspecial .contentCurrentScheduleClasicHistory,
+.schedules .itemHistory.historialHorarioEspecial .contentCurrentScheduleSpecialHistory {
   display: none;
 }
