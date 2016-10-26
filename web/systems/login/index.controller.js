@@ -6,10 +6,14 @@
     .module('login')
     .controller('IndexLoginCtrl',IndexLoginCtrl);
 
-  IndexLoginCtrl.$inject = ['$rootScope','$scope'];
+  IndexLoginCtrl.$inject = ['$rootScope','$scope', 'Login', '$window'];
 
-  function IndexLoginCtrl($rootScope, $scope) {
+  function IndexLoginCtrl($rootScope, $scope, Login, $window) {
 
+    activate();
+    function activate() {
+      Login.redirect();
+    }
   };
 
 })();
