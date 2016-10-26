@@ -19,9 +19,9 @@
         return factory;
     };
 
-  Login.$inject = ['$rootScope', '$window', '$q', '$cookies'];
+  Login.$inject = ['$rootScope', '$window', '$q', '$cookies', '$location'];
 
-  function Login($rootScope, $window, $q, $cookies) {
+  function Login($rootScope, $window, $q, $cookies, $location) {
     var service = this;
 
     service.username = null;
@@ -116,6 +116,37 @@
       }
     }
 
+    service.redirect = function() {
+      var creds = service._getAuthCookie();
+      if (creds == null) {
+        return;
+      }
+
+      // debo reconectarme con las nuevas credenciales en caso de no estar conectado
+      if (service.privateConnection == null || !service.privateConnection.isOpen) {
+        service.login(creds.username, creds.ticket).then(
+          function(conn) {
+            service.getRegisteredSystems(conn).then(
+            function(systems) {
+                console.log(systems);
+                for (var i = 0; i < systems['registered'].length; i++) {
+                    if ($location.host() == systems['registered'][i].domain) {
+                      $window.location.href = systems['registered'][i].relative;
+                      return;
+                    }
+                }
+                // si no lo encuentra usa la ultima (deberia ser la de sistema en mantenimiento o algo parecido)
+                $window.location.href = systems['default'];
+              },
+              function(err) {
+                 console.error(err);
+              });
+          },
+          function(err) {
+          }
+        );
+      }
+    }
 
 
     service.getCredentials = function() {
