@@ -1,8 +1,10 @@
-<div class="schedules usuarioAdmin {{vm.view.style1}} {{vm.view.style2}}">
+<div class="schedules usuarioAdmin {{vm.view.style1}} {{vm.view.style2}} {{vm.view.style3}} {{vm.view.style4}}">
 
     <!-- VARIABLES 0: usuarioAdmin, usuarioNormal (Si es un usuario comun no se muestra la pantalla de usuarios)
          VARIABLES 1: pantallaUsuarios, pantallaEdicion, pantallaHistorial
-         VARIABLES 2: verHorario, verPreguntaDeHorario, nuevoHorarioSemanal, nuevoHorarioSemanalSerenos, nuevoHorarioEspecial -->
+         VARIABLES 2: verHorario, verPreguntaDeHorario, nuevoHorarioSemanal, nuevoHorarioSemanalSerenos, nuevoHorarioEspecial
+         VARIABLES 3: mensajes
+         VARIABLES 4: mensajeCargando, mensajeGuardado, mensajeEliminarhorario, mensajeError-->
 
     <div class="contentOne" ng-click="vm.view.style1 = 'pantallaEdicion'">
         <e-person-assistance users="vm.model.users" select="vm.selectUser(user)" ng-click="vm.view.style2 = 'verHorario'"></e-person-assistance>
@@ -205,17 +207,22 @@
                 <div class="btnBack2" ng-click="vm.view.style2 = 'verHorario'"><i class="fa fa-chevron-left" aria-hidden="true"></i> VOLVER</div>
 
                 <div class="contentCurrentSchedule">
-                    <div class="contentSelectDay">
-                        <div>SELECCIONE EL DÍA: </div>
-                        <div><input class="inputDate" type="date"></input></div>
+
+                    <div class="headerCurrentSchedule">
+                        <div>Horario especial</div>
+                        <div class="btnCut"><i class="fa fa-scissors"></i> Cortar horario</div>
                     </div>
 
-                    <div class="line"></div>
-
                     <div class="itemDay">
-                        <div>Entrada</div>
+                        <div class="dayText">Entrada</div>
+                        <div><input class="inputTime" type="date"></input></div>
+                        <div>Hora</div>
                         <div><input class="inputTime" type="time"></input></div>
-                        <div>Salida</div>
+                    </div>
+                    <div class="itemDay">
+                        <div class="dayText">Salida</div>
+                        <div><input class="inputTime" type="date"></input></div>
+                        <div>Hora</div>
                         <div><input class="inputTime" type="time"></input></div>
                     </div>
                 </div>
@@ -236,7 +243,7 @@
 
         <div class="contentHistory">
 
-            <div class="itemHistory minimizarHistorial historialHorarioSemanal">
+            <div class="itemHistory expandirHistorial historialHorarioEspecial">
                 <!-- VARIABLES 1: expandirHistorial, minimizarHistorial
                      VARIABLES 2: historialHorarioSemanal ,historialHorarioSemanalSerenos, historialHorarioEspecial -->
 
@@ -274,31 +281,20 @@
                       </div>
 
                       <div class="contentScheduleSpecialHistory">
-                          <div class="headerCurrentSchedule">
+                          <!-- <div class="headerCurrentSchedule">
                               <div class="textSubTitleHistory"> El día 10/09/2016</div>
-                          </div>
-                          <div class="itemDay"> <div>Entrada</div><div>10:00</div> <div> | </div> <div>Salida</div><div>17:00</div></div>
+                          </div> -->
+                          <div class="itemDay"> <div>Fecha </div><div>10/08/2016</div> <div> Entrada</div> <div>10:00</div></div>
+                          <div class="itemDay"> <div>Fecha </div><div>10/08/2016</div> <div> Salida</div> <div>17:00</div></div>
                       </div>
                 </div>
             </div>
 
-
-            <!-- <div class="itemHistory minimizarHistorial historialHorarioEspecial">
-                <div class="infoItem">
-                    <div class="dataItem">
-                        <div class="textDate">15/25/259</div>
-                        <div class="textHourWeekly">CAMBIO HORARIO SEMANAL</div>
-                        <div class="textHourSpecial">HORARIO ESPECIAL</div>
-                    </div>
-                    <div class="actionBtn">
-                        <div class="btnMax" title="Detalle"><i class="fa fa-chevron-down btnDown"></i><i class="fa fa-chevron-up btnUp"></i></div>
-                        <div class="btnDeleteItem" title="Eliminar"><i class="fa fa-ban" aria-hidden="true"></i></div>
-                    </div>
-                </div>
-            </div> -->
-
         </div>
 
+    </div>
+
+    <div class="contentMessages"  ng-include="'modules/schedules/messages/messages.html?t=' + time">
     </div>
 
 </div>

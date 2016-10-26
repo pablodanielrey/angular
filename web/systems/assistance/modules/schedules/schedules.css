@@ -560,6 +560,25 @@
   display: none;
 }
 
+.schedules .dayText {
+  /*background-color: red;*/
+  width: 50px;
+}
+
+.schedules .btnCut {
+  background-color: #92AD17;
+  padding: 0 5px 0 5px;
+  border-radius: 3px;
+    -moz-border-radius: 3px;
+    -webkit-border-radius: 3px;
+    margin: 2px 0 2px 0;
+}
+
+.schedules .btnCut:hover {
+  background-color: #809612;
+  cursor: pointer;
+}
+
 
 @keyframes opacidad {
   0% {opacity: 0}
@@ -714,4 +733,53 @@
 .schedules .itemHistory.historialHorarioEspecial .contentCurrentScheduleClasicHistory,
 .schedules .itemHistory.historialHorarioEspecial .contentCurrentScheduleSpecialHistory {
   display: none;
+}
+
+/*---------- PANTALLA MENSAJES ----------*/
+
+.schedules.mensajes.mensajeEliminarhorario .messageError,
+.schedules.mensajes.mensajeEliminarhorario .messageSave,
+.schedules.mensajes.mensajeEliminarhorario .messageLoading {
+  display: none;
+}
+
+.schedules.mensajes.mensajeGuardado .messageError,
+.schedules.mensajes.mensajeGuardado .messageDeleteSchedule,
+.schedules.mensajes.mensajeGuardado .messageLoading {
+  display: none;
+}
+
+.schedules.mensajes.mensajeCargando .messageError,
+.schedules.mensajes.mensajeCargando .messageSave,
+.schedules.mensajes.mensajeCargando .messageDeleteSchedule {
+  display: none;
+}
+
+.schedules.mensajes.mensajeError .messageLoading,
+.schedules.mensajes.mensajeError .messageSave,
+.schedules.mensajes.mensajeError .messageDeleteSchedule{
+  display: none;
+}
+
+.schedules .contentMessages {
+  display: none;
+}
+
+.schedules.mensajes .contentMessages {
+  position: absolute;
+  display: flex;
+  display: -webkit-flex; /* Safari */
+  display: -moz-flex; /* mozilla */
+  flex-direction:row;
+  -webkit-flex-direction:row; /* Safari */
+  -moz-flex-direction:row; /* mozilla */
+  justify-content: center;
+  -webkit-justify-content: center;
+  -moz-justify-content: center;
+  align-items: center;
+  -webkit-align-items:center; /* Safari */
+  -moz-align-items:center; /* mozilla */
+  width: 100%;
+  height: 100%;
+  background-color: #EEEEEE;
 }
