@@ -170,48 +170,48 @@
 
 
         function _persistHeaderFilters() {
-          $window.sessionStorage.setItem('hfo',JSON.stringify(vm.model.header.status.open));
-          $window.sessionStorage.setItem('hfw',JSON.stringify(vm.model.header.status.working));
-          $window.sessionStorage.setItem('hfp',JSON.stringify(vm.model.header.status.paused));
-          $window.sessionStorage.setItem('hfr',JSON.stringify(vm.model.header.status.rejected));
-          $window.sessionStorage.setItem('hfc',JSON.stringify(vm.model.header.status.closed));
+          $window.localStorage.setItem('hfo',JSON.stringify(vm.model.header.status.open));
+          $window.localStorage.setItem('hfw',JSON.stringify(vm.model.header.status.working));
+          $window.localStorage.setItem('hfp',JSON.stringify(vm.model.header.status.paused));
+          $window.localStorage.setItem('hfr',JSON.stringify(vm.model.header.status.rejected));
+          $window.localStorage.setItem('hfc',JSON.stringify(vm.model.header.status.closed));
 
           for (var i = 0; i < vm.model.header.offices.length; i++) {
-            $window.sessionStorage.setItem('hFromOffices_' + vm.model.header.offices[i].id, JSON.stringify(vm.model.header.offices[i].active));
+            $window.localStorage.setItem('hFromOffices_' + vm.model.header.offices[i].id, JSON.stringify(vm.model.header.offices[i].active));
           }
 
           for (var i = 0; i < vm.model.header.userOffices.length; i++) {
-            $window.sessionStorage.setItem('hUserOffices_' + vm.model.header.userOffices[i].id, JSON.stringify(vm.model.header.userOffices[i].active));
+            $window.localStorage.setItem('hUserOffices_' + vm.model.header.userOffices[i].id, JSON.stringify(vm.model.header.userOffices[i].active));
           }
         }
 
         function _loadHeaderFilters() {
-            var v = $window.sessionStorage.getItem('hfo');
+            var v = $window.localStorage.getItem('hfo');
             vm.model.header.status.open = JSON.parse(v != null ? v : true);
 
-            v = $window.sessionStorage.getItem('hfw');
+            v = $window.localStorage.getItem('hfw');
             vm.model.header.status.working = JSON.parse(v != null ? v : true);
 
-            v = $window.sessionStorage.getItem('hfp');
+            v = $window.localStorage.getItem('hfp');
             vm.model.header.status.paused = JSON.parse(v != null ? v : true);
 
-            v = $window.sessionStorage.getItem('hfr');
+            v = $window.localStorage.getItem('hfr');
             vm.model.header.status.rejected = JSON.parse(v != null ? v : false);
 
-            v = $window.sessionStorage.getItem('hfc');
+            v = $window.localStorage.getItem('hfc');
             vm.model.header.status.closed = JSON.parse(v != null ? v : false);
 
             for (var i = 0; i < vm.model.header.offices.length; i++) {
               var id = vm.model.header.offices[i].id;
-              var v = $window.sessionStorage.getItem('hFromOffices_' + id);
+              var v = $window.localStorage.getItem('hFromOffices_' + id);
               var a = JSON.parse(v != null ? v : true);
               vm.model.header.offices[i].active = a;
             }
 
             for (var i = 0; i < vm.model.header.userOffices.length; i++) {
               var id = vm.model.header.userOffices[i].id;
-              var v = $window.sessionStorage.getItem('hUserOffices_' + id);
-              var a = JSON.parse(v);
+              var v = $window.localStorage.getItem('hUserOffices_' + id);
+              var a = JSON.parse(v != null ? v : true);
               vm.model.header.userOffices[i].active = a;
             }
         }
@@ -371,10 +371,10 @@
           Dispara la ordenación del listado.
         */
         function sortIssues() {
-          var order = $window.sessionStorage.getItem('listSort');
+          var order = $window.localStorage.getItem('listSort');
           if (order == null) {
             order = ['start', '-priority', 'statusPosition'];
-            $window.sessionStorage.setItem('listSort', JSON.stringify(order));
+            $window.localStorage.setItem('listSort', JSON.stringify(order));
           } else {
             order = JSON.parse(order);
           }
@@ -387,19 +387,19 @@
           no cuando se ordena el listado.
         */
         function _processSortRev() {
-          var rev = $window.sessionStorage.getItem('reverseSort');
+          var rev = $window.localStorage.getItem('reverseSort');
           if (rev == null) {
             rev = false;
-            $window.sessionStorage.setItem('reverseSort', JSON.stringify(!rev));
+            $window.localStorage.setItem('reverseSort', JSON.stringify(!rev));
           } else {
             rev = JSON.parse(rev);
           }
 
           // almaceno el orden a inverso.
           if (rev) {
-            $window.sessionStorage.setItem('reverseSort', JSON.stringify(!rev));
+            $window.localStorage.setItem('reverseSort', JSON.stringify(!rev));
           } else {
-            $window.sessionStorage.setItem('reverseSort', JSON.stringify(!rev));
+            $window.localStorage.setItem('reverseSort', JSON.stringify(!rev));
           }
 
           return rev;
@@ -413,7 +413,7 @@
           } else {
             order = ['-start', '-priority', 'statusPosition'];
           }
-          $window.sessionStorage.setItem('listSort', JSON.stringify(order));
+          $window.localStorage.setItem('listSort', JSON.stringify(order));
           sortIssues();
 
           /*
@@ -434,7 +434,7 @@
           } else {
             order = ['-statusPosition', '-priority', '-start'];
           }
-          $window.sessionStorage.setItem('listSort', JSON.stringify(order));
+          $window.localStorage.setItem('listSort', JSON.stringify(order));
           sortIssues();
 
           /*
@@ -455,7 +455,7 @@
           } else {
             order = ['priority', '-start', 'statusPosition'];
           }
-          $window.sessionStorage.setItem('listSort', JSON.stringify(order));
+          $window.localStorage.setItem('listSort', JSON.stringify(order));
           sortIssues();
 
           /*
