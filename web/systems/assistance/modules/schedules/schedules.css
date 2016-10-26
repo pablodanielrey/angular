@@ -96,6 +96,27 @@
 
 }
 
+.schedules .contentSelectDate {
+  display: flex;
+  display: -webkit-flex; /* Safari */
+  display: -moz-flex; /* mozilla */
+  flex-direction:row;
+  -webkit-flex-direction:row; /* Safari */
+  -moz-flex-direction:row; /* mozilla */
+  align-items: center;
+  -webkit-align-items: center;
+  -moz-align-items: center;
+  justify-content: space-around;
+  -webkit-justify-content: space-around;
+  -moz-justify-content: space-around;
+  margin-top: 5px;
+}
+
+.schedules .titleList {
+  color: #5C5F69;
+  font-size: 12px;
+}
+
 .schedules .contentCurrentScheduleClasic {
   /*display: none;*/
   width: 99%;
@@ -355,7 +376,8 @@
 .schedules .btnDeleteSchedule2,
 .schedules .btnCutSchedule2,
 .schedules .btnDeleteSchedule,
-.schedules .btnCutSchedule {
+.schedules .btnCutSchedule,
+.schedules .btnDelSchedule {
   border-radius: 3px;
   -moz-border-radius: 3px;
   -webkit-border-radius: 3px;
@@ -365,6 +387,7 @@
   padding: 0 3px 0 3px;
 }
 
+.schedules .btnDelSchedule:hover,
 .schedules .btnDeleteSchedule2:hover,
 .schedules .btnDeleteSchedule:hover {
   cursor: pointer;
