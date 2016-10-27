@@ -154,7 +154,10 @@
   text-align: center;
 }
 
+
+
 .reports .contentList {
+  /*display: none !important;*/
   display: flex;
   display: -webkit-flex;
   display: -moz-flex;
@@ -856,35 +859,35 @@
   opacity: .5;
 }
 
-.reports .file2b.entradaPorTeclado .inKeyboard {
+.reports .typeMarking.entradaPorTeclado .inKeyboard {
   display: block;
 }
 
-.reports .file2b.entradaPorHuella .inFinger {
+.reports .typeMarking.entradaPorHuella .inFinger {
   display: block;
 }
 
-.reports .file2b .inKeyboard {
+.reports .typeMarking .inKeyboard {
   display: none;
 }
 
-.reports .file2b .inFinger {
+.reports .typeMarking .inFinger {
   display: none;
 }
 
-.reports .file6 .outKeyboard {
+.reports .typeMarking .outKeyboard {
   display: none;
 }
 
-.reports .file6 .outFinger {
+.reports .typeMarking .outFinger {
   display: none;
 }
 
-.reports .file6.salidaPorTeclado .outKeyboard {
+.reports .typeMarking.salidaPorTeclado .outKeyboard {
   display: block;
 }
 
-.reports .file6.salidaPorHuella .outFinger {
+.reports .typeMarking.salidaPorHuella .outFinger {
   display: block;
 }
 /******************** MEDIA QUERIS ***************************/
@@ -1006,3 +1009,38 @@
 @media (max-width: 1280px){
 
 }
+
+.reports td.hidden,
+.reports th.hidden {
+  display: none;
+
+}
+
+.reports .contentTable {
+  display: none;
+  width: auto;
+  height: 400px;
+  background-color: red;
+  overflow: scroll;
+  margin: 0 0 0 10px;
+
+}
+/*
+.reports .table {
+  border-radius: 3px;
+
+   box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+  font-size: 12px;
+}*/
+
+
+
+/*tbody {
+
+}
+
+th, td {
+  background-color: green;
+  white-space: nowrap;
+  text-align: left;
+}*/
