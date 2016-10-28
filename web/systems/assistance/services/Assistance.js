@@ -10,10 +10,9 @@
 
       this.getLogs = getLogs;
 			this.exportLogs = exportLogs;
+
 			this.getStatistics = getStatistics;
 			this.exportStatistics = exportStatistics;
-			this._formatDateDay = _formatDateDay;
-			this._formatDateHour = _formatDateHour;
 
 			this.findUsersByLogs = findUsersByLogs;
 			this.findUserPhotos = findUserPhotos;
@@ -21,14 +20,6 @@
 
 			this.findUsersByStatics = findUsersByStatics;
 			this.setWorkedNote = setWorkedNote;
-
-			function _formatDateDay(d) {
-	      return d.getDate() + '/' + d.getMonth() + '/' + d.getFullYear()
-	    }
-
-	    function _formatDateHour(d) {
-	      return d.getHours() + ':' + d.getMinutes() + ':' + d.getSeconds();
-	    }
 
 
       function getLogs(initDate, endDate, initHour, endHour) {

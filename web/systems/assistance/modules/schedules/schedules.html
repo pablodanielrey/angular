@@ -1,14 +1,14 @@
-<div class="schedules usuarioAdmin {{vm.view.style1}} {{vm.view.style2}} {{vm.view.style3}} {{vm.view.style4}}">
-
+<!-- <div class="schedules usuarioAdmin {{vm.view.style1}} {{vm.view.style2}} {{vm.view.style3}} {{vm.view.style4}}"> -->
+<!-- <div class="schedules {{vm.view.style}}"> -->
+<div class="schedules usuarioAdmin pantallaEdicion nuevoHorarioSemanal">
     <!-- VARIABLES 0: usuarioAdmin, usuarioNormal (Si es un usuario comun no se muestra la pantalla de usuarios)
          VARIABLES 1: pantallaUsuarios, pantallaEdicion, pantallaHistorial
          VARIABLES 2: verHorario, verPreguntaDeHorario, nuevoHorarioSemanal, nuevoHorarioSemanalSerenos, nuevoHorarioEspecial
          VARIABLES 3: mensajes
          VARIABLES 4: mensajeCargando, mensajeGuardado, mensajeEliminarhorario, mensajeError-->
-
     <!-- LISTA DE USUARIOS -->
-    <div class="contentOne" ng-click="vm.view.style1 = 'pantallaEdicion'">
-        <e-person-assistance users="vm.model.users" select="vm.selectUser(user)" ng-click="vm.view.style2 = 'verHorario'"></e-person-assistance>
+    <div class="contentOne">
+        <e-person-assistance users="vm.model.users" select="vm.selectUser(user)"></e-person-assistance>
     </div>
 
     <!-- EDICION DE HORARIOS -->

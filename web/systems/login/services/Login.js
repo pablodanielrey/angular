@@ -106,7 +106,8 @@
       if (service.privateConnection == null || !service.privateConnection.isOpen) {
         service.login(creds.username, creds.ticket).then(
           function(conn) {
-            $rootScope.$broadcast('wamp.open');
+            // 28/10/16 Lo comente porque se dispara en el onOpen del metodo login (Consultar con pablo)
+            // $rootScope.$broadcast('wamp.open');
           },
           function(err) {
             console.log(err);
