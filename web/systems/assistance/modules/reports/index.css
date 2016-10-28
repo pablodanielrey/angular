@@ -859,6 +859,39 @@
   opacity: .5;
 }
 
+.reports .file2b.entradaPorTeclado .inKeyboard {
+  display: block;
+}
+
+.reports .file2b.entradaPorHuella .inFinger {
+  display: block;
+}
+
+.reports .file2b .inKeyboard {
+  display: none;
+}
+
+.reports .file2b .inFinger {
+  display: none;
+}
+
+.reports .file6 .outKeyboard {
+  display: none;
+}
+
+.reports .file6 .outFinger {
+  display: none;
+}
+
+.reports .file6.salidaPorTeclado .outKeyboard {
+  display: block;
+}
+
+.reports .file6.salidaPorHuella .outFinger {
+  display: block;
+}
+
+
 .reports .typeMarking.entradaPorTeclado .inKeyboard {
   display: block;
 }
