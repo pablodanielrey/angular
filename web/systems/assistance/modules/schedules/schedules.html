@@ -1,6 +1,6 @@
 <!-- <div class="schedules usuarioAdmin {{vm.view.style1}} {{vm.view.style2}} {{vm.view.style3}} {{vm.view.style4}}"> -->
-<!-- <div class="schedules {{vm.view.style}}"> -->
-<div class="schedules usuarioAdmin pantallaEdicion nuevoHorarioSemanal">
+<div class="schedules {{vm.view.style}}">
+<!-- <div class="schedules usuarioAdmin pantallaEdicion verHorario"> -->
     <!-- VARIABLES 0: usuarioAdmin, usuarioNormal (Si es un usuario comun no se muestra la pantalla de usuarios)
          VARIABLES 1: pantallaUsuarios, pantallaEdicion, pantallaHistorial
          VARIABLES 2: verHorario, verPreguntaDeHorario, nuevoHorarioSemanal, nuevoHorarioSemanalSerenos, nuevoHorarioEspecial
@@ -12,7 +12,81 @@
     </div>
 
     <!-- EDICION DE HORARIOS -->
-    <div class="contentTwo" ng-include="'modules/schedules/scheduleEdition/scheduleEdition.html?t=' + time">
+    <div class="contentTwo">
+      <div class="title">
+          <i class="fa fa-clock-o" aria-hidden="true"></i> HORARIO
+      </div>
+      <div class="contentUserSelected">
+          <div class="imgUSer"><img class="imgUser" src="./img/walter.jpg" alt="foto de perfil"></div>
+          <div class="dataUserSelected">
+              <div class="userName"> Walter Blanco</div>
+              <div class="userDNI"> 30001823</div>
+          </div>
+      </div>
+
+      <div class="contentSchedules">
+          <!-- CONTENEDOR DE MI HORARIO -->
+          <div class="currentSchedule  horarioSemanalClasico">
+              <!-- VARIABLES: horarioSemanalClasico, horarioSemanalEspecial
+              Esto es para mostrar el horario clasico o el horario en formato especial como por ej; serenos, guardias, etc-->
+                <div>
+                    <div class="contentCurrentScheduleClasic">
+                        <div class="contentSelectDate">
+                            <div class="titleList">Fecha de la semana laboral </div>
+                            <div><input class="inputDate" type="date"></input></div>
+                        </div>
+                        <div class="headerCurrentSchedule">
+                            <div>Semana laboral</div>
+                            <div><b>35</b> horas semanales</div>
+                        </div>
+                        <div class="itemDay"> <div class="day">Lunes</div><div>10:00</div><div>a</div><div>17:00</div> </div>
+                        <div class="itemDay"> <div class="day">Martes</div><div>10:00</div><div>a</div><div>17:00</div> </div>
+                        <div class="itemDay"> <div class="day">Miercoles</div><div>10:00</div><div>a</div><div>17:00</div> </div>
+                        <div class="itemDay"> <div class="day">Jueves</div><div>10:00</div><div>a</div><div>17:00</div> </div>
+                        <div class="itemDay"> <div class="day">Viernes</div><div>10:00</div><div>a</div><div>17:00</div> </div>
+                        <div class="itemDay"> <div class="day">Sabado</div><div>10:00</div><div>a</div><div>17:00</div> </div>
+                        <div class="itemDay"> <div class="day">Domingo</div><div>10:00</div><div>a</div><div>17:00</div> </div>
+                    </div>
+
+                    <div class="contentCurrentScheduleSpecial">
+                        <div class="headerCurrentSchedule">
+                            <div>Semana laboral</div>
+                            <div><b>35</b> horas semanales</div>
+                        </div>
+                        <div class="itemDay"> <div>Domingo</div><div>20:00</div> <div> a </div> <div>Domingo</div><div>17:00</div><div> | </div><div>14 Horas</div></div>
+
+                    </div>
+
+                    <div class="actionCurrentSchedule">
+                        <div class="btn" ng-click="vm.view.style2 = 'verPreguntaDeHorario'">
+                            <div class="text1Btn">Modificar</div>
+                            <div class="text2Btn">HORARIO SEMANAL</div>
+                        </div>
+                        <div class="btn" ng-click="vm.view.style2 = 'nuevoHorarioEspecial'">
+                            <div class="text1Btn">Agregar</div>
+                            <div class="text2Btn">HORARIO ESPECIAL</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="btnBackCel">
+                  <div class="btnBack" ng-click="vm.view.style1 = 'pantallaUsuarios'"><i class="fa fa-chevron-left" aria-hidden="true"></i> VOLVER</div>
+                </div>
+
+          </div>
+          <!-- PREGUNTA PARA VER TIPO DE JORANADA LABORAL -->
+          <div class="questions">
+              <div class="btnBack2" ng-click="vm.view.style2 = 'verHorario'"><i class="fa fa-chevron-left" aria-hidden="true"></i> VOLVER</div>
+              <div class="textQuestions">¿La jornada laboral transcurre en el mismo día o abarca mas de un día?</div>
+              <div class="btn btnQuestion" ng-click="vm.view.style2 = 'nuevoHorarioSemanal'"> JORNADA EN EL MISMO DÍA</div>
+              <div class="btn btnQuestion" ng-click="vm.view.style2 = 'nuevoHorarioSemanalSerenos'"> JORNADA DE MÁS DE UN DÍA</div>
+          </div>
+          <!-- NUEVO HORARIO SEMANAL CLASICO -->
+
+      </div>
+
+
+
+
     </div>
 
     <!-- HISTORIAL DE HORARIOS -->

@@ -106,7 +106,7 @@
       if (service.privateConnection == null || !service.privateConnection.isOpen) {
         service.login(creds.username, creds.ticket).then(
           function(conn) {
-            // 28/10/16 Lo comente porque se dispara en el onOpen del metodo login (Consultar con pablo)
+            // 28/10/16 Lo comente porque se dispara en el onOpen del metodo login (Consultar con pa)
             // $rootScope.$broadcast('wamp.open');
           },
           function(err) {

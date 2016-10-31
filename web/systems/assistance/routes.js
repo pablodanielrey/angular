@@ -15,7 +15,13 @@
          controller: 'ReportsCtrl',
          controllerAs: 'vm'
       })
+      // tengo que poner los dos para que tome el /schedules, por angular
       .when('/schedules', {
+         templateUrl: 'modules/schedules/schedules.html',
+         controller: 'SchedulesCtrl',
+         controllerAs: 'vm'
+      })
+      .when('/schedules/:personId', {
          templateUrl: 'modules/schedules/schedules.html',
          controller: 'SchedulesCtrl',
          controllerAs: 'vm'

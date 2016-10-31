@@ -13,7 +13,7 @@
         }
 
         $scope.selectSchedules = function() {
-          $location.path('schedules');
+          $location.path("/schedules");
         }
       }
     ]);
