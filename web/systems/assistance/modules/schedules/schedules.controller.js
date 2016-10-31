@@ -4,13 +4,15 @@
       .module('assistance')
       .controller('SchedulesCtrl', SchedulesCtrl);
 
-    SchedulesCtrl.$inject = ['$scope', 'Assistance', 'Users', 'Login', '$routeParams', '$location'];
+    SchedulesCtrl.$inject = ['$scope', 'Assistance', 'Users', 'Login', '$routeParams', '$location', '$q', '$timeout'];
 
-    function SchedulesCtrl($scope, Assistance, Users, Login, $routeParams, $location) {
+    function SchedulesCtrl($scope, Assistance, Users, Login, $routeParams, $location, $q, $timeout) {
         var vm = this;
         vm.model = {
           users: [],
-          selectedPerson: null
+          selectedPerson: null,
+          date: null,
+          user: null
         }
 
         vm.view = {
@@ -24,6 +26,7 @@
         }
 
         vm.selectUser = selectUser;
+        vm.getUserPhoto = getUserPhoto;
 
 
         $scope.$on('wamp.open', function(event, args) {
@@ -52,7 +55,8 @@
             }
           });
           loadUsers();
-          loadDataUser();
+          loadUser();
+          vm.model.date = new Date();
         }
 
     /* **************************************************************************************************
@@ -69,6 +73,10 @@
       vm.view.style = style + ' ' + vm.view.displayListUsers;
     }
 
+    function getUserPhoto() {
+      return (vm.model.user == null || !'photoSrc' in vm.model.user) ? 'img/avatarMan.jpg' : vm.model.user.photoSrc
+    }
+
     /* **************************************************************************************************
                                         MANEJO DE PERFIL DE USUARIO
     * ************************************************************************************************ */
@@ -83,6 +91,17 @@
       d.resolve();
 
       return d.promise;
+    }
+
+    function loadUser() {
+      vm.model.user = null;
+      Users.findById([vm.model.selectedPerson]).then(Users.findPhotos).then(Users.photoToDataUri).then(function(users) {
+        $timeout(function() {
+          vm.model.user = (users.length <= 0) ? null : users[0];
+        },0);
+      }, function(err) {
+        console.log(err);
+      })
     }
 
     /* **************************************************************************************************

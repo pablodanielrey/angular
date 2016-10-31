@@ -17,10 +17,12 @@
           <i class="fa fa-clock-o" aria-hidden="true"></i> HORARIO
       </div>
       <div class="contentUserSelected">
-          <div class="imgUSer"><img class="imgUser" src="./img/walter.jpg" alt="foto de perfil"></div>
+          <div class="imgUSer">
+            <img class="imgUser" ng-src='{{vm.getUserPhoto()}}' alt="foto de perfil"/>
+          </div>
           <div class="dataUserSelected">
-              <div class="userName"> Walter Blanco</div>
-              <div class="userDNI"> 30001823</div>
+              <div class="userName"> {{vm.model.user.name}} {{vm.model.user.lastname}}</div>
+              <div class="userDNI"> {{vm.model.user.dni}}</div>
           </div>
       </div>
 
@@ -33,7 +35,7 @@
                     <div class="contentCurrentScheduleClasic">
                         <div class="contentSelectDate">
                             <div class="titleList">Fecha de la semana laboral </div>
-                            <div><input class="inputDate" type="date"></input></div>
+                            <div><input class="inputDate" type="date" ng-model="vm.model.date"></input></div>
                         </div>
                         <div class="headerCurrentSchedule">
                             <div>Semana laboral</div>
