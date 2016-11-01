@@ -33,7 +33,6 @@ if __name__ == '__main__':
         users = []
         for uid in [i for (i, v) in userIds]:
             user = User.findById(con, [uid])[0]
-            print(user)
             if user.type != 'student':
                 users.extend(UserPassword.findByUserId(con, uid))
 
