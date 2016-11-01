@@ -14,7 +14,7 @@ import logging
 
 from model.registry import Registry
 from model.connection.connection import Connection
-from model.offices.offices import Office
+from model.offices.office import Office
 from model.users.users import User, UserPassword
 
 
