@@ -32,11 +32,13 @@ if __name__ == '__main__':
         userIds = User.findAll(con)
         users = []
         for uid in [i for (i, v) in userIds]:
-            users.extend(UserPassword.findByUserId(con, uid))
+            user = User.findById(uid)
+            print(user)
+            if user.type != 'student':
+                users.extend(UserPassword.findByUserId(con, uid))
 
-        users2 = [u for u in users if u.type != 'student']
         with open('/tmp/radius-users', 'w') as f:
-            for up in users2:
+            for up in users:
                 if r.match(up.username) is None or ' ' in up.username:
                     continue
 
