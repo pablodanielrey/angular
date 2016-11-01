@@ -21,13 +21,17 @@
           profileUser: 'usuarioNormal',
           displayListUsers: 'pantallaUsuarios verHorario',
           displayPerson: 'pantallaEdicion verHorario',
+          displayQuestions: 'pantallaEdicion verPreguntaDeHorario',
           profile: 'user',
           activate: false
         }
 
         vm.selectUser = selectUser;
         vm.getUserPhoto = getUserPhoto;
-
+        vm.displayEditQuestions = displayEditQuestions;
+        vm.displaySchedule = displaySchedule;
+        vm.displayUsers = displayUsers;
+        vm.displayEditWeekSch = displayEditWeekSch;
 
         $scope.$on('wamp.open', function(event, args) {
           activate();
@@ -73,9 +77,19 @@
       vm.view.style = style + ' ' + vm.view.displayListUsers;
     }
 
+    function displayEditQuestions() {
+      var style = (vm.view.profile == 'admin') ? vm.view.profileAdmin : vm.view.profileUser;
+      vm.view.style = style + ' ' + vm.view.displayQuestions;
+    }
+
+    function displayEditWeekSch() {
+      $location.path("/weekSchedules/" + vm.model.selectedPerson);
+    }
+
     function getUserPhoto() {
       return (vm.model.user == null || !'photoSrc' in vm.model.user) ? 'img/avatarMan.jpg' : vm.model.user.photoSrc
     }
+
 
     /* **************************************************************************************************
                                         MANEJO DE PERFIL DE USUARIO
@@ -131,7 +145,11 @@
         }
 
         function selectUser(user) {
-          $location.path("/schedules/" + user.id);
+          if (user.id == vm.model.selectedPerson) {
+            vm.displaySchedule();
+          } else {
+            $location.path("/schedules/" + user.id);
+          }
         }
 
 
