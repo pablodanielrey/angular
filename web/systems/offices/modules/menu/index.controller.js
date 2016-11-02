@@ -8,7 +8,9 @@
         $scope.selectOrders = function() {
           $location.path('/main');
         }
-
+        $scope.selectProfile = function() {
+          $location.path('/profile');
+        }
       }
     ]);
 

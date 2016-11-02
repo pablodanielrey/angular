@@ -5,6 +5,12 @@
     app.config(['$routeProvider', function($routeProvider) {
       $routeProvider
 
+      .when('/profile', {
+         templateUrl: 'modules/profile/profile.html',
+         controller: 'ProfileCtrl',
+         controllerAs: 'vm'
+      })
+
       .when('/create', {
          templateUrl: 'modules/offices/index.html',
          controller: 'OfficesCtrl',
@@ -22,6 +28,8 @@
          controller: 'OfficesCtrl',
          controllerAs: 'vm'
       })
+
+
 
       .otherwise({
         redirectTo: '/list'
