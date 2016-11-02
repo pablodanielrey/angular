@@ -61,9 +61,11 @@
           } else {
             vm.model.selectedPerson =  Login.getCredentials()['userId'];
           }
+
           loadProfile().then(function() {
-            vm.displayEditWeeklySch()
+              vm.displayEditWeeklySch()
           });
+
           loadUsers();
           loadUser();
           vm.model.date = new Date();
@@ -105,7 +107,7 @@
               continue;
             }
             if (sched.end < sched.start) {
-              sched.end = sched.end + dayMillis;
+              sched.end.setTime(sched.end.getTime() + dayMillis);
             }
             totalMillis = totalMillis + (sched.end - sched.start);
           }
@@ -200,19 +202,19 @@
                 }
 
                 if (date.getDay() == 3) {
-                  var start = new Date();
-                  var end = new Date();
+                  var start = new Date(date.getTime());
+                  var end = new Date(date.getTime());
                   start.setHours(7); start.setMinutes(0); start.setSeconds(0); start.setMilliseconds(0);
                   end.setHours(10); end.setMinutes(30); end.setSeconds(0); end.setMilliseconds(0);
                   vm.model.schedules.push({date: date, start: start, end: end, style: 'horarioNormal'});
-                  var start = new Date();
-                  var end = new Date();
+                  var start = new Date(date.getTime());
+                  var end = new Date(date.getTime());
                   start.setHours(15); start.setMinutes(30); start.setSeconds(0); start.setMilliseconds(0);
                   end.setHours(19); end.setMinutes(0); end.setSeconds(0); end.setMilliseconds(0);
                   vm.model.schedules.push({date: date, start: start, end: end, style: 'horarioCortado'});
                 } else {
-                  var start = new Date();
-                  var end = new Date();
+                  var start = new Date(date.getTime());
+                  var end = new Date(date.getTime());
                   start.setHours(8); start.setMinutes(0); start.setSeconds(0); start.setMilliseconds(0);
                   end.setHours(15); end.setMinutes(0); end.setSeconds(0); end.setMilliseconds(0);
                   vm.model.schedules.push({date: date, start: start, end: end, style: 'horarioNormal'});
