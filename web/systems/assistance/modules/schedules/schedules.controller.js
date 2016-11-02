@@ -32,6 +32,7 @@
         vm.displaySchedule = displaySchedule;
         vm.displayUsers = displayUsers;
         vm.displayEditWeekSch = displayEditWeekSch;
+        vm.displayEditHoursSch = displayEditHoursSch;
 
         $scope.$on('wamp.open', function(event, args) {
           activate();
@@ -44,6 +45,8 @@
             return;
           }
           vm.view.activate = true;
+
+          console.time("TimerName");
 
           var params = $routeParams;
           if ('personId' in params) {
@@ -61,6 +64,9 @@
           loadUsers();
           loadUser();
           vm.model.date = new Date();
+
+
+          console.timeEnd("TimerName");
         }
 
     /* **************************************************************************************************
@@ -84,6 +90,10 @@
 
     function displayEditWeekSch() {
       $location.path("/weekSchedules/" + vm.model.selectedPerson);
+    }
+
+    function displayEditHoursSch()  {
+      $location.path("/hoursSchedules/" + vm.model.selectedPerson);
     }
 
     function getUserPhoto() {

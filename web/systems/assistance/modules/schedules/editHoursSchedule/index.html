@@ -1,0 +1,87 @@
+<!-- <div class="schedules usuarioAdmin {{vm.view.style1}} {{vm.view.style2}} {{vm.view.style3}} {{vm.view.style4}}"> -->
+<div class="schedules {{vm.view.style}}">
+<!-- <div class="schedules usuarioAdmin pantallaEdicion verHorario"> -->
+    <!-- VARIABLES 0: usuarioAdmin, usuarioNormal (Si es un usuario comun no se muestra la pantalla de usuarios)
+         VARIABLES 1: pantallaUsuarios, pantallaEdicion, pantallaHistorial
+         VARIABLES 2: verHorario, verPreguntaDeHorario, nuevoHorarioSemanal, nuevoHorarioSemanalSerenos, nuevoHorarioEspecial
+         VARIABLES 3: mensajes
+         VARIABLES 4: mensajeCargando, mensajeGuardado, mensajeEliminarhorario, mensajeError-->
+    <!-- LISTA DE USUARIOS -->
+    <div class="contentOne">
+        <e-person-assistance users="vm.model.users" select="vm.selectUser(user)"></e-person-assistance>
+    </div>
+
+    <!-- EDICION DE HORARIOS -->
+    <div class="contentTwo">
+      <div class="title">
+          <i class="fa fa-clock-o" aria-hidden="true"></i> HORARIO
+      </div>
+      <div class="contentUserSelected">
+          <div class="imgUSer">
+            <img class="imgUser" ng-src='{{vm.getUserPhoto()}}' alt="foto de perfil"/>
+          </div>
+          <div class="dataUserSelected">
+              <div class="userName"> {{vm.model.user.name}} {{vm.model.user.lastname}}</div>
+              <div class="userDNI"> {{vm.model.user.dni}}</div>
+          </div>
+      </div>
+
+      <div class="contentSchedules">
+        <!-- NUEVO HORARIO SEMANAL SERENOS -->
+        <div class="newCurrentSchedule2">
+
+            <div class="btnBack2" ng-click="vm.back()"><i class="fa fa-chevron-left" aria-hidden="true"></i> VOLVER</div>
+
+            <div class="contentCurrentSchedule">
+                <div class="contentSelectDay">
+                    <div>VIGENTE A PARTIR DEL DÍA: </div>
+                    <div><input class="inputDate" type="date"></input></div>
+                </div>
+                <div class="headerCurrentSchedule">
+                    <div>Semana laboral</div>
+                    <div><b>35</b> horas semanales</div>
+                </div>
+                <div class="itemDay primerHorario">
+                    <!-- VARIABLES: primerHorario, otroHorario -->
+                    <div>Día</div>
+                    <div>
+                        <select class="selectDay">
+                            <option>Lun</option>
+                            <option>Mar</option>
+                            <option>Mié</option>
+                            <option>Jue</option>
+                            <option>Vie</option>
+                            <option>Sáb</option>
+                            <option>Dom</option>
+                        </select>
+                    </div>
+                    <div>Entrada</div>
+                    <div><input class="inputTime" type="time"></input></div>
+                    <div>Horas</div>
+                    <div><input type="number" class="inputNumber"></input></div>
+                    <div class="btnCutSchedule2" title="Agregar Día"><i class="fa fa-plus-circle" aria-hidden="true"></i></div>
+                    <div class="btnDeleteSchedule2" title="Eliminar horario cortado"><i class="fa fa-ban" aria-hidden="true"></i></div>
+
+                </div>
+
+            </div>
+
+            <div class="btn btnSave" ng-click="vm.view.style2 = 'verHorario'"> GUARDAR</div>
+
+        </div>
+      </div>
+
+
+
+
+    </div>
+
+    <!-- HISTORIAL DE HORARIOS -->
+    <div class="contentTheree" ng-include="'modules/schedules/history/history.html?t=' + time">
+    </div>
+
+    <!-- MENSAJES -->
+    <div class="contentMessages"  ng-include="'modules/schedules/messages/messages.html?t=' + time">
+    </div>
+
+</div>

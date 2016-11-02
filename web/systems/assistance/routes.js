@@ -34,6 +34,13 @@
          controllerAs: 'vm'
       })
 
+      // edicion de horario semanal
+      .when('/hoursSchedules/:personId', {
+         templateUrl: 'modules/schedules/editHoursSchedule/index.html',
+         controller: 'EditHoursSchCtrl',
+         controllerAs: 'vm'
+      })
+
       .otherwise({
         redirectTo: '/logs'
       });
