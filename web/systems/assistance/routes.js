@@ -41,6 +41,13 @@
          controllerAs: 'vm'
       })
 
+      // edicion de horario especial
+      .when('/specialSchedules/:personId', {
+         templateUrl: 'modules/schedules/editSpecialSchedule/index.html',
+         controller: 'EditSpecialSchCtrl',
+         controllerAs: 'vm'
+      })
+
       .otherwise({
         redirectTo: '/logs'
       });

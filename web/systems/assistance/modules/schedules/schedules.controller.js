@@ -33,6 +33,7 @@
         vm.displayUsers = displayUsers;
         vm.displayEditWeekSch = displayEditWeekSch;
         vm.displayEditHoursSch = displayEditHoursSch;
+        vm.displayEditSpecialSch = displayEditSpecialSch;
 
         $scope.$on('wamp.open', function(event, args) {
           activate();
@@ -94,6 +95,10 @@
 
     function displayEditHoursSch()  {
       $location.path("/hoursSchedules/" + vm.model.selectedPerson);
+    }
+
+    function displayEditSpecialSch()  {
+      $location.path("/specialSchedules/" + vm.model.selectedPerson);
     }
 
     function getUserPhoto() {

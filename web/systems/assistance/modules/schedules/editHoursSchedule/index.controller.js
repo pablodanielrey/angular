@@ -25,9 +25,9 @@
           profileAdmin: 'usuarioAdmin',
           profileUser: 'usuarioNormal',
           displayEdit: 'pantallaEdicion nuevoHorarioSemanalSerenos',
-          saveMessage: 'pantallaEdicion nuevoHorarioSemanal mensajes mensajeGuardado',
-          loadingMessage: 'pantallaEdicion nuevoHorarioSemanal mensajes mensajeCargando',
-          errorMessage: 'pantallaEdicion nuevoHorarioSemanal mensajes mensajeError',
+          saveMessage: 'pantallaEdicion nuevoHorarioSemanalSerenos mensajes mensajeGuardado',
+          loadingMessage: 'pantallaEdicion nuevoHorarioSemanalSerenos mensajes mensajeCargando',
+          errorMessage: 'pantallaEdicion nuevoHorarioSemanalSerenos mensajes mensajeError',
           profile: 'user',
           activate: false
         }
