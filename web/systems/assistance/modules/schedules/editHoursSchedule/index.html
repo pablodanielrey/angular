@@ -35,38 +35,38 @@
             <div class="contentCurrentSchedule">
                 <div class="contentSelectDay">
                     <div>VIGENTE A PARTIR DEL DÍA: </div>
-                    <div><input class="inputDate" type="date"></input></div>
+                    <div><input class="inputDate" type="date" ng-model="vm.model.date"></input></div>
                 </div>
                 <div class="headerCurrentSchedule">
                     <div>Semana laboral</div>
                     <div><b>35</b> horas semanales</div>
                 </div>
-                <div class="itemDay primerHorario">
+                <div class="itemDay" ng-class="vm.styleItem(sched, $index)" ng-repeat="sched in vm.model.schedules">
                     <!-- VARIABLES: primerHorario, otroHorario -->
                     <div>Día</div>
                     <div>
-                        <select class="selectDay">
-                            <option>Lun</option>
-                            <option>Mar</option>
-                            <option>Mié</option>
-                            <option>Jue</option>
-                            <option>Vie</option>
-                            <option>Sáb</option>
-                            <option>Dom</option>
+                        <select class="selectDay" ng-model="sched.day">
+                            <option value="1">Lun</option>
+                            <option value="2">Mar</option>
+                            <option value="3">Mié</option>
+                            <option value="4">Jue</option>
+                            <option value="5">Vie</option>
+                            <optio value="6">Sáb</option>
+                            <option value="0">Dom</option>
                         </select>
                     </div>
                     <div>Entrada</div>
-                    <div><input class="inputTime" type="time"></input></div>
+                    <div><input class="inputTime" type="time" ng-model="sched.start"></input></div>
                     <div>Horas</div>
-                    <div><input type="number" class="inputNumber"></input></div>
-                    <div class="btnCutSchedule2" title="Agregar Día"><i class="fa fa-plus-circle" aria-hidden="true"></i></div>
-                    <div class="btnDeleteSchedule2" title="Eliminar horario cortado"><i class="fa fa-ban" aria-hidden="true"></i></div>
+                    <div><input type="number" class="inputNumber" ng-model="sched.hours"></input></div>
+                    <div class="btnCutSchedule2" title="Agregar Día"><i class="fa fa-plus-circle" aria-hidden="true" ng-click="vm.addSched()"></i></div>
+                    <div class="btnDeleteSchedule2" title="Eliminar horario cortado" ng-click="vm.removeSched(sched)"><i class="fa fa-ban" aria-hidden="true"></i></div>
 
                 </div>
 
             </div>
 
-            <div class="btn btnSave" ng-click="vm.view.style2 = 'verHorario'"> GUARDAR</div>
+            <div class="btn btnSave" ng-click="vm.save()"> GUARDAR</div>
 
         </div>
       </div>

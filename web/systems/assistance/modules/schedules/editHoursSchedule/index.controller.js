@@ -35,7 +35,12 @@
         vm.getUserPhoto = getUserPhoto;
         vm.displayEditSch = displayEditSch;
         vm.selectUser = selectUser;
+        vm.styleItem = styleItem;
+
         vm.back = back;
+        vm.save = save;
+        vm.removeSched = removeSched;
+        vm.addSched = addSched;
 
         $scope.$on('wamp.open', function(event, args) {
           activate();
@@ -92,6 +97,10 @@
           return (vm.model.user == null || !'photoSrc' in vm.model.user) ? 'img/avatarMan.jpg' : vm.model.user.photoSrc
         }
 
+        function styleItem(sched, index) {
+          return (vm.model.schedules.length <= 1) ? 'primerHorario' : (index == 0) ? 'otroHorario primero' : 'otroHorario';
+        }
+
         function back() {
           $location.path("/schedules/" + vm.model.selectedPerson);
         }
@@ -123,7 +132,38 @@
             console.log(err);
           })
         }
+        /* **************************************************************************************************
+                                            MANEJO DE SCHEDULES
+        * ************************************************************************************************ */
 
+        $scope.$watch('vm.model.date', function(newVal, oldVal) {
+          if (newVal == null && oldVal == null) {
+            return;
+          }
+          if (newVal == null) {
+            vm.model.date = oldVal;
+            return;
+          }
+
+          loadSchedules();
+        });
+
+        function loadSchedules() {
+          var start = new Date(); start.setHours(21); start.setMinutes(0); start.setSeconds(0); start.setMilliseconds(0);
+          vm.model.schedules.push({day:"2", start: start, hours: 25});
+          start = new Date(); start.setHours(15); start.setMinutes(0); start.setSeconds(0); start.setMilliseconds(0);
+          vm.model.schedules.push({day:"4", start: start, hours: 30});
+        }
+
+        function removeSched(sched) {
+          var index = vm.model.schedules.indexOf(sched);
+          vm.model.schedules.splice(index, 1);
+        }
+
+        function addSched() {
+          var start = new Date(); start.setHours(0); start.setMinutes(0); start.setSeconds(0); start.setMilliseconds(0);
+          vm.model.schedules.push({day:"1", start: start, hours: 0});
+        }
         /* **************************************************************************************************
                                             MANEJO DE PERSONAS
         * ************************************************************************************************ */
@@ -154,5 +194,17 @@
               $location.path("/schedules/" + user.id);
             }
 
+            /* **************************************************************************************************
+                                                GUARDAR
+            * ************************************************************************************************ */
+            function save() {
+              vm.view.style = displayMessageLoading();
+              $timeout(function () {
+                vm.view.style = displayMessageSave();
+                $timeout(function () {
+                  $location.path("/schedules/" + vm.model.selectedPerson);
+                }, 2000);
+              }, 2000);
+            }
     }
 })();

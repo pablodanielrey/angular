@@ -420,6 +420,10 @@
   display: none;
 }
 
+.schedules .itemDay.otroHorario.primero .btnCutSchedule2 {
+  display: inline;
+}
+
 .schedules .btnSave {
   display: flex;
   display: -webkit-flex; /* Safari */
