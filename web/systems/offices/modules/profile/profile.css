@@ -40,14 +40,149 @@
     box-sizing: border-box;
     -moz-box-sizing: border-box;
     -webkit-box-sizing: border-box;
+    display: flex;
+    display: -webkit-flex; /* Safari */
+    display: -moz-flex; /* mozilla */
+    flex-direction:column;
+    -webkit-flex-direction:column; /* Safari */
+    -moz-flex-direction:column; /* mozilla */
+    align-items: center;
+    -webkit-align-items: center;
+    -moz-align-items: center;
+}
+
+.profile .contentPhoto {
+  /*background-color: red;*/
+  display: flex;
+  display: -webkit-flex; /* Safari */
+  display: -moz-flex; /* mozilla */
+  flex-direction:row;
+  -webkit-flex-direction:row; /* Safari */
+  -moz-flex-direction:row; /* mozilla */
+  justify-content: center;
+  -webkit-justify-content: center;
+  -moz-justify-content: center;
+  margin-bottom: 10px;
+
 }
 
 .profile .photo {
-  width: 50%;
+  width: 150px;
+  height: 150px;
+  border-radius: 100%;
+  -moz-border-radius: 100%;
+  -webkit-border-radius: 100%;
+}
+
+.profile .textName {
+  font-size: 13px;
+  font-weight: bold;
+  color: #28292D;
+  margin-bottom: 5px;
+}
+
+.profile .contentLegajo,
+.profile .contentMail,
+.profile .contentDNI {
+  display: flex;
+  display: -webkit-flex; /* Safari */
+  display: -moz-flex; /* mozilla */
+  flex-direction:row;
+  -webkit-flex-direction:row; /* Safari */
+  -moz-flex-direction:row; /* mozilla */
+  justify-content: center;
+  -webkit-justify-content: center;
+  -moz-justify-content: center;
+  align-items: center;
+  -webkit-align-items: center;
+  -moz-align-items: center;
+}
+
+.profile .textItem {
+  font-size: 10px;
+  color: #5C5F69;
+  margin-right: 5px;
+}
+
+.profile .textSubItem {
+  font-size: 12px;
+}
+
+.profile .contentActions {
+  margin-top: 5px;
+}
+
+.profile .btn {
+  padding: 10px;
+  width: 100%;
+  margin-top: 10px;
+  cursor: pointer;
+  background-color: #D1D1D1;
+  border: solid 1px #0066A6;
+  color: #28292D;
+  font-size: 12px;
+  border: none;
   border-radius: 2px;
   -moz-border-radius: 2px;
   -webkit-border-radius: 2px;
+  font-weight: bold;
 }
+
+.profile .btn:hover {
+  color: white;
+  background-color: #0066A6;
+  animation-name: fondo;
+  animation-duration: .5s;
+}
+
+.cropArea {
+  background: #E4E4E4;
+  overflow: hidden;
+  width:500px;
+  height:350px;
+}
+
+
+@keyframes fondo {
+    0% {  background-color: #D1D1D1}
+    100% {  background-color: #0066A6}
+}
+
+.profile .icoBtn {
+  color: #5C5F69;
+  opacity: 0.5;
+  margin-right: 5px;
+}
+
+.profile .btn:hover .icoBtn {
+  color: #eeeeee;
+}
+
+
+.profile .btnChangePhoto {
+  margin-top: 10px;
+  cursor: pointer;
+  background-color: white;;
+  border: solid 1px #0066A6;
+  color: #28292D;
+  font-size: 12px;
+  border: none;
+  border-radius: 2px;
+  -moz-border-radius: 2px;
+  -webkit-border-radius: 2px;
+
+}
+
+.profile .edit {
+  display:none;
+}
+.profile.modificar .edit {
+  display: block;
+}
+.profile.modificar .display {
+  display: none;
+}
+
 
 
 /*----------- MEDIA QUERIS -------------*/
@@ -56,4 +191,10 @@
   .profile .myProfile {
     width: 100% !important;
     height: calc(100% - 90px);
+}
+
+@media (min-width:1800px) {
+  .profile {
+    zoom: 1.3;
   }
+}
