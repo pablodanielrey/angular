@@ -36,24 +36,26 @@
 
                 <div class="headerCurrentSchedule">
                     <div>Horario especial</div>
-                    <div class="btnCut"><i class="fa fa-scissors"></i> Cortar horario</div>
+                    <div class="btnCut" ng-click="vm.addSchedule()" ng-if="vm.model.schedules.length <= 1"><i class="fa fa-scissors"></i> Cortar horario</div>
                 </div>
 
-                <div class="itemDay">
-                    <div class="dayText">Entrada</div>
-                    <div><input class="inputTime" type="date"></input></div>
-                    <div>Hora</div>
-                    <div><input class="inputTime" type="time"></input></div>
-                </div>
-                <div class="itemDay">
-                    <div class="dayText">Salida</div>
-                    <div><input class="inputTime" type="date"></input></div>
-                    <div>Hora</div>
-                    <div><input class="inputTime" type="time"></input></div>
+                <div ng-repeat="sched in vm.model.schedules">
+                  <div class="itemDay">
+                      <div class="dayText">Entrada</div>
+                      <div><input class="inputTime" type="date" ng-model="sched.start"></input></div>
+                      <div>Hora</div>
+                      <div><input class="inputTime" type="time" ng-model="sched.start"></input></div>
+                  </div>
+                  <div class="itemDay">
+                      <div class="dayText">Salida</div>
+                      <div><input class="inputTime" type="date" ng-model="sched.end"></input></div>
+                      <div>Hora</div>
+                      <div><input class="inputTime" type="time" ng-model="sched.end"></input></div>
+                  </div>
                 </div>
             </div>
 
-            <div class="btn btnSave" ng-click="vm.view.style2 = 'verHorario'"> GUARDAR</div>
+            <div class="btn btnSave" ng-click="vm.save()"> GUARDAR</div>
 
         </div>
 

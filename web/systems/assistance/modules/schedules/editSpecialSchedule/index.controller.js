@@ -12,8 +12,8 @@
       var vm = this;
 
       vm.model = {
-        date: null,
         selectedPerson: null,
+        schedules: [],
 
         users: [],
         user: null
@@ -35,16 +35,17 @@
       vm.selectUser = selectUser;
       vm.displayEditSpecialSch = displayEditSpecialSch;
       vm.back = back;
-      // vm.save = save;
+      vm.addSchedule = addSchedule;
+      vm.save = save;
 
       $scope.$on('wamp.open', function(event, args) {
         activate();
       });
-
       activate();
 
       function activate() {
         if (vm.view.activate || Login.getPrivateTransport() == null) {
+
           return;
         }
         vm.view.activate = true;
@@ -60,9 +61,9 @@
             vm.displayEditSpecialSch()
         });
 
+        loadSchedules();
         loadUsers();
         loadUser();
-        vm.model.date = new Date();
       }
 
       /* **************************************************************************************************
@@ -153,6 +154,37 @@
         $location.path("/schedules/" + user.id);
       }
 
+    /* **************************************************************************************************
+                                        MANEJO DE SCHEDULES
+    * ************************************************************************************************ */
 
+      function loadSchedules() {
+        vm.model.schedules = [];
+        var start = new Date(); start.setHours(7); start.setMinutes(0); start.setSeconds(0); start.setMilliseconds(0);
+        var end = new Date(); end.setHours(14); end.setMinutes(0); end.setSeconds(0); end.setMilliseconds(0);
+        vm.model.schedules.push({start: start, end: end});
+      }
+
+      function addSchedule() {
+        if (vm.model.schedules.length > 1) {
+          return;
+        }
+        var start = new Date(vm.model.schedules[0].end.getTime());
+        var end = new Date(start.getTime());
+        vm.model.schedules.push({start: start, end: end});
+      }
+
+      /* **************************************************************************************************
+                                          GUARDAR
+      * ************************************************************************************************ */
+      function save() {
+        vm.view.style = displayMessageLoading();
+        $timeout(function () {
+          vm.view.style = displayMessageSave();
+          $timeout(function () {
+            $location.path("/schedules/" + vm.model.selectedPerson);
+          }, 2000);
+        }, 2000);
+      }
     }
 })();
