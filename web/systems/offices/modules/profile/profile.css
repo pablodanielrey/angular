@@ -19,6 +19,7 @@
   padding: 20px;
   animation-name: movimiento;
    animation-duration: .5s;
+   overflow-y: auto;
 }
 
 
@@ -62,7 +63,7 @@
   justify-content: center;
   -webkit-justify-content: center;
   -moz-justify-content: center;
-  margin-bottom: 10px;
+
 
 }
 
@@ -136,10 +137,14 @@
 }
 
 .cropArea {
-  background: #E4E4E4;
+  /*background: #E4E4E4;*/
   overflow: hidden;
-  width:500px;
-  height:350px;
+  width:100%;
+  height:200px;
+}
+
+#fileInput {
+  /*background-color: red;*/
 }
 
 
@@ -160,11 +165,12 @@
 
 
 .profile .btnChangePhoto {
-  margin-top: 10px;
+  margin-top: 5px;
+  margin-bottom: 10px;
   cursor: pointer;
   background-color: white;;
   border: solid 1px #0066A6;
-  color: #28292D;
+  color: #5c5f69;
   font-size: 12px;
   border: none;
   border-radius: 2px;
@@ -173,17 +179,66 @@
 
 }
 
+.profile .dataUser {
+  display: flex;
+  display: -webkit-flex; /* Safari */
+  display: -moz-flex; /* mozilla */
+  flex-direction:column;
+  -webkit-flex-direction:column; /* Safari */
+  -moz-flex-direction:column; /* mozilla */
+  align-items: center;
+  -webkit-align-items: center;
+  -moz-align-items: center;
+}
+
 .profile .edit {
   display:none;
 }
 .profile.modificar .edit {
+  width: 100%;
+  /*background-color: #494949;*/
   display: block;
 }
-.profile.modificar .display {
+
+.profile.modificar .dataUser,
+.profile.modificar .displayPhoto {
   display: none;
 }
 
 
+.profile .displayPhoto {
+  display: flex;
+  display: -webkit-flex; /* Safari */
+  display: -moz-flex; /* mozilla */
+  flex-direction:column;
+  -webkit-flex-direction:column; /* Safari */
+  -moz-flex-direction:column; /* mozilla */
+  align-items: center;
+  -webkit-align-items: center;
+  -moz-align-items: center;
+  /*background-color: red;*/
+}
+
+.profile .btnAcept {
+  padding: 10px;
+  width: 100%;
+  margin-top: 10px;
+  cursor: pointer;
+  background-color: #0066A6;
+  border: solid 1px #0066A6;
+  color: white;
+  font-size: 12px;
+  border: none;
+  border-radius: 2px;
+  -moz-border-radius: 2px;
+  -webkit-border-radius: 2px;
+  font-weight: bold;
+}
+
+.profile .btnAcept:hover {
+  cursor: pointer;
+  background-color: #005184;
+}
 
 /*----------- MEDIA QUERIS -------------*/
 

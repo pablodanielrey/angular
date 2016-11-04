@@ -4,37 +4,37 @@
 
         <div class="contentProfile">
 
-            <div class="display">
+            <div class="displayPhoto">
               <div class="contentPhoto" > <img class="photo" ng-src="{{vm.myCroppedImage}}">  </div>
               <button class="btnChangePhoto" ng-click="vm.view.style='modificar'">cambiar imagen</button>
             </div>
 
             <div class="edit">
-              <div>Select an image file: <input type="file" id="fileInput" /></div>
-
-              <div class="cropArea">
-                  <img-crop image="vm.myImage" result-image="vm.myCroppedImage"></img-crop>
-              </div>
-              <button ng-click="vm.save()">Aceptar</button>
+              <div class="cropArea"> <img-crop image="vm.myImage" result-image="vm.myCroppedImage"></img-crop> </div>
+              <div> <input type="file" id="fileInput" /> </div>
+              <button class="btnAcept" ng-click="vm.save()">Aceptar </button>
             </div>
 
-            <div class="textName"> Walter Roberto Blanco </div>
-            <div class="contentDNI">
-                <div class=textItem>DNI</div>
-                <div class=textSubItem>30001823</div>
+            <div class="dataUser">
+                <div class="textName"> Walter Roberto Blanco </div>
+                <div class="contentDNI">
+                    <div class=textItem>DNI</div>
+                    <div class=textSubItem>30001823</div>
+                </div>
+                <div class="contentLegajo">
+                    <div class=textItem>LEGAJO</div>
+                    <div class=textSubItem>55689/2</div>
+                </div>
+                <div class="contentMail">
+                    <div class=textItem><i class="fa fa-envelope-o"></i></div>
+                    <div class=textSubItem>lllwalterlll@gmail.com</div>
+                </div>
+                <div class="contentMail">
+                    <div class=textItem><i class="fa fa-envelope-o"></i></div>
+                    <div class=textSubItem>walter.blanco@econo.unlp.edu.ar</div>
+                </div>
             </div>
-            <div class="contentLegajo">
-                <div class=textItem>LEGAJO</div>
-                <div class=textSubItem>55689/2</div>
-            </div>
-            <div class="contentMail">
-                <div class=textItem><i class="fa fa-envelope-o"></i></div>
-                <div class=textSubItem>lllwalterlll@gmail.com</div>
-            </div>
-            <div class="contentMail">
-                <div class=textItem><i class="fa fa-envelope-o"></i></div>
-                <div class=textSubItem>walter.blanco@econo.unlp.edu.ar</div>
-            </div>
+
         </div>
 
         <div class="contentActions">
