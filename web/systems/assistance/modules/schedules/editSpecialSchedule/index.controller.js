@@ -36,6 +36,7 @@
       vm.displayEditSpecialSch = displayEditSpecialSch;
       vm.back = back;
       vm.addSchedule = addSchedule;
+      vm.removeSchedule = removeSchedule;
       vm.save = save;
 
       $scope.$on('wamp.open', function(event, args) {
@@ -172,6 +173,10 @@
         var start = new Date(vm.model.schedules[0].end.getTime());
         var end = new Date(start.getTime());
         vm.model.schedules.push({start: start, end: end});
+      }
+
+      function removeSchedule() {
+        vm.model.schedules.splice(1,1);
       }
 
       /* **************************************************************************************************

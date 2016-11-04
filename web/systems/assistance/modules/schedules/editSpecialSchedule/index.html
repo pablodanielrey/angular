@@ -37,6 +37,7 @@
                 <div class="headerCurrentSchedule">
                     <div>Horario especial</div>
                     <div class="btnCut" ng-click="vm.addSchedule()" ng-if="vm.model.schedules.length <= 1"><i class="fa fa-scissors"></i> Cortar horario</div>
+                    <div class="btnCut" ng-click="vm.removeSchedule()" ng-if="vm.model.schedules.length > 1"><i class="fa fa-scissors"></i> Eliminar horario cortado</div>
                 </div>
 
                 <div ng-repeat="sched in vm.model.schedules">
