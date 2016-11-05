@@ -199,7 +199,6 @@ class UserDAO(DAO):
     @staticmethod
     def findByDni(con, dnis):
         '''
-            Obtiene los datos básicos del usuario
             Retorna:
                 (id, version)
                 None en caso de no existir

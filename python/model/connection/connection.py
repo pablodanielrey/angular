@@ -62,9 +62,9 @@ class Connection:
         return self.pool.getconn()
 
     def put(self, conn):
-        self.logging.debug('retornando la conexion al pool')
         self.pool.putconn(conn)
+        self.logging.debug('retornando la conexion al pool')
 
     def __del__(self):
-        self.logging.debug('cerrando todas las conexiones a la base')
         self.pool.closeall()
+        self.logging.debug('cerrando todas las conexiones a la base')

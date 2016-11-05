@@ -21,39 +21,80 @@ from model.connection.connection import Connection
 from model.offices.office import Office
 from model.users.users import User, UserPassword
 
-def getIp(b, n):
-    return '.{}.{}'.format((n // 250) + b, (n % 250) + 1)
+
+
+class Iph:
+
+    def __init__(self, b):
+        self.base = b
+        self.count = 1
+        self.macs = []
+        self.networks = ['10.10','10.17','10.26','10.14','10.8','10.9','10.11','10.15','10.12','10.18','10.19','10.20']
+
+    def __getIp(self, n):
+        return '.{}.{}'.format((n // 254) + self.base, (n % 254) + 1)
+
+    def getIps(self, mac):
+        ''' obtiene las ips de las redes asignadas para determinada mac '''
+        if mac in self.macs:
+            return []
+        self.macs.append(mac)
+        ips = []
+        ip = self.__getIp(self.count)
+        for n in self.networks:
+            ips.append('{}{}'.format(n, ip))
+        self.count = self.count + 1
+        return ips
 
 if __name__ == '__main__':
 
     logging.getLogger().setLevel(logging.DEBUG)
 
-    # obtengo todos los usuasrios para referenciarlos despues con los registros de acceso.
+    # obtengo los registros de acceso de los aps
+    logging.info('obtieniendo registros de logs')
+    mcon = pymysql.connect(host='163.10.17.130',
+                    user='freeradius',
+                    password='radacct',
+                    db='freeradius',
+                    cursorclass=pymysql.cursors.DictCursor)
+    try:
+        macs = {}
+        with mcon.cursor() as cur:
+            cur.execute('select distinct username, callingstationid from radacct order by username')
+            for r in cur:
+                mac = r['callingstationid'].replace('-',':')
+                dni = r['username']
+                if dni not in macs:
+                    macs[dni] = set()
+                macs[dni].add(mac)
+    finally:
+        mcon.close()
+    logging.info('{} registros obtenidos'.format(len(macs.keys())))
 
+    logging.info('Obteniendo usuarios')
     users = {}
-
-    print('Obteniendo usuarios')
-
     reg = inject.instance(Registry)
     conn = Connection(reg.getRegistry('dcsys'))
     con = conn.get()
     try:
         Connection.readOnly(con)
-        userIds = User.findAll(con)
-        for uid in [i for (i, v) in userIds]:
-            user = User.findById(con, [uid])[0]
-            users[user.dni] = user
+        userIds = User.findByDni(con, macs.keys())
+        userss = User.findById(con, [i for (i,v) in userIds])
+        for u in userss:
+            users[u.dni] = u
 
     finally:
         conn.put(con)
 
-
     print('Usuarios obtenidos: {}'.format(len(users.keys())))
 
 
-    ## las redes a generar:
+    ## creo los generadores de ips para los distintos rangos.
+    ipa = Iph(250)      # 10.250.x.x -----> autoridades
+    ipd = Iph(100)      # >= 10.100.x.x --> docentes
+    ipn = Iph(10)       # >= 10.10.x.x ---> alumnos
 
-    networks = ['10.10','10.17','10.26','10.14','10.8','10.9','10.11','10.15','10.12','10.18','10.19','10.20']
+    # registro usuarios que son autoridades
     autoridades = [
         '27294557',     # pablo rey
         '30057880',     # charly
@@ -70,93 +111,42 @@ if __name__ == '__main__':
         '29763750'      # paula beyries
     ]
 
-    # obteniendo los registros de acceso.
+    logging.info('escribiendo los archivos dhcp')
+    with open('/tmp/dhcp-alumnos.txt','w') as dalumnos:
+        with open('/tmp/dhcp-docentes.txt','w') as ddocentes:
+            with open('/tmp/dhcp-autoridades.txt','w') as dautoridades:
+                for dni in macs:
+                    maccs = macs[dni]
+                    ips = []
 
-    mcon = pymysql.connect(host='163.10.17.130',
-                    user='freeradius',
-                    password='radacct',
-                    db='freeradius',
-                    cursorclass=pymysql.cursors.DictCursor)
-    try:
-        with open('/tmp/dhcp-alumnos.txt','w') as dalumnos:
-            with open('/tmp/dhcp-docentes.txt','w') as ddocentes:
-                with open('/tmp/dhcp-autoridades.txt','w') as dautoridades:
-                    with mcon.cursor() as cur:
-                        cur.execute('select distinct username, callingstationid from radacct order by username')
+                    fileToWrite = None
+                    if dni in autoridades:
+                        fileToWrite = dautoridades
+                        for mac in maccs:
+                            ips.extend(ipa.getIps(mac))
 
-                        #contador y base de cada uno de los grupos de usuarios. autoridades, docentes, alumnos
-                        ipa = 1
-                        basea = 250
+                    elif dni in users and users[dni].type == 'teacher':
+                        fileToWrite = ddocentes
+                        for mac in maccs:
+                            ips.extend(ipd.getIps(mac))
 
-                        ipd = 1
-                        based = 100
+                    else:
+                        fileToWrite = dalumnos
+                        for mac in maccs:
+                            ips.extend(ipn.getIps(mac))
 
-                        ipn = 1
-                        basen = 1
+                    name = users[dni].name if dni in users and users[dni].name is not None else 'no tiene'
+                    lastname = users[dni].lastname if dni in users and users[dni].lastname is not None else 'no tiene'
 
-                        macsProcessed = []
-
-                        for r in cur:
-                            tipo = 'n'
-
-                            mac = r['callingstationid'].replace('-',':')
-                            if mac in macsProcessed:
-                                continue
-
-                            macsProcessed.append(mac)
-
-                            dni = r['username']
-                            username = ' no tiene '
-                            lastname = ' no tiene '
-                            try:
-                                uname = users[dni].name
-                                lastname = users[dni].lastname
-                                tipo = 'd' if users[dni].type == 'teacher' else 'n'
-                                tipo = 'a' if dni in autoridades else tipo
-                            except Exception as e:
-                                pass
-
-                            #net = r['calledstationid'].split(':')[1]
-                            #ap = r['calledstationid'].split(':')[0]
-                            name = str(uuid.uuid4())
-
-                            for ne in networks:
-
-                                fileToWrite = None
-                                ip = ''
-
-                                if tipo == 'a':
-                                    ip = getIp(basea, ipa)
-                                    fileToWrite = dautoridades
-
-                                elif tipo == 'd':
-                                    ip = getIp(based, ipd)
-                                    fileToWrite = ddocentes
-
-                                elif tipo == 'n':
-                                    ip = getIp(basen, ipn)
-                                    fileToWrite = dalumnos
-
-                                fileToWrite.write("""
-                                        # {} {} {}
-                                        host {} {{
-                                            hardware ethernet {};
-                                            fixed-address {}{};
-                                        }}\n
-                                """.format(dni, uname, lastname, name, mac, ne, ip))
-
-                            if tipo == 'a':
-                                ipa = ipa + 1
-
-                            if tipo == 'd':
-                                ipd = ipd + 1
-
-                            if tipo == 'n':
-                                ipn = ipn + 1
-
-
-    finally:
-        mcon.close()
+                    for ip in ips:
+                        hname = str(uuid.uuid4())
+                        fileToWrite.write("""
+                                # {} {} {}
+                                host {} {{
+                                    hardware ethernet {};
+                                    fixed-address {};
+                                }}\n
+                        """.format(dni, name, lastname, hname, mac, ip))
 
     sys.exit(1)
 
