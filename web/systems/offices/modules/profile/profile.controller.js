@@ -9,10 +9,25 @@
     function ProfileCtrl($scope) {
         var vm = this;
 
+        ////////////////
+
+        vm.view = {
+          style: '',
+          editMail: editMail,
+        }
+
+        function editMail() {
+          console.log('prueb');
+          vm.view.style = 'pantallaEdicionUsuario editarMail';
+        }
+
+
+
         vm.myImage="/systems/offices/img/noImage.jpg";
         vm.myCroppedImage='';
 
         vm.save = save;
+        vm.editMail = editMail;
 
         var handleFileSelect=function(evt) {
           var file=evt.currentTarget.files[0];
@@ -31,6 +46,10 @@
           vm.view.style = '';
           // vm.myImage = vm.myCroppedImage;
         }
+
+
+
+
     }
 
 

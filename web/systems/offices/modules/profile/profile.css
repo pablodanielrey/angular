@@ -28,7 +28,19 @@
     100% {opacity: 1}
 }
 
-.profile .contentProfile {
+/* -------- PANTALLA EDITPROFILE -------------*/
+
+.profile .editProfile {
+  width: calc(33% - 40px);
+  height: calc(100% - 40px);
+  /*background-color: red;*/
+  padding: 20px;
+  animation-name: movimiento;
+   animation-duration: .5s;
+   overflow-y: auto;
+}
+
+.profile .contentEditProfile {
     width: 100%;
     padding: 10px;
     background: #ffffff;
@@ -47,209 +59,60 @@
     flex-direction:column;
     -webkit-flex-direction:column; /* Safari */
     -moz-flex-direction:column; /* mozilla */
-    align-items: center;
-    -webkit-align-items: center;
-    -moz-align-items: center;
-}
-
-.profile .contentPhoto {
-  /*background-color: red;*/
-  display: flex;
-  display: -webkit-flex; /* Safari */
-  display: -moz-flex; /* mozilla */
-  flex-direction:row;
-  -webkit-flex-direction:row; /* Safari */
-  -moz-flex-direction:row; /* mozilla */
-  justify-content: center;
-  -webkit-justify-content: center;
-  -moz-justify-content: center;
-
 
 }
 
-.profile .photo {
-  width: 150px;
-  height: 150px;
-  border-radius: 100%;
-  -moz-border-radius: 100%;
-  -webkit-border-radius: 100%;
-}
 
-.profile .textName {
-  font-size: 13px;
-  font-weight: bold;
-  color: #28292D;
-  margin-bottom: 5px;
-}
-
-.profile .contentLegajo,
-.profile .contentMail,
-.profile .contentDNI {
-  display: flex;
-  display: -webkit-flex; /* Safari */
-  display: -moz-flex; /* mozilla */
-  flex-direction:row;
-  -webkit-flex-direction:row; /* Safari */
-  -moz-flex-direction:row; /* mozilla */
-  justify-content: center;
-  -webkit-justify-content: center;
-  -moz-justify-content: center;
-  align-items: center;
-  -webkit-align-items: center;
-  -moz-align-items: center;
-}
-
-.profile .textItem {
-  font-size: 10px;
-  color: #5C5F69;
-  margin-right: 5px;
-}
-
-.profile .textSubItem {
-  font-size: 12px;
-}
-
-.profile .contentActions {
-  margin-top: 5px;
-}
-
-.profile .btn {
-  padding: 10px;
-  width: 100%;
-  margin-top: 10px;
-  cursor: pointer;
-  background-color: #D1D1D1;
-  border: solid 1px #0066A6;
-  color: #28292D;
-  font-size: 12px;
-  border: none;
-  border-radius: 2px;
-  -moz-border-radius: 2px;
-  -webkit-border-radius: 2px;
-  font-weight: bold;
-}
-
-.profile .btn:hover {
-  color: white;
-  background-color: #0066A6;
-  animation-name: fondo;
-  animation-duration: .5s;
-}
-
-.cropArea {
-  /*background: #E4E4E4;*/
-  overflow: hidden;
-  width:100%;
-  height:200px;
-}
-
-#fileInput {
-  /*background-color: red;*/
-}
-
-
-@keyframes fondo {
-    0% {  background-color: #D1D1D1}
-    100% {  background-color: #0066A6}
-}
-
-.profile .icoBtn {
-  color: #5C5F69;
-  opacity: 0.5;
-  margin-right: 5px;
-}
-
-.profile .btn:hover .icoBtn {
-  color: #eeeeee;
-}
-
-
-.profile .btnChangePhoto {
-  margin-top: 5px;
-  margin-bottom: 10px;
-  cursor: pointer;
-  background-color: white;;
-  border: solid 1px #0066A6;
-  color: #5c5f69;
-  font-size: 12px;
-  border: none;
-  border-radius: 2px;
-  -moz-border-radius: 2px;
-  -webkit-border-radius: 2px;
-
-}
-
-.profile .dataUser {
-  display: flex;
-  display: -webkit-flex; /* Safari */
-  display: -moz-flex; /* mozilla */
-  flex-direction:column;
-  -webkit-flex-direction:column; /* Safari */
-  -moz-flex-direction:column; /* mozilla */
-  align-items: center;
-  -webkit-align-items: center;
-  -moz-align-items: center;
-}
-
-.profile .edit {
-  display:none;
-}
-.profile.modificar .edit {
-  width: 100%;
-  /*background-color: #494949;*/
-  display: block;
-}
-
-.profile.modificar .dataUser,
-.profile.modificar .displayPhoto {
-  display: none;
-}
-
-
-.profile .displayPhoto {
-  display: flex;
-  display: -webkit-flex; /* Safari */
-  display: -moz-flex; /* mozilla */
-  flex-direction:column;
-  -webkit-flex-direction:column; /* Safari */
-  -moz-flex-direction:column; /* mozilla */
-  align-items: center;
-  -webkit-align-items: center;
-  -moz-align-items: center;
-  /*background-color: red;*/
-}
-
-.profile .btnAcept {
-  padding: 10px;
-  width: 100%;
-  margin-top: 10px;
-  cursor: pointer;
-  background-color: #0066A6;
-  border: solid 1px #0066A6;
-  color: white;
-  font-size: 12px;
-  border: none;
-  border-radius: 2px;
-  -moz-border-radius: 2px;
-  -webkit-border-radius: 2px;
-  font-weight: bold;
-}
-
-.profile .btnAcept:hover {
-  cursor: pointer;
-  background-color: #005184;
-}
 
 /*----------- MEDIA QUERIS -------------*/
 
 @media (max-width: 719px) {
-  .profile .myProfile {
+  .profile .searchUser,
+  .profile .myProfile,
+  .profile .editProfile {
     width: 100% !important;
     height: calc(100% - 90px);
 }
+
+  .profile.pantallaBuscarUsuarios .myProfile,
+  .profile.pantallaBuscarUsuarios .editProfile {
+    display: none;
+  }
+
+  .profile.pantallaPerfilDeUsuario .searchUser,
+  .profile.pantallaPerfilDeUsuario .editProfile {
+    display: none;
+  }
+
+  .profile.pantallaEdicionUsuario .searchUser,
+  .profile.pantallaEdicionUsuario .myProfile {
+    display: none;
+  }
+
+}
+
 
 @media (min-width:1800px) {
   .profile {
     zoom: 1.3;
   }
+}
+
+
+
+/*-----  MENEJO DE PANTALLAS -------*/
+
+.profile.pantallaEdicionUsuario.editarMail .editPass,
+.profile.pantallaEdicionUsuario.editarMail .editProfileAdvanced {
+  display: none;
+}
+
+.profile.pantallaEdicionUsuario.editarContrasena .editMail,
+.profile.pantallaEdicionUsuario.editarContrasena .editProfileAdvanced {
+  display: none;
+}
+
+.profile.pantallaEdicionUsuario.editarPerfilAvanzado .editPass,
+.profile.pantallaEdicionUsuario.editarPerfilAvanzado .editMail {
+  display: none;
 }
