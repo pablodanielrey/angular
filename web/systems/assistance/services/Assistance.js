@@ -4,9 +4,9 @@
 			.module('assistance')
 			.service('Assistance', Assistance);
 
-		Assistance.inject = ['Login', 'Users'];
+		Assistance.inject = ['Login', 'Users', '$q'];
 
-		function Assistance(Login, Users) {
+		function Assistance(Login, Users, $q) {
 
       this.getLogs = getLogs;
 			this.exportLogs = exportLogs;
@@ -20,6 +20,16 @@
 
 			this.findUsersByStatics = findUsersByStatics;
 			this.setWorkedNote = setWorkedNote;
+
+			this.searchUsers = searchUsers;
+			this.findUserByIds = findUserByIds;
+			this.loadProfile = loadProfile;
+
+			this.saveSpecialSchedules = saveSpecialSchedules;
+			this.loadWatcherSchedules = loadWatcherSchedules;
+			this.loadSchedules = loadSchedules;
+			this.saveWatcherSchedules = saveWatcherSchedules;
+			this.saveSchedules = saveSchedules;
 
 
       function getLogs(initDate, endDate, initHour, endHour) {
@@ -183,6 +193,119 @@
 						}
 					);
 				}
+
+				/* ***********************************************************************************
+																					Usuarios de asistencia
+				 * *********************************************************************************** */
+
+				 function findUserByIds(users) {
+					 var d = $q.defer();
+					  var ids = [];
+					 	for (var i = 0; i < users.length; i++) {
+							ids.push(users[i].id);
+						}
+						Users.findById(ids).then(function(users) {
+							console.log(users);
+							d.resolve(users);
+						}, function(error) {
+							d.reject(error);
+						});
+
+						return d.promise;
+				 }
+
+				/*
+					searchUsers return : [(userId, version)]
+				*/
+				function searchUsers(regex) {
+					var d = $q.defer();
+					Login.getPrivateTransport().call('assistance.search_users', [regex]).then(function(ids) {
+						var users = [];
+						for (var i = 0; i < ids.length; i++) {
+							var data = ids[i];
+							users.push({id:data[0], version: data[1]});
+						}
+						d.resolve(users);
+					}, function(error) {
+						d.reject(error);
+					});
+					return d.promise;
+				}
+
+				// return: 'admin' o 'user'
+				function loadProfile() {
+					var defer = $q.defer();
+					defer.resolve('admin');
+					return defer.promise;
+				}
+
+				/* ***********************************************************************************
+																					SCHEDULES
+				 * *********************************************************************************** */
+
+				 function saveSpecialSchedules(schedules) {
+					 var defer = $q.defer();
+ 					defer.resolve(true);
+ 					return defer.promise;
+				 }
+
+				 function saveSchedules(schedules) {
+					 var defer = $q.defer();
+ 					defer.resolve(true);
+ 					return defer.promise;
+				 }
+
+				 function saveWatcherSchedules(schedules) {
+					 var defer = $q.defer();
+ 					defer.resolve(true);
+ 					return defer.promise;
+				 }
+
+				 function loadWatcherSchedules(date) {
+					 var defer = $q.defer();
+					 var schedules = [];
+					 var start = new Date(); start.setHours(21); start.setMinutes(0); start.setSeconds(0); start.setMilliseconds(0);
+           schedules.push({day:"2", start: start, hours: 25});
+           start = new Date(); start.setHours(15); start.setMinutes(0); start.setSeconds(0); start.setMilliseconds(0);
+           schedules.push({day:"4", start: start, hours: 30});
+					 defer.resolve(schedules);
+					 return defer.promise;
+				 }
+
+				 function loadSchedules(date) {
+					 var defer = $q.defer();
+					 var schedules = [];
+					 var dayMillis = 24 * 60 * 60 * 1000;
+					 for (var i = 0; i < 7; i++) {
+						 var dateAux = new Date(date.getTime() + i * dayMillis);
+						 if (dateAux.getDay() == 6 || dateAux.getDay() == 0) {
+							 schedules.push({date: dateAux, start: null, end: null, style: 'horarioNormal'});
+							 continue;
+						 }
+
+						 if (dateAux.getDay() == 3) {
+							 var start = new Date(dateAux.getTime());
+							 var end = new Date(dateAux.getTime());
+							 start.setHours(7); start.setMinutes(0); start.setSeconds(0); start.setMilliseconds(0);
+							 end.setHours(10); end.setMinutes(30); end.setSeconds(0); end.setMilliseconds(0);
+							 schedules.push({date: dateAux, start: start, end: end, style: 'horarioNormal'});
+							 var start = new Date(dateAux.getTime());
+							 var end = new Date(dateAux.getTime());
+							 start.setHours(15); start.setMinutes(30); start.setSeconds(0); start.setMilliseconds(0);
+							 end.setHours(19); end.setMinutes(0); end.setSeconds(0); end.setMilliseconds(0);
+							 schedules.push({date: dateAux, start: start, end: end, style: 'horarioCortado'});
+						 } else {
+							 var start = new Date(dateAux.getTime());
+							 var end = new Date(dateAux.getTime());
+							 start.setHours(8); start.setMinutes(0); start.setSeconds(0); start.setMilliseconds(0);
+							 end.setHours(15); end.setMinutes(0); end.setSeconds(0); end.setMilliseconds(0);
+							 schedules.push({date: dateAux, start: start, end: end, style: 'horarioNormal'});
+						 }
+					 }
+
+					 defer.resolve(schedules);
+					 return defer.promise;
+				 }
 
     }
 })();

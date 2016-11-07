@@ -1,14 +1,14 @@
 <div class="listUsers">
     <div class="searchUsers">
         <div class="contentSearch"><i class="fa fa-search"></i> BUSCAR USUARIOS</div>
-        <div> <input class="input" type="text" ng-model="vm.search"> </div>
+        <div> <input class="input" ng-click="vm.search = ''" ng-model="vm.search" type="text" placeholder="Buscar personal..." ng-disabled="vm.searching" ng-model-options="{ debounce: 1000 }" ng-change="vm.searchUsers()"></div>
         <div class="titleListOffices">  Listado de Usuarios </div>
     </div>
     <div class="contentList">
-        <div class="itemUser" ng-repeat="user in vm.users | filter: vm.search">
+        <div class="itemUser" ng-repeat="user in vm.users | orderBy: ['name', 'lastname']">
             <div class="dataUser">
                 <div class="photoUser">
-                    <img class="imgUser" ng-src="{{user.img}}" alt="foto de perfil">
+                    <img class="imgUser" ng-src="{{user.photoSrc}}" alt="foto de perfil">
                 </div>
                 <div class="infoUser">
                     <div class="textName">{{user.name}} {{user.lastname}}</div>

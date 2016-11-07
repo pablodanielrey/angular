@@ -5,10 +5,10 @@
         .module('assistance')
         .controller('EditSpecialSchCtrl', EditSpecialSchCtrl);
 
-    EditSpecialSchCtrl.$inject = ['$scope', '$routeParams', 'Login', '$q', 'Users', '$timeout', '$location'];
+    EditSpecialSchCtrl.$inject = ['$scope', '$routeParams', 'Login', 'Users', 'Assistance', '$timeout', '$location'];
 
     /* @ngInject */
-    function EditSpecialSchCtrl($scope, $routeParams, Login, $q, Users, $timeout, $location) {
+    function EditSpecialSchCtrl($scope, $routeParams, Login, Users, Assistance, $timeout, $location) {
       var vm = this;
 
       vm.model = {
@@ -58,10 +58,7 @@
           vm.model.selectedPerson =  Login.getCredentials()['userId'];
         }
 
-        loadProfile().then(function() {
-            vm.displayEditSpecialSch()
-        });
-
+        loadProfile();
         loadSchedules();
         loadUsers();
         loadUser();
@@ -90,6 +87,12 @@
         });
       }
 
+      function displayMessageError(error) {
+        var style = (vm.view.profile == 'admin') ? vm.view.profileAdmin : vm.view.profileUser;
+        vm.view.error = error;
+        vm.view.style = style + ' ' + vm.view.errorMessage;
+      }
+
       function getUserPhoto() {
         return (vm.model.user == null || !'photoSrc' in vm.model.user) ? 'img/avatarMan.jpg' : vm.model.user.photoSrc
       }
@@ -103,15 +106,24 @@
       * ************************************************************************************************ */
 
       function loadProfile() {
-        var d = $q.defer();
-        // aca deberia hacer la llamada al servidor
-        vm.view.profile = "admin";
+        Assistance.loadProfile().then(function(profile) {
+          _loadProfile(profile);
+        }, function(error) {
+          displayMessageError(error);
+          $timeout(function() {
+              _loadProfile(null)
+          }, 2500);
+        })
+      }
 
+
+
+      function _loadProfile(profile) {
+        vm.view.profile = profile;
         var style = (vm.view.profile == 'admin') ? vm.view.profileAdmin : vm.view.profileUser;
         vm.view.style = style + ' ' + vm.view.displayListUsers;
-        d.resolve();
 
-        return d.promise;
+        vm.displayEditSpecialSch();
       }
 
       function loadUser() {
@@ -120,8 +132,11 @@
           $timeout(function() {
             vm.model.user = (users.length <= 0) ? null : users[0];
           },0);
-        }, function(err) {
-          console.log(err);
+        }, function(error) {
+          displayMessageError(error);
+          $timeout(function() {
+              _loadProfile(vm.view.profile)
+          }, 1500);
         })
       }
 
@@ -130,25 +145,14 @@
   * ************************************************************************************************ */
 
       function loadUsers() {
-          vm.model.users = [];
-          vm.model.users.push({id:'1', dni: '31381082', name: 'Emanuel Joaquín', lastname: 'Pais', img: 'img/avatarMan.jpg'});
-          vm.model.users.push({id:'2', dni: '30112124', name: 'Walter Roberto', lastname: 'Blanco', img: 'img/avatarMan.jpg'});
-          vm.model.users.push({id:'3', dni: '30112124', name: 'Walter Roberto', lastname: 'Blanco', img: 'img/avatarMan.jpg'});
-          vm.model.users.push({id:'4', dni: '30112124', name: 'Walter Roberto', lastname: 'Blanco', img: 'img/avatarMan.jpg'});
-          vm.model.users.push({id:'5', dni: '30112124', name: 'Walter Roberto', lastname: 'Blanco', img: 'img/avatarMan.jpg'});
-          vm.model.users.push({id:'6', dni: '30112124', name: 'Walter Roberto', lastname: 'Blanco', img: 'img/avatarMan.jpg'});
-          vm.model.users.push({id:'7', dni: '30112124', name: 'Walter Roberto', lastname: 'Blanco', img: 'img/avatarMan.jpg'});
-          vm.model.users.push({id:'8', dni: '30112124', name: 'Walter Roberto', lastname: 'Blanco', img: 'img/avatarMan.jpg'});
-          vm.model.users.push({id:'9', dni: '30112124', name: 'Walter Roberto', lastname: 'Blanco', img: 'img/avatarMan.jpg'});
-          vm.model.users.push({id:'10', dni: '30112124', name: 'Walter Roberto', lastname: 'Blanco', img: 'img/avatarMan.jpg'});
-          vm.model.users.push({id:'11', dni: '30112124', name: 'Walter Roberto', lastname: 'Blanco', img: 'img/avatarMan.jpg'});
-          vm.model.users.push({id:'12', dni: '30112124', name: 'Walter Roberto', lastname: 'Blanco', img: 'img/avatarMan.jpg'});
-          vm.model.users.push({id:'13', dni: '30112124', name: 'Walter Roberto', lastname: 'Blanco', img: 'img/avatarMan.jpg'});
-          vm.model.users.push({id:'14', dni: '30112124', name: 'Walter Roberto', lastname: 'Blanco', img: 'img/avatarMan.jpg'});
-          vm.model.users.push({id:'15', dni: '30112124', name: 'Walter Roberto', lastname: 'Blanco', img: 'img/avatarMan.jpg'});
-          vm.model.users.push({id:'16', dni: '30112124', name: 'Walter Roberto', lastname: 'Blanco', img: 'img/avatarMan.jpg'});
-          vm.model.users.push({id:'17', dni: '30112124', name: 'Walter Roberto', lastname: 'Blanco', img: 'img/avatarMan.jpg'});
-          vm.model.users.push({id:'18', dni: '30112124', name: 'Walter Roberto', lastname: 'Blanco', img: 'img/avatarMan.jpg'});
+        Assistance.loadUsers().then(function(users) {
+          vm.model.users = users;
+        }, function(error) {
+          displayMessageError(error);
+          $timeout(function() {
+              _loadProfile(vm.view.profile)
+          }, 1500);
+        })
       }
 
       function selectUser(user) {
@@ -182,14 +186,28 @@
       /* **************************************************************************************************
                                           GUARDAR
       * ************************************************************************************************ */
+
+      function _verify() {
+        return true;
+      }
+
       function save() {
+        if (!_verify()) {
+          return;
+        }
+
         vm.view.style = displayMessageLoading();
-        $timeout(function () {
+        Assistance.saveSpecialSchedules(vm.model.schedules).then(function() {
           vm.view.style = displayMessageSave();
           $timeout(function () {
             $location.path("/schedules/" + vm.model.selectedPerson);
           }, 2000);
-        }, 2000);
+        }, function(error) {
+          displayMessageError(error);
+          $timeout(function() {
+            vm.view.style = vm.view.displayEdit;
+          }, 3000)
+        });
       }
     }
 })();

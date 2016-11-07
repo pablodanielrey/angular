@@ -4,9 +4,9 @@
       .module('assistance')
       .controller('SchedulesCtrl', SchedulesCtrl);
 
-    SchedulesCtrl.$inject = ['$scope', 'Assistance', 'Users', 'Login', '$routeParams', '$location', '$q', '$timeout'];
+    SchedulesCtrl.$inject = ['$scope', 'Assistance', 'Users', 'Login', '$routeParams', '$location', '$timeout'];
 
-    function SchedulesCtrl($scope, Assistance, Users, Login, $routeParams, $location, $q, $timeout) {
+    function SchedulesCtrl($scope, Assistance, Users, Login, $routeParams, $location, $timeout) {
         var vm = this;
         vm.model = {
           users: [],
@@ -22,8 +22,11 @@
           displayListUsers: 'pantallaUsuarios verHorario',
           displayPerson: 'pantallaEdicion verHorario',
           displayQuestions: 'pantallaEdicion verPreguntaDeHorario',
+          loadingMessage: 'pantallaEdicion verHorario mensajes mensajeCargando',
+          errorMessage: 'pantallaEdicion verHorario mensajes mensajeError',
           profile: 'user',
-          activate: false
+          activate: false,
+          error: ''
         }
 
         vm.selectUser = selectUser;
@@ -47,27 +50,16 @@
           }
           vm.view.activate = true;
 
-          console.time("TimerName");
-
           var params = $routeParams;
           if ('personId' in params) {
             vm.model.selectedPerson = params.personId;
           } else {
             vm.model.selectedPerson =  Login.getCredentials()['userId'];
           }
-          loadProfile().then(function() {
-            if ('personId' in params) {
-              displaySchedule();
-            } else {
-              displayUsers();
-            }
-          });
-          loadUsers();
+          loadProfile();
           loadUser();
           vm.model.date = new Date();
 
-
-          console.timeEnd("TimerName");
         }
 
     /* **************************************************************************************************
@@ -105,21 +97,46 @@
       return (vm.model.user == null || !'photoSrc' in vm.model.user) ? 'img/avatarMan.jpg' : vm.model.user.photoSrc
     }
 
+    function displayMessageLoading() {
+      var style = (vm.view.profile == 'admin') ? vm.view.profileAdmin : vm.view.profileUser;
+      $timeout(function () {
+        vm.view.style = style + ' ' + vm.view.loadingMessage;
+      });
+    }
+
+    function displayMessageError(error) {
+      var style = (vm.view.profile == 'admin') ? vm.view.profileAdmin : vm.view.profileUser;
+      vm.view.error = error;
+      vm.view.style = style + ' ' + vm.view.errorMessage;
+    }
+
 
     /* **************************************************************************************************
                                         MANEJO DE PERFIL DE USUARIO
     * ************************************************************************************************ */
 
     function loadProfile() {
-      var d = $q.defer();
-      // aca deberia hacer la llamada al servidor
-      vm.view.profile = "admin";
+      Assistance.loadProfile().then(function(profile) {
+        _loadProfile(profile);
+      }, function(error) {
+        displayMessageError(error);
+        $timeout(function() {
+          _loadProfile(null);
+        }, 1500);
 
+      })
+    }
+
+    function _loadProfile(profile) {
+      vm.view.profile = (profile == null) ? 'user' : profile;
       var style = (vm.view.profile == 'admin') ? vm.view.profileAdmin : vm.view.profileUser;
       vm.view.style = style + ' ' + vm.view.displayListUsers;
-      d.resolve();
 
-      return d.promise;
+      if ('personId' in $routeParams) {
+        displaySchedule();
+      } else {
+        displayUsers();
+      }
     }
 
     function loadUser() {
@@ -129,7 +146,10 @@
           vm.model.user = (users.length <= 0) ? null : users[0];
         },0);
       }, function(err) {
-        console.log(err);
+        displayMessageError(error);
+        $timeout(function() {
+            _loadProfile(vm.view.profile)
+        }, 1500);
       })
     }
 
@@ -137,39 +157,15 @@
                                         MANEJO DE PERSONAS
     * ************************************************************************************************ */
 
-        function loadUsers() {
-            vm.model.users = [];
-            vm.model.users.push({id:'1', dni: '31381082', name: 'Emanuel Joaquín', lastname: 'Pais', img: 'img/avatarMan.jpg'});
-            vm.model.users.push({id:'2', dni: '30112124', name: 'Walter Roberto', lastname: 'Blanco', img: 'img/avatarMan.jpg'});
-            vm.model.users.push({id:'3', dni: '30112124', name: 'Walter Roberto', lastname: 'Blanco', img: 'img/avatarMan.jpg'});
-            vm.model.users.push({id:'4', dni: '30112124', name: 'Walter Roberto', lastname: 'Blanco', img: 'img/avatarMan.jpg'});
-            vm.model.users.push({id:'5', dni: '30112124', name: 'Walter Roberto', lastname: 'Blanco', img: 'img/avatarMan.jpg'});
-            vm.model.users.push({id:'6', dni: '30112124', name: 'Walter Roberto', lastname: 'Blanco', img: 'img/avatarMan.jpg'});
-            vm.model.users.push({id:'7', dni: '30112124', name: 'Walter Roberto', lastname: 'Blanco', img: 'img/avatarMan.jpg'});
-            vm.model.users.push({id:'8', dni: '30112124', name: 'Walter Roberto', lastname: 'Blanco', img: 'img/avatarMan.jpg'});
-            vm.model.users.push({id:'9', dni: '30112124', name: 'Walter Roberto', lastname: 'Blanco', img: 'img/avatarMan.jpg'});
-            vm.model.users.push({id:'10', dni: '30112124', name: 'Walter Roberto', lastname: 'Blanco', img: 'img/avatarMan.jpg'});
-            vm.model.users.push({id:'11', dni: '30112124', name: 'Walter Roberto', lastname: 'Blanco', img: 'img/avatarMan.jpg'});
-            vm.model.users.push({id:'12', dni: '30112124', name: 'Walter Roberto', lastname: 'Blanco', img: 'img/avatarMan.jpg'});
-            vm.model.users.push({id:'13', dni: '30112124', name: 'Walter Roberto', lastname: 'Blanco', img: 'img/avatarMan.jpg'});
-            vm.model.users.push({id:'14', dni: '30112124', name: 'Walter Roberto', lastname: 'Blanco', img: 'img/avatarMan.jpg'});
-            vm.model.users.push({id:'15', dni: '30112124', name: 'Walter Roberto', lastname: 'Blanco', img: 'img/avatarMan.jpg'});
-            vm.model.users.push({id:'16', dni: '30112124', name: 'Walter Roberto', lastname: 'Blanco', img: 'img/avatarMan.jpg'});
-            vm.model.users.push({id:'17', dni: '30112124', name: 'Walter Roberto', lastname: 'Blanco', img: 'img/avatarMan.jpg'});
-            vm.model.users.push({id:'18', dni: '30112124', name: 'Walter Roberto', lastname: 'Blanco', img: 'img/avatarMan.jpg'});
-        }
 
-        function selectUser(user) {
-          if (user.id == vm.model.selectedPerson) {
-            vm.displaySchedule();
-          } else {
-            $location.path("/schedules/" + user.id);
-          }
+      function selectUser(user) {
+        if (user.id == vm.model.selectedPerson) {
+          vm.displaySchedule();
+        } else {
+          $location.path("/schedules/" + user.id);
         }
-
+      }
 
 
     }
-
-
 })();

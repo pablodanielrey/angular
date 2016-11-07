@@ -17,6 +17,8 @@ from model.assistance.logs import Log
 from model.assistance.utils import Utils
 from model.assistance.assistance import AssistanceModel
 
+from model.users.users import User
+
 ######## para activar exportación a LibreOffice #############
 ## from actions.systems.assistance.exportOO import ExportModel
 ####### para activar la exportación a google spreadsheets #############
@@ -100,6 +102,20 @@ class Assistance(wamp.SystemComponentSession):
     @inlineCallbacks
     def setWorkedNote(self, userId, date, text, details):
         r = yield threads.deferToThread(self._setWorkedNote,userId, date, text, details)
+        returnValue(r)
+
+
+    def _searchUsers(self, regex, details):
+        con = self.conn.get()
+        try:
+            return User.search(con, regex)
+        finally:
+            self.conn.put(con)
+
+    @autobahn.wamp.register('assistance.search_users')
+    @inlineCallbacks
+    def searchUsers(self, regex, details):
+        r = yield threads.deferToThread(self._searchUsers, regex, details)
         returnValue(r)
 
     ############################# EXPORTACIONES #######################################

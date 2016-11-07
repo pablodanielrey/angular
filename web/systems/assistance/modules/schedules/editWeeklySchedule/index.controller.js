@@ -5,10 +5,10 @@
         .module('assistance')
         .controller('EditWeeklySchCtrl', EditWeeklySchCtrl);
 
-    EditWeeklySchCtrl.$inject = ['$scope', 'Assistance', 'Users', 'Login', '$routeParams', '$location', '$timeout', '$q', '$filter'];
+    EditWeeklySchCtrl.$inject = ['$scope', 'Assistance', 'Users', 'Login', '$routeParams', '$location', '$timeout', '$filter'];
 
     /* @ngInject */
-    function EditWeeklySchCtrl($scope, Assistance, Users, Login, $routeParams, $location, $timeout, $q, $filter) {
+    function EditWeeklySchCtrl($scope, Assistance, Users, Login, $routeParams, $location, $timeout, $filter) {
         var vm = this;
 
         vm.model = {
@@ -29,7 +29,8 @@
           loadingMessage: 'pantallaEdicion nuevoHorarioSemanal mensajes mensajeCargando',
           errorMessage: 'pantallaEdicion nuevoHorarioSemanal mensajes mensajeError',
           profile: 'user',
-          activate: false
+          activate: false,
+          error: ''
         }
 
         vm.getUserPhoto = getUserPhoto;
@@ -62,10 +63,7 @@
             vm.model.selectedPerson =  Login.getCredentials()['userId'];
           }
 
-          loadProfile().then(function() {
-              vm.displayEditWeeklySch()
-          });
-
+          loadProfile();
           loadUsers();
           loadUser();
           vm.model.date = new Date();
@@ -77,7 +75,9 @@
 
         function displayEditWeeklySch() {
           var style = (vm.view.profile == 'admin') ? vm.view.profileAdmin : vm.view.profileUser;
-          vm.view.style = style + ' ' + vm.view.displayEdit;
+          $timeout(function () {
+            vm.view.style = style + ' ' + vm.view.displayEdit;
+          });
         }
 
         function displayMessageSave() {
@@ -121,17 +121,23 @@
         /* **************************************************************************************************
                                             MANEJO DE PERFIL DE USUARIO
         * ************************************************************************************************ */
-
         function loadProfile() {
-          var d = $q.defer();
-          // aca deberia hacer la llamada al servidor
-          vm.view.profile = "admin";
+          Assistance.loadProfile().then(function(profile) {
+            _loadProfile(profile);
+          }, function(error) {
+            displayMessageError(error);
+            $timeout(function() {
+                _loadProfile(null)
+            }, 1500);
+          })
+        }
 
+        function _loadProfile(profile) {
+          vm.view.profile = profile;
           var style = (vm.view.profile == 'admin') ? vm.view.profileAdmin : vm.view.profileUser;
           vm.view.style = style + ' ' + vm.view.displayListUsers;
-          d.resolve();
 
-          return d.promise;
+          vm.displayEditWeeklySch();
         }
 
         function loadUser() {
@@ -141,7 +147,10 @@
               vm.model.user = (users.length <= 0) ? null : users[0];
             },0);
           }, function(err) {
-            console.log(err);
+            displayMessageError(error);
+            $timeout(function() {
+                vm.displayEditWeeklySch();
+            }, 1500);
           })
         }
 
@@ -149,35 +158,24 @@
                                             MANEJO DE PERSONAS
         * ************************************************************************************************ */
 
-            function loadUsers() {
-                vm.model.users = [];
-                vm.model.users.push({id:'1', dni: '31381082', name: 'Emanuel Joaquín', lastname: 'Pais', img: 'img/avatarMan.jpg'});
-                vm.model.users.push({id:'2', dni: '30112124', name: 'Walter Roberto', lastname: 'Blanco', img: 'img/avatarMan.jpg'});
-                vm.model.users.push({id:'3', dni: '30112124', name: 'Walter Roberto', lastname: 'Blanco', img: 'img/avatarMan.jpg'});
-                vm.model.users.push({id:'4', dni: '30112124', name: 'Walter Roberto', lastname: 'Blanco', img: 'img/avatarMan.jpg'});
-                vm.model.users.push({id:'5', dni: '30112124', name: 'Walter Roberto', lastname: 'Blanco', img: 'img/avatarMan.jpg'});
-                vm.model.users.push({id:'6', dni: '30112124', name: 'Walter Roberto', lastname: 'Blanco', img: 'img/avatarMan.jpg'});
-                vm.model.users.push({id:'7', dni: '30112124', name: 'Walter Roberto', lastname: 'Blanco', img: 'img/avatarMan.jpg'});
-                vm.model.users.push({id:'8', dni: '30112124', name: 'Walter Roberto', lastname: 'Blanco', img: 'img/avatarMan.jpg'});
-                vm.model.users.push({id:'9', dni: '30112124', name: 'Walter Roberto', lastname: 'Blanco', img: 'img/avatarMan.jpg'});
-                vm.model.users.push({id:'10', dni: '30112124', name: 'Walter Roberto', lastname: 'Blanco', img: 'img/avatarMan.jpg'});
-                vm.model.users.push({id:'11', dni: '30112124', name: 'Walter Roberto', lastname: 'Blanco', img: 'img/avatarMan.jpg'});
-                vm.model.users.push({id:'12', dni: '30112124', name: 'Walter Roberto', lastname: 'Blanco', img: 'img/avatarMan.jpg'});
-                vm.model.users.push({id:'13', dni: '30112124', name: 'Walter Roberto', lastname: 'Blanco', img: 'img/avatarMan.jpg'});
-                vm.model.users.push({id:'14', dni: '30112124', name: 'Walter Roberto', lastname: 'Blanco', img: 'img/avatarMan.jpg'});
-                vm.model.users.push({id:'15', dni: '30112124', name: 'Walter Roberto', lastname: 'Blanco', img: 'img/avatarMan.jpg'});
-                vm.model.users.push({id:'16', dni: '30112124', name: 'Walter Roberto', lastname: 'Blanco', img: 'img/avatarMan.jpg'});
-                vm.model.users.push({id:'17', dni: '30112124', name: 'Walter Roberto', lastname: 'Blanco', img: 'img/avatarMan.jpg'});
-                vm.model.users.push({id:'18', dni: '30112124', name: 'Walter Roberto', lastname: 'Blanco', img: 'img/avatarMan.jpg'});
-            }
+          function loadUsers() {
+            Assistance.loadUsers().then(function(users) {
+              vm.model.users = users;
+            }, function(error) {
+              displayMessageError(error);
+              $timeout(function() {
+                  vm.displayEditWeeklySch();
+              }, 1500);
+            })
+          }
 
             function selectUser(user) {
               $location.path("/schedules/" + user.id);
             }
 
-            /* **************************************************************************************************
-                                                MANEJO DE SCHEDULES
-            * ************************************************************************************************ */
+          /* **************************************************************************************************
+                                              MANEJO DE SCHEDULES
+          * ************************************************************************************************ */
 
             $scope.$watch('vm.model.date', function(newVal, oldVal) {
               if (newVal == null && oldVal == null) {
@@ -193,33 +191,17 @@
 
             function loadSchedules() {
               vm.model.schedules = [];
-              var dayMillis = 24 * 60 * 60 * 1000;
-              for (var i = 0; i < 7; i++) {
-                var date = new Date(vm.model.date.getTime() + i * dayMillis);
-                if (date.getDay() == 6 || date.getDay() == 0) {
-                  vm.model.schedules.push({date: date, start: null, end: null, style: 'horarioNormal'});
-                  continue;
-                }
+              displayMessageLoading();
+              Assistance.loadSchedules(vm.model.date).then(function(schedules) {
+                vm.model.schedules = schedules;
+                vm.displayEditWeeklySch();
+              }, function(error) {
+                displayMessageError(error);
+                $timeout(function () {
+                  vm.displayEditWeeklySch();
+                }, 1500);
+              })
 
-                if (date.getDay() == 3) {
-                  var start = new Date(date.getTime());
-                  var end = new Date(date.getTime());
-                  start.setHours(7); start.setMinutes(0); start.setSeconds(0); start.setMilliseconds(0);
-                  end.setHours(10); end.setMinutes(30); end.setSeconds(0); end.setMilliseconds(0);
-                  vm.model.schedules.push({date: date, start: start, end: end, style: 'horarioNormal'});
-                  var start = new Date(date.getTime());
-                  var end = new Date(date.getTime());
-                  start.setHours(15); start.setMinutes(30); start.setSeconds(0); start.setMilliseconds(0);
-                  end.setHours(19); end.setMinutes(0); end.setSeconds(0); end.setMilliseconds(0);
-                  vm.model.schedules.push({date: date, start: start, end: end, style: 'horarioCortado'});
-                } else {
-                  var start = new Date(date.getTime());
-                  var end = new Date(date.getTime());
-                  start.setHours(8); start.setMinutes(0); start.setSeconds(0); start.setMilliseconds(0);
-                  end.setHours(15); end.setMinutes(0); end.setSeconds(0); end.setMilliseconds(0);
-                  vm.model.schedules.push({date: date, start: start, end: end, style: 'horarioNormal'});
-                }
-              }
             }
 
             function removeSched(sched) {
@@ -255,14 +237,27 @@
             /* **************************************************************************************************
                                                 GUARDAR
             * ************************************************************************************************ */
+            function _verify() {
+              return true;
+            }
+
             function save() {
+              if (!_verify()) {
+                return;
+              }
+
               vm.view.style = displayMessageLoading();
-              $timeout(function () {
+              Assistance.saveSchedules(vm.model.schedules).then(function() {
                 vm.view.style = displayMessageSave();
                 $timeout(function () {
                   $location.path("/schedules/" + vm.model.selectedPerson);
                 }, 2000);
-              }, 2000);
+              }, function(error) {
+                displayMessageError(error);
+                $timeout(function() {
+                  vm.view.displayEditWeeklySch;
+                }, 3000)
+              });
             }
     }
 })();
