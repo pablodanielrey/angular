@@ -30,10 +30,10 @@
         }
     }
 
-    PerrsonAssistanceController.$inject = ['$scope', '$timeout', 'Assistance', 'Users'];
+    PerrsonAssistanceController.$inject = ['$scope', '$timeout', 'Assistance', 'Users', '$window'];
 
     /* @ngInject */
-    function PerrsonAssistanceController($scope, $timeout, Assistance, Users) {
+    function PerrsonAssistanceController($scope, $timeout, Assistance, Users, $window) {
         var vm = this;
         vm.selectUser = selectUser;
         vm.searchUsers = searchUsers;
@@ -46,6 +46,8 @@
         activate();
 
         function activate() {
+          var search = JSON.parse($window.sessionStorage.getItem('searchUser'));
+
           vm.search = '';
           vm.searching = false;
         }
