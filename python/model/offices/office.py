@@ -149,7 +149,8 @@ class OfficeDAO(DAO):
                 currentIds = [o['id'] for o in cur]
                 cids.update(currentIds)
                 if tree:
-                    pids.update(currentIds)
+                    toAdd = set(currentIds) - cids
+                    pids.update(toAdd)
 
 
             if types is not None and len(cids) > 0:
