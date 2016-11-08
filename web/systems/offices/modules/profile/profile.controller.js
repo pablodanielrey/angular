@@ -14,12 +14,20 @@
         vm.view = {
           style: '',
           editMail: editMail,
+          editProfileAdvanced: editProfileAdvanced,
+          editPassword: editPassword,
         }
 
         function editMail() {
-          console.log('prueb');
           vm.view.style = 'pantallaEdicionUsuario editarMail';
         }
+        function editProfileAdvanced() {
+          vm.view.style = 'pantallaEdicionUsuario editarPerfilAvanzado';
+        }
+        function editPassword() {
+          vm.view.style = 'pantallaEdicionUsuario editarContrasena';
+        }
+
 
 
 

@@ -31,6 +31,7 @@
 /* -------- PANTALLA EDITPROFILE -------------*/
 
 .profile .editProfile {
+  display: none;
   width: calc(33% - 40px);
   height: calc(100% - 40px);
   /*background-color: red;*/
@@ -74,17 +75,11 @@
     height: calc(100% - 90px);
 }
 
-  .profile.pantallaBuscarUsuarios .myProfile,
-  .profile.pantallaBuscarUsuarios .editProfile {
-    display: none;
-  }
 
-  .profile.pantallaPerfilDeUsuario .searchUser,
   .profile.pantallaPerfilDeUsuario .editProfile {
     display: none;
   }
 
-  .profile.pantallaEdicionUsuario .searchUser,
   .profile.pantallaEdicionUsuario .myProfile {
     display: none;
   }
@@ -115,4 +110,10 @@
 .profile.pantallaEdicionUsuario.editarPerfilAvanzado .editPass,
 .profile.pantallaEdicionUsuario.editarPerfilAvanzado .editMail {
   display: none;
+}
+
+.profile.pantallaEdicionUsuario.editarMail .editProfile,
+.profile.pantallaEdicionUsuario.editarContrasena .editProfile,
+.profile.pantallaEdicionUsuario.editarPerfilAvanzado .editProfile {
+  display: block;
 }
