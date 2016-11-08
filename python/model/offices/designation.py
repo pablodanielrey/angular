@@ -16,6 +16,14 @@ class Position(JSONSerializable):
         self.position = 'Cumple función'
         self.type = self.SUPPORT
 
+    """
+        TODO: HACK HORRIBLE PARA MANTENER FUNCIONANOD CODIGO DE ASISTENCIA Y OTROS SISTEMAS QUE
+        SUPONEN 1 SOLO CARGO ACTIVO, POR ESO LO BUSCAN USANDO Position.findByUserId() Y NO Designations
+    """
+    @classmethod
+    def findByUserId(cls, con, userId):
+        return PositionDAO.findByUserId(con, userId)
+
 
 class PositionDAO(DAO):
 
@@ -37,13 +45,27 @@ class PositionDAO(DAO):
         finally:
             cur.close()
 
-    @staticmethod
-    def _fromResult(r):
+    @classmethod
+    def _fromResult(cls, r):
         d = Position()
         d.id = r['id']
         d.position = r['position']
         d.type = r['type']
         return d
+
+    """
+        TODO: HACK HORRIBLE PARA MANTENER FUNCIONANOD CODIGO DE ASISTENCIA Y OTROS SISTEMAS QUE
+        SUPONEN 1 SOLO CARGO ACTIVO, POR ESO LO BUSCAN USANDO Position.findByUserId() Y NO Designations
+    """
+    @classmethod
+    def findByUserId(cls, con, userId):
+        cur = con.cursor()
+        try:
+            cur.execute('select dp.* from designations.positions dp, designations.designations d where d.position_id = dp.id and d.user_id = %s order by sstart desc limit 1', (userId,))
+            return [cls._fromResult(r) for r in cur]
+        finally:
+            cur.close()
+
 
 
 class Designation(JSONSerializable):

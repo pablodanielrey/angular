@@ -13,7 +13,7 @@ from model.assistance.justifications import *
 from model.assistance.justifications.justifications import Justification
 from model.assistance.justifications.justifications import Status
 
-from model.positions.positions import Position
+from model.offices.designation import Position
 from model.offices.office import Office, OfficeModel
 from model.assistance.statistics import WpStatistics, WorkedNote
 from model.assistance.utils import Utils
@@ -392,8 +392,6 @@ class AssistanceModel:
         for uid in wpss.keys():
             stats = WpStatistics()
             stats.userId = uid
-            pos = Position.findByUser(con, [uid])
-            stats.position = pos[0].name if len(pos) > 0 else None
             for wp in wpss[uid]:
                 stats.updateStatistics(con, wp)
             totalStats.append(stats)
@@ -411,8 +409,10 @@ class AssistanceModel:
         for uid in userIds:
             sts = stats[uid]
             ws = []
+
             oids = Office.getOfficesByUser(con, uid)
             offices = Office.findById(con, oids)
+
             for s in sts:
                 for ds in s.dailyStats:
                     w = WorkedAssistanceData(ds)
@@ -520,7 +520,7 @@ class AssistanceModel:
             s.persist(con)
 
 
-    def getStatisticsData(self, con, userIds, start, end, officeIds=[], initTime= None, endTime=None):
+    def getStatisticsData(self, con, userIds, start, end, officeIds=[], initTime=None, endTime=None):
         # si no se le pasa usuarios busca en el listado de oficinas
         if userIds is None or len(userIds) <= 0:
             userIds = OfficeModel.findOfficesUsers(con, officeIds)
@@ -529,8 +529,14 @@ class AssistanceModel:
         aData = []
         for uid in userIds:
             sts = stats[uid]
+
+            """ TODO: HACK HORRIBLE HASTA QUE SE DEFINA BIEN LO DE DESIGNACIONES """
+            positions = Position.findByUserId(con, uid)
+            position = positions[0].position if len(positions) > 0 else ''
+            """ ------------- """
+
             for s in sts:
-                aData.extend([self._createStaticData(con, ds, s.position) for ds in s.dailyStats if self._verifiedTime(ds, initTime, endTime)])
+                aData.extend([self._createStaticData(con, ds, position) for ds in s.dailyStats if self._verifiedTime(ds, initTime, endTime)])
         return aData
 
     def _createStaticData(self, con, ds, position):
