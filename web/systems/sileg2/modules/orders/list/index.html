@@ -1,0 +1,7 @@
+<div class="orders {{vm.view.style1}} {{vm.view.style2}} {{vm.view.style3}}">
+  <!-- VARIABLES 3: seleccionarEstado, seleccionarAreas, SeleccionarOficinas -->
+  <div ng-include="'modules/orders/list/header.html?t=' + time"></div>
+  <e-list-issues template='directives/listIssues.html' issues="vm.model.issues" users="vm.model.users" search='vm.view.search' src="vm.view.src"></e-list-issues>
+  <div ng-include="'modules/orders/messageUser.html?t=' + time"></div>
+
+</div>

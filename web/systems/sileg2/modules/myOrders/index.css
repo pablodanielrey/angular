@@ -1,0 +1,2334 @@
+.myOrders {
+  height: 100%;
+  width: 100%;
+}
+
+.myOrders .header {
+  /* height: 50px; */
+  width: calc(100% - 30px);
+  background: #3A3C44;
+  color: #5C5F69;
+  margin: 10px;
+  display: flex;
+  display: -webkit-flex;
+  display: -moz-flex;
+  align-items: center;
+  -webkit-align-items: center;
+  -moz-align-items: center;
+  border-radius: 3px;
+  -moz-border-radius: 3px;
+  -webkit-border-radius: 3;
+  padding: 5px 5px 5px 5px;
+}
+
+.myOrders .contentHeader {
+  width: 100%;
+  display: flex;
+  display: -webkit-flex; /* Safari */
+  display: -moz-flex; /* mozilla */
+  flex-direction:row;
+  -webkit-flex-direction:row; /* Safari */
+  -moz-flex-direction:row; /* mozilla */
+  align-items: center;
+  -webkit-align-items:center; /* Safari */
+  -moz-align-items:center; /* mozilla */
+  justify-content: space-between;
+  -webkit-justify-content: space-between;
+  -moz-justify-content: space-between;
+  margin-left: 20px;
+
+}
+
+.myOrders .textMisPedidos {
+  font-size: 12px;
+  color: #28292D !important;
+}
+
+.myOrders .textMisPedidos2 {
+  font-size: 14px !important;;
+  color: #afafaf;
+}
+
+.myOrders .contentFilters {
+  display: flex;
+  display: -webkit-flex; /* Safari */
+  display: -moz-flex; /* mozilla */
+  flex-direction:row;
+  -webkit-flex-direction:row; /* Safari */
+  -moz-flex-direction:row; /* mozilla */
+  align-items: center;
+  -webkit-align-items:center; /* Safari */
+  -moz-align-items:center; /* mozilla */
+}
+
+.myOrders .textFilters {
+  margin-right: 10px;
+  font-size: 12px;
+  color: #afafaf;
+
+}
+
+.myOrders .btnFilter {
+  background-color: #5C5F69 !important;
+  border-radius: 2px;
+  font-size: 13px !important;
+  padding: 5px;
+  color: white !important;
+  border:none;
+  margin-right: 10px;
+  cursor: pointer;
+}
+
+.myOrders .btnFilter:hover {
+  background-color: #92AD17 !important;
+}
+
+.myOrders .contentBtnNewOrder {
+  display: flex;
+  display: -webkit-flex; /* Safari */
+  display: -moz-flex; /* mozilla */
+  flex-direction:row;
+  -webkit-flex-direction:row; /* Safari */
+  -moz-flex-direction:row; /* mozilla */
+  align-items: center;
+  -webkit-align-items:center; /* Safari */
+  -moz-align-items:center; /* mozilla */
+}
+
+.myOrders .btnNewOrder {
+  border: none;
+  color: white;
+  background-color: #809612 !important;
+  padding: 15px;
+  border-radius: 100% 0 0 100%;
+  font-size: 25px;
+  margin: 0px !important;
+  cursor: pointer;
+}
+
+.myOrders .btnNewOrder2 {
+  border: none;
+  color: white;
+  background-color: #92AD17 !important;
+  padding: 13px;
+  font-size: 14px;
+  margin: 0px !important;
+  width: 50px;
+  cursor: pointer;
+}
+
+.myOrders .btnNewOrder2:hover {
+  background-color: #809612 !important;
+}
+.myOrders .btnNewOrder:hover {
+  background-color: #92AD17 !important;
+}
+
+.myOrders .contentSearchOrders {
+  display: none;
+}
+.myOrders.buscarPedido .contentSearchOrders {
+  position: absolute;
+  display: block;
+  display: flex;
+  display: -webkit-flex; /* Safari */
+  display: -moz-flex; /* mozilla */
+  flex-direction:row;
+  -webkit-flex-direction:row; /* Safari */
+  -moz-flex-direction:row; /* mozilla */
+  justify-content:  center;
+  -webkit-justify-content:center; /* Safari */
+  -moz-justify-content:center; /* mozilla */
+  width: 100%;
+  top:70px;
+}
+
+.myOrders .searchOrders {
+  border: 1px solid #E2E2E2;
+  width: 230px;
+  height: 270px;
+  background-color: white;
+  /*margin-left:110px;*/
+  padding: 20px;
+  border-radius: 3px;
+  -moz-border-radius: 3px;
+  -webkit-border-radius: 3px;
+}
+
+.myOrders .inputSearch {
+  border-radius: 3px;
+  -moz-border-radius: 3px;
+  -webkit-border-radius:3px;
+  font-size: 14px;
+  padding: 3px;
+  border: 1px solid #ededed;
+  width: 120px;
+  margin-top: 2px;
+  margin-bottom: 5px;
+  margin-right: 20px;
+
+}
+
+.myOrders .inputSearch2 {
+  border-radius: 2px;
+  -moz-border-radius: 2px;
+  -webkit-border-radius: 2px;
+  font-size: 16px;
+  padding: 7px;
+  border: 1px solid #DBE2E5;
+  margin-bottom: 5px;
+  margin-top: 2px;
+  background-color: white;
+}
+
+.myOrders .inputSearch3 {
+  border-radius: 2px;
+  -moz-border-radius: 2px;
+  -webkit-border-radius: 2px;
+  font-size: 16px;
+  padding: 7px;
+  border: 1px solid #DBE2E5;
+  margin-bottom: 5px;
+  margin-top: 2px;
+  background-color: white;
+}
+
+.myOrders .textSearch1 {
+  color: #5C5F69;
+}
+
+.myOrders .textSearch1b {
+  color: #5C5F69;
+  margin-top: 5px;
+}
+
+.myOrders .textSearch2a {
+  color: #5C5F69;
+  font-size: 12px;
+  margin-top: 5px;
+}
+
+.myOrders .textSearch2b {
+  color: #5C5F69;
+  font-size: 12px;
+}
+
+/******************************************************
+************ INICIO PANTALLA DE HOME ******************
+*******************************************************/
+
+.myOrders .contentOrders {
+  width: 100%;
+  height: calc(100% - 68px);
+  overflow-y: auto;
+}
+
+.myOrders .itemOrders {
+  width: 95%;
+  height: 85px;
+  background-color: white;
+  margin-left: 20px;
+  margin-top: 15px;
+  margin-bottom: 15px;
+  border: 1px solid #E2E2E2;
+  display: flex;
+  display: -webkit-flex; /* Safari */
+  display: -moz-flex; /* mozilla */
+  flex-direction:row;
+  -webkit-flex-direction:row; /* Safari */
+  -moz-flex-direction:row; /* mozilla */
+  align-items: center;
+  -webkit-align-items:center; /* Safari */
+  -moz-align-items:center; /* mozilla */
+  justify-content: space-between;
+  -webkit-justify-content: space-between;
+  -moz-justify-content: space-between;
+  border-radius: 3px;
+  -moz-border-radius: 3px;
+  -webkit-border-radius: 3px;
+}
+
+.myOrders .itemOrders:hover {
+  box-shadow: 2px 2px 2px 2px #E2E2E2;
+}
+
+
+.myOrders .itemInfo {
+  display: flex;
+  display: -webkit-flex; /* Safari */
+  display: -moz-flex; /* mozilla */
+  flex-direction:row;
+  -webkit-flex-direction:row; /* Safari */
+  -moz-flex-direction:row; /* mozilla */
+  align-items: center;
+  -webkit-align-items:center; /* Safari */
+  -moz-align-items:center; /* mozilla */
+}
+
+.myOrders .itemStatus {
+  /*background-color: yellow;*/
+  width: 150px;
+}
+
+.myOrders .itemStatus2 {
+  /*background-color: yellow;*/
+  width: 150px;
+}
+
+.myOrders .status {
+  padding: 5px;
+  border-radius: 3px;
+  -moz-border-radius: 3px;
+  -webkit-border-radius: 3px;
+  color:white;
+  font-weight: bold;
+  font-size: 14px;
+  width: 80px;
+  text-align: center;
+}
+
+
+.myOrders .itemsOffice.solicitadoPorEl .userUpload {
+  display: none;
+}
+
+.myOrders.pantallaDetallePedido .itemStatus2 {
+  /*background-color: yellow;*/
+  width: 150px;
+}
+
+
+.myOrders.pantallaDetallePedido .status2 {
+  padding: 15px;
+  border-radius: 3px;
+  -moz-border-radius: 3px;
+  -webkit-border-radius: 3px;
+  color:white;
+  font-weight: bold;
+  font-size: 14px;
+  width: 80px;
+  text-align: center;
+}
+
+.myOrders .abierta {
+  background-color: #92AD17;
+}
+
+.myOrders .enProgreso {
+    background-color: #0066A6;
+}
+
+.myOrders .pausada {
+  background-color: #EC9122;
+}
+
+.myOrders .rechazada {
+  background-color: #E43E46;
+}
+
+.myOrders .cerrada {
+  background-color: #afbec5;
+}
+
+
+.myOrders .itemsType {
+  width: 350px;
+  /*background-color: blue;*/
+  font-size: 12px;
+}
+
+.myOrders .contentOffice {
+  width: 210px;
+  font-size: 12px;
+
+}
+
+.myOrders .status.abierta .textEC1,
+.myOrders .status.abierta .textEC2,
+.myOrders .status.abierta .textC1,
+.myOrders .status.abierta .textC2,
+.myOrders .status.abierta .textP1,
+.myOrders .status.abierta .textP2,
+.myOrders .status.abierta .textR1,
+.myOrders .status.abierta .textR2 {
+  display: none;
+}
+
+.myOrders .status.enProgreso .textA1,
+.myOrders .status.enProgreso .textA2,
+.myOrders .status.enProgreso .textC1,
+.myOrders .status.enProgreso .textC2,
+.myOrders .status.enProgreso .textP1,
+.myOrders .status.enProgreso .textP2,
+.myOrders .status.enProgreso .textR1,
+.myOrders .status.enProgreso .textR2 {
+  display: none;
+}
+
+.myOrders .status.cerrada .textA1,
+.myOrders .status.cerrada .textA2,
+.myOrders .status.cerrada .textEC1,
+.myOrders .status.cerrada .textEC2,
+.myOrders .status.cerrada .textP1,
+.myOrders .status.cerrada .textP2,
+.myOrders .status.cerrada .textR1,
+.myOrders .status.cerrada .textR2 {
+  display: none;
+}
+
+.myOrders .status.pausada .textA1,
+.myOrders .status.pausada .textA2,
+.myOrders .status.pausada .textEC1,
+.myOrders .status.pausada .textEC2,
+.myOrders .status.pausada .textC1,
+.myOrders .status.pausada .textC2,
+.myOrders .status.pausada .textR1,
+.myOrders .status.pausada .textR2 {
+  display: none;
+}
+
+.myOrders .status.rechazada .textA1,
+.myOrders .status.rechazada .textA2,
+.myOrders .status.rechazada .textEC1,
+.myOrders .status.rechazada .textEC2,
+.myOrders .status.rechazada .textC1,
+.myOrders .status.rechazada .textC2,
+.myOrders .status.rechazada .textP1,
+.myOrders .status.rechazada .textP2 {
+  display: none;
+}
+
+
+.myOrders .status2.abierta .textEC1,
+.myOrders .status2.abierta .textEC2,
+.myOrders .status2.abierta .textC1,
+.myOrders .status2.abierta .textC2,
+.myOrders .status2.abierta .textP1,
+.myOrders .status2.abierta .textP2,
+.myOrders .status2.abierta .textR1,
+.myOrders .status2.abierta .textR2 {
+  display: none;
+}
+
+.myOrders .status2.enProgreso .textA1,
+.myOrders .status2.enProgreso .textA2,
+.myOrders .status2.enProgreso .textC1,
+.myOrders .status2.enProgreso .textC2,
+.myOrders .status2.enProgreso .textP1,
+.myOrders .status2.enProgreso .textP2,
+.myOrders .status2.enProgreso .textR1,
+.myOrders .status2.enProgreso .textR2 {
+  display: none;
+}
+
+.myOrders .status2.cerrada .textA1,
+.myOrders .status2.cerrada .textA2,
+.myOrders .status2.cerrada .textEC1,
+.myOrders .status2.cerrada .textEC2,
+.myOrders .status2.cerrada .textP1,
+.myOrders .status2.cerrada .textP2,
+.myOrders .status2.cerrada .textR1,
+.myOrders .status2.cerrada .textR2 {
+  display: none;
+}
+
+.myOrders .status2.pausada .textA1,
+.myOrders .status2.pausada .textA2,
+.myOrders .status2.pausada .textEC1,
+.myOrders .status2.pausada .textEC2,
+.myOrders .status2.pausada .textC1,
+.myOrders .status2.pausada .textC2,
+.myOrders .status2.pausada .textR1,
+.myOrders .status2.pausada .textR2 {
+  display: none;
+}
+
+.myOrders .status2.rechazada .textA1,
+.myOrders .status2.rechazada .textA2,
+.myOrders .status2.rechazada .textEC1,
+.myOrders .status2.rechazada .textEC2,
+.myOrders .status2.rechazada .textC1,
+.myOrders .status2.rechazada .textC2,
+.myOrders .status2.rechazada .textP1,
+.myOrders .status2.rechazada .textP2 {
+  display: none;
+}
+
+.myOrders .status.rechazada .textR1 {
+  font-size: 13px;
+}
+
+.myOrders .contentActions {
+  display: flex;
+  display: -webkit-flex; /* Safari */
+  display: -moz-flex; /* mozilla */
+  flex-direction:row;
+  -webkit-flex-direction:row; /* Safari */
+  -moz-flex-direction:row; /* mozilla */
+  align-items: center;
+  -webkit-align-items:center; /* Safari */
+  -moz-align-items:center; /* mozilla */
+  justify-content: center;
+}
+
+
+.myOrders .itemActions {
+  margin: 10px;
+  height: 65px;
+  width: 80px;
+  color: #808080;
+  font-size: 40px;
+  border-left: 1px solid #DDD;
+  display: flex;
+  display: -webkit-flex; /* Safari */
+  display: -moz-flex; /* mozilla */
+  flex-direction:row;
+  -webkit-flex-direction:row; /* Safari */
+  -moz-flex-direction:row; /* mozilla */
+  align-items: center;
+  -webkit-align-items:center; /* Safari */
+  -moz-align-items:center; /* mozilla */
+  justify-content: center;
+  -webkit-justify-content: center;
+  -moz-justify-content: center;
+}
+
+.myOrders .itemActions:hover {
+  cursor: pointer;
+}
+
+.myOrders .contentPriority {
+  display: none;
+}
+
+.myOrders .itemDate {
+  font-size: 12px;
+  /*background: red;*/
+  width: 190px;
+  margin-left: 20px;
+}
+
+.myOrders .itemDate2 {
+  font-size: 12px;
+  /*background: red;*/
+  width: 80px;
+  margin-left: 0px;
+}
+
+
+.myOrders .textNumerOrders2 {
+  color: #434343;
+  font-weight: bold;
+  font-size: 16px;
+}
+
+.myOrders .textNumerOrders,
+.myOrders .textType,
+.myOrders .textOffice {
+  color: #434343;
+  font-weight: bold;
+  font-size: 14px;
+}
+
+.myOrders .textType2 {
+  color: #5C5F69;
+  font-weight: bold;
+  font-size: 12px;
+}
+
+.myOrders .textDateorders,
+.myOrders .textDaysOrders {
+  font-size: 12px;
+  color:#848484;
+}
+
+.myOrders .textSubType,
+.myOrders .textName {
+  font-size: 12px;
+    color:#434343;
+}
+
+.myOrders .textMini {
+  font-size: 11px;
+  color:#92AD17;
+}
+
+
+/***********************************************************
+******************* DETALLES DEL PEDIDO ********************
+***********************************************************/
+
+.myOrders.pantallaDetallePedido .contentOrderDetail {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background-color: #FFFFFF;
+  top:0;
+  opacity: 1;
+  transform: translate3d(0,0,0);
+  -webkit-transform: translate3d(0,0,0);
+  -webkit-transition: all 500ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
+     -moz-transition: all 500ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
+       -o-transition: all 500ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
+          transition: all 500ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
+}
+
+.myOrders .contentOrderDetail {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background-color: #FFFFFF;
+  opacity: 0;
+  transform: translate3d(0,300%,0);
+  -webkit-transform: translate3d(0,300%,0);
+  -webkit-transition: all 500ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
+     -moz-transition: all 500ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
+       -o-transition: all 500ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
+          transition: all 500ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
+}
+
+.myOrders .headerDetail {
+  height: 102px;
+  display: flex;
+  display: -webkit-flex; /* Safari */
+  display: -moz-flex; /* mozilla */
+  flex-direction:row;
+  -webkit-flex-direction:row; /* Safari */
+  -moz-flex-direction:row; /* mozilla */
+  align-items: center;
+  -webkit-align-items:center; /* Safari */
+  -moz-align-items:center; /* mozilla */
+  justify-content: space-between;
+  -webkit-justify-content: space-between;
+  -moz-justify-content: space-between;
+  border-bottom: 1px solid #E2E2E2;
+}
+
+.myOrders .contentTotalReplys {
+  overflow-y: auto;
+  height: calc(100% - 248px);
+  /*background-color: red;*/
+}
+
+.myOrders .detail {
+  display: flex;
+  display: -webkit-flex; /* Safari */
+  display: -moz-flex; /* mozilla */
+  flex-direction:row;
+  -webkit-flex-direction:row; /* Safari */
+  -moz-flex-direction:row; /* mozilla */
+  align-items: center;
+  -webkit-align-items:center; /* Safari */
+  -moz-align-items:center; /* mozilla */
+  width: 100%;
+  justify-content: space-around;
+  -webkit-justify-content: space-around;
+  -moz-justify-content: space-around;
+}
+
+.myOrders .contentBtnReturn {
+  margin-left: 20px;
+}
+
+.myOrders .btnReturn {
+  background-color: #BFC0C5;
+  color: white;
+  border: none;
+  border-radius: 3px;
+  -moz-border-radius: 3px;
+  -webkit-border-radius: 3px;
+  padding: 8px 20px 8px 20px;
+}
+
+.myOrders .btnReturn:hover{
+  background-color: #DBE2E5;
+  cursor: pointer;
+}
+
+.myOrders .contentAsunto {
+  display: flex;
+  display: -webkit-flex; /* Safari */
+  display: -moz-flex; /* mozilla */
+  flex-direction:row;
+  -webkit-flex-direction:row; /* Safari */
+  -moz-flex-direction:row; /* mozilla */
+}
+
+.myOrders .actionDetail {
+  margin-right: 68px;
+
+}
+
+.myOrders .selectStatus {
+  padding: 13px;
+  border-radius: 3px;
+  -moz-border-radius: 3px;
+  -webkit-border-radius: 3px;
+  color:white;
+  font-weight: bold;
+  font-size: 14px;
+  width: 170px;
+  text-align: center;
+  cursor: pointer;
+
+}
+
+.myOrders .selectOptionStatus {
+  padding: 5px;
+  border-radius: 3px;
+  -moz-border-radius: 3px;
+  -webkit-border-radius: 3px;
+  color:#5c5f69;
+  font-size: 14px;
+  width: 150px;
+  text-align: center;
+  background-color: #DBE2E5;
+  cursor: pointer;
+
+}
+
+.myOrders .infoOrder {
+  padding: 10px 20px 10px 20px;
+  display: flex;
+  display: -webkit-flex; /* Safari */
+  display: -moz-flex; /* mozilla */
+  flex-direction:row;
+  -webkit-flex-direction:row; /* Safari */
+  -moz-flex-direction:row; /* mozilla */
+  border-bottom: 1px solid #E2E2E2;
+  margin-bottom: 20px;
+  background-color: #E2E2E2;
+}
+
+.myOrders .contentUser {
+  margin-left: 0px;
+}
+
+.myOrders .contentUser2 {
+  margin-right: 10px;
+}
+
+.myOrders .photo {
+
+}
+
+.myOrders .avatar {
+  width: 60px;
+    height: 60px;
+    border-radius: 100%;
+    -moz-border-radius: 100%;
+    -webkit-border-radius: 100%;
+}
+
+.myOrders .nameUser {
+
+  font-size: 13px;
+    color: #434343;
+    text-align: center;
+}
+
+.myOrders .contentArrow {
+  color: #E2E2E2;
+  margin-left: 10px;
+  font-size: 40px;
+}
+
+.myOrders .contentInfo {
+  background-color: #E2E2E2;
+  width: 100%;
+  min-height: 60px;
+  max-height: 65px;
+  border-radius: 3px;
+  -moz-border-radius: 3px;
+  -webkit-border-radius: 3px;
+  padding: 20px;
+  overflow-y: auto;
+}
+
+.myOrders .textDateDetailOrders {
+  font-size: 12px;
+  color: #5C5F69;
+}
+
+.myOrders .contentAdd {
+  background-color: #eaeaea;
+  width: 150px;
+  height: 50px;
+  border-radius: 3px;
+  -moz-border-radius: 3px;
+  -webkit-border-radius: 3px;
+  padding: 10px;
+  margin-left: 20px;
+}
+
+.myOrders .textAdd {
+  font-size: 12px;
+  max-height: 35px;
+  overflow-y: auto;
+}
+
+.myOrders .contentBtnReply {
+  margin-right: 25px;
+
+}
+
+.myOrders .btnReply {
+  width: 170px;
+  height: 50px;
+  font-size: 14px;
+  background-color: #92AD17;
+  color:white;
+  padding: 15px 10px 15px 10px;
+  border:none;
+  border-radius: 3px;
+  -moz-border-radius: 3px;
+  -webkit-border-radius: 3px;
+  font-weight: bold;
+
+}
+
+.myOrders .btnReply2 {
+  display: none;
+}
+
+.myOrders .btnReply:hover,
+.myOrders .btnReply2:hover {
+  background-color: #809612;
+  cursor: pointer;
+}
+
+.myOrders .btnApply {
+  width: 170px;
+  height: 50px;
+  font-size: 14px;
+  background-color: #92AD17 !important;
+  color:white;
+  padding: 5px 10px 5px 10px;
+  border:none;
+  border-radius: 3px;
+  -moz-border-radius: 3px;
+  -webkit-border-radius: 3px;
+
+}
+
+.myOrders .btnApply2 {
+  display: none;
+  width: 50px;
+  height: 50px;
+  font-size: 14px;
+  background-color: #92AD17 !important;
+  color:white;
+  padding: 5px 10px 5px 10px;
+  border:none;
+  border-radius: 3px;
+  -moz-border-radius: 3px;
+  -webkit-border-radius: 3px;
+}
+
+
+
+.myOrders .btnApply:hover {
+  background-color: #809612 !important;
+  cursor: pointer;
+}
+
+.myOrders .reply {
+  width: 97%;
+  display: flex;
+  display: -webkit-flex; /* Safari */
+  display: -moz-flex; /* mozilla */
+  flex-direction:row;
+  -webkit-flex-direction:row; /* Safari */
+  -moz-flex-direction:row; /* mozilla */
+}
+
+.myOrders .reply.miRespuesta .contentReplys {
+  display: flex;
+  display: -webkit-flex; /* Safari */
+  display: -moz-flex; /* mozilla */
+  flex-direction:row;
+  -webkit-flex-direction:row; /* Safari */
+  -moz-flex-direction:row; /* mozilla */
+  justify-content: flex-end;
+  -webkit-justify-content: flex-end;
+  -moz-justify-content: flex-end;
+  margin-bottom: 20px;
+  width: 100%;
+}
+
+.myOrders .reply.respuestaDeAutor .contentReplys {
+  display: flex;
+  display: -webkit-flex; /* Safari */
+  display: -moz-flex; /* mozilla */
+  flex-direction:row;
+  -webkit-flex-direction:row; /* Safari */
+  -moz-flex-direction:row; /* mozilla */
+  justify-content: flex-start;
+  -webkit-justify-content: flex-start;
+  -moz-justify-content: flex-start;
+  margin-bottom: 20px;
+  width: 100%;
+  margin-left: 20px;
+
+}
+
+.myOrders .reply.respuestaDeAutor .contentUser {
+  order: -1;
+}
+
+.myOrders .reply.respuestaDeAutor .subcontentReply {
+  margin-left: 0px;
+}
+
+.myOrders .reply.respuestaDeAutor .contentArrowRight {
+  display: none;
+}
+
+.myOrders .reply.miRespuesta .contentArrowLeft {
+  display: none;
+}
+
+.myOrders .reply.respuestaDeAutor .textReply {
+  background-color: #E2E2E2;
+}
+
+.myOrders .reply.respuestaDeAutor .contentArrowLeft,
+.myOrders .reply.respuestaDeAutor .contentArrowRight {
+  color: #E2E2E2;
+}
+
+
+.myOrders .subcontentReply {
+  display: flex;
+  display: -webkit-flex; /* Safari */
+  display: -moz-flex; /* mozilla */
+  flex-direction:row;
+  -webkit-flex-direction:row; /* Safari */
+  -moz-flex-direction:row; /* mozilla */
+  max-width: 65%;
+  min-width: 30%
+}
+
+
+.myOrders .contentReplys2 {
+  margin-left: 110px;
+  display: flex;
+  display: -webkit-flex; /* Safari */
+  display: -moz-flex; /* mozilla */
+  flex-direction:row;
+  -webkit-flex-direction:row; /* Safari */
+  -moz-flex-direction:row; /* mozilla */
+  margin-bottom: 20px;
+}
+
+
+.myOrders .textReply {
+  background-color: #dbe2e5;
+  width: 100%;
+  min-height: 30px;
+  /*max-height: 90px;*/
+  border-radius: 3px;
+  -moz-border-radius: 3px;
+  -webkit-border-radius: 3px;
+  padding: 20px;
+  overflow-y:auto;
+}
+
+.myOrders .contentArrowRight,
+.myOrders .contentArrowLeft {
+  color: #dbe2e5;
+  font-size: 40px;
+}
+
+.myOrders .textArea {
+  min-width: 490px;
+  max-width: 490px;
+  min-height: 30px;
+  max-height: 100px;
+  font-size: 14px;
+  background-color: #EAEAEA;
+  border: none;
+}
+
+.myOrders .contentAddReply {
+  background-color: #eaeaea;
+  width: 150px;
+  height: 50px;
+  border-radius: 3px;
+  -moz-border-radius: 3px;
+  -webkit-border-radius: 3px;
+  padding: 10px;
+  margin-left: 30px;
+}
+
+.myOrders .contentAddReply2 {
+  background-color: #eaeaea;
+  width: 150px;
+  height: 50px;
+  border-radius: 3px;
+  -moz-border-radius: 3px;
+  -webkit-border-radius: 3px;
+  padding: 10px;
+  margin-left: 140px;
+}
+
+/***********************************************************
+*************** PANTALLA DE NUEVO MENSAJE*******************
+***********************************************************/
+
+.myOrders .contentMessage {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top:9999px;
+}
+
+.myOrders.pantallaMensaje .contentMessage {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top:0px;
+}
+
+.myOrders .subContentMessage {
+  width: 100%;
+  height: 100%;
+  background-color: rgba(241,241,241,0);
+
+}
+
+.myOrders.pantallaMensaje .subContentMessage {
+  width: 100%;
+  height: 100%;
+  background-color: rgba(241,241,241,1);
+  transition: background-color .3s ease-out;
+  -moz-transition: background-color .3s ease-out;
+  -webkit-transition: background-color .3s ease-out;
+  -o-transition: background-color .3s ease-out;
+
+}
+
+.myOrders .message {
+
+  opacity: 0;
+  transform: translate3d(0,0px,0);
+  -webkit-transform: translate3d(0,0px,0);
+  -webkit-transition: all 500ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
+     -moz-transition: all 500ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
+       -o-transition: all 500ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
+          transition: all 500ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
+}
+
+.myOrders.pantallaMensaje .message {
+  width: 500px;
+  height: 300px;
+  opacity: 1;
+  margin-left: auto;
+  margin-right: auto;
+  transform: translate3d(0,100px,0);
+  -webkit-transform: translate3d(0,100px,0);
+  -webkit-transition: all 500ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
+     -moz-transition: all 500ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
+       -o-transition: all 500ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
+          transition: all 500ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
+}
+
+.myOrders .titleMessage {
+  color: #434343;
+  font-size: 20px;
+  margin-bottom: 3px;
+}
+
+.myOrders .textMessage {
+  margin-bottom: 10px;
+}
+
+.myOrders .textareaMenssage {
+  resize: none;
+  width: 475px;
+  height: 200px;
+  border: none;
+  padding: 10px;
+  font-size: 14px;
+  border: 1px solid #E2E2E2;
+}
+
+.myOrders .addMenssage {
+  background-color: #EAEAEA;
+  border: 1px solid #E2E2E2;
+  width: 495px;
+  height: 40px;
+  margin-top: -5px;
+  display: flex;
+  display: -webkit-flex; /* Safari */
+  display: -moz-flex; /* mozilla */
+  flex-direction:row;
+  -webkit-flex-direction:row; /* Safari */
+  -moz-flex-direction:row; /* mozilla */
+}
+
+.myOrders .addMenssage2 {
+  /*background-color: #EAEAEA;*/
+  /*border: 1px solid #E2E2E2;*/
+  width: 51.4%;
+  height: 40px;
+  margin-top: -5px;
+  display: flex;
+  display: -webkit-flex; /* Safari */
+  display: -moz-flex; /* mozilla */
+  flex-direction:row;
+  -webkit-flex-direction:row; /* Safari */
+  -moz-flex-direction:row; /* mozilla */
+  margin-top: 10px;
+}
+
+.myOrders .btnAdd {
+  border: none;
+  font-size: 14px;
+  padding: 5px;
+  width: 150px;
+  height: 40px;
+  background-color: #BFC0C5;
+  color: #5C5F69;
+  cursor: pointer;
+
+}
+
+.myOrders .btnAdd:hover {
+  cursor: pointer;
+  background-color: #28292d;
+  color: white;
+}
+
+.myOrders .inputFile {
+  opacity: 0;
+  position: absolute;
+  left: 50px;
+  height: 35px;
+  cursor: pointer;
+
+}
+
+.myOrders .ArchivesAdd {
+  padding-left: 5px;
+  padding-right: 15px;
+  font-size: 13px;
+  overflow-y: auto;
+  padding: 5px;
+
+
+}
+
+.myOrders .btnTrashAdd {
+  padding: 1px 3px 1px 3px;
+  border: none;
+    background-color: #76787c;
+  border-radius: 3px;
+  -moz-border-radius: 3px;
+  -webkit-border-radius: 3px;
+  color: white;
+  margin-right: 5px;
+}
+
+.myOrders .btnTrashAdd:hover {
+    background-color: #E43E46;
+    cursor: pointer;
+}
+
+.myOrders .actionMessage {
+  margin-top: 10px;
+}
+
+.myOrders .btnAceptMennsage {
+
+  font-size: 14px;
+  background-color: #92AD17;
+  color:white;
+  padding: 10px 20px 10px 20px;
+  border:none;
+  border-radius: 3px;
+  -moz-border-radius: 3px;
+  -webkit-border-radius: 3px;
+}
+
+.myOrders .btnAceptMennsage:hover {
+  background-color: #809612;
+  cursor: pointer;
+}
+
+.myOrders .btnCancelMennsage {
+
+  font-size: 14px;
+  background-color: #76787C;
+  color:white;
+  padding: 10px 20px 10px 20px;
+  border:none;
+  border-radius: 3px;
+  -moz-border-radius: 3px;
+  -webkit-border-radius: 3px;
+}
+
+.myOrders .btnCancelMennsage:hover {
+  background-color: #E43E46;
+  cursor: pointer;
+}
+
+
+/***********************************************************
+**************** PANTALLA NUEVO PEDIDO ********************
+***********************************************************/
+
+.myOrders .contentNewOrder {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top:9999px;
+}
+
+.myOrders.pantallaNuevoPedido .contentNewOrder {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top:0px;
+
+}
+
+.myOrders .subContentMessage,
+.myOrders .subContentNewOrder {
+  width: 100%;
+  height: 100%;
+  background-color: rgba(241,241,241,0);
+
+}
+
+.myOrders.pantallaMensaje .subContentMessage,
+.myOrders.pantallaNuevoPedido .subContentNewOrder {
+  width: 100%;
+  height: 100%;
+  background-color: rgba(241,241,241,1);
+  transition: background-color .3s ease-out;
+  -moz-transition: background-color .3s ease-out;
+  -webkit-transition: background-color .3s ease-out;
+  -o-transition: background-color .3s ease-out;
+
+
+}
+
+.myOrders .newOrder {
+
+  opacity: 0;
+  transform: translate3d(0,500%,0);
+-webkit-transform: translate3d(0,500%,0);
+-webkit-transition: all 500ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
+-moz-transition: all 500ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
+-o-transition: all 500ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
+transition: all 500ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
+}
+
+.myOrders.pantallaNuevoPedido .newOrder {
+  width: 100%;
+  height: 100%;
+  opacity: 1;
+
+  margin-left: auto;
+  margin-right: auto;
+  transform: translate3d(0,0,0);
+  -webkit-transform: translate3d(0,0,0);
+  -webkit-transition: all 300ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
+  -moz-transition: all 300ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
+  -o-transition: all 300ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
+  transition: all 300ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
+}
+
+.myOrders .contentTitleNewOrder {
+  display: flex;
+  display: -webkit-flex; /* Safari */
+  display: -moz-flex; /* mozilla */
+  flex-direction:row;
+  -webkit-flex-direction:row; /* Safari */
+  -moz-flex-direction:row; /* mozilla */
+  justify-content: space-between;
+  -webkit-justify-content: space-between;
+  -moz-justify-content: space-between;
+  background-color: white;
+  padding: 20px;
+      border-bottom: 1px solid #E2E2E2;
+}
+
+.myOrders .contentBackNewOrder {
+  display: flex;
+  display: -webkit-flex; /* Safari */
+  display: -moz-flex; /* mozilla */
+  flex-direction:row;
+  -webkit-flex-direction:row; /* Safari */
+  -moz-flex-direction:row; /* mozilla */
+  align-items:center;
+  -webkit-align-items:center; /* Safari */
+  -moz-align-items:center; /* mozilla */
+}
+
+.myOrders .titleNewOrder {
+  color: #434343;
+  font-size: 20px;
+  margin-bottom: 3px;
+  opacity: 0;
+  margin-left: 20px;
+}
+
+.myOrders.pantallaNuevoPedido .titleNewOrder {
+  opacity: 1;
+
+}
+
+.myOrders .contentOrder {
+  margin-left: 40px;
+  padding: 10px;
+  height: calc(100% - 127px);
+  overflow-y: auto;
+}
+
+.myOrders .subtitleNewOrder {
+    color: #434343;
+    font-weight: bold;
+    font-size: 14px;
+    margin: 10px 0px 2px 0px;
+}
+
+.myOrders .subtitleNewOrder2 {
+    color: #434343;
+    font-weight: bold;
+    font-size: 14px;
+    margin: 10px 0px 2px 0px;
+}
+
+.myOrders .inputNewOrder {
+    border-radius: 2px;
+    -moz-border-radius: 2px;
+    -webkit-border-radius: 2px;
+    font-size: 16px;
+    padding: 7px;
+    border: 1px solid #DBE2E5;
+    width: 50%;
+    margin-top: 2px;
+}
+
+.myOrders .textareaNewOrder {
+    resize: none;
+    width: 49.5%;
+    height: 100px;
+    border: none;
+    padding: 10px;
+    font-size: 14px;
+    border: 1px solid #E2E2E2;
+
+}
+
+.myOrders.pantallaNuevoPedido.buscarOficina .offices {
+  min-height: 25px;
+  max-height: 250px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  width: 49.5%;
+  position: absolute;
+  background-color: #F1F1F1;
+  border: 1px solid #DBE2E5;
+  display: block;
+}
+
+.myOrders.pantallaNuevoPedido.buscarArea .areas {
+  min-height: 25px;
+  max-height: 250px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  width: 49.5%;
+  position: absolute;
+  background-color: #F1F1F1;
+  border: 1px solid #DBE2E5;
+  display: block;
+}
+
+.myOrders.pantallaNuevoPedido.buscarConsulta .querys {
+  min-height: 25px;
+  max-height: 250px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  width: 49.5%;
+  position: absolute;
+  background-color: #F1F1F1;
+  border: 1px solid #DBE2E5;
+  display: block;
+}
+
+.myOrders .offices,
+.myOrders .querys,
+.myOrders .areas {
+  display: none;
+}
+
+.myOrders .itemsSelectOffice,
+.myOrders .itemsSelectQuery,
+.myOrders .itemsSelectArea {
+  border-radius: 2px;
+  -moz-border-radius: 2px;
+  -webkit-border-radius: 2px;
+  background-color: #92AD17;
+  font-size: 16px;
+  padding: 7px;
+  border-bottom: 1px solid #798c1a;
+  width: 100%;
+  cursor: pointer;
+  color: white;
+}
+
+.myOrders .itemsSelectOffice:hover,
+.myOrders .itemsSelectQuery:hover,
+.myOrders .itemsSelectArea:hover {
+  background-color: #798c1a;
+}
+
+/***********************************************************
+************* PANTALLA MENSAJE AL USUARIO ******************
+***********************************************************/
+
+.myOrders .contentMessageUser {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top:9999px;
+}
+
+.myOrders.pantallaMensajeAlUsuario .contentMessageUser {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top:0px !important;
+
+}
+
+.myOrders .subContentMessageUser {
+  width: 100%;
+  height: 100%;
+  background-color: rgba(241,241,241,0);
+
+}
+
+.myOrders.pantallaMensajeAlUsuario .subContentMessageUser {
+  width: 100%;
+  height: 100%;
+  background-color: rgba(241,241,241,1);
+  transition: background-color .3s ease-out;
+  -moz-transition: background-color .3s ease-out;
+  -webkit-transition: background-color .3s ease-out;
+  -o-transition: background-color .3s ease-out;
+
+}
+
+.myOrders .messageUser {
+  display: flex;
+  display: -webkit-flex; /* Safari */
+  display: -moz-flex; /* mozilla */
+  flex-direction:column;
+  -webkit-flex-direction:column; /* Safari */
+  -moz-flex-direction:column; /* mozilla */
+  align-items: center;
+  -webkit-align-items:center; /* Safari */
+  -moz-align-items:center; /* mozilla */
+  justify-content: center;
+  -webkit-justify-content: center;
+  -moz-justify-content: center;
+  opacity: 0;
+  transform: translate3d(0,0px,0);
+  -webkit-transform: translate3d(0,0px,0);
+  -webkit-transition: all 500ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
+     -moz-transition: all 500ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
+       -o-transition: all 500ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
+          transition: all 500ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
+}
+
+.myOrders.pantallaMensajeAlUsuario .messageUser {
+  width: 100%;
+  height: 300px;
+  /*background-color: red;*/
+  opacity: 1;
+  margin-left: auto;
+  margin-right: auto;
+  transform: translate3d(0,100px,0);
+  -webkit-transform: translate3d(0,100px,0);
+  -webkit-transition: all 500ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
+     -moz-transition: all 500ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
+       -o-transition: all 500ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
+          transition: all 500ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
+}
+
+.myOrders .preload,
+.myOrders .messageSent,
+.myOrders .orderCreated,
+.myOrders .errorSystem {
+  display: flex;
+  display: -webkit-flex; /* Safari */
+  display: -moz-flex; /* mozilla */
+  flex-direction:column;
+  -webkit-flex-direction:column; /* Safari */
+  -moz-flex-direction:column; /* mozilla */
+  align-items: center;
+  -webkit-align-items:center; /* Safari */
+  -moz-align-items:center; /* mozilla */
+  justify-content: center;
+  -webkit-justify-content: center;
+  -moz-justify-content: center;
+  /*color:#5c5f69;*/
+
+}
+
+.myOrders.pantallaMensajeAlUsuario.mensajeCargando .messageSent,
+.myOrders.pantallaMensajeAlUsuario.mensajeCargando .orderCreated,
+.myOrders.pantallaMensajeAlUsuario.mensajeCargando .errorSystem {
+  display: none;
+}
+
+.myOrders.pantallaMensajeAlUsuario.mensajeError .preload,
+.myOrders.pantallaMensajeAlUsuario.mensajeError .messageSent,
+.myOrders.pantallaMensajeAlUsuario.mensajeError .orderCreated {
+  display: none;
+}
+
+.myOrders.pantallaMensajeAlUsuario.mensajeEnviado .preload,
+.myOrders.pantallaMensajeAlUsuario.mensajeEnviado .orderCreated,
+.myOrders.pantallaMensajeAlUsuario.mensajeEnviado .errorSystem {
+  display: none;
+}
+
+.myOrders.pantallaMensajeAlUsuario.mensajePedidoCreado .preload,
+.myOrders.pantallaMensajeAlUsuario.mensajePedidoCreado .messageSent,
+.myOrders.pantallaMensajeAlUsuario.mensajePedidoCreado .errorSystem {
+  display: none;
+}
+
+
+.myOrders .circle {
+  color:#d6d4d4;
+  margin-bottom: 10px;
+}
+
+.myOrders a:link {
+ text-decoration:none;
+}
+
+.myOrders .archiveAdd {
+  color: #0069A6;
+  margin-right: 5px;
+}
+
+.myOrders .contentInfo.sinAdjunto .contentAddInfo {
+  display: none;
+}
+
+.myOrders .textReply.sinAdjunto .contentAddInfo {
+  display: none;
+}
+
+
+.myOrders .contentSelectOffice {
+  display: flex;
+  display: -webkit-flex; /* Safari */
+  display: -moz-flex; /* mozilla */
+  flex-direction:row;
+  -webkit-flex-direction:row; /* Safari */
+  -moz-flex-direction:row; /* mozilla */
+  align-items: center;
+  -webkit-align-items:center; /* Safari */
+  -moz-align-items:center; /* mozilla */
+  justify-content: space-between;
+  -webkit-justify-content:space-between;
+  -moz-justify-content: space-between;
+  border-radius: 2px 0px 0px 2px;
+  -moz-border-radius: 2px 0px 0px 2px;
+  -webkit-border-radius: 2px 0px 0px 2px;
+  padding: 2px 10px 2px 5px;
+  border: 1px solid #DBE2E5;
+  color: #434343;
+/* background-color: #f9f7f7; */
+  cursor: pointer;
+  /*width: 190px;*/
+  margin-top: 3px;
+  font-size: 13px;
+}
+
+.myOrders .arrowButton {
+  margin-left: 5px;
+}
+
+.myOrders .btnApply2 {
+  display: none;
+  width: 50px;
+  height: 50px;
+  font-size: 14px;
+  background-color: #92AD17 !important;
+  color:white;
+  padding: 5px 10px 5px 10px;
+  border:none;
+  border-radius: 3px;
+  -moz-border-radius: 3px;
+  -webkit-border-radius: 3px;
+}
+
+.myOrders .contentListOffices {
+  display: none;
+}
+
+.myOrders.pantallaNuevoPedido.verMisOficinas .contentListOffices {
+  display: block;
+  position: absolute;
+  max-width: 370px;
+  padding: 0px 0px 2px 0px;
+  border: 1px solid #DBE2E5;
+  font-size: 12px;
+  overflow-y: auto;
+  max-height: 82px;
+}
+
+.myOrders .itemsOffice2 {
+  border-top: 1px solid #DBE2E5;
+  padding: 5px 0 5px 5px;
+  cursor: pointer;
+  background-color: white;
+}
+
+.myOrders .itemsOffice2:hover {
+  background-color: #F1F1F1;
+}
+
+.myOrders.pantallaNuevoPedido.verMisOficinas {
+
+}
+
+.myOrders .contentTitleNewOrder.usuarioDeUnaSolaOficina .contentSelectedOffice {
+  display: none;
+}
+
+.myOrders .contentTitleNewOrder.usuarioDeUnaSolaOficina .titleNewOrder {
+  display: block;
+}
+
+.myOrders .itemsOffice {
+  font-size: 12px;
+  /*background-color: red;*/
+}
+
+/******************** MEDIA QUERIS ***************************/
+
+@media (max-width: 719px){
+  .myOrders .header {
+      height: 50px;
+  }
+
+  .myOrders .contentOrders {
+    height: calc(100% - 140px);
+  }
+
+  .myOrders.buscarPedido .contentSearchOrders {
+    width: 100%;
+    height: 100%;
+    top:0px;
+  }
+
+  .myOrders .searchOrders {
+    border: none;
+    width: 100%;
+    height: 100%;
+    padding: 20px;
+    border-radius: 0px;
+    -moz-border-radius: 0px;
+    -webkit-border-radius: 0px;
+  }
+
+
+  .myOrders .textMisPedidos {
+    margin-left: 10px;
+    font-size: 14px;
+  }
+
+  .myOrders .contentBtnNewOrder {
+
+
+  }
+
+
+
+  .myOrders .contentOrder {
+      padding: 10px;
+      margin-left: 0px;
+  }
+
+  .myOrders .itemOrders {
+    margin-left: 10px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+
+  }
+
+
+  .myOrders .itemDate {
+    display: none;
+  }
+
+  .myOrders .textA1,
+  .myOrders .textEC1,
+  .myOrders .textC1,
+  .myOrders .textP1,
+  .myOrders .textR1 {
+    display: none;
+  }
+
+  .myOrders .status {
+    width: 10px;
+    height: 85px;
+    padding: 0px;
+    border-radius: 3px 0 0 3px;
+    -moz-border-radius: 3px 0 0 3px;
+    -webkit-border-radius: 3px 0 0 3px;
+  }
+
+  .myOrders .status2 {
+    font-size: 20px !important;
+    height: inherit !important;
+    padding: 11px !important;
+    width: 30px !important;
+    /*width: 10px;
+    height: 10px;
+    padding: 0px;*/
+    border-radius: 3px 0 0 3px;
+    -moz-border-radius: 3px 0 0 3px;
+    -webkit-border-radius: 3px 0 0 3px;
+  }
+
+  .myOrders .itemStatus {
+    width: 25px;
+
+  }
+
+  .myOrders .itemStatus2 {
+    width: 25px;
+  }
+
+  .myOrders.pantallaDetallePedido .itemStatus2 {
+    /*background-color: yellow;*/
+    width: 60px;
+  }
+
+  .myOrders.pantallaDetallePedido .status2 {
+    padding: 15px;
+    width: 20px;
+    height: 20px;
+      text-align: center;
+  }
+
+  .myOrders .contentBtnReply {
+    margin-right: 5px;
+  }
+
+  .myOrders .itemsType {
+    width: 300px;
+    /*background-color: blue;*/
+  }
+
+  .myOrders .itemsOffice {
+    font-size: 12px;
+    width: 145px;
+    /*background-color: red;*/
+  }
+
+
+  .myOrders .textType,
+  .myOrders .textOffice {
+    font-size: 12px;
+  }
+
+  .myOrders .itemActions {
+    margin: 0px;
+    height: 65px;
+    width: 80px;
+    color: #808080;
+    font-size: 30px;
+    /*background-color: yellow;*/
+    border: none;
+  }
+
+  .myOrders .textFilters {
+    display: none;
+  }
+
+  .myOrders .btnNew {
+    width: 100px !important;
+    height: 50px;
+    font-size: 14px !important;
+    background-color: #92AD17 !important;
+    color:white;
+    padding: 5px 10px 5px 10px;
+    border:none;
+    border-radius: 0px;
+    -moz-border-radius: 0px;
+    -webkit-border-radius: 0px;
+    margin-right: 0px !important;
+
+  }
+
+  .myOrders .contentTitleNewOrder {
+      padding: 10px;
+  }
+
+  .myOrders .contentBtnReturn {
+    margin-left: 5px;
+  }
+
+  .myOrders .subtitleNewOrder {
+      margin: 0px 0px 2px 0px;
+      width: 80px;
+      text-align: right;
+      padding-right: 10px;
+      /*background-color: red;*/
+  }
+
+  .myOrders .subtitleNewOrder2 {
+      margin: 10px 0px 2px 0px;
+      width: 80px;
+      text-align: left;;
+
+      /*background-color: red;*/
+  }
+
+  .myOrders .contentOrientation {
+    display: flex;
+    display: -webkit-flex; /* Safari */
+    display: -moz-flex; /* mozilla */
+    flex-direction:row;
+    -webkit-flex-direction:row; /* Safari */
+    -moz-flex-direction:row; /* mozilla */
+    align-items:center;
+    -webkit-align-items:center; /* Safari */
+    -moz-align-items:center; /* mozilla */
+  }
+
+  .myOrders .inputNewOrder {
+      border-radius: 2px;
+      -moz-border-radius: 2px;
+      -webkit-border-radius: 2px;
+      font-size: 16px;
+      padding: 7px;
+      border: 1px solid #DBE2E5;
+      width: 100%;
+      margin-top: 2px;
+  }
+
+  .myOrders.pantallaNuevoPedido.buscarOficina .offices {
+    max-height: 200px;
+    margin-left: 90px;
+    width: 63%;
+  }
+
+  .myOrders.pantallaNuevoPedido.buscarArea .areas {
+    max-height: 200px;
+    margin-left: 90px;
+    width: 63%;
+  }
+
+  .myOrders.pantallaNuevoPedido.buscarConsulta .querys {
+    max-height: 170px;
+    margin-left: 90px;
+    width: 63%;
+  }
+
+  .myOrders .textareaNewOrder {
+      resize: none;
+      width: 88%;
+      height: 70px;
+      border: none;
+      padding: 10px;
+      font-size: 14px;
+      border: 1px solid #E2E2E2;
+
+  }
+
+  .myOrders .addMenssage2 {
+    width: 93.5%;
+    height: 50px;
+  }
+
+
+  .myOrders .btnReturn {
+    color: white;
+    border: none;
+    border-radius: 3px;
+    -moz-border-radius: 3px;
+    -webkit-border-radius: 3px;
+    padding: 8px 20px 8px 20px;
+  }
+
+
+  .myOrders .titleNewOrder {
+    font-size: 12px;
+  }
+
+  .myOrders .message {
+    margin-left: 20px;
+    margin-right: 0px;
+    opacity: 0;
+    transform: translate3d(0,0px,0);
+    -webkit-transform: translate3d(0,0px,0);
+    -webkit-transition: all 500ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
+       -moz-transition: all 500ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
+         -o-transition: all 500ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
+            transition: all 500ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
+  }
+
+  .myOrders.pantallaMensaje .message {
+    width: 80%;
+    height: 300px;
+    opacity: 1;
+    margin-left: 20px;
+    margin-right: 0px;
+    transform: translate3d(0,20px,0);
+    -webkit-transform: translate3d(0,20px,0);
+    -webkit-transition: all 500ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
+       -moz-transition: all 500ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
+         -o-transition: all 500ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
+            transition: all 500ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
+  }
+
+  .myOrders .textareaMenssage {
+    resize: none;
+    width: 100%;
+    height: 150px;
+    border: none;
+    padding: 10px;
+    font-size: 14px;
+    border: 1px solid #E2E2E2;
+  }
+
+  .myOrders.pantallaMensajeAlUsuario .messageUser {
+    width: 100%;
+    height: 300px;
+    /*background-color: red;*/
+    opacity: 1;
+    margin-left: auto;
+    margin-right: auto;
+    transform: translate3d(0,30px,0);
+    -webkit-transform: translate3d(0,30px,0);
+
+  }
+
+  .myOrders .btnReply {
+    display: none;
+  }
+
+  .myOrders .btnReply2 {
+    display: block;
+    font-size: 14px;
+    background-color: #92AD17;
+    color:white;
+    border:none;
+    border-radius: 3px;
+    -moz-border-radius: 3px;
+    -webkit-border-radius: 3px;
+    width: 48px;
+    height: 48px;
+    margin-top: 2px;
+    display: flex;
+    display: -webkit-flex; /* Safari */
+    display: -moz-flex; /* mozilla */
+    flex-direction:row;
+    -webkit-flex-direction:row; /* Safari */
+    -moz-flex-direction:row; /* mozilla */
+    align-items:center;
+    -webkit-align-items:center; /* Safari */
+    -moz-align-items:center; /* mozilla */
+    justify-content: center;
+    -webkit-justify-content: center;
+    -moz-justify-content: center;
+  }
+
+  .myOrders .infoOrder {
+    padding: 5px 5px 5px 5px;
+    border-bottom: 1px solid #E2E2E2;
+    margin-bottom: 10px;
+
+  }
+
+  .myOrders .reply.respuestaDeAutor .contentUser {
+    margin-left: 5px;
+  }
+  .myOrders .reply.miRespuesta .contentUser {
+    margin-left: 0px;
+  }
+
+
+  .myOrders .contentInfo {
+
+    width: 100%;
+    min-height: 65px;
+    max-height: 100px;
+    border-radius: 3px;
+    padding: 0px 10px 0px 10px;
+  }
+
+  .myOrders .reply {
+    width: 100%;
+  }
+
+  .myOrders .reply.miRespuesta .contentReplys {
+    margin-bottom: 10px;
+    margin-right: 5px;
+  }
+
+  .myOrders .reply.respuestaDeAutor .contentReplys {
+    margin-bottom: 10px;
+    width: 100%;
+    margin-left: 0px;
+
+  }
+
+  .myOrders .subcontentReply {
+    max-width: 100%;
+    min-width: 70%;
+    padding: 0px 5px 0 5px;
+  }
+
+  .myOrders .textReply {
+    width: 100%;
+    min-height: 30px;
+    /*max-height: 100px;*/
+    padding: 5px 10px 5px 10px;
+  }
+
+  .myOrders .contentTotalReplys {
+    overflow-y: auto;
+    height: calc(100% - 248px);
+    /*background-color: red;*/
+  }
+
+  .myOrders .titleNewOrder {
+    display: none;
+  }
+
+  .myOrders .btnApply2 {
+    display: block;
+  }
+
+  .myOrders .btnApply {
+    display: none;
+  }
+
+  .myOrders .subContentOrderLeft {
+    display: none;
+  }
+
+  .myOrders .titleNewOrder {
+    display: none;
+  }
+
+  .myOrders .userOrder {
+    margin-bottom: 5px;
+    color: #434343;
+    font-weight: bold;
+    font-size: 12px;
+    width: 150px;
+  }
+
+  .myOrders .officeOrder {
+    margin-bottom: 5px;
+    color: #434343;
+    font-weight: bold;
+    font-size: 12px;
+  }
+
+  .myOrders .arrowOpen2 {
+    height: 17px;
+  }
+
+  .myOrders .arrowOpen {
+    height: 17px;
+  }
+
+  .myOrders .textMisPedidos {
+    display: none;
+  }
+
+  .myOrders .textMisPedidos2 {
+    margin-top: 0px;
+    font-size: 12px !important;
+  }
+
+  .myOrders .headerDetail {
+    height: 72px;
+  }
+
+  .myOrders .userUpload {
+    display: none;
+  }
+
+  .myOrders .contentBtnOrder,
+  .myOrders .icoSeach,
+  .myOrders .contentInputSearch,
+  .myOrders .contentBtnStates,
+  .myOrders .contentBtnAreas,
+  .myOrders .contentBtnOffices {
+    display: none;
+  }
+
+
+
+
+}
+
+@media (min-width: 720px){
+  .myOrders .textA2,
+  .myOrders .textEC2,
+  .myOrders .textC2,
+  .myOrders .textP2,
+  .myOrders .textR2 {
+    display: none;
+  }
+}
+
+@media (max-width: 1280px){
+  .myOrders.pantallaDetallePedido .itemDate2 {
+    display: none;
+  }
+
+  .myOrders.pantallaDetallePedido .contentOffice {
+    display: none;
+  }
+}
+
+
+@media (min-width:1800px) {
+  .myOrders .itemDate {
+    width: 230px;
+  }
+  .myOrders .itemStatus {
+    width: 180px;
+  }
+  .myOrders .itemsType {
+    width: 350px;
+  }
+  .myOrders .itemOrders {
+    zoom:1.4;
+  }
+  .myOrders .contentFilters {
+    zoom:1.4
+  }
+  .myOrders .contentTextHeader {
+    zoom:1.4;
+    margin-left: 10px;
+  }
+  .myOrders .contentBtnHeader {
+    zoom:1.2;
+  }
+  .myOrders .contentOrderDetail {
+    zoom:1.3;
+  }
+  .myOrders .contentMessage {
+    zoom:1.4;
+  }
+  .myOrders .newOrder {
+    zoom: 1.4;
+  }
+  .myOrders .header {
+    padding: 10px 5px 10px 5px !important;
+  }
+  .myOrders .contentOrders {
+    height: calc(100% - 90px);
+    width: calc(100% - 10px);
+  }
+
+}
+
+.myOrders .textPreform {
+  white-space: pre-line;
+}
+
+.myOrders .contentTextHeader {
+  display: flex;
+  display: -webkit-flex; /* Safari */
+  display: -moz-flex; /* mozilla */
+  flex-direction:row;
+  -webkit-flex-direction:row; /* Safari */
+  -moz-flex-direction:row; /* mozilla */
+  align-items:center;
+  -webkit-align-items:center; /* Safari */
+  -moz-align-items:center; /* mozilla */
+}
+
+.myOrders .btnOrder {
+  display: flex;
+  display: -webkit-flex;
+  display: -moz-flex;
+  align-items: center;
+  -webkit-align-items: center;
+  -moz-align-items: center;
+  justify-content: center;
+  -webkit-justify-content: center;
+  -moz-justify-content: center;
+  font-size: 14px;
+  margin-left: 10px;
+  background-color: #5C5F69;
+  color: white;
+  width: 25px;
+  height: 25px;
+  border-radius: 3px 3px 3px 3px ;
+  -moz-border-radius: 3px 3px 3px 3px;
+  -webkit-border-radius: 3px 3px 3px 3px;
+}
+
+.myOrders .btnOrder:hover {
+  background-color: #92AD17;
+  color: white;
+  cursor: pointer;
+}
+
+.myOrders .icoSeach {
+    font-size: 16px;
+    margin-left: 30px;
+    margin-right: 10px;
+    color: #afafaf;
+}
+
+.myOrders .btnNew {
+  /*width: 170px;
+  height: 50px;*/
+  font-size: 14px !important;
+  background-color: #92AD17 !important;
+  color:white;
+  padding: 10px 10px 10px 10px;
+  border:none;
+  border-radius: 3px;
+  -moz-border-radius: 3px;
+  -webkit-border-radius: 3px;
+  margin-right: 10px !important;
+
+}
+
+.myOrders .btnNew:hover {
+  background-color: #809612 !important;
+  cursor: pointer;
+}
+
+.myOrders .btnOrder2 {
+    display: block;
+    display: flex;
+    display: -webkit-flex;
+    display: -moz-flex;
+    align-items: center;
+    -webkit-align-items: center;
+    -moz-align-items: center;
+    justify-content: center;
+    -webkit-justify-content: center;
+    -moz-justify-content: center;
+    font-size: 13px;
+    margin-left: 10px;
+    background-color: #5C5F69;
+    width: 100px;
+    height: 25px;
+    border-radius: 3px 3px 3px 3px;
+    -moz-border-radius: 3px 3px 3px 3px;
+    -webkit-border-radius: 3px 3px 3px 3px;
+    color:white;
+}
+
+.myOrders .btnOrder2:hover {
+  background-color: #92AD17;
+  color: white;
+  cursor: pointer;
+}
+
+.myOrders .contentInputStates {
+  display: none;
+}
+
+.myOrders.seleccionarEstado .contentInputStates {
+  display: block;
+  position: absolute;
+  background-color: #3A3C44;
+  padding: 10px 20px 20px 20px;
+  color: white;
+  font-size: 12px;
+  z-index: 999;
+  border-radius: 0px 0px 3px 3px;
+  -moz-border-radius: 0px 0px 3px 3px;
+  -webkit-border-radius: 0px 0px 3px 3px;
+}
+
+.myOrders .contentSelectAll {
+  display: flex;
+  display: -webkit-flex;
+  display: -moz-flex;
+  flex-direction: row;
+  -webkit-flex-direction: row;
+  -moz-flex-direction: row;
+  align-items: center;
+  -webkit-align-items: center;
+  -moz-align-items: center;
+  margin-bottom: 5px;
+  padding-bottom: 2px;
+  border-bottom: 1px solid #5C5F69;
+  color: #b2b2b2;
+  margin-top: 10px;
+}
+
+.myOrders .contentAsunto,
+.myOrders .contentRow {
+  display: flex;
+  display: -webkit-flex; /* Safari */
+  display: -moz-flex; /* mozilla */
+  flex-direction:row;
+  -webkit-flex-direction:row; /* Safari */
+  -moz-flex-direction:row; /* mozilla */
+}
+
+.myOrders .contentListOffices {
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+.myOrders .itemOffices {
+  display: flex;
+  display: -webkit-flex;
+  display: -moz-flex;
+  flex-direction: row;
+  -webkit-flex-direction: row;
+  -moz-flex-direction: row;
+  align-items: center;
+  -webkit-align-items: center;
+  -moz-align-items: center;
+}
+
+.orders .contentListStatus {
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+.myOrders .btnSave {
+  display: none;
+  background-color: #92AD17;
+  color:white;
+  border-radius: 3px;
+  -moz-border-radius: 3px;
+  -webkit-border-radius: 3px;
+  padding: 5px;
+  margin-top: 10px;
+  width: 30px;
+  text-align: center;
+  cursor: pointer;
+}
+
+.myOrders .btnSave:hover {
+  background-color: #adc922;
+}
+
+.myOrders .contentAdds {
+  margin-top: 5px;
+  /*background-color: #BFC0C5;*/
+
+  height: 50px;
+  overflow-y: auto;
+}
