@@ -5,12 +5,53 @@ from model.users.users import UserDAO, User
 import re
 import uuid
 
+class Position(JSONSerializable):
+
+    SUPPORT = 0
+    NONTEACHING = 1
+    TEACHING = 2
+
+    def __init__(self):
+        self.id = '1'
+        self.position = 'Cumple función'
+        self.type = self.SUPPORT
+
+
+class PositionDAO(DAO):
+
+    @classmethod
+    def _createSchema(cls, con):
+        super()._createSchema(con)
+        cur = con.cursor()
+        try:
+            cur.execute("""
+                CREATE SCHEMA IF NOT EXISTS designations;
+
+                CREATE TABLE IF NOT EXISTS designations.positions (
+                  id VARCHAR PRIMARY KEY,
+                  position VARCHAR,
+                  type INTEGER,
+                  created TIMESTAMPTZ default now()
+                );
+            """)
+        finally:
+            cur.close()
+
+    @staticmethod
+    def _fromResult(r):
+        d = Position()
+        d.id = r['id']
+        d.position = r['position']
+        d.type = r['type']
+        return d
+
+
 class Designation(JSONSerializable):
 
     def __init__(self):
         self.id = None
         self.officeId = None
-        self.position = 'Cumple función'
+        self.positionId = '1'
         self.userId = None
         self.start = None
         self.end = None
@@ -59,15 +100,16 @@ class DesignationDAO(DAO):
         cur = con.cursor()
         try:
             cur.execute("""
-                CREATE SCHEMA IF NOT EXISTS offices;
+                CREATE SCHEMA IF NOT EXISTS designations;
 
-                CREATE TABLE IF NOT EXISTS offices.designations (
+                CREATE TABLE IF NOT EXISTS designations.designations (
                   id VARCHAR PRIMARY KEY,
                   user_id VARCHAR NOT NULL REFERENCES profile.users (id),
                   office_id VARCHAR REFERENCES offices.offices (id),
-                  position VARCHAR,
+                  position_id VARCHAR REFERENCES designations.positions (id),
                   sstart DATE default now(),
-                  send DATE
+                  send DATE,
+                  created timestamptz default now()
                 );
             """)
         finally:
@@ -78,7 +120,7 @@ class DesignationDAO(DAO):
         d = Designation()
         d.id = r['id']
         d.officeId = r['office_id']
-        d.position = r['position']
+        d.position_id = r['position_id']
         d.userId = r['user_id']
         d.start = r['sstart']
         d.end = r['send']
@@ -90,7 +132,7 @@ class DesignationDAO(DAO):
         assert isinstance(ids, list)
         cur = con.cursor()
         try:
-            cur.execute('update offices.designations set send = NOW() where id in %s', (tuple(ids),))
+            cur.execute('update designations.designations set send = NOW() where id in %s', (tuple(ids),))
         finally:
             cur.close()
 
@@ -115,9 +157,9 @@ class DesignationDAO(DAO):
         cur = con.cursor()
         try:
             if history is None or not history:
-                cur.execute('select id from offices.designations where user_id = %s and send is null order by sstart',(userId,))
+                cur.execute('select id from designations.designations where user_id = %s and send is null order by sstart',(userId,))
             else:
-                cur.execute('select id from offices.designations where user_id = %s order by sstart',(userId,))
+                cur.execute('select id from designations.designations where user_id = %s order by sstart',(userId,))
             return [d['id'] for d in cur]
         finally:
             cur.close()
@@ -132,7 +174,7 @@ class DesignationDAO(DAO):
 
         cur = con.cursor()
         try:
-            cur.execute('select * from offices.designations where id in %s order by sstart asc', (tuple(ids),))
+            cur.execute('select * from designations.designations where id in %s order by sstart asc', (tuple(ids),))
             if cur.rowcount <= 0:
                 return []
 
@@ -147,9 +189,9 @@ class DesignationDAO(DAO):
         cur = con.cursor()
         try:
             if history is None or not history:
-                cur.execute('select id from offices.designations where office_id = %s and send is null order by sstart asc',(officeId,))
+                cur.execute('select id from designations.designations where office_id = %s and send is null order by sstart asc',(officeId,))
             else:
-                cur.execute('select id from offices.designations where office_id = %s order by sstart asc',(officeId,))
+                cur.execute('select id from designations.designations where office_id = %s order by sstart asc',(officeId,))
 
             return [d['id'] for d in cur]
 
@@ -179,8 +221,8 @@ class DesignationDAO(DAO):
         try:
             if not hasattr(desig, 'id'):
                 desig.id = str(uuid.uuid4())
-            cur.execute("insert into offices.designations (id, office_id, user_id, position, sstart, send) "
-                        "values (%(id)s, %(officeId)s, %(userId)s, %(position)s, %(start)s, %(end)s)",
+            cur.execute("insert into designations.designations (id, office_id, user_id, position_id, sstart, send) "
+                        "values (%(id)s, %(officeId)s, %(userId)s, %(positionId)s, %(start)s, %(end)s)",
                         desig.__dict__)
             return desig.id
         finally:
