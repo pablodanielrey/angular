@@ -146,15 +146,17 @@ class OfficeDAO(DAO):
             while (len(pids) > 0):
                 pid = pids.pop()
                 cur.execute('select id from offices.offices where parent = %s and removed is null', (pid,))
-                currentIds = [o['id'] for o in cur]
-                cids.update(currentIds)
-                if tree:
-                    toAdd = set(currentIds) - cids
-                    pids.update(toAdd)
-
+                currentIds = [o['id'] for o in cur if o['id'] not in cids]
+                if not tree:
+                    cids.update(currentIds)
+                else:
+                    ''' evito loops '''
+                    pids.update(set(currentIds) - cids)
+                    cids.update(currentIds)
 
             if types is not None and len(cids) > 0:
-                cur.execute('select id from offices.offices where id in %s and type in %s', (tuple(cids),tuple(types)))
+                ''' de todos los hijos se seleccionan los de determinados tipos '''
+                cur.execute('select id from offices.offices where id in %s and type in %s', (tuple(cids), tuple(types)))
                 return [o['id'] for o in cur]
             else:
                 return list(cids)
