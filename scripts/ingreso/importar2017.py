@@ -14,7 +14,7 @@ try:
     cur = con.cursor()
     try:
         with open(arch,'r') as f:
-            sr = csv.reader(f, delimiter=';')
+            sr = csv.reader(f, delimiter=';', quotechar='"')
             for r in sr:
                 l = r[0].split(',')[0].strip()
                 n = r[0].split(',')[1].strip()
@@ -29,5 +29,6 @@ try:
                 cur.execute('insert into credentials.user_password (id, user_id, username, password) values (%s,%s,%s,%s)',(str(uuid.uuid4()), uid, d, d))
     finally:
         cur.close()
+        con.commit()
 finally:
     con.close()
