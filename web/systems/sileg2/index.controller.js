@@ -8,7 +8,7 @@
 
     function IndexCtrl($scope) {
         var vm = this;
-        $scope.time = new Date().getTime();
+        $scope.nocache = new Date().getTime();
 
     };
 

@@ -3,11 +3,14 @@
 <head>
   <meta charset="utf-8"/>
   <meta name='viewport' content='width=device-width'/>
-  <title> </title>
+  <title>Facultad de Ciencias Económicas | Universidad Nacional de La Plata</title>
 
-  <script>
-    // AUTOBAHN_DEBUG = true;
-  </script>
+  <!-- esto es el estilo de font awesome para tener los iconos -->
+  <link rel="stylesheet" href="/libs/font-awesome/css/font-awesome.min.css">
+  <link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
+  <link rel="stylesheet" type="text/css" href="./index.css" />
+
+  <script>// AUTOBAHN_DEBUG = true;</script>
 
   <script src="../../libs/bower_components/angular/angular.js"></script>
   <script src="../../libs/bower_components/angular-route/angular-route.js"></script>
@@ -21,11 +24,21 @@
   <script src='services/Sileg.js'></script>
   <script src='services/SilegDD.js'></script>
 
-  <script src='modules/teacher/teacher.js'></script>
+  <!-- El acceso al modelo se realiza a traves del modulo del login, que utilizar el modulo users, y este ultimo utiliza Files -->
+  <script src='../login/index.module.js'></script>
+  <script src='../login/services/Login.js'></script>
+  <script src='../users/index.module.js'></script>
+  <script src='../users/services/Users.js'></script>
+  <script src='../files/index.module.js'></script>
+  <script src='../files/services/Files.js'></script>
+
+  <script src='modules/staff/staff.js'></script>
 
 </head>
 
-<body ng-controller="IndexCtrl">
+<body class="sileg" ng-controller="IndexCtrl" >
+  <header ng-include="'./modules/menu/menu.html?r='+nocache"></header>
+
   <div ng-view></div>
 </body>
 </html>

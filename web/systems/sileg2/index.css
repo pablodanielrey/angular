@@ -38,7 +38,7 @@
   margin-bottom: 5px;
 }
 
-.sileg main {
+.sileg .main {
   width: 900px;
   color: #707173;
   /*background-color: red;*/
@@ -100,8 +100,8 @@
           transition: all 500ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
 }
 
-.sileg main.busquedaPorDocente .btnsSearch,
-.sileg main.busquedaPorCatedra .btnsSearch {
+.sileg .main.busquedaPorDocente .btnsSearch,
+.sileg .main.busquedaPorCatedra .btnsSearch {
   opacity: 0;
   transform: translate3d(0,200%,0);
   -webkit-transform: translate3d(0,200%,0);
@@ -123,7 +123,7 @@
           transition: all 500ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
 }
 
-.sileg main.busquedaPorDocente .searchDocente {
+.sileg .main.busquedaPorDocente .searchDocente {
   opacity: 1;
   transform: translate3d(0,-400px,0);
   -webkit-transform: translate3d(0,-400px,0);
@@ -145,7 +145,7 @@
           transition: all 500ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
 }
 
-.sileg main.busquedaPorCatedra .searchCatedra {
+.sileg .main.busquedaPorCatedra .searchCatedra {
   opacity: 1;
   transform: translate3d(0,-800px,0);
   -webkit-transform: translate3d(0,-800px,0);
@@ -285,7 +285,7 @@
           transition: all 500ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
 }
 
-.sileg main.busquedaPorDocente.verInfoDocente .contentDocente {
+.sileg .main.busquedaPorDocente.verInfoDocente .contentDocente {
   opacity: 1;
   transform: translate3d(0,0,0);
   -webkit-transform: translate3d(0,0,0);
@@ -319,7 +319,7 @@
           transition: all 500ms cubic-bezier(0.480, 0.525, 0.340, 0.910);
 }
 
-.sileg main.busquedaPorCatedra.verInfoCatedra .contentCatedra {
+.sileg .main.busquedaPorCatedra.verInfoCatedra .contentCatedra {
   opacity: 1;
   transform: translate3d(0,-400px,0);
   -webkit-transform: translate3d(0,-400px,0);

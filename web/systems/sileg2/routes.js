@@ -5,8 +5,8 @@
     app.config(['$routeProvider', function($routeProvider) {
       $routeProvider
 
-      .when('/teacher', {templateUrl: 'modules/teacher/teacher.html', controller: 'TeacherCtrl' })
-      .otherwise({ redirectTo: '/teacher' });
+      .when('/staff', {templateUrl: 'modules/staff/staff.html', controller: 'StaffCtrl', controllerAs: 'vm' })
+      .otherwise({ redirectTo: '/staff' });
 
     }]);
 

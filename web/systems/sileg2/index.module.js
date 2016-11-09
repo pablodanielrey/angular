@@ -1,6 +1,6 @@
 (function() {
   'user strict'
   angular
-      .module('sileg',['ngRoute'])
+      .module('sileg',['ngRoute', 'login', 'users'])
 
 })();

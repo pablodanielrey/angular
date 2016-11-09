@@ -1,0 +1,26 @@
+<div class="main {{view.style}} {{view.style2}}">
+  <!-- VARIABLES 1: busquedaPorDocente, busquedaPorCatedra -->
+  <!-- VARIABLES 2: verInfoDocente, verInfoCatedra -->
+  <i class="fa fa-search" aria-hidden="true"></i> Buscar por
+
+  <div class="contentMain">
+    <div class="contentLeft">
+      <div class="btnsSearch">
+          <button type="button" class="btnSearch" ng-click="view.style = 'busquedaPorDocente'">
+            DOCENTE
+          </button>
+          <button type="button" class="btnSearch" ng-click="view.style = 'busquedaPorCatedra'">
+            CÁTEDRA
+          </button>
+      </div>
+
+      <div class="searchDocente" ng-include="'./modules/staff/teacher/teacher.html?r='+nocache" ></div>
+      <div class="searchCatedra" ng-include="'./modules/staff/teacher/cathedra.html?r='+nocache" ></div>
+    </div>
+
+    <div class="contentRight">
+      <div  class="contentDocente" ng-include="'./modules/staff/teacher/showTeacher.html?r='+nocache" ></div>
+      <div  class="contentCatedra" ng-include="'./modules/staff/teacher/showCathedra.html?r='+nocache" ></div>
+    </div>
+  </div>
+</div>

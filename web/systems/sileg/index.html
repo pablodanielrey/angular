@@ -12,7 +12,7 @@
   <link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
   <link rel="stylesheet" type="text/css" href="./index.css" />
 
-  
+
 
   <script src="/libs/bower_components/angularjs/angular.js"></script>
   <script src="/libs/bower_components/angular-route/angular-route.js"></script>
@@ -42,7 +42,7 @@
   <header ng-include="'./modules/menu/menu.html?r='+nocache"></header>
 
 
-  <main ng-controller="TeacherCtrl" class="{{view.style}} {{view.style2}}">
+  <main ng-controller="TeacherCtrl" class="{{vm.view.style}} {{vm.view.style2}}">
     <!-- VARIABLES 1: busquedaPorDocente, busquedaPorCatedra -->
     <!-- VARIABLES 2: verInfoDocente, verInfoCatedra -->
     <i class="fa fa-search" aria-hidden="true"></i> Buscar por
@@ -50,21 +50,21 @@
     <div class="contentMain">
       <div class="contentLeft">
         <div class="btnsSearch">
-            <button type="button" class="btnSearch" ng-click="view.style = 'busquedaPorDocente'">
+            <button type="button" class="btnSearch" ng-click="vm.view.style = 'busquedaPorDocente'">
               DOCENTE
             </button>
-            <button type="button" class="btnSearch" ng-click="view.style = 'busquedaPorCatedra'">
+            <button type="button" class="btnSearch" ng-click="vm.view.style = 'busquedaPorCatedra'">
               CÁTEDRA
             </button>
         </div>
 
-        <div class="searchDocente" ng-include="'./modules/teacher/teacher.html?r='+nocache" ></div>
-        <div class="searchCatedra" ng-include="'./modules/teacher/cathedra.html?r='+nocache" ></div>
+        <div class="searchDocente" ng-include="'./modules/staff/teacher/teacher.html?r='+nocache" ></div>
+        <div class="searchCatedra" ng-include="'./modules/staff/teacher/cathedra.html?r='+nocache" ></div>
       </div>
 
       <div class="contentRight">
-        <div  class="contentDocente" ng-include="'./modules/teacher/showTeacher.html?r='+nocache" ></div>
-        <div  class="contentCatedra" ng-include="'./modules/teacher/showCathedra.html?r='+nocache" ></div>
+        <div  class="contentDocente" ng-include="'./modules/staff/teacher/showTeacher.html?r='+nocache" ></div>
+        <div  class="contentCatedra" ng-include="'./modules/staff/teacher/showCathedra.html?r='+nocache" ></div>
       </div>
     </div>
   </main>
