@@ -22,6 +22,7 @@ from model.offices.office import Office
 from model.users.users import User, UserPassword
 
 
+networks = ['10.10','10.17','10.26','10.14','10.8','10.9','10.11','10.15','10.12','10.18','10.19','10.20']
 
 class Iph:
 
@@ -29,7 +30,7 @@ class Iph:
         self.base = b
         self.count = 1
         self.macs = []
-        self.networks = ['10.10','10.17','10.26','10.14','10.8','10.9','10.11','10.15','10.12','10.18','10.19','10.20']
+        self.networks = networks
 
     def __getIp(self, n):
         return '.{}.{}'.format((n // 254) + self.base, (n % 254) + 1)
@@ -91,8 +92,8 @@ if __name__ == '__main__':
 
     ## creo los generadores de ips para los distintos rangos.
     ipa = Iph(250)      # 10.250.x.x -----> autoridades
-    ipd = Iph(100)      # >= 10.100.x.x --> docentes
-    ipn = Iph(10)       # >= 10.10.x.x ---> alumnos
+    ipd = Iph(128)      # >= 10.128.x.x -- 10.191.255.254 --> docentes
+    ipn = Iph(10)       # >= 10.0.x.x --- 10.63.255.254 ----> alumnos
 
     # registro usuarios que son autoridades
     autoridades = [
@@ -112,6 +113,9 @@ if __name__ == '__main__':
     ]
 
     logging.info('escribiendo los archivos dhcp')
+
+    authIps = {}
+
     with open('/tmp/dhcp-alumnos.txt','w') as dalumnos:
         with open('/tmp/dhcp-docentes.txt','w') as ddocentes:
             with open('/tmp/dhcp-autoridades.txt','w') as dautoridades:
@@ -123,7 +127,11 @@ if __name__ == '__main__':
                     if dni in autoridades:
                         fileToWrite = dautoridades
                         for mac in maccs:
-                            ips.extend(ipa.getIps(mac))
+                            ipsa = ipa.getIps(mac)
+                            ips.extend(ipsa)
+                            if dni not in authIps:
+                                authIps[dni] = set()
+                            authIps[dni].update(ipsa)
 
                     elif dni in users and users[dni].type == 'teacher':
                         fileToWrite = ddocentes
@@ -147,6 +155,20 @@ if __name__ == '__main__':
                                     fixed-address {};
                                 }}\n
                         """.format(dni, name, lastname, hname, mac, ip))
+
+
+        count = 135
+        with open('/tmp/iptables.txt','w') as f:
+            for dni in authIps.keys():
+                f.write('\n\n#{}\n'.format(dni))
+                for ip in authIps[dni]:
+                    f.write('iptables -t nat -A POSTROUTING -s {} -j SNAT --to-source 163.10.17.{}          # {}\n'.format(ip, count, dni))
+                count = count + 1
+
+            f.write('\n\n##### nat general ###\n')
+            for n in networks:
+                f.write('iptables -t nat -A POSTROUTING -s 10.{}.100.0/')
+
 
     sys.exit(1)
 
