@@ -1,72 +1,44 @@
 <!DOCTYPE html>
-<html lang="es">
-<html ng-app="mainApp">
+<html ng-app="sileg">
 <head>
   <meta charset="utf-8"/>
   <meta name='viewport' content='width=device-width'/>
   <title>Facultad de Ciencias Económicas | Universidad Nacional de La Plata</title>
-
 
   <!-- esto es el estilo de font awesome para tener los iconos -->
   <link rel="stylesheet" href="/libs/font-awesome/css/font-awesome.min.css">
   <link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
   <link rel="stylesheet" type="text/css" href="./index.css" />
 
+  <script>// AUTOBAHN_DEBUG = true;</script>
 
+  <script src="../../libs/bower_components/angular/angular.js"></script>
+  <script src="../../libs/bower_components/angular-route/angular-route.js"></script>
+  <script src="../../libs/bower_components/angular-cookies/angular-cookies.js"></script>
+  <script src="../../libs/bower_components/autobahn/autobahn.js"></script>
+  <script src="../../libs/bower_components/angular-wamp/release/angular-wamp.js"></script>
 
-  <script src="/libs/bower_components/angularjs/angular.js"></script>
-  <script src="/libs/bower_components/angular-route/angular-route.js"></script>
-  <script src="/libs/bower_components/autobahn/autobahn.js"></script>
-  <script src="/libs/bower_components/angular-wamp/release/angular-wamp.js"></script>
+  <script src='index.module.js'></script>
+  <script src='index.controller.js'></script>
+  <script src='routes.js'></script>
+  <script src='services/Sileg.js'></script>
+  <script src='services/SilegDD.js'></script>
 
-  <script type="text/javascript" src="/config-sileg.json"></script>
+  <!-- El acceso al modelo se realiza a traves del modulo del login, que utilizar el modulo users, y este ultimo utiliza Files -->
+  <script src='../login/index.module.js'></script>
+  <script src='../login/services/Login.js'></script>
+  <script src='../users/index.module.js'></script>
+  <script src='../users/services/Users.js'></script>
+  <script src='../files/index.module.js'></script>
+  <script src='../files/services/Files.js'></script>
 
-  <script type="text/javascript" src="./index.module.js"></script>
-
-
-  <script src="./js/prototype/Date.js"></script>
-
-  <script type="text/javascript" src="./services/systems/sileg/Sileg.js"></script>
-
-
-  <script type="text/javascript" src="./index.controller.js"></script>
-
-
-  <script type="text/javascript" src="./modules/teacher/teacher.controller.js"></script>
-  <script type="text/javascript" src="./modules/teacher/cathedra.controller.js"></script>
+  <script src='modules/staff/staff.js'></script>
 
 </head>
 
-<body class="sileg" ng-controller='IndexCtrl'>
-
+<body class="sileg" ng-controller="IndexCtrl" >
   <header ng-include="'./modules/menu/menu.html?r='+nocache"></header>
 
-
-  <main ng-controller="TeacherCtrl" class="{{vm.view.style}} {{vm.view.style2}}">
-    <!-- VARIABLES 1: busquedaPorDocente, busquedaPorCatedra -->
-    <!-- VARIABLES 2: verInfoDocente, verInfoCatedra -->
-    <i class="fa fa-search" aria-hidden="true"></i> Buscar por
-
-    <div class="contentMain">
-      <div class="contentLeft">
-        <div class="btnsSearch">
-            <button type="button" class="btnSearch" ng-click="vm.view.style = 'busquedaPorDocente'">
-              DOCENTE
-            </button>
-            <button type="button" class="btnSearch" ng-click="vm.view.style = 'busquedaPorCatedra'">
-              CÁTEDRA
-            </button>
-        </div>
-
-        <div class="searchDocente" ng-include="'./modules/staff/teacher/teacher.html?r='+nocache" ></div>
-        <div class="searchCatedra" ng-include="'./modules/staff/teacher/cathedra.html?r='+nocache" ></div>
-      </div>
-
-      <div class="contentRight">
-        <div  class="contentDocente" ng-include="'./modules/staff/teacher/showTeacher.html?r='+nocache" ></div>
-        <div  class="contentCatedra" ng-include="'./modules/staff/teacher/showCathedra.html?r='+nocache" ></div>
-      </div>
-    </div>
-  </main>
-
+  <div ng-view></div>
 </body>
+</html>

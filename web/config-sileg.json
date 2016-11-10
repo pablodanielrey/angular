@@ -1,4 +1,4 @@
 config = {
   url: "autodetect",
-  realm: "assistance"
+  realm: "sileg"
 }

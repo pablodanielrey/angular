@@ -399,6 +399,22 @@
                         },
                         "url": "ws://localhost:8081"
                     }
+                },
+
+                {
+                    "id": "sileg",
+                    "type": "class",
+                    "classname": "actions.systems.sileg.sileg.Sileg",
+                    "realm": "core",
+                    "transport": {
+                        "type": "websocket",
+                        "endpoint": {
+                            "type": "tcp",
+                            "host": "127.0.0.1",
+                            "port": 8081
+                        },
+                        "url": "ws://localhost:8081"
+                    }
                 }
 
             ]
