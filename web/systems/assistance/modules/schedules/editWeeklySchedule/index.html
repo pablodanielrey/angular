@@ -41,7 +41,7 @@
                     <div>Semana laboral</div>
                     <div><b>{{vm.getHours()}}</b> horas semanales</div>
                 </div>
-                <div class="itemDay" ng-class="{true:'horarioCortado', false: 'horarioNormal'}[vm.isSplitSchedule(sched)]" ng-repeat="sched in vm.model.schedules | orderBy: date">
+                <div class="itemDay" ng-class="{true:'horarioCortado', false: 'horarioNormal'}[vm.isSplitSchedule(sched)]" ng-repeat="sched in vm.model.schedules | orderBy: 'date'">
                   <!-- VARIABLES: horarioNormal, horarioCortado -->
                     <div class="newDay">{{sched.date | date: 'EEEE'}}</div>
                     <div><input type="time" class="inputTime" ng-model="sched.start"></input></div>

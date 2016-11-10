@@ -184,9 +184,23 @@
             });
 
             function _parseSchedule(sc) {
-              return {
-                date: new Date(sc.date)
+              // getDay() => [Sunday, Monday, ..., Saturday]
+              var sortDay = [6, 0, 1, 2, 3, 4, 5];
+              var date = new Date(sc.date);
+              var weekday = sortDay[date.getDay()];
+
+              var millisStart = (sc.schedule == null) ? null : sc.schedule.start * 1000;
+              var start = (millisStart == null) ? null : new Date(date.getTime() + millisStart);
+
+              var millisEnd =  (sc.schedule == null) ? null : sc.schedule.end * 1000;
+              var end = (millisEnd == null) ? null : new Date(date.getTime() + millisEnd);
+
+              var limitMillis = 24 * 60 * 60 * 1000;
+              if (start != null && end != null && (end.getTime() - start.getTime()) > limitMillis) {
+                start = null;
+                end = null;
               }
+              return {date: date, weekday:weekday, start: start, end: end}
             }
 
             function loadSchedules() {
