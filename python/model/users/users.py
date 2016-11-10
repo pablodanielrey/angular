@@ -116,6 +116,17 @@ class UserDAO(DAO):
             cur.close()
 
     @staticmethod
+    def findByType(con, types):
+        cur = con.cursor()
+        try:
+            cur.execute('select id, version from profile.users where type in %s', (tuple(types),))
+            return [(c['id'],c['version']) for c in cur]
+
+        finally:
+            cur.close()
+
+
+    @staticmethod
     def findById(con, uids):
         assert uids is not None
         assert isinstance(uids, list)
@@ -331,6 +342,10 @@ class User(JSONSerializable):
     def findAll(cls, con):
         assert cls.dao is not None
         return cls.dao.findAll(con)
+
+    @classmethod
+    def findByType(cls, con, types):
+        return cls.dao.findByType(con, types)
 
     @classmethod
     def findByDni(cls, con, dnis):

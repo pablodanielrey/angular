@@ -97,6 +97,7 @@ if __name__ == '__main__':
 
     # registro usuarios que son autoridades
     autoridades = [
+        '24892148',     # pablo diaz
         '27294557',     # pablo rey
         '30057880',     # charly
         '31993212',     # adrian

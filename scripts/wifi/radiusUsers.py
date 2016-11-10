@@ -14,13 +14,34 @@ import logging
 
 from model.registry import Registry
 from model.connection.connection import Connection
-from model.offices.offices import Office
+from model.offices.office import Office
 from model.users.users import User, UserPassword
 
 
 if __name__ == '__main__':
 
     logging.getLogger().setLevel(logging.DEBUG)
+
+    # registro usuarios que son autoridades
+    autoridades = [
+        '24892148',     # pablo diaz
+        '27294557',     # pablo rey
+        '30057880',     # charly
+        '31993212',     # adrian
+        '25952190',     # julieta
+        '13908434',     # laura catani
+        '18283954',     # armengol
+        '26578935',     # masson
+        '26250165',     # eduardo degiusti
+        '23454309',     # marina gs
+        '20294338',     # diego felices
+        '17755153',     # leo gasparini
+        '22349070',     # mariana marchioni
+        '29763750',     # paula beyries
+        '30001823',     # walter blanco
+        '27821597'      # maxi saucedo
+    ]
+
 
     import re
     r = re.compile('[a-zA-Z\d]+')
@@ -29,13 +50,17 @@ if __name__ == '__main__':
     conn = Connection(reg.getRegistry('dcsys'))
     con = conn.get()
     try:
+        Connection.readOnly(con)
         userIds = User.findAll(con)
-        users = []
-        for uid in [i for (i, v) in userIds]:
-            users.extend(UserPassword.findByUserId(con, uid))
+        userss = User.findByType(con, ['teacher'])
+        userss.extend(User.findByDni(con, autoridades))
+        users = [i for (i,v) in userss]
+        usersp = []
+        for uid in users:
+            usersp.extend(UserPassword.findByUserId(con, uid))
 
-        with open('/etc/freeradius/radius-users', 'w') as f:
-            for up in users:
+        with open('/tmp/radius-users', 'w') as f:
+            for up in usersp:
                 if r.match(up.username) is None or ' ' in up.username:
                     continue
 
