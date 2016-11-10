@@ -21,6 +21,17 @@
   padding: 5px 5px 5px 5px;
 }
 
+.orders .issueSelect {
+  text-decoration: none;
+  cursor: pointer;
+  color: black;
+}
+
+.orders .issueSelect:hover {
+  text-decoration: none;
+  cursor: pointer;
+}
+
 .orders .contentHeader {
   width: 100%;
   display: flex;
