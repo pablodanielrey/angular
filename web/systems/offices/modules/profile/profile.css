@@ -45,9 +45,9 @@
     width: 100%;
     padding: 10px;
     background: #ffffff;
-    border-radius: 2px;
-    -moz-border-radius: 2px;
-    -webkit-border-radius: 2px;
+    border-radius: 3px;
+    -moz-border-radius: 3px;
+    -webkit-border-radius: 3px;
     box-shadow: 1px 1px 2px rgba(0,0,0,0.2);
     -moz-box-shadow: 1px 1px 2px rgba(0,0,0,0.2);
     -webkit-box-shadow: 1px 1px 2px rgba(0,0,0,0.2);
@@ -62,6 +62,65 @@
     -moz-flex-direction:column; /* mozilla */
 
 }
+
+
+
+/* ------- EDITAR CONTRASEÑA ------------*/
+
+
+
+.profile .title {
+  color: #28292D;
+  background-color: #D1D1D1;
+  padding: 8px;
+  margin-bottom: 20px;
+  border-radius: 2px;
+  -moz-border-radius: 2px;
+  -webkit-border-radius: 2px;
+}
+
+.profile .contentForm {
+  color:#5C5F69;
+  font-size: 12px;
+}
+
+.profile .inputPass {
+  margin: 3px 0 10px 0;
+  padding: 5px 10px 5px 10px;
+  width: calc(100% - 22px);
+  border: 1px solid #c9cbd3;
+  font-size:20px;
+  color: #3A3C44;
+}
+
+.profile .textSubtitle {
+  color: #0066A6;
+  margin-bottom: 5px;
+}
+
+.profile .textMail {
+  color: #3a3c44;
+  font-size: 12px;
+  background-color: #EEEEEE;
+  padding: 5px;
+  margin-bottom: 5px;
+}
+
+.profile .contentItemMail {
+  display: flex;
+  display: -webkit-flex; /* Safari */
+  display: -moz-flex; /* mozilla */
+  flex-direction:row;
+  -webkit-flex-direction:row; /* Safari */
+  -moz-flex-direction:row; /* mozilla */
+  align-items: center;
+  -webkit-align-items: center;
+  -moz-align-items: center;
+  justify-content: space-around;
+}
+
+ /*------------ PANTALLA CORREOS ------------*/
+
 
 
 
