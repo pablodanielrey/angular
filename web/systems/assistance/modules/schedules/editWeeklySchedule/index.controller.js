@@ -228,7 +228,12 @@
 
             function clearSched(sched) {
               var item = vm.model.schedules.indexOf(sched);
-              if (isSplitSchedule(sched)) {
+              var nextSched = (item == vm.model.schedules.length - 1) ? null : vm.model.schedules[item + 1];
+              var prevSched = (item == 0) ? null : vm.model.schedules[item - 1];
+
+              if (isSplitSchedule(sched) ||
+               (nextSched != null && sched.weekday == nextSched.weekday) ||
+               (prevSched != null && sched.weekday == prevSched.weekday)) {
                 removeSched(sched);
               } else {
                 sched.start = null;
@@ -246,7 +251,7 @@
                 return;
               }
 
-              vm.model.schedules.push({date: sched.date, start: null, end: null, style: 'horarioCortado'});
+              vm.model.schedules.push({date: sched.date, weekday: sched.weekday, start: null, end: null, style: 'horarioCortado'});
               vm.model.schedules = $filter('orderBy')(vm.model.schedules, 'date', false);
               console.log(vm.model.schedules);
             }
