@@ -63,7 +63,6 @@
           }
 
           loadProfile();
-          loadUsers();
           loadUser();
           vm.model.date = new Date();
         }
@@ -193,16 +192,6 @@
                                             MANEJO DE PERSONAS
         * ************************************************************************************************ */
 
-            function loadUsers() {
-              Assistance.loadUsers().then(function(users) {
-                vm.model.users = users;
-              }, function(error) {
-                displayMessageError(error);
-                $timeout(function() {
-                    vm.displayEditSch();
-                }, 1500);
-              })
-            }
 
             function selectUser(user) {
               $location.path("/schedules/" + user.id);
