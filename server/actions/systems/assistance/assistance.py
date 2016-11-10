@@ -14,6 +14,7 @@ import autobahn
 import wamp
 
 from model.assistance.logs import Log
+from model.assistance.schedules import Schedule
 from model.assistance.utils import Utils
 from model.assistance.assistance import AssistanceModel
 
@@ -116,6 +117,26 @@ class Assistance(wamp.SystemComponentSession):
     @inlineCallbacks
     def searchUsers(self, regex, details):
         r = yield threads.deferToThread(self._searchUsers, regex, details)
+        returnValue(r)
+
+
+    def _findSchedulesWeek(self, userId, date, details):
+        con = self.conn.get()
+        try:
+            logging.info("Buscando schedules para la semana")
+            date = self._parseDate(date).date()
+            scheds = Schedule.findByUserIdInWeek(con, userId, date)
+            scheds = [{'date':key, 'sched': scheds[key]} for key in scheds]
+            for sc in scheds:
+                logging.info('Schdule:{}'.format(sc))
+            return scheds
+        finally:
+            self.conn.put(con)
+
+    @autobahn.wamp.register('assistance.find_schedules_week')
+    @inlineCallbacks
+    def findSchedulesWeek(self, userId, date, details):
+        r = yield threads.deferToThread(self._findSchedulesWeek, userId, date, details)
         returnValue(r)
 
     ############################# EXPORTACIONES #######################################

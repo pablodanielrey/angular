@@ -93,6 +93,12 @@
           });
         }
 
+        function displayMessageError(error) {
+          var style = (vm.view.profile == 'admin') ? vm.view.profileAdmin : vm.view.profileUser;
+          vm.view.error = error;
+          vm.view.style = style + ' ' + vm.view.errorMessage;
+        }
+
         function getUserPhoto() {
           return (vm.model.user == null || !'photoSrc' in vm.model.user) ? 'img/avatarMan.jpg' : vm.model.user.photoSrc
         }
@@ -177,13 +183,22 @@
               loadSchedules();
             });
 
+            function _parseSchedule(sc) {
+              return {
+                date: new Date(sc.date)
+              }
+            }
+
             function loadSchedules() {
               vm.model.schedules = [];
               displayMessageLoading();
-              Assistance.loadSchedules(vm.model.date).then(function(schedules) {
-                vm.model.schedules = schedules;
+              Assistance.loadSchedules(vm.model.selectedPerson, vm.model.date).then(function(schedules) {
+                for (var i = 0; i < schedules.length; i++) {
+                  vm.model.schedules.push(_parseSchedule(schedules[i]));
+                }
                 vm.displayEditWeeklySch();
               }, function(error) {
+                console.error(error);
                 displayMessageError(error);
                 $timeout(function () {
                   vm.displayEditWeeklySch();

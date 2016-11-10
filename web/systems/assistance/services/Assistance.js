@@ -272,39 +272,13 @@
 					 return defer.promise;
 				 }
 
-				 function loadSchedules(date) {
-					 var defer = $q.defer();
-					 var schedules = [];
-					 var dayMillis = 24 * 60 * 60 * 1000;
-					 for (var i = 0; i < 7; i++) {
-						 var dateAux = new Date(date.getTime() + i * dayMillis);
-						 if (dateAux.getDay() == 6 || dateAux.getDay() == 0) {
-							 schedules.push({date: dateAux, start: null, end: null, style: 'horarioNormal'});
-							 continue;
-						 }
-
-						 if (dateAux.getDay() == 3) {
-							 var start = new Date(dateAux.getTime());
-							 var end = new Date(dateAux.getTime());
-							 start.setHours(7); start.setMinutes(0); start.setSeconds(0); start.setMilliseconds(0);
-							 end.setHours(10); end.setMinutes(30); end.setSeconds(0); end.setMilliseconds(0);
-							 schedules.push({date: dateAux, start: start, end: end, style: 'horarioNormal'});
-							 var start = new Date(dateAux.getTime());
-							 var end = new Date(dateAux.getTime());
-							 start.setHours(15); start.setMinutes(30); start.setSeconds(0); start.setMilliseconds(0);
-							 end.setHours(19); end.setMinutes(0); end.setSeconds(0); end.setMilliseconds(0);
-							 schedules.push({date: dateAux, start: start, end: end, style: 'horarioCortado'});
-						 } else {
-							 var start = new Date(dateAux.getTime());
-							 var end = new Date(dateAux.getTime());
-							 start.setHours(8); start.setMinutes(0); start.setSeconds(0); start.setMilliseconds(0);
-							 end.setHours(15); end.setMinutes(0); end.setSeconds(0); end.setMilliseconds(0);
-							 schedules.push({date: dateAux, start: start, end: end, style: 'horarioNormal'});
-						 }
-					 }
-
-					 defer.resolve(schedules);
-					 return defer.promise;
+				 /*
+				 	Retorna los schedules de una semana
+					[{daily:false, date:"2015-10-13T00:00:00+00:00",end:54000,id:"3ca2f7c0-3923-4ceb-925b-ff2918479eca",special:false,start:28800,userId:"0cd70f16-aebb-4274-bc67-a57da88ab6c7",weekday:1},..]
+				 */
+				 function loadSchedules(userId, date) {
+					 var d = date.toISOString();
+	         return Login.getPrivateTransport().call('assistance.find_schedules_week', [userId, d]);
 				 }
 
     }
