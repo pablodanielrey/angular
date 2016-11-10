@@ -1,6 +1,7 @@
 <!-- --------------- LISTADO DE PEDIDOS ------------------ -->
     <div class="contentOrders">
       <div class="itemOrders" ng-repeat="issue in vm.issues | filter: vm.search">
+        <a class="issueSelect" ng-href="{{vm.src}}{{issue.id}}">
           <div class="itemInfo">
 
               <!-- ---- Prioridad del pedido, por defecto tiene que estar en "normal" ---- -->
@@ -66,6 +67,6 @@
                   <i class=" fa fa-angle-right" aria-hidden="true"></i>
               </a>
           </div>
-
+        </a>
       </div>
     </div>

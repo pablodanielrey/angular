@@ -126,10 +126,11 @@ class Assistance(wamp.SystemComponentSession):
             logging.info("Buscando schedules para la semana")
             date = self._parseDate(date).date()
             scheds = Schedule.findByUserIdInWeek(con, userId, date)
-            scheds = [{'date':key, 'sched': scheds[key]} for key in scheds]
-            for sc in scheds:
-                logging.info('Schdule:{}'.format(sc))
-            return scheds
+            schedules = []
+            for key in scheds:
+                data = [{'date': key, 'schedule': sc} for sc in scheds[key]]
+                schedules.extend([ data if len(data) > 0 else [{'date': key, 'schedule': None}]][0])
+            return schedules
         finally:
             self.conn.put(con)
 
