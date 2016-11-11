@@ -49,7 +49,6 @@ if __name__ == '__main__':
         '35487193'      #fernanda bernasconi
     ]
 
-
     import re
     r = re.compile('[a-zA-Z\d]+')
 
@@ -76,7 +75,7 @@ if __name__ == '__main__':
     Service-Type = Framed-User,
     Framed-Protocol = PPP,
     Framed-Compression = Van-Jacobsen-TCP-IP
-                """.format(up.username, up.password)
+                """.format(up.username, up.password))
 
     finally:
         conn.put(con)
