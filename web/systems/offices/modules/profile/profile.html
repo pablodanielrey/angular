@@ -11,7 +11,42 @@
         <div class="contentEditProfile">
 
               <div class="editMail">
-                <div class="title"> <i class="icoBtn fa fa-envelope"></i> CUENTAS DE CORREO</div>
+                  <div class="title"> <i class="icoBtn fa fa-envelope"></i> CUENTAS DE CORREO</div>
+                  <div class="contentMailUniversity">
+                        <div>Correo Institucional </div>
+                        <div> walter.blanco@econo.unlp.edu.ar </div>
+                        <div>Correo Institucional Asociado </div>
+                        <div> soporte@econo.unlp.edu.ar </div>
+                        <div> ditesi@econo.unlp.edu.ar </div>
+                  </div>
+                  <div class="contentMailPersonal">
+                        <div>Correo Personal </div>
+                        <div ng-repeat='mail in vm.model.userMails' class="contentItemMail {{vm.view.getEMailClass(mail)}}">
+                              <!-- VARIABLES: mailConfirmado, mailSinConfirmar
+                                              mailPredeterminado -->
+                              <div class="mail">
+                                  <div> {{mail.email}} <i class="btnCheck fa fa-check" title="Correo predeterminado"></i> </div>
+                                  <div>
+                                      <button type="button" class="btnForward" title="Establecer como predeterminada"> <i class="fa fa-repeat"></i></button>
+                                      <button type="button" class="btnStar" title="Establecer como predeterminada"> <i class="fa fa-star-o"></i></button>
+                                      <button type="button" class="btnDelete" title="Eliminar cuenta de correo" ng-click='vm.deleteEmail(mail)'> <i class="fa fa-trash-o"></i></button>
+                                  </div>
+                              </div>
+                              <div class="mailPending">
+                                <i class="fa fa-spinner fa-spin"></i> Pedindiente de confirmación, revisa tu correo!
+                              </div>
+                        </div>
+                        <div class="newMail {{vm.view.styleMail}}">
+                            <!-- VARIABLES: nuevoMail -->
+                            <button type="button" class="btnAddMail" title="Agregar correo" ng-click="vm.view.newMail()"> AGREGAR CORREO PERSONAL</button>
+                            <div class="contentNewMail">
+                                <div>Ingrese correo</div>
+                                <div><input type="email" required></div>
+                                <div><button type="button" class="" ng-click="vm.view.back()"> ACEPTAR </button></div>
+                                <div><button type="button" class="" ng-click="vm.view.back()"> CANCELAR </button></div>
+                            </div>
+                        </div>
+                  </div>
               </div>
 
               <div class="editPass">

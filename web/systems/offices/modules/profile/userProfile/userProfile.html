@@ -1,12 +1,12 @@
 <div class="contentProfile">
 
     <div class="displayPhoto">
-      <div class="contentPhoto" > <img class="photo" ng-src="{{vm.myCroppedImage}}">  </div>
+      <div class="contentPhoto" > <img class="photo" ng-src="{{vm.model.user.myCroppedImage}}">  </div>
       <button class="btnChangePhoto" ng-click="vm.view.style='modificar'">cambiar imagen</button>
     </div>
 
     <div class="edit">
-      <div class="cropArea"> <img-crop image="vm.myImage" result-image="vm.myCroppedImage"></img-crop> </div>
+      <div class="cropArea"> <img-crop image="vm.model.user.myImage" result-image="vm.model.user.myCroppedImage"></img-crop> </div>
       <div> <input type="file" id="fileInput" /> </div>
       <button class="btnAcept" ng-click="vm.save()">Aceptar </button>
     </div>

@@ -93,20 +93,20 @@
   color: #3A3C44;
 }
 
-.profile .textSubtitle {
-  color: #0066A6;
-  margin-bottom: 5px;
+
+
+ /*------------ PANTALLA CORREOS ------------*/
+
+.profile .editMail {
+  font-size: 12px;
 }
 
-.profile .textMail {
-  color: #3a3c44;
-  font-size: 12px;
-  background-color: #EEEEEE;
-  padding: 5px;
-  margin-bottom: 5px;
-}
 
 .profile .contentItemMail {
+
+}
+
+.profile .mail {
   display: flex;
   display: -webkit-flex; /* Safari */
   display: -moz-flex; /* mozilla */
@@ -116,10 +116,43 @@
   align-items: center;
   -webkit-align-items: center;
   -moz-align-items: center;
-  justify-content: space-around;
+  justify-content: space-between;
 }
 
- /*------------ PANTALLA CORREOS ------------*/
+.profile .btnCheck {
+  display: none;
+}
+
+
+.profile .contentItemMail.mailConfirmado .btnForward,
+.profile .contentItemMail.mailConfirmado .mailPending {
+  display: none;
+}
+
+.profile .contentItemMail.mailSinConfirmar .btnForward,
+.profile .contentItemMail.mailSinConfirmar .btnStar {
+  display: none;
+}
+
+.profile .contentItemMail.mailConfirmado.mailPredeterminado .btnCheck {
+  display: inline;
+}
+.profile .contentItemMail.mailConfirmado.mailPredeterminado .btnStar {
+  display: none;
+}
+
+
+.profile .contentNewMail {
+  display: none;
+}
+
+.profile .newMail.nuevoMail .contentNewMail {
+  display: block;
+}
+
+.profile .newMail.nuevoMail .btnAddMail {
+  display: none;
+}
 
 
 
