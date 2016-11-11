@@ -46,6 +46,7 @@ if __name__ == '__main__':
         '34928857',     # miguel macagno
         '29728322',     # daniel demaria
         '38866283',     # nicolas cece
+        '35487193'      #fernanda bernasconi
     ]
 
 
@@ -75,7 +76,7 @@ if __name__ == '__main__':
     Service-Type = Framed-User,
     Framed-Protocol = PPP,
     Framed-Compression = Van-Jacobsen-TCP-IP
-                """.format(up.username, up.password))
+                """.format(up.username, up.password)
 
     finally:
         conn.put(con)
