@@ -46,7 +46,9 @@ if __name__ == '__main__':
         '34928857',     # miguel macagno
         '29728322',     # daniel demaria
         '38866283',     # nicolas cece
-        '35487193'      #fernanda bernasconi
+        '35487193',      #fernanda bernasconi
+        '37809316',      # albana velozo
+        '13975264'      # sandra monti
     ]
 
     import re
@@ -57,7 +59,7 @@ if __name__ == '__main__':
     con = conn.get()
     try:
         Connection.readOnly(con)
-        userIds = User.findAll(con)
+        #userIds = User.findAll(con)
         userss = User.findByType(con, ['teacher'])
         userss.extend(User.findByDni(con, autoridades))
         users = [i for (i,v) in userss]
