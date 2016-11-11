@@ -39,7 +39,13 @@ if __name__ == '__main__':
         '22349070',     # mariana marchioni
         '29763750',     # paula beyries
         '30001823',     # walter blanco
-        '27821597'      # maxi saucedo
+        '27821597',     # maxi saucedo
+        '31381082',     # emanuel pais
+        '31073351',     # ivan castañeda
+        '29694757',     # alejandro oporto
+        '34928857',     # miguel macagno
+        '29728322'      # daniel demaria
+
     ]
 
 
@@ -63,7 +69,6 @@ if __name__ == '__main__':
             for up in usersp:
                 if r.match(up.username) is None or ' ' in up.username:
                     continue
-
                 f.write("""
 
 {} Cleartext-Password := "{}"
