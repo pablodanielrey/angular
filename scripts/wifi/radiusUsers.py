@@ -44,8 +44,8 @@ if __name__ == '__main__':
         '31073351',     # ivan castañeda
         '29694757',     # alejandro oporto
         '34928857',     # miguel macagno
-        '29728322'      # daniel demaria
-
+        '29728322',     # daniel demaria
+        '38866283',     # nicolas cece
     ]
 
 
