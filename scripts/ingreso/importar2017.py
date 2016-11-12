@@ -25,7 +25,7 @@ try:
                 if cur.rowcount > 0:
                     print('recursante')
                     continue
-                cur.execute('insert into profile.users (id, name, lastname, dni) values (%s,%s,%s,%s)',(uid, n, l, d))
+                cur.execute('insert into profile.users (id, name, lastname, dni, type) values (%s,%s,%s,%s,%s)',(uid, n, l, d, 'student'))
                 cur.execute('insert into credentials.user_password (id, user_id, username, password) values (%s,%s,%s,%s)',(str(uuid.uuid4()), uid, d, d))
     finally:
         cur.close()
