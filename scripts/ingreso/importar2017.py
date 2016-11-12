@@ -18,7 +18,7 @@ try:
             for r in sr:
                 l = r[0].split(',')[0].strip()
                 n = r[0].split(',')[1].strip()
-                d = r[1].replace('DNI','').replace('.','').strip()
+                d = r[1].upper().replace('DNI','').replace('PAS','').replace('.','').strip()
                 print('a:{} n:{} d:{}'.format(l,n,d))
                 uid = str(uuid.uuid4())
                 cur.execute('select id from profile.users where dni = %s', (d,))

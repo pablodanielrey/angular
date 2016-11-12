@@ -6,7 +6,52 @@
 
 import uuid
 import inject
+import logging
 from model.connection.connection import Connection
+
+"""
+    -------------------------------------------------------------------
+    creo el esquema si es que no existe cada vez que importo el archivo
+    -------------------------------------------------------------------
+"""
+
+def _createSchema():
+    try:
+        reg = inject.instance(Registry)
+        conn = Connection(reg.getRegistry('dcsys'))
+        con = conn.get()
+        try:
+            cur = con.cursor()
+            try:
+                cur.execute('create schema if not exists dhcp')
+
+                cur.execute("""create table if not exists dhcp.hosts (
+                                    id varchar primary key,
+                                    reference_id varchar,
+                                    mac varchar not null,
+                                    ip varchar not null
+                                )
+                    """)
+                cur.execute("""create table if not exists dhcp.networks
+                                    id varchar primary key,
+                                    ip varchar not null,
+                                    netmask varchar not null,
+                                    gateway varchar not null,
+                                    rangeInit varchar not null,
+                                    rangeEnd varchar not null
+                                )
+                    """)
+            finally:
+                cur.close()
+        finally:
+            conn.put(con)
+
+    except Exception as e:
+        logging.warn(e)
+
+"""
+    ------------------------------------
+"""
 
 
 class Dhcp:
@@ -54,6 +99,7 @@ class DhcpHost:
     @classmethod
     def __fromResult(cls, r):
         d = cls()
+        d.hostame = r['id']
         d.mac = r['host']
         d.ip = r['ip']
         return d
@@ -94,6 +140,7 @@ class DhcpNetwork:
 
     def toFile(self, f):
         f.write("""
+            # {}
             subnet {} netmask {} {{
                 option routers {};
                 pool {{
@@ -102,6 +149,7 @@ class DhcpNetwork:
                 }}
             }}
         """.format(
+                self.name,
                 self.ip,
                 self.netmask,
                 self.gateway,
