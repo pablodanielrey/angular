@@ -206,7 +206,7 @@
             function loadSchedules() {
               vm.model.schedules = [];
               displayMessageLoading();
-              Assistance.loadSchedules(vm.model.selectedPerson, vm.model.date).then(function(schedules) {
+              Assistance.loadSchedules(vm.model.selectedPerson, vm.model.date, false).then(function(schedules) {
                 for (var i = 0; i < schedules.length; i++) {
                   vm.model.schedules.push(_parseSchedule(schedules[i]));
                 }

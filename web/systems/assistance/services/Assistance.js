@@ -274,12 +274,13 @@
 
 				 /*
 				 	Retorna los schedules de una semana
+					actualWeek : es un boolean, si esta en True trae los schedules de la semana actual sino trae a partir del date 6 días mas
 					[{date: 'dia correspondiente a la semana del date pasado', 'schedule':{daily:false, date:"2015-10-13T00:00:00+00:00",end:54000,id:"3ca2f7c0-3923-4ceb-925b-ff2918479eca",special:false,start:28800,userId:"0cd70f16-aebb-4274-bc67-a57da88ab6c7",weekday:1}}
 					{date: 'dia correspondiente a la semana del date pasado', 'schedule': null}]
 				 */
-				 function loadSchedules(userId, date) {
+				 function loadSchedules(userId, date, actualWeek) {
 					 var d = date.toISOString();
-	         return Login.getPrivateTransport().call('assistance.find_schedules_week', [userId, d]);
+	         return Login.getPrivateTransport().call('assistance.find_schedules_week', [userId, d, actualWeek]);
 				 }
 
     }

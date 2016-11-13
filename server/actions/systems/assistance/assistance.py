@@ -120,12 +120,12 @@ class Assistance(wamp.SystemComponentSession):
         returnValue(r)
 
 
-    def _findSchedulesWeek(self, userId, date, details):
+    def _findSchedulesWeek(self, userId, date, actualWeek, details):
         con = self.conn.get()
         try:
             logging.info("Buscando schedules para la semana")
             date = self._parseDate(date).date()
-            scheds = Schedule.findByUserIdInWeek(con, userId, date)
+            scheds = Schedule.findByUserIdInWeek(con, userId, date, actualWeek)
             schedules = []
             for key in scheds:
                 data = [{'date': key, 'schedule': sc} for sc in scheds[key]]
@@ -136,8 +136,8 @@ class Assistance(wamp.SystemComponentSession):
 
     @autobahn.wamp.register('assistance.find_schedules_week')
     @inlineCallbacks
-    def findSchedulesWeek(self, userId, date, details):
-        r = yield threads.deferToThread(self._findSchedulesWeek, userId, date, details)
+    def findSchedulesWeek(self, userId, date, actualWeek, details):
+        r = yield threads.deferToThread(self._findSchedulesWeek, userId, date, actualWeek, details)
         returnValue(r)
 
     ############################# EXPORTACIONES #######################################

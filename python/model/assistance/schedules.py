@@ -79,8 +79,8 @@ class Schedule(JSONSerializable):
         return [sc for sc in schSorted if sc.date == schSorted[0].date and sc.getScheduleSeconds() >= 0]
 
     @classmethod
-    def findByUserIdInWeek(cls, con, userId, date):
-        firstDate = date - datetime.timedelta(days=date.weekday())
+    def findByUserIdInWeek(cls, con, userId, date, actualWeek = True):
+        firstDate = date - datetime.timedelta(days=date.weekday()) if actualWeek else date
         result = {}
         for day in range(7):
             actual = firstDate + datetime.timedelta(days=day)
