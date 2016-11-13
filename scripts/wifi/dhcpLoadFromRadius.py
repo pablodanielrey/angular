@@ -67,18 +67,25 @@ if __name__ == '__main__':
     conn = Connection(reg.getRegistry('dcsys'))
     con = conn.get()
     try:
-        netww = {}
+        # obtengo las redes y subredes
         networks = DhcpNetwork.findById(con, DhcpNetwork.findAll(con))
+        wnets = {}
         for n in networks:
-            count = 10
-            for macs in rad.values():
-                for mac in macs:
+            wnets[n.id] = fce.wifiSubnets(n)
+
+        # asigno las ips
+        for dni in rad.keys():
+            macs = rad[dni]
+            for mac in macs:
+                logging.info('mac : {}'.format(mac))
+                for n in networks:
+                    logging.info('red: {}'.format(n.ip))
+                    ip = n.findNextIpAvailable(con)
+                    logging.info('ip: {}'.format(ip))
                     d = DhcpHost()
                     d.mac = mac
-                    d.ip = ipaddress.ip_interface(str(n.ip[count]) + '/' + str(n.ip.prefixlen))
-                    logging.info('Agregando {}'.format(d.ip))
+                    d.ip = ip
                     d.persist(con)
-                    count = count + 1
 
         con.commit()
 

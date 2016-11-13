@@ -276,6 +276,10 @@ class DhcpNetwork:
     def persist(self, con):
         return self.dao.persist(con, self)
 
+    def findNextIpAvailable(self, con):
+        last = DhcpHost.findById(con, [DhcpHost.findLastByNetwork(con, self)])
+        return last.ip + 1
+
     @classmethod
     def findById(cls, con, ids):
         return cls.dao.findById(con, ids)
