@@ -18,6 +18,7 @@ inject.configure()
 from model.registry import Registry
 from model.connection.connection import Connection
 
+from model.dhcp import fce
 from model.dhcp.dhcp import DhcpHost, DhcpNetwork
 import ipaddress
 
@@ -39,37 +40,6 @@ import ipaddress
 
 """
 
-def subnets(network):
-    """
-        Genero las subredes especificadas de acuerdo a la política de la facultad
-    """
-    n = ipaddress.ip_network(network + '.0.0/16')
-    subn = list(n.subnets(new_prefix=17))
-    general = subn[0]
-    subn = list(subn[1].subnets(new_prefix=19))
-    authorities = subn[0]
-    events = subn[1]
-    voip = subn[2]
-    admin = subn[3]
-    dynamic = list(subn[3].subnets(new_prefix=26))[0]
-
-    return {
-        'network': n,
-        'general': general,
-        'authorities': authorities,
-        'events': events,
-        'voip': voip,
-        'admin': admin,
-        'dynamic': dynamic
-    }
-
-def combine(ip, network):
-    """ retorna una interface a partir de una ip y una red """
-    return ipaddress.ip_interface(str(ip) + '/' + str(network.prefixlen))
-
-
-networks = ['10.10','10.17','10.26','10.14','10.8','10.9','10.11','10.15','10.12','10.18','10.19','10.20']
-
 if __name__ == '__main__':
 
     logging.getLogger().setLevel(logging.DEBUG)
@@ -78,13 +48,15 @@ if __name__ == '__main__':
     conn = Connection(reg.getRegistry('dcsys'))
     con = conn.get()
     try:
-        for n in networks:
-            netww = subnets(n)
+        for n in fce.wifiNetworks():
+            netww = fce.wifiSubnets(n)
+            r = fce.wifiDynamicRange(netww)
+
             dn = DhcpNetwork()
             dn.ip = netww['network']
-            dn.gateway = combine(dn.ip.broadcast_address - 1, dn.ip)
-            dn.rangeInit = combine(netww['dynamic'].network_address + 1, netww['dynamic'])
-            dn.rangeEnd = combine(netww['dynamic'].broadcast_address - 1, netww['dynamic'])
+            dn.gateway = fce.gateway(dn.ip)
+            dn.rangeInit = r['start']
+            dn.rangeEnd = r['end']
             dn.persist(con)
 
         con.commit()

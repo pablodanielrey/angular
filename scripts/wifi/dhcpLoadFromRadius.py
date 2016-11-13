@@ -21,8 +21,6 @@ from model.connection.connection import Connection
 from model.dhcp.dhcp import DhcpHost, DhcpNetwork
 import ipaddress
 
-#networks = ['10.10','10.17','10.26','10.14','10.8','10.9','10.11','10.15','10.12','10.18','10.19','10.20']
-
 def loadRadiusRegs():
     macs = {}
     mcon = pymysql.connect(host='163.10.17.130',

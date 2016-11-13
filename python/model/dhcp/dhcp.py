@@ -138,9 +138,9 @@ class DhcpNetworkDAO(DAO):
         d.id = r['id']
         d.name = r['name']
         d.ip = ipaddress.ip_network(r['ip'])
-        d.rangeInit = ipaddress.ip_interface(r['range_init'])
-        d.rangeEnd = ipaddress.ip_interface(r['range_end'])
-        d.gateway = ipaddress.ip_interface(r['gateway']).ip
+        d.rangeInit = ipaddress.ip_address(r['range_init'])
+        d.rangeEnd = ipaddress.ip_address(r['range_end'])
+        d.gateway = ipaddress.ip_address(r['gateway']).ip
         return d
 
     @classmethod
