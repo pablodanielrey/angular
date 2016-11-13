@@ -7,51 +7,162 @@
 import uuid
 import inject
 import logging
+import ipaddress
 from model.connection.connection import Connection
+from model.dao import DAO
 
-"""
-    -------------------------------------------------------------------
-    creo el esquema si es que no existe cada vez que importo el archivo
-    -------------------------------------------------------------------
-"""
 
-def _createSchema():
-    try:
-        reg = inject.instance(Registry)
-        conn = Connection(reg.getRegistry('dcsys'))
-        con = conn.get()
+class DhcpHostDAO(DAO):
+
+    @classmethod
+    def _createSchema(cls, con):
+        cur = con.cursor()
         try:
-            cur = con.cursor()
-            try:
-                cur.execute('create schema if not exists dhcp')
+            cur.execute('create schema if not exists dhcp')
 
-                cur.execute("""create table if not exists dhcp.hosts (
-                                    id varchar primary key,
-                                    reference_id varchar,
-                                    mac varchar not null,
-                                    ip varchar not null
-                                )
-                    """)
-                cur.execute("""create table if not exists dhcp.networks
-                                    id varchar primary key,
-                                    ip varchar not null,
-                                    netmask varchar not null,
-                                    gateway varchar not null,
-                                    rangeInit varchar not null,
-                                    rangeEnd varchar not null
-                                )
-                    """)
-            finally:
-                cur.close()
+            cur.execute("""
+                    create table if not exists dhcp.hosts (
+                        id varchar primary key,
+                        mac macaddr not null,
+                        ip inet not null
+                    )
+                """)
+
         finally:
-            conn.put(con)
+            cur.close()
 
-    except Exception as e:
-        logging.warn(e)
+    @classmethod
+    def __fromResult(cls, r):
+        d = cls()
+        d.id = r['id']
+        d.ip = ipaddress.ip_interface(r['ip'])
+        d.mac = r['mac']
+        return d
 
-"""
-    ------------------------------------
-"""
+    @classmethod
+    def findById(cls, con, ids):
+        cur = con.cursor()
+        try:
+            cur.execute('select * as netmask from dhcp.hosts where id in (%s)', (tuple(ids),))
+            return [cls.__fromResult(c) for c in cur]
+
+        finally:
+            cur.close()
+
+    @classmethod
+    def findByNetwork(cls, con, networks):
+        cur = con.cursor()
+        try:
+            ips = []
+            for n in networks:
+                cur.execute('select id from dhcp.hosts where ip << %s order by ip asc', (n,))
+                ips.extend([h['id'] for h in cur])
+            return ips
+
+        finally:
+            cur.close()
+
+    @classmethod
+    def findLastByNetwork(cls, con, network):
+        cur = con.cursor()
+        try:
+            cur.execute('select id from dhcp.hosts where ip << %s order by ip desc limit 1', (network,))
+            if cur.rowcount <= 0:
+                return None
+            return cur.fetchone()['id']
+
+        finally:
+            cur.close()
+
+    @classmethod
+    def findAll(cls, con):
+        cur = con.cursor()
+        try:
+            cur.execute('select id from dhcp.hosts')
+            return [h['id'] for h in cur]
+
+        finally:
+            cur.close()
+
+    @classmethod
+    def persist(cls, con, instance):
+        cur = con.cursor()
+        try:
+            instance.ipaddress = str(instance.ip)
+            cur.execute('insert into dhcp.hosts (id, mac, ip) values (%(id)s, %(mac)s, %(ipaddress)s)', instance.__dict__)
+
+        finally:
+            cur.close()
+
+
+class DhcpNetworkDAO(DAO):
+
+    @classmethod
+    def _createSchema(cls, con):
+        cur = con.cursor()
+        try:
+            cur.execute('create schema if not exists dhcp')
+
+            cur.execute("""
+                    create table if not exists dhcp.networks (
+                        id varchar primary key,
+                        name varchar default '',
+                        ip cidr not null,
+                        gateway inet not null,
+                        range_init inet,
+                        range_end inet
+                    )
+                """)
+        finally:
+            cur.close()
+
+    @classmethod
+    def persist(cls, con, instance):
+        cur = con.cursor()
+        try:
+            d = instance.__dict__
+            d['ipAddress'] = str(instance.ip)
+            d['rangeInitAddress'] = str(instance.rangeInit)
+            d['rangeEndAddress'] = str(instance.rangeEnd)
+            d['gatewayAddress'] = str(instance.gateway)
+            cur.execute('insert into dhcp.networks '
+                        '(id, name, ip, range_init, range_end, gateway) values '
+                        '(%(id)s, %(name)s, %(ipAddress)s, %(rangeInitAddress)s, %(rangeEndAddress)s, %(gatewayAddress)s)', instance.__dict__)
+
+        finally:
+            cur.close()
+
+    @classmethod
+    def __fromResult(cls, r):
+        d = cls()
+        d.id = r['id']
+        d.name = r['name']
+        d.ip = ipaddress.ip_network(r['ip'])
+        d.rangeInit = ipaddress.ip_interface(r['range_init'])
+        d.rangeEnd = ipaddress.ip_interface(r['range_end'])
+        d.gateway = ipaddress.ip_interface(r['gateway']).ip
+        return d
+
+    @classmethod
+    def findById(cls, con, ids):
+        cur = con.cursor()
+        try:
+            cur.execute('select * from dhcp.networks where id in (%s)', (tuple(ids),))
+            return [cls.__fromResult(c) for c in cur]
+
+        finally:
+            cur.close()
+
+    @classmethod
+    def findAll(cls, con):
+        cur = con.cursor()
+        try:
+            cur.execute('select id from dhcp.networks')
+            return [n['id'] for n in cur]
+
+        finally:
+            cur.close()
+
 
 
 class Dhcp:
@@ -91,48 +202,53 @@ class Dhcp:
 
 class DhcpHost:
 
+    dao = DhcpHostDAO
+
     def __init__(self):
-        self.hostname = str(uuid.uuid4())
+        self.id = str(uuid.uuid4())
         self.mac = None
         self.ip = None
 
     @classmethod
-    def __fromResult(cls, r):
-        d = cls()
-        d.hostame = r['id']
-        d.mac = r['host']
-        d.ip = r['ip']
-        return d
+    def findByNetwork(cls, con, networks):
+        return cls.dao.findByNetwork(con, networks)
+
+    @classmethod
+    def findLastByNetwork(cls, con, network):
+        return cls.dao.findLastByNetwork(con, network)
+
+    @classmethod
+    def findById(cls, con, ids):
+        return cls.dao.findById(con, ids)
 
     @classmethod
     def findAll(cls, con):
-        cur = con.cursor()
-        try:
-            cur.execute('select * from dhcp.hosts')
-            return [cls.__fromResult(c) for c in cur]
+        return cls.dao.findAll(con)
 
-        finally:
-            cur.close()
+    def persist(self, con):
+        return self.dao.persist(con, self)
 
-    def toFrite(self, f):
+    def toFile(self, f):
         f.write("""
             host {} {{
                 hardware ethernet {};
                 fixed-address {};
             }}
         """.format(
-            self.hostname,
+            self.id,
             self.mac,
-            self.ip
+            self.host
         ))
 
 
 class DhcpNetwork:
 
+    dao = DhcpNetworkDAO
+
     def __init__(self):
+        self.id = str(uuid.uuid4())
         self.name = None
         self.ip = None
-        self.netmask = None
         self.rangeInit = None
         self.rangeEnd = None
         self.gateway = None
@@ -151,30 +267,19 @@ class DhcpNetwork:
         """.format(
                 self.name,
                 self.ip,
-                self.netmask,
                 self.gateway,
                 self.failOverName,
                 self.rangeInit,
                 self.rangeEnd
             ))
 
+    def persist(self, con):
+        return self.dao.persist(con, self)
+
     @classmethod
-    def __fromResult(cls, r):
-        d = cls()
-        d.name = r['name']
-        d.ip = r['ip']
-        d.netmask = r['netmask']
-        d.rangeInit = r['rangeInit']
-        d.rangeEnd = r['rangeEnd']
-        d.gateway = r['gateway']
-        return d
+    def findById(cls, con, ids):
+        return cls.dao.findById(con, ids)
 
     @classmethod
     def findAll(cls, con):
-        cur = con.cursor()
-        try:
-            cur.execute('select * from dhcp.networks')
-            return [cls.__fromResult(c) for c in cur]
-
-        finally:
-            cur.close()
+        return cls.dao.findAll(con)

@@ -110,7 +110,9 @@ if __name__ == '__main__':
         '20294338',     # diego felices
         '17755153',     # leo gasparini
         '22349070',     # mariana marchioni
-        '29763750'      # paula beyries
+        '29763750',     # paula beyries
+        '28345959',     # jona sereno
+        '38850609'      # ivan sereno
     ]
 
     logging.info('escribiendo los archivos dhcp')
