@@ -33,7 +33,7 @@ class DhcpHostDAO(DAO):
 
     @classmethod
     def __fromResult(cls, r):
-        d = cls()
+        d = DhcpHost()
         d.id = r['id']
         d.ip = ipaddress.ip_interface(r['ip'])
         d.mac = r['mac']
@@ -43,7 +43,7 @@ class DhcpHostDAO(DAO):
     def findById(cls, con, ids):
         cur = con.cursor()
         try:
-            cur.execute('select * as netmask from dhcp.hosts where id in (%s)', (tuple(ids),))
+            cur.execute('select * from dhcp.hosts where id in (%s)', (tuple(ids),))
             return [cls.__fromResult(c) for c in cur]
 
         finally:
@@ -55,7 +55,7 @@ class DhcpHostDAO(DAO):
         try:
             ips = []
             for n in networks:
-                cur.execute('select id from dhcp.hosts where ip << %s order by ip asc', (n,))
+                cur.execute('select id from dhcp.hosts where ip << %s order by ip asc', (str(n),))
                 ips.extend([h['id'] for h in cur])
             return ips
 
@@ -66,7 +66,7 @@ class DhcpHostDAO(DAO):
     def findLastByNetwork(cls, con, network):
         cur = con.cursor()
         try:
-            cur.execute('select id from dhcp.hosts where ip << %s order by ip desc limit 1', (network,))
+            cur.execute('select id from dhcp.hosts where ip << %s order by ip desc limit 1', (str(network),))
             if cur.rowcount <= 0:
                 return None
             return cur.fetchone()['id']
@@ -134,20 +134,20 @@ class DhcpNetworkDAO(DAO):
 
     @classmethod
     def __fromResult(cls, r):
-        d = cls()
+        d = DhcpNetwork()
         d.id = r['id']
         d.name = r['name']
         d.ip = ipaddress.ip_network(r['ip'])
         d.rangeInit = ipaddress.ip_address(r['range_init'])
         d.rangeEnd = ipaddress.ip_address(r['range_end'])
-        d.gateway = ipaddress.ip_address(r['gateway']).ip
+        d.gateway = ipaddress.ip_address(r['gateway'])
         return d
 
     @classmethod
     def findById(cls, con, ids):
         cur = con.cursor()
         try:
-            cur.execute('select * from dhcp.networks where id in (%s)', (tuple(ids),))
+            cur.execute('select * from dhcp.networks where id in %s', (tuple(ids),))
             return [cls.__fromResult(c) for c in cur]
 
         finally:
@@ -277,8 +277,11 @@ class DhcpNetwork:
         return self.dao.persist(con, self)
 
     def findNextIpAvailable(self, con):
-        last = DhcpHost.findById(con, [DhcpHost.findLastByNetwork(con, self)])
-        return last.ip + 1
+        last = DhcpHost.findById(con, [DhcpHost.findLastByNetwork(con, self.ip)])
+        if len(last) <= 0:
+            return self.ip[1]
+        else:
+            return last[0].ip + 1
 
     @classmethod
     def findById(cls, con, ids):

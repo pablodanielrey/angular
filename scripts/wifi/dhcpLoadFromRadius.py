@@ -19,6 +19,7 @@ from model.registry import Registry
 from model.connection.connection import Connection
 
 from model.dhcp.dhcp import DhcpHost, DhcpNetwork
+from model.dhcp import fce
 import ipaddress
 
 def loadRadiusRegs():
@@ -60,6 +61,24 @@ if __name__ == '__main__':
 
     logging.getLogger().setLevel(logging.DEBUG)
 
+    autoridades = [
+        '24892148',     # pablo diaz
+        '27294557',     # pablo rey
+        '30057880',     # charly
+        '31993212',     # adrian
+        '25952190',     # julieta
+        '13908434',     # laura catani
+        '18283954',     # armengol
+        '26578935',     # masson
+        '26250165',     # eduardo degiusti
+        '23454309',     # marina gs
+        '20294338',     # diego felices
+        '17755153',     # leo gasparini
+        '22349070',     # mariana marchioni
+        '29763750'     # paula beyries
+    ]
+
+
     rad = loadRadiusRegs()
     #users = loadUserData()
 
@@ -71,23 +90,29 @@ if __name__ == '__main__':
         networks = DhcpNetwork.findById(con, DhcpNetwork.findAll(con))
         wnets = {}
         for n in networks:
-            wnets[n.id] = fce.wifiSubnets(n)
+            wnets[n.id] = fce.wifiSubnets(n.ip)
 
+        net = DhcpNetwork()
         # asigno las ips
         for dni in rad.keys():
             macs = rad[dni]
             for mac in macs:
                 logging.info('mac : {}'.format(mac))
                 for n in networks:
-                    logging.info('red: {}'.format(n.ip))
-                    ip = n.findNextIpAvailable(con)
-                    logging.info('ip: {}'.format(ip))
+                    """
+                        hack para hacerlo funcionar
+                    """
+                    if dni in autoridades:
+                        net.ip = wnets[n.id]['authorities']
+                    else:
+                        net.ip = wnets[n.id]['general']
+
+                    ip = net.findNextIpAvailable(con)
                     d = DhcpHost()
                     d.mac = mac
                     d.ip = ip
                     d.persist(con)
-
-        con.commit()
+                con.commit()
 
     finally:
         conn.put(con)
