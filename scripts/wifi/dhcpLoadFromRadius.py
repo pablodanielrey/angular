@@ -118,7 +118,6 @@ if __name__ == '__main__':
                                     da.userId = users[dni].id
                                     da.hostId = h.id
                                     da.persist(con)
-                                    con.commit()
                                 break
 
                         if not found:
@@ -144,13 +143,7 @@ if __name__ == '__main__':
                         da.hostId = d.id
                         da.persist(con)
 
-                if len(toGenerate) > 0:
-                    con.commit()
-
-
-
-
-
+            con.commit()
 
     finally:
         conn.put(con)
