@@ -48,7 +48,8 @@ if __name__ == '__main__':
         '38866283',     # nicolas cece
         '35487193',      #fernanda bernasconi
         '37809316',      # albana velozo
-        '13975264'      # sandra monti
+        '13975264',      # sandra monti
+        '33782574'      # adrian garcia
     ]
 
     import re
