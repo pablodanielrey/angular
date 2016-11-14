@@ -249,10 +249,9 @@
  					return defer.promise;
 				 }
 
-				 function saveSchedules(schedules) {
-					 var defer = $q.defer();
- 					defer.resolve(true);
- 					return defer.promise;
+				 function saveSchedules(userId, date, schedules) {
+					 var d = date.toISOString();
+					 return Login.getPrivateTransport().call('assistance.persist_schedule_week', [userId, d, schedules]);
 				 }
 
 				 function saveWatcherSchedules(schedules) {

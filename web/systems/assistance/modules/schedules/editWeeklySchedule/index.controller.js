@@ -269,7 +269,7 @@
               }
 
               vm.view.style = displayMessageLoading();
-              Assistance.saveSchedules(vm.model.schedules).then(function() {
+              Assistance.saveSchedules(vm.model.selectedPerson, vm.model.date, vm.model.schedules).then(function() {
                 vm.view.style = displayMessageSave();
                 $timeout(function () {
                   $location.path("/schedules/" + vm.model.selectedPerson);
