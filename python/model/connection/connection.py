@@ -11,8 +11,8 @@ from model.registry import Registry
 
 
 import logging
-logging.basicConfig(format='%(asctime)s, %(stack_info)s, %(thread)s, %(message)s')
-logging.getLogger().setLevel(logging.DEBUG)
+#logging.basicConfig(format='%(asctime)s, %(stack_info)s, %(thread)s, %(message)s')
+#logging.getLogger().setLevel(logging.DEBUG)
 
 import cProfile
 def do_cprofile(func):
@@ -48,9 +48,6 @@ class Connection:
         conn.set_isolation_level(psycopg2.extensions.ISOLATION_LEVEL_AUTOCOMMIT)
 
     def __init__(self, registry=Registry()):
-
-        self.logging.setLevel(logging.DEBUG)
-
         self.host = registry.get('host')
         self.database = registry.get('database')
         self.user = registry.get('user')
