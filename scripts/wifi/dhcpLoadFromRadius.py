@@ -112,7 +112,7 @@ if __name__ == '__main__':
                     d.mac = mac
                     d.ip = ip
                     d.persist(con)
-            con.commit()
+                con.commit()
 
     finally:
         conn.put(con)
