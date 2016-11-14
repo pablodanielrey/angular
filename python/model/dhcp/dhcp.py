@@ -43,8 +43,18 @@ class DhcpHostDAO(DAO):
     def findById(cls, con, ids):
         cur = con.cursor()
         try:
-            cur.execute('select * from dhcp.hosts where id in (%s)', (tuple(ids),))
+            cur.execute('select * from dhcp.hosts where id in %s', (tuple(ids),))
             return [cls.__fromResult(c) for c in cur]
+
+        finally:
+            cur.close()
+
+    @classmethod
+    def findByMac(cls, con, mac):
+        cur = con.cursor()
+        try:
+            cur.execute('select id from dhcp.hosts where mac = %s order by ip asc', (mac,))
+            return [h['id'] for h in cur]
 
         finally:
             cur.close()
@@ -214,6 +224,10 @@ class DhcpHost:
         return cls.dao.findByNetwork(con, networks)
 
     @classmethod
+    def findByMac(cls, con, mac):
+        return cls.dao.findByMac(con, mac)
+
+    @classmethod
     def findLastByNetwork(cls, con, network):
         return cls.dao.findLastByNetwork(con, network)
 
@@ -282,6 +296,9 @@ class DhcpNetwork:
             return self.ip[1]
         else:
             return last[0].ip + 1
+
+    def includes(self, dhcpHost):
+        return dhcpHost.ip in self.ip
 
     @classmethod
     def findById(cls, con, ids):
