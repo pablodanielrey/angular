@@ -88,6 +88,29 @@ class Schedule(JSONSerializable):
         return result
 
 
+class ScheduleModel:
+
+    '''
+        guarda el horario semanal
+        date: dia de vigencia
+        schedules: [{date: date, weekday: 0-6, start: datetime, end: datetime}]
+    '''
+    @classmethod
+    def persistScheduleWeek(cls, con, userId, date, schedules):
+        # obtengo el horario semanal que ya posee
+        scheds = Schedule.findByUserIdInWeek(cls, con, userId, date, False)
+
+        scheds = [ sc.delete(con) for sc in scheds if sc.date == date]
+        for sc in schedules:
+            s = Schedule()
+            s.userId = userId
+            s.date = date
+            s.weekday = sc.weekday
+            s.start = sc.start
+            s.end = sc.end
+            s.daily = True
+            s.special = False
+            s.persist(con)
 
 
 class ScheduleDAO(AssistanceDAO):
