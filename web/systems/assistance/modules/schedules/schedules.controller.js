@@ -10,6 +10,9 @@
         var vm = this;
         vm.model = {
           users: [],
+          schedulesWeek: [],
+          schedulesHours: [],
+
           selectedPerson: null,
           date: null,
           user: null
@@ -37,6 +40,7 @@
         vm.displayEditWeekSch = displayEditWeekSch;
         vm.displayEditHoursSch = displayEditHoursSch;
         vm.displayEditSpecialSch = displayEditSpecialSch;
+        vm.getHours = getHours;
 
         $scope.$on('wamp.open', function(event, args) {
           activate();
@@ -110,6 +114,35 @@
       vm.view.style = style + ' ' + vm.view.errorMessage;
     }
 
+    function getHours() {
+      var totalMillis = 0;
+      var dayMillis = 24 * 60 * 60 * 1000;
+
+      for (var i = 0; i < vm.model.schedulesWeek.length; i++) {
+        var sched = vm.model.schedulesWeek[i];
+        if (sched.start == null || sched.end == null) {
+          continue;
+        }
+        if (sched.end < sched.start) {
+          sched.end.setTime(sched.end.getTime() + dayMillis);
+        }
+        totalMillis = totalMillis + (sched.end - sched.start);
+      }
+
+      for (var i = 0; i < vm.model.schedulesHours.length; i++) {
+        var sched = vm.model.schedulesHours[i];
+        if (sched.start == null || sched.end == null) {
+          continue;
+        }
+        if (sched.end < sched.start) {
+          sched.end.setTime(sched.end.getTime() + dayMillis);
+        }
+        totalMillis = totalMillis + (sched.end - sched.start);
+      }
+
+      return Math.trunc(totalMillis / 1000 / 60 / 60);
+    }
+
 
     /* **************************************************************************************************
                                         MANEJO DE PERFIL DE USUARIO
@@ -166,6 +199,61 @@
         }
       }
 
+      /* **************************************************************************************************
+                                          MANEJO DE SCHEDULES
+      * ************************************************************************************************ */
+
+        $scope.$watch('vm.model.date', function(newVal, oldVal) {
+          if (newVal == null && oldVal == null) {
+            return;
+          }
+          if (newVal == null) {
+            vm.model.date = oldVal;
+            return;
+          }
+
+          loadSchedules();
+        });
+
+        function _parseSchedule(sc) {
+          // getDay() => [Sunday, Monday, ..., Saturday]
+          var sortDay = [6, 0, 1, 2, 3, 4, 5];
+          var date = new Date(sc.date);
+          var weekday = sortDay[date.getDay()];
+
+          var millisStart = (sc.schedule == null) ? null : sc.schedule.start * 1000;
+          var start = (millisStart == null) ? null : new Date(date.getTime() + millisStart);
+
+          var millisEnd =  (sc.schedule == null) ? null : sc.schedule.end * 1000;
+          var end = (millisEnd == null) ? null : new Date(date.getTime() + millisEnd);
+
+          var limitMillis = 24 * 60 * 60 * 1000;
+          if (start != null && end != null && (end.getTime() - start.getTime()) > limitMillis) {
+            start = null;
+            end = null;
+          }
+          return {date: date, weekday:weekday, start: start, end: end}
+        }
+
+        function loadSchedules() {
+          vm.model.schedules = [];
+          displayMessageLoading();
+          Assistance.loadSchedules(vm.model.selectedPerson, vm.model.date, true).then(function(schedules) {
+            for (var i = 0; i < schedules.length; i++) {
+              if (schedules[i].schedule != null) {
+                vm.model.schedulesWeek.push(_parseSchedule(schedules[i]));
+              }
+            }
+            vm.displaySchedule();
+          }, function(error) {
+            console.error(error);
+            displayMessageError(error);
+            $timeout(function () {
+              vm.displayEditWeeklySch();
+            }, 1500);
+          })
+
+        }
 
     }
 })();
