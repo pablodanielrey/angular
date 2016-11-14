@@ -93,26 +93,44 @@ if __name__ == '__main__':
             wnets[n.id] = fce.wifiSubnets(n.ip)
 
         net = DhcpNetwork()
+        d = DhcpHost()
         # asigno las ips
         for dni in rad.keys():
             macs = rad[dni]
             for mac in macs:
                 logging.info('mac : {}'.format(mac))
-                for n in networks:
-                    """
-                        hack para hacerlo funcionar
-                    """
+
+                ''' chequeo a ver en que redes no esta generada la mac '''
+                toGenerate = []
+                hids = DhcpHost.findByMac(con, mac)
+                if len(hids) > 0:
+                    hosts = DhcpHost.findById(con, hids)
+                    for n in networks:
+                        found = False
+                        for h in hosts:
+                            if n.includes(h):
+                                found = True
+                                break
+                        if not found:
+                            toGenerate.append(n)
+                else:
+                    toGenerate.extend(networks)
+
+                ''' genero las ips en las redes faltantes '''
+                for n in toGenerate:
                     if dni in autoridades:
                         net.ip = wnets[n.id]['authorities']
                     else:
                         net.ip = wnets[n.id]['general']
 
                     ip = net.findNextIpAvailable(con)
-                    d = DhcpHost()
+                    d.id = str(uuid.uuid4())
                     d.mac = mac
                     d.ip = ip
                     d.persist(con)
-                con.commit()
+
+                if len(toGenerate) > 0:
+                    con.commit()
 
     finally:
         conn.put(con)
