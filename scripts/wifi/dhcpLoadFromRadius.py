@@ -17,8 +17,8 @@ inject.configure()
 
 from model.registry import Registry
 from model.connection.connection import Connection
-
-from model.dhcp.dhcp import DhcpHost, DhcpNetwork
+from model.users.users import User
+from model.dhcp.dhcp import DhcpHost, DhcpNetwork, DhcpAssignation
 from model.dhcp import fce
 import ipaddress
 
@@ -42,14 +42,14 @@ def loadRadiusRegs():
         mcon.close()
     return macs
 
-def loadUserData():
+def loadUserData(dnis):
     users = {}
     reg = inject.instance(Registry)
     conn = Connection(reg.getRegistry('dcsys'))
     con = conn.get()
     try:
         Connection.readOnly(con)
-        userIds = User.findByDni(con, macs.keys())
+        userIds = User.findByDni(con, dnis)
         userss = User.findById(con, [i for (i,v) in userIds])
         for u in userss:
             users[u.dni] = u
@@ -80,7 +80,7 @@ if __name__ == '__main__':
 
 
     rad = loadRadiusRegs()
-    #users = loadUserData()
+    users = loadUserData(rad.keys())
 
     reg = inject.instance(Registry)
     conn = Connection(reg.getRegistry('dcsys'))
@@ -92,9 +92,12 @@ if __name__ == '__main__':
         for n in networks:
             wnets[n.id] = fce.wifiSubnets(n.ip)
 
+        ''' genero aca las instancias para que sea un poco mas rapido el codigo '''
         net = DhcpNetwork()
         d = DhcpHost()
-        # asigno las ips
+        da = DhcpAssignation()
+
+        '''  asigno las ips para las macs que no tengan ya asignadas '''
         for dni in rad.keys():
             macs = rad[dni]
             for mac in macs:
@@ -110,7 +113,14 @@ if __name__ == '__main__':
                         for h in hosts:
                             if n.includes(h):
                                 found = True
+                                ''' por las dudas que no tenga asignación, la genero '''
+                                if dni in users:
+                                    da.userId = users[dni].id
+                                    da.hostId = h.id
+                                    da.persist(con)
+                                    con.commit()
                                 break
+
                         if not found:
                             toGenerate.append(n)
                 else:
@@ -129,8 +139,18 @@ if __name__ == '__main__':
                     d.ip = ip
                     d.persist(con)
 
+                    if dni in users:
+                        da.userId = users[dni].id
+                        da.hostId = d.id
+                        da.persist(con)
+
                 if len(toGenerate) > 0:
                     con.commit()
+
+
+
+
+
 
     finally:
         conn.put(con)

@@ -12,6 +12,83 @@ from model.connection.connection import Connection
 from model.dao import DAO
 
 
+class DhcpAssignationDAO(DAO):
+
+    @classmethod
+    def _createSchema(cls, con):
+        cur = con.cursor()
+        try:
+            cur.execute('create schema if not exists dhcp')
+
+            cur.execute("""
+                    create table if not exists dhcp.assignations (
+                        user_id varchar not null references profile.users (id),
+                        host_id varchar not null references dhcp.hosts (id)
+                    )
+                """)
+
+        finally:
+            cur.close()
+
+    @classmethod
+    def __fromResult(r):
+        d = DhcpAssignation()
+        d.hostId = r['host_id']
+        d.userId = r['user_id']
+        return d
+
+    @classmethod
+    def findByHost(cls, con, hostId):
+        cur = con.cursor()
+        try:
+            cur.execute('select * from dhcp.assignations where host_id = %s', (hostId,))
+            return [cls.__fromResult(r) for r in cur]
+
+        finally:
+            cur.close()
+
+    @classmethod
+    def findByUser(cls, con, userId):
+        cur = con.cursor()
+        try:
+            cur.execute('select * from dhcp.assignations where user_id = %s', (userId,))
+            return [cls.__fromResult(r) for r in cur]
+
+        finally:
+            cur.close()
+
+    @classmethod
+    def persist(cls, con, instance):
+        cur = con.cursor()
+        try:
+            cur.execute('select * from dhcp.assignations where user_id = %(userId)s and host_id = %(hostId)s', instance.__dict__)
+            if cur.rowcount <= 0:
+                cur.execute('insert into dhcp.assignations (user_id, host_id) values (%(userId)s, %(hostId)s)', instance.__dict__)
+
+        finally:
+            cur.close()
+
+
+class DhcpAssignation:
+
+    dao = DhcpAssignationDAO
+
+    def __init__(self):
+        self.userId = None
+        self.hostId = None
+
+    def persist(self, con):
+        self.dao.persist(con, self)
+
+    @classmethod
+    def findByHost(con, hostId):
+        return self.dao.findByHost(con, hostId)
+
+    @classmethod
+    def findByUser(con, userId):
+        return self.dao.findByUser(con, userId)
+
+
 class DhcpHostDAO(DAO):
 
     @classmethod
@@ -24,7 +101,8 @@ class DhcpHostDAO(DAO):
                     create table if not exists dhcp.hosts (
                         id varchar primary key,
                         mac macaddr not null,
-                        ip inet not null
+                        ip inet not null,
+                        created timestamptz default now()
                     )
                 """)
 
