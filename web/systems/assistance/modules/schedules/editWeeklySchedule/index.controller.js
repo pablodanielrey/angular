@@ -189,10 +189,10 @@
               var date = new Date(sc.date);
               var weekday = sortDay[date.getDay()];
 
-              var millisStart = (sc.schedule == null) ? null : sc.schedule.start * 1000;
+              var millisStart = (sc.schedule == null || sc.schedule.start == null) ? null : sc.schedule.start * 1000;
               var start = (millisStart == null) ? null : new Date(date.getTime() + millisStart);
 
-              var millisEnd =  (sc.schedule == null) ? null : sc.schedule.end * 1000;
+              var millisEnd =  (sc.schedule == null || sc.schedule.end == null) ? null : sc.schedule.end * 1000;
               var end = (millisEnd == null) ? null : new Date(date.getTime() + millisEnd);
 
               var limitMillis = 24 * 60 * 60 * 1000;
