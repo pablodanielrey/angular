@@ -1,10 +1,11 @@
 
 import inject
+inject.configure()
 
 import sys
 sys.path.append('../../python')
 
-from model.dhcp.dhcp import Dhcp, DhcpHost, DhpNetwork
+from model.dhcp.dhcp import Dhcp, DhcpHost, DhcpNetwork
 from model.registry import Registry
 from model.connection.connection import Connection
 from model.offices.office import Office
@@ -20,8 +21,8 @@ if __name__ == '__main__':
     con = conn.get()
     try:
         Connection.readOnly(con)
-        d.hosts = DhcpHost.findAll(con)
-        d.networks = DhcpNetwork.findAll(con)
+        d.hosts = DhcpHost.findById(con, DhcpHost.findAll(con))
+        d.networks = DhcpNetwork.findById(con, DhcpNetwork.findAll(con))
     finally:
         conn.put(con)
 
