@@ -1,6 +1,14 @@
 
 import inject
+
+import sys
+sys.path.append('../../python')
+
 from model.dhcp.dhcp import Dhcp, DhcpHost, DhpNetwork
+from model.registry import Registry
+from model.connection.connection import Connection
+from model.offices.office import Office
+from model.users.users import User, UserPassword
 
 
 if __name__ == '__main__':
