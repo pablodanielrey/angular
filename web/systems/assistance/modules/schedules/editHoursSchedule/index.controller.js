@@ -37,6 +37,7 @@
         vm.displayEditSch = displayEditSch;
         vm.selectUser = selectUser;
         vm.styleItem = styleItem;
+        vm.getHours = getHours;
 
         vm.back = back;
         vm.save = save;
@@ -108,6 +109,22 @@
 
         function back() {
           $location.path("/schedules/" + vm.model.selectedPerson);
+        }
+
+        function getHours() {
+          var totalMillis = 0;
+          var dayMillis = 24 * 60 * 60 * 1000;
+          for (var i = 0; i < vm.model.schedules.length; i++) {
+            var sched = vm.model.schedules[i];
+            if (sched.start == null || sched.end == null) {
+              continue;
+            }
+            if (sched.end < sched.start) {
+              sched.end.setTime(sched.end.getTime() + dayMillis);
+            }
+            totalMillis = totalMillis + (sched.end - sched.start);
+          }
+          return Math.trunc(totalMillis / 1000 / 60 / 60);
         }
 
 
@@ -195,7 +212,9 @@
               if (sc != null) {
                 vm.model.schedules.push(sc);
               }
-
+            }
+            if (vm.model.schedules.length <= 0) {
+              vm.model.schedules.push(null);
             }
             vm.displayEditSch();
           }, function(error) {

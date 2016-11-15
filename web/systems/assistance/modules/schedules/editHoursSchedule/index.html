@@ -39,7 +39,7 @@
                 </div>
                 <div class="headerCurrentSchedule">
                     <div>Semana laboral</div>
-                    <div><b>35</b> horas semanales</div>
+                    <div><b>{{vm.getHours()}}</b> horas semanales</div>
                 </div>
                 <div class="itemDay" ng-class="vm.styleItem(sched, $index)" ng-repeat="sched in vm.model.schedules | orderBy: 'weekday'">
                     <!-- VARIABLES: primerHorario, otroHorario -->
