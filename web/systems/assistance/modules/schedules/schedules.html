@@ -28,7 +28,7 @@
 
       <div class="contentSchedules">
           <!-- CONTENEDOR DE MI HORARIO -->
-          <div class="currentSchedule  horarioSemanalClasico">
+          <div class="currentSchedule {{vm.getContentSchedStyle()}}">
               <!-- VARIABLES: horarioSemanalClasico, horarioSemanalEspecial
               Esto es para mostrar el horario clasico o el horario en formato especial como por ej; serenos, guardias, etc-->
                 <div>
@@ -39,7 +39,7 @@
                         </div>
                         <div class="headerCurrentSchedule">
                             <div>Semana laboral</div>
-                            <div><b>{{vm.getHours()}}</b> horas semanales</div>
+                            <div><b>{{vm.getHours(vm.model.schedulesWeek)}}</b> horas semanales</div>
                         </div>
                         <div class="itemDay" ng-repeat="sched in vm.model.schedulesWeek | orderBy: ['weekday', 'start']">
                           <div class="day">{{sched.date | date: 'EEEE'}}</div>
@@ -50,9 +50,11 @@
                     <div class="contentCurrentScheduleSpecial">
                         <div class="headerCurrentSchedule">
                             <div>Semana laboral</div>
-                            <div><b>35</b> horas semanales</div>
+                            <div><b>{{vm.getHours(vm.model.schedules)}}</b> horas semanales</div>
                         </div>
-                        <div class="itemDay"> <div>Domingo</div><div>20:00</div> <div> a </div> <div>Domingo</div><div>17:00</div><div> | </div><div>14 Horas</div></div>
+                        <div class="itemDay" ng-repeat="sched in vm.model.schedules | orderBy: 'weekday'">
+                          <div>{{sched.date | date: 'EEEE'}}</div><div>{{sched.start | date: 'HH:mm'}}</div> <div> a </div> <div>{{sched.end | date: 'EEEE'}}</div><div>{{sched.end | date: 'HH:mm'}}</div><div> | </div><div>{{sched.hours}} Horas</div>
+                        </div>
 
                     </div>
 

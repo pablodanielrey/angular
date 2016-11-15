@@ -26,7 +26,6 @@
 			this.loadProfile = loadProfile;
 
 			this.saveSpecialSchedules = saveSpecialSchedules;
-			this.loadWatcherSchedules = loadWatcherSchedules;
 			this.loadSchedules = loadSchedules;
 			this.saveWatcherSchedules = saveWatcherSchedules;
 			this.saveSchedules = saveSchedules;
@@ -258,17 +257,6 @@
 					 var defer = $q.defer();
  					defer.resolve(true);
  					return defer.promise;
-				 }
-
-				 function loadWatcherSchedules(date) {
-					 var defer = $q.defer();
-					 var schedules = [];
-					 var start = new Date(); start.setHours(21); start.setMinutes(0); start.setSeconds(0); start.setMilliseconds(0);
-           schedules.push({day:"2", start: start, hours: 25});
-           start = new Date(); start.setHours(15); start.setMinutes(0); start.setSeconds(0); start.setMilliseconds(0);
-           schedules.push({day:"4", start: start, hours: 30});
-					 defer.resolve(schedules);
-					 return defer.promise;
 				 }
 
 				 /*

@@ -37,6 +37,7 @@
         vm.displayEditSch = displayEditSch;
         vm.selectUser = selectUser;
         vm.styleItem = styleItem;
+        vm.getHours = getHours;
 
         vm.back = back;
         vm.save = save;
@@ -110,6 +111,22 @@
           $location.path("/schedules/" + vm.model.selectedPerson);
         }
 
+        function getHours() {
+          var totalMillis = 0;
+          var dayMillis = 24 * 60 * 60 * 1000;
+          for (var i = 0; i < vm.model.schedules.length; i++) {
+            var sched = vm.model.schedules[i];
+            if (sched.start == null || sched.end == null) {
+              continue;
+            }
+            if (sched.end < sched.start) {
+              sched.end.setTime(sched.end.getTime() + dayMillis);
+            }
+            totalMillis = totalMillis + (sched.end - sched.start);
+          }
+          return Math.trunc(totalMillis / 1000 / 60 / 60);
+        }
+
 
         /* **************************************************************************************************
                                             MANEJO DE PERFIL DE USUARIO
@@ -165,11 +182,40 @@
           loadSchedules();
         });
 
+        function _parseSchedule(sc) {
+          if (sc.schedule == null || sc.schedule.start == null || sc.schedule.end == null) {
+            return null;
+          }
+
+          // getDay() => [Sunday, Monday, ..., Saturday]
+          var sortDay = [6, 0, 1, 2, 3, 4, 5];
+          var date = new Date(sc.date);
+          var weekday = sortDay[date.getDay()];
+
+          var millisStart = sc.schedule.start * 1000;
+          var start = new Date(date.getTime() + millisStart);
+
+          var millisEnd =  sc.schedule.end * 1000;
+          var end = new Date(date.getTime() + millisEnd);
+
+          var hours = Math.trunc((end - start) / 1000 / 60 / 60);
+
+          return (hours < 24) ? null : {date: date, weekday: weekday.toString(), start: start, hours: hours}
+        }
+
         function loadSchedules() {
-          displayMessageLoading();
           vm.model.schedules = [];
-          Assistance.loadWatcherSchedules(vm.model.date).then(function(schedules) {
-            vm.model.schedules = schedules;
+          displayMessageLoading();
+          Assistance.loadSchedules(vm.model.selectedPerson, vm.model.date, false).then(function(schedules) {
+            for (var i = 0; i < schedules.length; i++) {
+              var sc = _parseSchedule(schedules[i]);
+              if (sc != null) {
+                vm.model.schedules.push(sc);
+              }
+            }
+            if (vm.model.schedules.length <= 0) {
+              vm.model.schedules.push(null);
+            }
             vm.displayEditSch();
           }, function(error) {
             displayMessageError(error);
