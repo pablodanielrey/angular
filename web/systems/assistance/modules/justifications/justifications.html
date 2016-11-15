@@ -1,0 +1,17 @@
+<div class="justifications {{vm.view.style}}">
+
+    <div class="contentOne">
+        <e-person-assistance users="vm.model.users" select="vm.selectUser(user)"></e-person-assistance>
+    </div>
+
+    <div class="contentTwo">
+    </div>
+
+    <div class="contentTheree">
+    </div>
+
+    <!-- MENSAJES -->
+    <div class="contentMessages"  ng-include="'modules/schedules/messages/messages.html?t=' + time">
+    </div>
+
+</div>
