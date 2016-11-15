@@ -65,6 +65,61 @@
 
 }
 
+.profile .inputProfile {
+    margin: 2px 0 2px 0;
+    padding: 3px 5px 3px 5px;
+    width: calc(100% - 15px);
+    border: 1px solid #c9cbd3;
+    font-size: 12px;
+    color: #3A3C44;
+    font-weight: bold;
+    background-color: #EEEEEE;
+}
+
+.profile .inputProfileDouble {
+  margin: 2px 0 2px 0;
+  padding: 3px 5px 3px 5px;
+  width: calc(100% - 15px);
+  border: 1px solid #c9cbd3;
+  font-size: 12px;
+  color: #3A3C44;
+  font-weight: bold;
+  background-color: #EEEEEE;
+
+}
+
+
+
+.profile .contentInputDouble {
+  display: flex;
+  display: -webkit-flex; /* Safari */
+  display: -moz-flex; /* mozilla */
+  flex-direction:row;
+  -webkit-flex-direction:row; /* Safari */
+  -moz-flex-direction:row; /* mozilla */
+}
+
+.profile .itemDouble {
+  width: 100%;
+}
+
+.profile .itemDouble1 {
+  width: 100%;
+  margin-right: 5px;
+}
+
+
+
+.profile .inputSelect {
+  margin: 2px 0 2px 0;
+  padding: 4px 5px 4px 5px;
+  width: calc(100% - 3px);
+  border: 1px solid #c9cbd3;
+  font-size: 12px;
+  color: #3A3C44;
+  font-weight: bold;
+  background-color: #EEEEEE;
+}
 
 
 /* ------- EDITAR CONTRASEÑA ------------*/
