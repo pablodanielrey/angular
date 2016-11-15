@@ -52,7 +52,8 @@ if __name__ == '__main__':
         '33782574',      # adrian garcia
         '31433408',      # ezequiel alustiza
         '34058503',      # Florencia Moscoso
-        '34770399'      # Rocio Bogue
+        '34770399',      # Rocio Bogue
+        '37809316'       # Albana
     ]
 
     import re
