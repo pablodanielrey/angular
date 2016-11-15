@@ -343,7 +343,7 @@ class DhcpHost:
         """.format(
             self.id,
             self.mac,
-            self.host
+            self.ip
         ))
 
 
@@ -361,23 +361,41 @@ class DhcpNetwork:
         self.failOverName = 'fp'
 
     def toFile(self, f):
-        f.write("""
-            # {}
-            subnet {} netmask {} {{
-                option routers {};
-                pool {{
-                    failover peer "{}";
-                    range {} {};
+        if self.rangeInit is not None and self.rangeEnd is not None:
+            f.write("""
+                # {}
+                subnet {} netmask {} {{
+                    option routers {};
+                    pool {{
+                        failover peer "{}";
+                        range {} {};
+                    }}
                 }}
-            }}
-        """.format(
-                self.name,
-                self.ip,
-                self.gateway,
-                self.failOverName,
-                self.rangeInit,
-                self.rangeEnd
-            ))
+            """.format(
+                    self.name,
+                    self.ip[0],
+                    self.ip.netmask,
+                    self.gateway,
+                    self.failOverName,
+                    self.rangeInit,
+                    self.rangeEnd
+                ))
+        else:
+            f.write("""
+                # {}
+                subnet {} netmask {} {{
+                    option routers {};
+                    pool {{
+                        failover peer "{}";
+                    }}
+                }}
+            """.format(
+                    self.name,
+                    self.ip,
+                    self.gateway,
+                    self.failOverName
+                ))
+
 
     def persist(self, con):
         return self.dao.persist(con, self)
