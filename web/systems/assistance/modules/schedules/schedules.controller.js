@@ -72,7 +72,9 @@
 
     function displaySchedule() {
       var style = (vm.view.profile == 'admin') ? vm.view.profileAdmin : vm.view.profileUser;
-      vm.view.style = style + ' ' + vm.view.displayPerson;
+      $timeout(function () {
+        vm.view.style = style + ' ' + vm.view.displayPerson;
+      });
     }
 
     function displayUsers() {
@@ -221,10 +223,10 @@
           var date = new Date(sc.date);
           var weekday = sortDay[date.getDay()];
 
-          var millisStart = (sc.schedule == null) ? null : sc.schedule.start * 1000;
+          var millisStart = (sc.schedule == null || sc.schedule.start == null) ? null : sc.schedule.start * 1000;
           var start = (millisStart == null) ? null : new Date(date.getTime() + millisStart);
 
-          var millisEnd =  (sc.schedule == null) ? null : sc.schedule.end * 1000;
+          var millisEnd =  (sc.schedule == null || sc.schedule.end == null) ? null : sc.schedule.end * 1000;
           var end = (millisEnd == null) ? null : new Date(date.getTime() + millisEnd);
 
           var limitMillis = 24 * 60 * 60 * 1000;
@@ -237,6 +239,7 @@
 
         function loadSchedules() {
           vm.model.schedules = [];
+          vm.model.schedulesWeek = [];
           displayMessageLoading();
           Assistance.loadSchedules(vm.model.selectedPerson, vm.model.date, true).then(function(schedules) {
             for (var i = 0; i < schedules.length; i++) {
@@ -246,7 +249,6 @@
             }
             vm.displaySchedule();
           }, function(error) {
-            console.error(error);
             displayMessageError(error);
             $timeout(function () {
               vm.displayEditWeeklySch();

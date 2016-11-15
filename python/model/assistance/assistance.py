@@ -582,6 +582,7 @@ class AssistanceModel:
         # obtengo el horario semanal que ya posee
         scheds = Schedule.findByUserIdInWeek(con, userId, date, False)
 
+        #  la eliminacion la tengo que sacar una vez que pueda eliminar desde la pantalla
         logging.info("schdules anteriores: {}".format(scheds))
         for d in scheds:
             [sc.delete(con) for sc in scheds[d] if sc.date == date]
