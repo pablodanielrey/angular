@@ -46,24 +46,7 @@ class Schedule(JSONSerializable):
         return self.end - self.start
 
     def persist(self, con):
-        if self.daily:
-            ''' si es horario semanal '''
-            days = self.weekday - self.date.weekday()
-            date = self.date + datetime.timedelta(days=days)
-            schedules = Schedule.findByUserIdInDate(con, self.userId, date)
-            for sc in schedules:
-                daySc = sc.weekday - sc.date.weekday()
-                d = sc.date + datetime.timedelta(days=daySc)
-                if d == date and sc.daily:
-                    sc.delete(con)
-            return ScheduleDAO.persist(con, self)
-        else:
-            ''' si es horario especial '''
-            schedules = Schedule.findByUserIdInDate(con, self.userId, self.date)
-            for sc in schedules:
-                if not sc.daily:
-                    sc.delete(con)
-            return ScheduleDAO.persist(con, self)
+        return ScheduleDAO.persist(con, self)
 
     def delete(self, con):
         return ScheduleDAO.delete(con, [self.id])
@@ -86,31 +69,6 @@ class Schedule(JSONSerializable):
             actual = firstDate + datetime.timedelta(days=day)
             result[actual] = cls.findByUserIdInDate(con, userId, actual)
         return result
-
-
-class ScheduleModel:
-
-    '''
-        guarda el horario semanal
-        date: dia de vigencia
-        schedules: [{date: date, weekday: 0-6, start: datetime, end: datetime}]
-    '''
-    @classmethod
-    def persistScheduleWeek(cls, con, userId, date, schedules):
-        # obtengo el horario semanal que ya posee
-        scheds = Schedule.findByUserIdInWeek(cls, con, userId, date, False)
-
-        scheds = [ sc.delete(con) for sc in scheds if sc.date == date]
-        for sc in schedules:
-            s = Schedule()
-            s.userId = userId
-            s.date = date
-            s.weekday = sc.weekday
-            s.start = sc.start
-            s.end = sc.end
-            s.daily = True
-            s.special = False
-            s.persist(con)
 
 
 class ScheduleDAO(AssistanceDAO):
@@ -195,8 +153,8 @@ class ScheduleDAO(AssistanceDAO):
         try:
             sch.id = str(uuid.uuid4())
             r = sch.__dict__
-            cur.execute('insert into assistance.schedules (id, user_id, sdate, sstart, send, weekday, daily) '
-                        'values ( %(id)s, %(userId)s, %(date)s, %(start)s, %(end)s, %(weekday)s, %(daily)s)', r)
+            cur.execute('insert into assistance.schedules (id, user_id, sdate, sstart, send, weekday, daily, special) '
+                        'values ( %(id)s, %(userId)s, %(date)s, %(start)s, %(end)s, %(weekday)s, %(daily)s, %(special)s)', r)
             return sch.id
         finally:
             cur.close()

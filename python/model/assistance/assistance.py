@@ -565,3 +565,48 @@ class AssistanceModel:
         wn.date = date
         wn.notes = text
         return wn.persist(con)
+
+
+
+    @classmethod
+    def _utcToLocal(cls, date):
+        return None if date is None else Utils._localizeUtc(date).astimezone(cls.timezone)
+
+    '''
+        guarda el horario semanal
+        date: dia de vigencia
+        schedules: [{date: date, weekday: 0-6, start: datetime, end: datetime}]
+    '''
+    @classmethod
+    def persistScheduleWeek(cls, con, userId, date, schedules):
+        # obtengo el horario semanal que ya posee
+        scheds = Schedule.findByUserIdInWeek(con, userId, date, False)
+
+        logging.info("schdules anteriores: {}".format(scheds))
+        for d in scheds:
+            [sc.delete(con) for sc in scheds[d] if sc.date == date]
+
+        ids = []
+        logging.info("schedules a agregar {}".format(schedules))
+        for sc in schedules:
+            s = Schedule()
+            s.userId = userId
+            s.date = date
+            s.weekday = sc['weekday']
+
+            sTime = None if sc["start"] is None else cls._utcToLocal(sc["start"]).time()
+            s.start = [None if sTime is None else sTime.second + sTime.minute * 60 + sTime.hour * 60 * 60][0]
+
+            if sc["end"] is None or s.start is None:
+                s.end = None
+            else:
+                eTime = None if sc["end"] is None else cls._utcToLocal(sc["end"]).time()
+                eTime = eTime.second + eTime.minute * 60 + eTime.hour * 60 * 60
+                s.end = eTime if s.start < eTime else eTime + 24 * 60 * 60
+
+            s.daily = True
+            s.special = False
+            logging.info("presistiendo date:{} start:{} end:{}".format(s.date, s.start, s.end))
+            ids.append(s.persist(con))
+        logging.info("Ids insertados:{}".format(ids))
+        return ids
