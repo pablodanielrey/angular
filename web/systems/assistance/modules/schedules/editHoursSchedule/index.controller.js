@@ -183,7 +183,7 @@
 
           var hours = Math.trunc((end - start) / 1000 / 60 / 60);
 
-          return {date: date, weekday: weekday.toString(), start: start, hours: hours}
+          return (hours < 24) ? null : {date: date, weekday: weekday.toString(), start: start, hours: hours}
         }
 
         function loadSchedules() {

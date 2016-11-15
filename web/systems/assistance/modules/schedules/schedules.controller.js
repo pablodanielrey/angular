@@ -11,7 +11,7 @@
         vm.model = {
           users: [],
           schedulesWeek: [],
-          schedulesHours: [],
+          schedules: [],
 
           selectedPerson: null,
           date: null,
@@ -41,6 +41,7 @@
         vm.displayEditHoursSch = displayEditHoursSch;
         vm.displayEditSpecialSch = displayEditSpecialSch;
         vm.getHours = getHours;
+        vm.getContentSchedStyle = getContentSchedStyle;
 
         $scope.$on('wamp.open', function(event, args) {
           activate();
@@ -116,23 +117,12 @@
       vm.view.style = style + ' ' + vm.view.errorMessage;
     }
 
-    function getHours() {
+    function getHours(schedules) {
       var totalMillis = 0;
       var dayMillis = 24 * 60 * 60 * 1000;
 
-      for (var i = 0; i < vm.model.schedulesWeek.length; i++) {
-        var sched = vm.model.schedulesWeek[i];
-        if (sched.start == null || sched.end == null) {
-          continue;
-        }
-        if (sched.end < sched.start) {
-          sched.end.setTime(sched.end.getTime() + dayMillis);
-        }
-        totalMillis = totalMillis + (sched.end - sched.start);
-      }
-
-      for (var i = 0; i < vm.model.schedulesHours.length; i++) {
-        var sched = vm.model.schedulesHours[i];
+      for (var i = 0; i < schedules.length; i++) {
+        var sched = schedules[i];
         if (sched.start == null || sched.end == null) {
           continue;
         }
@@ -143,6 +133,14 @@
       }
 
       return Math.trunc(totalMillis / 1000 / 60 / 60);
+    }
+
+    function getContentSchedStyle() {
+      if (vm.model.schedules.length > 0) {
+        return (vm.model.schedulesWeek.length > 0) ? '' : 'horarioSemanalEspecial';
+      } else {
+        return 'horarioSemanalClasico';
+      }
     }
 
 
@@ -218,23 +216,22 @@
         });
 
         function _parseSchedule(sc) {
+          if (sc.schedule == null || sc.schedule.start == null || sc.schedule.end == null) {
+            return null;
+          }
           // getDay() => [Sunday, Monday, ..., Saturday]
           var sortDay = [6, 0, 1, 2, 3, 4, 5];
           var date = new Date(sc.date);
           var weekday = sortDay[date.getDay()];
 
-          var millisStart = (sc.schedule == null || sc.schedule.start == null) ? null : sc.schedule.start * 1000;
-          var start = (millisStart == null) ? null : new Date(date.getTime() + millisStart);
+          var millisStart = sc.schedule.start * 1000;
+          var start = new Date(date.getTime() + millisStart);
 
-          var millisEnd =  (sc.schedule == null || sc.schedule.end == null) ? null : sc.schedule.end * 1000;
-          var end = (millisEnd == null) ? null : new Date(date.getTime() + millisEnd);
+          var millisEnd =  sc.schedule.end * 1000;
+          var end = new Date(date.getTime() + millisEnd);
 
-          var limitMillis = 24 * 60 * 60 * 1000;
-          if (start != null && end != null && (end.getTime() - start.getTime()) > limitMillis) {
-            start = null;
-            end = null;
-          }
-          return {date: date, weekday:weekday, start: start, end: end}
+          var hours = Math.trunc((end - start) / 1000 / 60 / 60);
+          return {date: date, weekday:weekday, start: start, end: end, hours: hours}
         }
 
         function loadSchedules() {
@@ -243,8 +240,14 @@
           displayMessageLoading();
           Assistance.loadSchedules(vm.model.selectedPerson, vm.model.date, true).then(function(schedules) {
             for (var i = 0; i < schedules.length; i++) {
-              if (schedules[i].schedule != null) {
-                vm.model.schedulesWeek.push(_parseSchedule(schedules[i]));
+              var sc = _parseSchedule(schedules[i]);
+              if (sc == null) {
+                continue;
+              }
+              if (sc.hours < 24) {
+                vm.model.schedulesWeek.push(sc);
+              } else {
+                vm.model.schedules.push(sc);
               }
             }
             vm.displaySchedule();
