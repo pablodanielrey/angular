@@ -1,17 +1,69 @@
 <div class="justifications {{vm.view.style}}">
 
+    <!-- VARIABLES: pantallaPrincipal, pantallaEdicion, pantallaDerecha
+    VARIABLES2:  nuevaJustificacion -->
+
     <div class="contentOne">
-        <e-person-assistance users="vm.model.users" select="vm.selectUser(user)"></e-person-assistance>
+        <div><button> JUSTIFICAR</button>  </div>
+        <div><button ng-click="vm.view.newJustification()"> CREAR NUEVA JUSTIFICACIÓN</button> </div>
+        <div><button ng-click="vm.view.listJustification()"> VER / MOFIFICAR JUSTIFICACIÓN</button> </div>
+        <div><button> JUSTIFICACIONES REALIZADAS</button> </div>
     </div>
 
     <div class="contentTwo">
+          <div class="newJustification">
+              <div><button ng-click="vm.view.back()"> VOLVER</button> NUEVA JUSTIFICACIÓN  </div>
+              <div>Nombre</div>
+              <div><input type="text"></input></div>
+              <div>Código</div>
+              <div><input type="text"></input></div>
+              <div>Descripción</div>
+              <div><textarea></textarea></div>
+              <div><button ng-click="vm.view.save()"> ACEPTAR </button>  </div>
+          </div>
+          <div class="listJustification">
+              <div><button ng-click="vm.view.back()"> VOLVER</button> VER / MOFIFICAR JUSTIFICACIÓN  </div>
+              <div>BUSCAR</div>
+              <div><input type="text"></div>
+              <div> LISTADO DE JUSTIFICACIONES  </div>
+              <div>
+                  <button ng-click="vm.view.editJustification()">
+                      <div>NOMBRE DE JUSTIFICACION</div>
+                      <div>CÓDIGO</div>
+                  </button>
+                  <button>
+                      <div>NOMBRE DE JUSTIFICACION</div>
+                      <div>CÓDIGO</div>
+                  </button>
+                  <button>
+                      <div>NOMBRE DE JUSTIFICACION</div>
+                      <div>CÓDIGO</div>
+                  </button>
+                  <button>
+                      <div>NOMBRE DE JUSTIFICACION</div>
+                      <div>CÓDIGO</div>
+                  </button>
+              </div>
+
+
+          </div>
     </div>
 
     <div class="contentTheree">
+        <div>
+            <div><button ng-click="vm.view.backList()"> VOLVER</button> DETALLE DE JUSTIFICACIÓN  </div>
+            <div>Nombre</div>
+            <div><input type="text"></input></div>
+            <div>Código</div>
+            <div><input type="text"></input></div>
+            <div>Descripción</div>
+            <div><textarea></textarea></div>
+            <div><button ng-click="vm.view.save()"> ACEPTAR </button>  </div>
+        </div>
     </div>
 
     <!-- MENSAJES -->
-    <div class="contentMessages"  ng-include="'modules/schedules/messages/messages.html?t=' + time">
-    </div>
+    <!-- <div class="contentMessages"  ng-include="'modules/schedules/messages/messages.html?t=' + time">
+    </div> -->
 
 </div>

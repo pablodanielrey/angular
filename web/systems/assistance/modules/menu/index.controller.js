@@ -15,6 +15,9 @@
         $scope.selectSchedules = function() {
           $location.path("/schedules");
         }
+        $scope.selectJustifications = function() {
+          $location.path("/justifications");
+        }
       }
     ]);
 
