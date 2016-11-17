@@ -502,3 +502,24 @@ class DhcpManual:
     @classmethod
     def findById(cls, con, ids):
         return cls.dao.findById(con, ids)
+
+
+class PublicIpDAO:
+
+    @classmethod
+    def _createSchema(cls, con):
+        cur = con.cursor()
+        try:
+            cur.execute('create schema if not exists dhcp')
+
+            cur.execute("""
+                    create table if not exists dhcp.public (
+                        id varchar primary key,
+                        mac macaddr not null,
+                        ip inet not null,
+                        created timestamptz default now()
+                    )
+                """)
+
+        finally:
+            cur.close()
