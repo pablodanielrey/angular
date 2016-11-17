@@ -417,3 +417,88 @@ class DhcpNetwork:
     @classmethod
     def findAll(cls, con):
         return cls.dao.findAll(con)
+
+
+
+class DhcpManualDAO(DAO):
+
+    @classmethod
+    def _createSchema(cls, con):
+        cur = con.cursor()
+        try:
+            cur.execute('create schema if not exists dhcp')
+
+            cur.execute("""
+                    create table if not exists dhcp.manual (
+                        id varchar primary key,
+                        mac macaddr not null,
+                        net varchar,
+                        description varchar,
+                        created timestamptz default now()
+                    )
+                """)
+
+        finally:
+            cur.close()
+
+    @classmethod
+    def __fromResult(cls, r):
+        d = DhcpManual()
+        d.id = r['id']
+        d.mac = r['mac']
+        d.net = r['net']
+        d.description = r['description']
+        return d
+
+    @classmethod
+    def findById(cls, con, ids):
+        cur = con.cursor()
+        try:
+            cur.execute('select * from dhcp.manual where id in %s', (tuple(ids),))
+            return [cls.__fromResult(c) for c in cur]
+
+        finally:
+            cur.close()
+
+    @classmethod
+    def findAll(cls, con):
+        cur = con.cursor()
+        try:
+            cur.execute('select id from dhcp.manual')
+            return [n['id'] for n in cur]
+
+        finally:
+            cur.close()
+
+    @classmethod
+    def findByMac(cls, con, mac):
+        cur = con.cursor()
+        try:
+            cur.execute('select id from dhcp.manual where id in %s', (tuple(mac),))
+            return [n['id'] for n in cur]
+
+        finally:
+            cur.close()
+
+
+class DhcpManual:
+
+    dao = DhcpManualDAO
+
+    def __init__(self):
+        self.id = None
+        self.mac = None
+        self.net = None
+        self.description = None
+
+    @classmethod
+    def findByMac(cls, con, mac):
+        return cls.dao.findByMac(con, mac)
+
+    @classmethod
+    def findAll(cls, con):
+        return cls.dao.findAll(con)
+
+    @classmethod
+    def findById(cls, con, ids):
+        return cls.dao.findById(con, ids)
