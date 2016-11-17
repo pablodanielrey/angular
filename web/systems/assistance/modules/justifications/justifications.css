@@ -19,6 +19,61 @@
    animation-duration: .7s;
 }
 
+.justifications .headerJustification {
+  /*width: calc(100% - 10px);
+  border-radius: 3px;
+  -moz-border-radius: 3px;
+  -webkit-border-radius: 3px;
+  background-color: #3a3c44;*/
+  /*color: #afafaf;*/
+  color: #5C5F69;
+  font-size: 16px;
+  margin: 10px 0 15px 0;
+
+  width: 100%;
+  /*padding: 10px 0 10px 10px;*/
+}
+
+.justifications .btn {
+  border: none;
+  background-color: #E5E5E5;
+  color: #3A3C44;
+  border-radius: 3px;
+  -moz-border-radius: 3px;
+  -webkit-border-radius: 3px;
+  padding: 12px 0 12px 0;
+  text-align: center;
+  width: 100%;
+  margin-bottom: 10px;
+  border: 1px solid #c9cbd3;
+
+}
+
+.justifications .btn:hover {
+  background-color: #5C5F69;
+  cursor: pointer;
+  color: white;
+}
+
+.justifications .btn2 {
+  border: none;
+  background-color: #804080;
+  color: white;
+  border-radius: 3px;
+  -moz-border-radius: 3px;
+  -webkit-border-radius: 3px;
+  padding: 12px 0 12px 0;
+  text-align: center;
+  width: 100%;
+  margin-bottom: 10px;
+}
+
+.justifications .btn2:hover {
+  background-color: #6D316D;
+  cursor: pointer;
+}
+
+
 .justifications .contentTwo {
   width: calc(33% - 20px);
   height: calc(100% - 110px);
