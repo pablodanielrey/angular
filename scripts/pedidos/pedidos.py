@@ -22,4 +22,5 @@ for p in pedidos.keys():
     print(len(pedidos[p]))
     for i in pedidos[p]:
         print(i.author)
-        print(i.custom_field)
+        for c in i.custom_fields:
+            print(c)
