@@ -31,9 +31,9 @@ if __name__ == '__main__':
             if len(hosts) <= 0:
                 continue
 
-            rules = rules + "iptables -t nat -A PREROUTING -d {} -m state --state NEW -j DNAT --to-destination {} \n".format(str(public.ip), str(hosts[0].ip))
+            rules = rules + "iptables -t nat -A PREROUTING -d {} -m state --state NEW -j DNAT --to-destination {} \n".format(str(public.ip.ip), str(hosts[0].ip.ip))
             for h in hosts:
-                rules = rules + "iptables -t nat -A POSTROUTING -s {} -j SNAT --to-source {} \n".format(str(h.ip), str(public.ip))
+                rules = rules + "iptables -t nat -A POSTROUTING -s {} -j SNAT --to-source {} \n".format(str(h.ip.ip), str(public.ip.ip))
         print(rules)
 
     finally:
