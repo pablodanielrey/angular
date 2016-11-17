@@ -523,3 +523,77 @@ class PublicIpDAO:
 
         finally:
             cur.close()
+
+    @classmethod
+    def __fromResult(cls, r):
+        d = PublicIp()
+        d.id = r['id']
+        d.ip = ipaddress.ip_interface(r['ip'])
+        d.mac = r['mac']
+        return d
+
+    @classmethod
+    def findById(cls, con, ids):
+        cur = con.cursor()
+        try:
+            cur.execute('select * from dhcp.public where id in %s', (tuple(ids),))
+            return [cls.__fromResult(c) for c in cur]
+
+        finally:
+            cur.close()
+
+    @classmethod
+    def findByIp(cls, con, ip):
+        cur = con.cursor()
+        try:
+            cur.execute('select id from dhcp.puclic where ip = %s', (str(ip),))
+            return [h['id'] for h in cur]
+
+        finally:
+            cur.close()
+
+    @classmethod
+    def findByMac(cls, con, mac):
+        cur = con.cursor()
+        try:
+            cur.execute('select id from dhcp.public where mac = %s order by ip asc', (mac,))
+            return [h['id'] for h in cur]
+
+        finally:
+            cur.close()
+
+    @classmethod
+    def findAll(cls, con):
+        cur = con.cursor()
+        try:
+            cur.execute('select id from dhcp.public')
+            return [n['id'] for n in cur]
+
+        finally:
+            cur.close()
+
+class PublicIp:
+
+    dao = PublicIpDAO
+
+    def __init__(self):
+        self.id = str(uuid.uuid4())
+        self.mac = None
+        self.ip = None
+
+
+    @classmethod
+    def findByMac(cls, con, mac):
+        return cls.dao.findByMac(con, mac)
+
+    @classmethod
+    def findByIp(cls, con, ip):
+        return cls.dao.findByIp(con, ip)
+
+    @classmethod
+    def findById(cls, con, ids):
+        return cls.dao.findById(con, ids)
+
+    @classmethod
+    def findAll(cls, con):
+        return cls.dao.findAll(con)

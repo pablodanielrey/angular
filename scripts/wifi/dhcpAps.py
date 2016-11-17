@@ -10,7 +10,7 @@ inject.configure()
 from model.registry import Registry
 from model.connection.connection import Connection
 
-from model.dhcp.dhcp import DhcpHost, DhcpNetwork, DhcpAssignation, DhcpManual
+from model.dhcp.dhcp import DhcpHost, DhcpNetwork, DhcpManual
 from model.dhcp import fce
 import ipaddress
 
