@@ -24,7 +24,7 @@ import ipaddress
 
 def loadRadiusRegs():
     macs = {}
-    mcon = pymysql.connect(host='163.10.17.130',
+    mcon = pymysql.connect(host='127.0.0.1',
                     user='freeradius',
                     password='radacct',
                     db='freeradius',
