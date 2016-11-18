@@ -11,6 +11,8 @@ import logging
 from model.registry import Registry
 from model.connection import connection
 from model.sileg.place.place import Place
+from model.sileg.sileg import SilegModel
+
 
 
 
@@ -23,7 +25,10 @@ if __name__ == '__main__':
     con = silegConn.get()
     try:
         places = Place.findAll(con)
-        print(places)
+        for p in places:
+            print(p)
+            econoPageData = SilegModel.getEconoPageDataPlace(con, p)
+            print(econoPageData)
 
     finally:
         silegConn.put(con)

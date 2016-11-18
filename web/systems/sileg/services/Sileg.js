@@ -10,43 +10,14 @@
 
 		  this.getUsers = getUsers;
 			this.getCathedras = getCathedras;
-			this.getPositionsByUser = getPositionsByUser;
-			this.getPositionsByCathedra = getPositionsByCathedra;
-			this.getCathedrasByIds = getCathedras;
-			this.getUsersByIds = getCathedras;
+			this.findPositionsActiveByUser = findPositionsActiveByUser;
 
 
-		  function getUsers() {
-        return $q.when([
-					{id:1, name:"Ivan", lastname:"Castañeda",dni:31073351},
-					{id:2, name:"Juan", lastname:"Pérez",dni:31123456}
-				]);
-		    //return Login.getPublicTransport().call('sileg.users');
-  	  };
 
-			function getCathedras() {
-        return $q.when([
-					{id:1,description:"Lengua"},
-					{id:2,description:"Matemática"}
-				]);
-		    //return Login.getPrivateTransport().call('sileg.cathedras', [regex]);
-  	  };
+		  function getUsers() {  return Login.getPublicTransport().call('sileg.get_users');  };
+      function getCathedras() {  return Login.getPublicTransport().call('sileg.get_cathedras');  };
+			function findPositionsActiveByUser(userId) {  return Login.getPublicTransport().call('sileg.find_positions_active_by_user', [userId]);  };
 
-			function getPositionsByUser(user) {
-				return $q.when([
-					{id:1, cathedra:1, user:1},
-					{id:2, cathedra:2, user:1},
-				]);
-				//return Login.getPrivateTransport().call('sileg.positionByUser', [regex]);
-			};
-
-			function getPositionsByCathedra(cathedra) {
-				return $q.when([
-					{id:1, cathedra:1, user:1},
-					{id:3, cathedra:1, user:2},
-				]);
-				//return Login.getPrivateTransport().call('sileg.positionByCathedra', [regex]);
-			};
 
 
 		}

@@ -8,7 +8,7 @@ from model.users.users import User
 class SilegModel:
 
     @classmethod
-    def getEconoPageDataUser(cls, con, userId):
+    def findPositionsActiveByUser(cls, con, userId):
         designationIds = Designation.findByUserId(con, [userId])
         designations = Designation.findById(con, designationIds)
 
@@ -30,7 +30,7 @@ class SilegModel:
 
 
     @classmethod
-    def getEconoPageDataPlace(cls, con, placeId):
+    def findPositionsActiveByPlace(cls, con, placeId):
 
         designationIds = Designation.findByPlaceId(con, [placeId])
         designations = Designation.findById(con, designationIds)
