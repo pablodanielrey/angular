@@ -14,6 +14,8 @@ from model.users.users import User, UserPassword
 
 if __name__ == '__main__':
 
+    dhcpFile = sys.argv[1]
+
     d = Dhcp()
 
     reg = inject.instance(Registry)
@@ -26,5 +28,5 @@ if __name__ == '__main__':
     finally:
         conn.put(con)
 
-    with open('/tmp/dhcpd.conf','w') as f:
+    with open(dhcpFile,'w') as f:
         d.toFile(f)

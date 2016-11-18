@@ -275,6 +275,8 @@ class Dhcp:
 
     def toFile(self, f):
         f.write("""
+            autoritative;
+            log-facility local7;
             ddns-update-style-none;
             default-lease-time {};
             max-lease-time {};
@@ -343,7 +345,7 @@ class DhcpHost:
         """.format(
             self.id,
             self.mac,
-            self.ip
+            self.ip.ip
         ))
 
 
