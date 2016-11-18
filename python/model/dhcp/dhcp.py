@@ -533,7 +533,7 @@ class PublicIpDAO:
         d.id = r['id']
         d.ip = ipaddress.ip_interface(r['ip'])
         d.mac = r['mac']
-        d.redirectNetwork = r['redirect_network']
+        d.redirectNetwork = ipaddress.ip_network(r['redirect_network'])
         return d
 
     @classmethod
