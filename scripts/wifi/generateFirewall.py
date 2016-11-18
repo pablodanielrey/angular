@@ -35,8 +35,9 @@ if __name__ == '__main__':
 
             rules = rules + "iptables -A FORWARD -d {} -j ACCEPT\n".format(str(public.ip.ip))
             rules = rules + "iptables -A FORWARD -d {} -j ACCEPT\n".format(str(hosts[0].ip.ip))
-            rules = rules + "iptables -t nat -A PREROUTING -d {} -m state --state NEW -j DNAT --to-destination {} \n".format(str(public.ip.ip), str(hosts[0].ip.ip))
             for h in hosts:
+                if public.redirectNetwork is not None and h.ip.ip in public.redirectNetwork:
+                    rules = rules + "iptables -t nat -A PREROUTING -d {} -m state --state NEW -j DNAT --to-destination {} \n".format(str(public.ip.ip), str(h.ip.ip))
                 rules = rules + "iptables -t nat -A POSTROUTING -s {} -j SNAT --to-source {} \n".format(str(h.ip.ip), str(public.ip.ip))
             rules = rules + "\n"
 

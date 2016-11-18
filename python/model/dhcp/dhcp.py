@@ -519,6 +519,7 @@ class PublicIpDAO:
                         id varchar primary key,
                         mac macaddr not null,
                         ip inet not null,
+                        redirect_network cdir not null,
                         created timestamptz default now()
                     )
                 """)
@@ -532,6 +533,7 @@ class PublicIpDAO:
         d.id = r['id']
         d.ip = ipaddress.ip_interface(r['ip'])
         d.mac = r['mac']
+        d.redirectNetwork = r['redirect_network']
         return d
 
     @classmethod
@@ -582,6 +584,7 @@ class PublicIp:
         self.id = str(uuid.uuid4())
         self.mac = None
         self.ip = None
+        self.redirectNetwork = None
 
 
     @classmethod
