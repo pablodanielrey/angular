@@ -22,6 +22,8 @@ if __name__ == '__main__':
 
     logging.getLogger().setLevel(logging.DEBUG)
 
+    radiusUsersFile = sys.argv[1]
+
     # registro usuarios que son autoridades
     autoridades = [
         '24892148',     # pablo diaz
@@ -66,15 +68,15 @@ if __name__ == '__main__':
     con = conn.get()
     try:
         Connection.readOnly(con)
-        #userIds = User.findAll(con)
-        userss = User.findByType(con, ['teacher'])
-        userss.extend(User.findByDni(con, autoridades))
+        userss = User.findAll(con)
+        #userss = User.findByType(con, ['teacher'])
+        #userss.extend(User.findByDni(con, autoridades))
         users = [i for (i,v) in userss]
         usersp = []
         for uid in users:
             usersp.extend(UserPassword.findByUserId(con, uid))
 
-        with open('/tmp/radius-users', 'w') as f:
+        with open(radiusUsersFile, 'w') as f:
             for up in usersp:
                 if r.match(up.username) is None or ' ' in up.username:
                     continue
