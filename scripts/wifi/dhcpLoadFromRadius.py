@@ -61,9 +61,18 @@ if __name__ == '__main__':
 
     logging.getLogger().setLevel(logging.DEBUG)
 
+    sistemas = [
+        '27294557',     # pablo rey
+        '30001823',     # walter blanco
+        '27821597',     # maxi saucedo
+        '31381082',     # emanuel pais
+        '31073351',     # ivan castañeda
+        '29694757',     # alejandro oporto
+        '34928857'      # miguel macagno
+    ]
+
     autoridades = [
         '24892148',     # pablo diaz
-        '27294557',     # pablo rey
         '30057880',     # charly
         '31993212',     # adrian
         '25952190',     # julieta
@@ -75,7 +84,8 @@ if __name__ == '__main__':
         '20294338',     # diego felices
         '17755153',     # leo gasparini
         '22349070',     # mariana marchioni
-        '29763750'     # paula beyries
+        '29763750',     # paula beyries
+        '29728322'      # daniel demaria
     ]
 
 
@@ -127,7 +137,9 @@ if __name__ == '__main__':
 
                 ''' genero las ips en las redes faltantes '''
                 for n in toGenerate:
-                    if dni in autoridades:
+                    if dni in sistemas:
+                        net.ip = wnets[n.id]['admin']
+                    elif dni in autoridades:
                         net.ip = wnets[n.id]['authorities']
                     else:
                         net.ip = wnets[n.id]['general']
