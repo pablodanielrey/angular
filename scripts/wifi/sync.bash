@@ -1,6 +1,6 @@
 #!/bin/bash
 
-cd /root/angular/scripts/wifi
+cd /root/github/angular/scripts/wifi
 
 python3 dhcpAps.py
 sleep 60s
