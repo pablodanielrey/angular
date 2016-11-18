@@ -57,6 +57,7 @@
     service.publicConnection = new autobahn.Connection(options);
     service.publicConnection.onopen = function(session, details) {
       console.log(details);
+      $rootScope.$broadcast('wamp_public.open');
     }
     service.publicConnection.onclose = function(reason, details) {
       console.log(reason);
