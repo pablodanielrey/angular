@@ -26,5 +26,5 @@ if __name__ == '__main__':
     finally:
         conn.put(con)
 
-    with open('/tmp/p.txt','w') as f:
+    with open('/tmp/dhcpd.conf','w') as f:
         d.toFile(f)
