@@ -39,5 +39,5 @@ if __name__ == '__main__':
     finally:
         conn.put(con)
 
-    with open('/tmp/firewall','w') as f:
+    with open('/etc/init.d/manual-firewall','w') as f:
         f.write(rules)
