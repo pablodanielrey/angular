@@ -164,7 +164,7 @@ class DhcpHostDAO(DAO):
     def findLastByNetwork(cls, con, network):
         cur = con.cursor()
         try:
-            cur.execute('select id from dhcp.hosts where ip << %s order by ip desc limit 1', (str(network),))
+            cur.execute('select id from dhcp.hosts where ip << %s order by ip asc limit 1', (str(network),))
             if cur.rowcount <= 0:
                 return None
             return cur.fetchone()['id']
@@ -404,10 +404,13 @@ class DhcpNetwork:
 
     def findNextIpAvailable(self, con):
         last = DhcpHost.findById(con, [DhcpHost.findLastByNetwork(con, self.ip)])
+        logging.info("Ip last: {}".format(last))
         if len(last) <= 0:
-            return self.ip[1]
+            logging.info("Netowrk ip: {}".format(self.ip))
+            return self.ip[-4]
         else:
-            return last[0].ip + 1
+            logging.info("******* ip: {} *************".format(last[0].ip))
+            return last[0].ip - 1
 
     def includes(self, dhcpHost):
         return dhcpHost.ip in self.ip
