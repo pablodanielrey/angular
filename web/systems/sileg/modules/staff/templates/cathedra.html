@@ -1,9 +1,9 @@
             <button class="btnBack" ng-click="vm.view.style='';vm.view.style2=''"><i class="fa fa-chevron-left" title="Volver"></i></button> <b>CÁTEDRA</b>
-            <input class="inputSearch" ng-model="searchCathedra"></input>
+            <input class="inputSearch" ng-model="searchPlace"></input>
 
             <div class="contentList">
 
-                  <div ng-repeat="c in vm.view.cathedras | filter:searchCathedra | orderBy:['description']" class="itemList" ng-click="vm.selectCathedra(c)">
+                  <div ng-repeat="c in vm.view.places | filter:searchPlace | orderBy:['description']" class="itemList" ng-click="vm.selectPlace(c)">
                     <div class="icoListCat">
                       {{c.letter}}
                     </div>
@@ -11,7 +11,6 @@
                         <div class="textNameCat">
                           {{c.description}}
                         </div>
-
                     </div>
                   </div>
             </div>

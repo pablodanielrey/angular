@@ -67,3 +67,20 @@ class Sileg(wamp.SystemComponentSession):
 
         finally:
             self.conn.put(con)
+
+
+
+    @autobahn.wamp.register('sileg.find_positions_active_by_place')
+    @inlineCallbacks
+    def findPositionsActiveByPlace(self, placeId):
+        r = yield threads.deferToThread(self._findPositionsActiveByPlace, placeId)
+        returnValue(r)
+
+    def _findPositionsActiveByPlace(self, placeId):
+        try:
+            con = self.conn.get()
+            self.conn.readOnly(con)
+            return SilegModel.findPositionsActiveByPlace(con, placeId)
+
+        finally:
+            self.conn.put(con)
