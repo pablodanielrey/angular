@@ -404,12 +404,9 @@ class DhcpNetwork:
 
     def findNextIpAvailable(self, con):
         last = DhcpHost.findById(con, [DhcpHost.findLastByNetwork(con, self.ip)])
-        logging.info("Ip last: {}".format(last))
         if len(last) <= 0:
-            logging.info("Netowrk ip: {}".format(self.ip))
             return self.ip[-4]
         else:
-            logging.info("******* ip: {} *************".format(last[0].ip))
             return last[0].ip - 1
 
     def includes(self, dhcpHost):
