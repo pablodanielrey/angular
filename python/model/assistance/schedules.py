@@ -26,6 +26,7 @@ class Schedule(JSONSerializable):
         self.daily = False
         self.special = False
         self.id = None
+        self.isNull = False
 
     def isValid(self, date):
         if self.special:
@@ -90,9 +91,19 @@ class ScheduleDAO(AssistanceDAO):
                     weekday integer,
                     daily boolean default false,
                     special boolean default false,
+                    is_null boolean default false,
+                    created timestamptz default now()
+                );
+
+                CREATE TABLE IF NOT EXISTS assistance.schedules_history (
+                    id varchar primary key,
+                    user_id varchar not null references profile.users (id),
+                    sdate date default now(),
+                    schedule_ids varchar[] not null,
                     created timestamptz default now()
                 );
             """)
+
         finally:
             cur.close()
 
@@ -107,6 +118,7 @@ class ScheduleDAO(AssistanceDAO):
         s.weekday = r['weekday']
         s.daily = r['daily']
         s.special = r['special']
+        s.isNull = r['is_null']
         return s
 
     @staticmethod
@@ -153,11 +165,12 @@ class ScheduleDAO(AssistanceDAO):
         try:
             sch.id = str(uuid.uuid4())
             r = sch.__dict__
-            cur.execute('insert into assistance.schedules (id, user_id, sdate, sstart, send, weekday, daily, special) '
-                        'values ( %(id)s, %(userId)s, %(date)s, %(start)s, %(end)s, %(weekday)s, %(daily)s, %(special)s)', r)
+            cur.execute('insert into assistance.schedules (id, user_id, sdate, sstart, send, weekday, daily, special, is_null) '
+                        'values ( %(id)s, %(userId)s, %(date)s, %(start)s, %(end)s, %(weekday)s, %(daily)s, %(special)s, %(isNull)s)', r)
             return sch.id
         finally:
             cur.close()
+
 
     @classmethod
     def delete(cls, con, ids):
@@ -170,3 +183,114 @@ class ScheduleDAO(AssistanceDAO):
 
         finally:
             cur.close()
+
+
+class ScheduleHistoryDAO(AssistanceDAO):
+    dependencies = [ UserDAO ]
+
+    @classmethod
+    def _createSchema(cls, con):
+        super()._createSchema(con)
+        cur = con.cursor()
+        try:
+            cur.execute("""
+                create schema if not exists assistance;
+
+                CREATE TABLE IF NOT EXISTS assistance.schedules_history (
+                    id varchar primary key,
+                    user_id varchar not null references profile.users (id),
+                    sdate date default now(),
+                    schedule_ids varchar[] not null,
+                    description varchar,
+                    created timestamptz default now()
+                );
+            """)
+
+        finally:
+            cur.close()
+
+    @staticmethod
+    def _fromResult(r):
+        s = ScheduleHistory()
+        s.id = r['id']
+        s.userId = r['user_id']
+        s.date = r['sdate']
+        s.schedules = r['schedule_ids']
+        s.created = r['created']
+        s.description = r['description']
+        return s
+
+    @classmethod
+    def persist(cls, con, s):
+        cur = con.cursor()
+        try:
+            s.id = str(uuid.uuid4())
+            param = s.__dict__
+            cur.execute('insert into assistance.schedules_history (id, user_id, sdate, schedule_ids) '
+                        'values ( %(id)s, %(userId)s, %(date)s, %(schedules)s)', param)
+            return s.id
+        finally:
+            cur.close()
+
+    @classmethod
+    def findAll(cls, con):
+        cur = con.cursor()
+        try:
+            cur.execute('select id from assistance.schedules_history')
+            return [c['id'] for c in cur]
+
+        finally:
+            cur.close()
+
+    @classmethod
+    def findById(cls, con, ids=[]):
+        assert isinstance(ids, list)
+        if len(ids) <= 0:
+            return []
+
+        cur = con.cursor()
+        try:
+            cur.execute('select * from assistance.schedules_history where id in %s', (tuple(ids),))
+            return [cls._fromResult(c) for c in cur]
+
+        finally:
+            cur.close()
+
+
+    @classmethod
+    def delete(cls, con, ids):
+        assert isinstance(ids, list)
+
+        cur = con.cursor()
+        try:
+            cur.execute('delete from assistance.schedules_history where id in %s', (tuple(ids),))
+            return ids
+
+        finally:
+            cur.close()
+
+class ScheduleHistory(JSONSerializable):
+
+    dao = ScheduleHistoryDAO
+
+    def __init__(self):
+        self.id = None
+        self.userId = None
+        self.date = None
+        self.schedules = []
+        self.created = None
+        self.description = ''
+
+    def persist(self, con):
+        return self.dao.persist(con, self)
+
+    def delete(self, con):
+        return self.dao.delete(con, [self.id])
+
+    @classmethod
+    def findAll(cls, con):
+        return cls.dao.findAll(con)
+
+    @classmethod
+    def findById(cls, con, ids):
+        return cls.dao.findById(con, ids)

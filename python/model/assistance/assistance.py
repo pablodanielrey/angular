@@ -6,7 +6,7 @@ from dateutil.tz import tzlocal
 import pytz
 import importlib
 from model.assistance.logs import LogDAO, Log
-from model.assistance.schedules import ScheduleDAO, Schedule
+from model.assistance.schedules import ScheduleDAO, Schedule, ScheduleHistory
 from model.serializer import JSONSerializable
 
 from model.assistance.justifications import *
@@ -578,7 +578,7 @@ class AssistanceModel:
         schedules: [{date: date, weekday: 0-6, start: datetime, end: datetime}]
     '''
     @classmethod
-    def persistScheduleWeek(cls, con, userId, date, schedules):
+    def persistScheduleWeek(cls, con, userId, date, schedules, description = 'Cambio de horario semanal'):
         # obtengo el horario semanal que ya posee
         scheds = Schedule.findByUserIdInWeek(con, userId, date, False)
 
@@ -600,6 +600,7 @@ class AssistanceModel:
 
             if sc["end"] is None or s.start is None:
                 s.end = None
+                s.isNull = True
             else:
                 eTime = None if sc["end"] is None else cls._utcToLocal(sc["end"]).time()
                 eTime = eTime.second + eTime.minute * 60 + eTime.hour * 60 * 60
@@ -609,5 +610,12 @@ class AssistanceModel:
             s.special = False
             logging.info("presistiendo date:{} start:{} end:{}".format(s.date, s.start, s.end))
             ids.append(s.persist(con))
-        logging.info("Ids insertados:{}".format(ids))
+
+        sh = ScheduleHistory()
+        sh.userId = userId
+        sh.date = date
+        sh.schedules = ids
+        sh.description = description
+        sh.persist(con)
+
         return ids
