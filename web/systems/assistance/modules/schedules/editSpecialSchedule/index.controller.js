@@ -186,7 +186,7 @@
         }
 
         vm.view.style = displayMessageLoading();
-        Assistance.saveSpecialSchedules(vm.model.schedules).then(function() {
+        Assistance.saveSpecialSchedules(vm.model.selectedPerson, vm.model.schedules).then(function() {
           vm.view.style = displayMessageSave();
           $timeout(function () {
             $location.path("/schedules/" + vm.model.selectedPerson);
