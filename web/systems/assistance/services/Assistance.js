@@ -242,10 +242,11 @@
 																					SCHEDULES
 				 * *********************************************************************************** */
 
-				 function saveSpecialSchedules(schedules) {
-					 var defer = $q.defer();
- 					defer.resolve(true);
- 					return defer.promise;
+				 /*
+				 	schedules = {start: datetime, end: datetime}
+				 */
+				 function saveSpecialSchedules(userId, schedules) {
+					 return Login.getPrivateTransport().call('assistance.persist_schedule_special', [userId, schedules])
 				 }
 
 				 function saveSchedules(userId, date, schedules) {
@@ -253,10 +254,12 @@
 					 return Login.getPrivateTransport().call('assistance.persist_schedule_week', [userId, d, schedules]);
 				 }
 
-				 function saveWatcherSchedules(schedules) {
-					 var defer = $q.defer();
- 					defer.resolve(true);
- 					return defer.promise;
+				 /*
+				 	schedules = {date: date, weekday: weekday, start: start, hours: hours}
+				 */
+				 function saveWatcherSchedules(userId, date, schedules) {
+					 var d = date.toISOString();
+					 return Login.getPrivateTransport().call('assistance.persist_schedule_hours', [userId, d, schedules]);
 				 }
 
 				 /*

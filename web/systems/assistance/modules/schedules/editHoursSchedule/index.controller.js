@@ -112,19 +112,15 @@
         }
 
         function getHours() {
-          var totalMillis = 0;
-          var dayMillis = 24 * 60 * 60 * 1000;
+          var totalHours = 0;
           for (var i = 0; i < vm.model.schedules.length; i++) {
             var sched = vm.model.schedules[i];
-            if (sched.start == null || sched.end == null) {
+            if (sched.start == null || sched.hours == null) {
               continue;
             }
-            if (sched.end < sched.start) {
-              sched.end.setTime(sched.end.getTime() + dayMillis);
-            }
-            totalMillis = totalMillis + (sched.end - sched.start);
+            totalHours += sched.hours;
           }
-          return Math.trunc(totalMillis / 1000 / 60 / 60);
+          return totalHours;
         }
 
 
@@ -257,7 +253,7 @@
               }
 
               vm.view.style = displayMessageLoading();
-              Assistance.saveWatcherSchedules(vm.model.schedules).then(function() {
+              Assistance.saveWatcherSchedules(vm.model.selectedPerson, vm.model.date, vm.model.schedules).then(function() {
                 vm.view.style = displayMessageSave();
                 $timeout(function () {
                   $location.path("/schedules/" + vm.model.selectedPerson);

@@ -619,3 +619,85 @@ class AssistanceModel:
         sh.persist(con)
 
         return ids
+
+    '''
+        guarda el horario semanal en formato de horas
+        date: dia de vigencia
+        schedules: [{date: date, weekday: 0-6, start: datetime, hours: int}]
+    '''
+    @classmethod
+    def persistScheduleHours(cls, con, userId, date, schedules, description = 'Cambio de horario semanal'):
+        logging.info("schedules a agregar {}".format(schedules))
+        ids = []
+        for sc in schedules:
+            s = Schedule()
+            s.userId = userId
+            s.date = date
+            s.weekday = sc['weekday']
+
+            sTime = None if sc["start"] is None else cls._utcToLocal(sc["start"]).time()
+            s.start = [None if sTime is None else sTime.second + sTime.minute * 60 + sTime.hour * 60 * 60][0]
+
+            if sc["hours"] is None or s.start is None or sc["hours"] <= 0:
+                s.end = None
+                s.isNull = True
+            else:
+                s.end = sc["hours"] * 60 * 60 + s.start
+
+            s.daily = True
+            s.special = False
+            logging.info("presistiendo date:{} start:{} end:{}".format(s.date, s.start, s.end))
+            ids.append(s.persist(con))
+
+        sh = ScheduleHistory()
+        sh.userId = userId
+        sh.date = date
+        sh.schedules = ids
+        sh.description = description
+        sh.persist(con)
+
+        return ids
+
+    '''
+        guarda un horario especial
+        schedules: [{start: datetime, end: datetime}]
+    '''
+    @classmethod
+    def persistScheduleSpecial(cls, con, userId, schedules, description = 'Horario especial'):
+        logging.info("schedules especiales a crear {}".format(schedules))
+        ids = []
+        date = None
+        for sc in schedules:
+            if sc['start'] is None or sc['end'] is None or sc['start'] >= sc['end']:
+                continue
+
+            startLocal = cls._utcToLocal(sc["start"])
+            endLocal = cls._utcToLocal(sc["end"])
+
+            s = Schedule()
+            s.userId = userId
+            s.date = startLocal.date()
+            s.weekday = s.date.weekday()
+
+            sTime = startLocal.time()
+            s.start = sTime.second + sTime.minute * 60 + sTime.hour * 60 * 60
+
+            s.end = (endLocal - startLocal).total_seconds() + s.start
+            s.special = True
+            s.daily = True
+
+            if date is None:
+                date = s.date
+
+            logging.info("presistiendo date:{} start:{} end:{}".format(s.date, s.start, s.end))
+            ids.append(s.persist(con))
+
+        if date is not None:
+            sh = ScheduleHistory()
+            sh.userId = userId
+            sh.date = date
+            sh.schedules = ids
+            sh.description = description
+            sh.persist(con)
+
+        return ids

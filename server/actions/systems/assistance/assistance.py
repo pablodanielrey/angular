@@ -163,6 +163,51 @@ class Assistance(wamp.SystemComponentSession):
         r = yield threads.deferToThread(self._persistScheduleWeek, userId, date, schedules, details)
         returnValue(r)
 
+
+
+    def _persistScheduleHours(self, userId, date, schedules, details):
+        con = self.conn.get()
+        try:
+            logging.info("guardando schedules vigente a partir del: {}".format(date))
+            date = self._parseDate(date).date()
+            ids = AssistanceModel.persistScheduleHours(con, userId, date, schedules)
+            con.commit()
+            return ids
+        finally:
+            self.conn.put(con)
+
+    '''
+        guarda el horario semanal en formato de horas
+        date: dia de vigencia
+        schedules: [{date: date, weekday: 0-6, start: datetime, hours: int}]
+    '''
+    @autobahn.wamp.register('assistance.persist_schedule_hours')
+    @inlineCallbacks
+    def persistScheduleHours(self, userId, date, schedules, details):
+        r = yield threads.deferToThread(self._persistScheduleHours, userId, date, schedules, details)
+        returnValue(r)
+
+
+    def _persistScheduleSpecial(self, userId, schedules, details):
+        con = self.conn.get()
+        try:
+            ids = AssistanceModel.persistScheduleSpecial(con, userId, schedules)
+            con.commit()
+            return ids
+        finally:
+            self.conn.put(con)
+
+
+    '''
+        guarda un horario especial
+        schedules: [{start: datetime, end: datetime}]
+    '''
+    @autobahn.wamp.register('assistance.persist_schedule_special')
+    @inlineCallbacks
+    def persistScheduleSpecial(self, userId, schedules, details):
+        r = yield threads.deferToThread(self._persistScheduleSpecial, userId, schedules, details)
+        returnValue(r)
+
     ############################# EXPORTACIONES #######################################
 
     @inlineCallbacks
