@@ -5,68 +5,6 @@ from model.users.users import UserDAO, User
 import re
 import uuid
 
-class Position(JSONSerializable):
-
-    SUPPORT = 0
-    NONTEACHING = 1
-    TEACHING = 2
-
-    def __init__(self):
-        self.id = '1'
-        self.position = 'Cumple función'
-        self.type = self.SUPPORT
-
-    """
-        TODO: HACK HORRIBLE PARA MANTENER FUNCIONANOD CODIGO DE ASISTENCIA Y OTROS SISTEMAS QUE
-        SUPONEN 1 SOLO CARGO ACTIVO, POR ESO LO BUSCAN USANDO Position.findByUserId() Y NO Designations
-    """
-    @classmethod
-    def findByUserId(cls, con, userId):
-        return PositionDAO.findByUserId(con, userId)
-
-
-class PositionDAO(DAO):
-
-    @classmethod
-    def _createSchema(cls, con):
-        super()._createSchema(con)
-        cur = con.cursor()
-        try:
-            cur.execute("""
-                CREATE SCHEMA IF NOT EXISTS designations;
-
-                CREATE TABLE IF NOT EXISTS designations.positions (
-                  id VARCHAR PRIMARY KEY,
-                  position VARCHAR,
-                  type INTEGER,
-                  created TIMESTAMPTZ default now()
-                );
-            """)
-        finally:
-            cur.close()
-
-    @classmethod
-    def _fromResult(cls, r):
-        d = Position()
-        d.id = r['id']
-        d.position = r['position']
-        d.type = r['type']
-        return d
-
-    """
-        TODO: HACK HORRIBLE PARA MANTENER FUNCIONANOD CODIGO DE ASISTENCIA Y OTROS SISTEMAS QUE
-        SUPONEN 1 SOLO CARGO ACTIVO, POR ESO LO BUSCAN USANDO Position.findByUserId() Y NO Designations
-    """
-    @classmethod
-    def findByUserId(cls, con, userId):
-        cur = con.cursor()
-        try:
-            cur.execute('select dp.* from designations.positions dp, designations.designations d where d.position_id = dp.id and d.user_id = %s order by dstart desc limit 1', (userId,))
-            return [cls._fromResult(r) for r in cur]
-        finally:
-            cur.close()
-
-
 
 class Designation(JSONSerializable):
 
@@ -77,20 +15,20 @@ class Designation(JSONSerializable):
         self.userId = None
         self.start = None
         self.end = None
+        self.out = None
+        self.parentId = None
+        self.resolution = None
+        self.record = None
+        self.originalId = None
 
-    """
-    @classmethod
-    def removeByIds(cls, con, ids):
-        DesignationDAO.removeByIds(con, ids)
-
-    def remove(self, con):
-        DesignationDAO.removeByIds(con, [self.id])
-
-    """
 
     @classmethod
-    def findAllByUser(cls, con, userId, history=False):
-        return DesignationDAO.getDesignationsByUser(con, userId, history)
+    def findByUsers(cls, con, userIds, history=False):
+        return DesignationDAO.findByUsers(con, userIds, history)
+
+    @classmethod
+    def findByPlaces(cls, con, placeIds, history=False):
+        return DesignationDAO.findByPlaces(con, placeIds, history)
 
     def expire(self, con):
         DesignationDAO.expireByIds(con, [self.id])
@@ -124,13 +62,13 @@ class DesignationDAO(DAO):
             cur.execute("""
                 CREATE SCHEMA IF NOT EXISTS designations;
 
-                CREATE TABLE IF NOT EXISTS designations.designations (
+                CREATE TABLE IF NOT EXISTS designations.designation (
                     id VARCHAR PRIMARY KEY,
                     user_id VARCHAR NOT NULL REFERENCES profile.users (id),
                     office_id VARCHAR REFERENCES offices.offices (id),
                     position_id VARCHAR REFERENCES designations.positions (id),
-                    parent_id VARCHAR REFERENCES designations.designations (id),
-                    original_id VARCHAR REFERENCES designations.designations (id),
+                    parent_id VARCHAR REFERENCES designations.designation (id),
+                    original_id VARCHAR REFERENCES designations.designation (id),
 
                     dstart DATE default now(),
                     dend DATE,
@@ -147,6 +85,8 @@ class DesignationDAO(DAO):
                     created timestamptz default now()
                 );
             """)
+        except Error:
+          print("error")
         finally:
             cur.close()
 
@@ -154,11 +94,18 @@ class DesignationDAO(DAO):
     def _fromResult(r):
         d = Designation()
         d.id = r['id']
-        d.officeId = r['office_id']
-        d.position_id = r['position_id']
-        d.userId = r['user_id']
         d.start = r['dstart']
         d.end = r['dend']
+        d.out = r["dout"]
+        d.description = r["description"]
+        d.resolution = r["resolution"]
+        d.record = r["record"]
+        d.replaceId = r["parent_id"]
+        d.originalId = r["original_id"]
+        d.officeId = r['office_id']
+        d.positionId = r['position_id']
+        d.userId = r['user_id']
+
         return d
 
     @classmethod
@@ -167,37 +114,44 @@ class DesignationDAO(DAO):
         assert isinstance(ids, list)
         cur = con.cursor()
         try:
-            cur.execute('update designations.designations set dend = NOW() where id in %s', (tuple(ids),))
+            cur.execute('update designations.designation set dend = NOW() where id in %s', (tuple(ids),))
         finally:
             cur.close()
 
 
-    """
-    @classmethod
-    def removeByIds(cls, con, ids):
-        assert ids is not None
-        assert isinstance(ids, list)
-        cur = con.cursor()
-        try:
-            cur.execute('delete from offices.designation where id in %s', (ids,))
 
-        finally:
-            cur.close()
-
-    """
 
     @classmethod
-    def getDesignationsByUser(cls, con, userId, history=False):
-        assert userId is not None
-        cur = con.cursor()
+    def findByUsers(cls, con, userIds, history=False):
+        assert userIds is not None
+        assert isinstance(userIds, list)
         try:
             if history is None or not history:
-                cur.execute('select id from designations.designations where user_id = %s and dout is null order by dstart',(userId,))
+                cur.execute('select id from designations.designation where user_id IN %s and dout is null order by dstart',(tuple(userIds),))
             else:
-                cur.execute('select id from designations.designations where user_id = %s order by dstart',(userId,))
+                cur.execute('select id from designations.designation where user_id IN %s order by dstart',(tuple(userIds),))
             return [d['id'] for d in cur]
         finally:
             cur.close()
+
+
+    @classmethod
+    def findByPlaces(cls, con, placeIds, history=False):
+        assert placeIds is not None
+        assert isinstance(placeIds, list)
+
+        if len(placeIds) <= 0:
+            return []
+        cur = con.cursor()
+        try:
+            if history is None or not history:
+                cur.execute('select id from designations.designation where office_id IN %s and dout is null order by dstart',(tuple(placeIds),))
+            else:
+                cur.execute('select id from designations.designation where office_id IN %s order by dstart',(tuple(placeIds),))
+            return [d['id'] for d in cur]
+        finally:
+            cur.close()
+
 
     @classmethod
     def findByIds(cls, con, ids):
@@ -209,7 +163,7 @@ class DesignationDAO(DAO):
 
         cur = con.cursor()
         try:
-            cur.execute('select * from designations.designations where id in %s order by dstart asc', (tuple(ids),))
+            cur.execute('select * from designations.designation where id in %s order by dstart asc', (tuple(ids),))
             if cur.rowcount <= 0:
                 return []
 
@@ -224,31 +178,16 @@ class DesignationDAO(DAO):
         cur = con.cursor()
         try:
             if history is None or not history:
-                cur.execute('select id from designations.designations where office_id = %s and dout is null order by dstart asc',(officeId,))
+                cur.execute('select id from designations.designation where office_id = %s and dout is null order by dstart asc',(officeId,))
             else:
-                cur.execute('select id from designations.designations where office_id = %s order by dstart asc',(officeId,))
+                cur.execute('select id from designations.designation where office_id = %s order by dstart asc',(officeId,))
 
             return [d['id'] for d in cur]
 
         finally:
             cur.close()
 
-    """
-    @classmethod
-    def getDesignationsByPosition(cls, con, position, history=False):
-        assert position is not None
-        cur = con.cursor()
-        try:
-            if history is None or not history:
-                cur.execute('select id from offices.designation where position = %s and dend is null',(position,))
-            else:
-                cur.execute('select id from offices.designation where position = %s',(position,))
 
-            return [d['id'] for d in cur]
-
-        finally:
-            cur.close()
-    """
 
 
 
@@ -258,7 +197,7 @@ class DesignationDAO(DAO):
         try:
             if not hasattr(desig, 'id'):
                 desig.id = str(uuid.uuid4())
-            cur.execute("insert into designations.designations (id, office_id, user_id, position_id, dstart, dend) "
+            cur.execute("insert into designations.designation (id, office_id, user_id, position_id, dstart, dend) "
                         "values (%(id)s, %(officeId)s, %(userId)s, %(positionId)s, %(start)s, %(end)s)",
                         desig.__dict__)
             return desig.id
