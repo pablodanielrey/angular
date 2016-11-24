@@ -16,10 +16,12 @@
         }
 
         vm.view = {
-          activate: false
+          activate: false,
+          styleHistory: {'Cambio de horario semanal' : 'historialHorarioSemanal' ,'Cambio de horario semanal por horas': 'historialHorarioSemanalSerenos', 'Horario especial': 'historialHorarioEspecial '}
         }
 
         vm.viewDetail = viewDetail;
+        vm.getStyleHistory = getStyleHistory;
         vm.remove = remove;
 
         $scope.$on('wamp.open', function(event, args) {
@@ -68,14 +70,18 @@
           item.displayDetail = !item.displayDetail;
         }
 
+        function getStyleHistory(item) {
+          return vm.view.styleHistory[item.description];
+        }
+
         /*
           LLAMADAS AL SERVIDOR
         */
 
         function loadHistory() {
           vm.model.history = [];
-
           vm.model.history.push({id: 1, created: new Date(), description: 'Horario especial', schedules: [], displayDetail: false});
+          vm.model.history.push({id: 2, created: new Date(), description: 'Cambio de horario semanal', schedules: [], displayDetail: false});
         }
 
         function remove(item) {

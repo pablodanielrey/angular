@@ -626,7 +626,7 @@ class AssistanceModel:
         schedules: [{date: date, weekday: 0-6, start: datetime, hours: int}]
     '''
     @classmethod
-    def persistScheduleHours(cls, con, userId, date, schedules, description = 'Cambio de horario semanal'):
+    def persistScheduleHours(cls, con, userId, date, schedules, description = 'Cambio de horario semanal por horas'):
         logging.info("schedules a agregar {}".format(schedules))
         ids = []
         for sc in schedules:

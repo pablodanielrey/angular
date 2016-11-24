@@ -3,7 +3,7 @@
 </div>
 
 <div class="contentHistory">
-  <div class="itemHistory historialHorarioSemanal" ng-class="{true: 'expandirHistorial', false: 'minimizarHistorial'}[item.displayDetail]" ng-repeat="item in vm.model.history">
+  <div class="itemHistory {{vm.getStyleHistory(item)}}" ng-class="{true: 'expandirHistorial', false: 'minimizarHistorial'}[item.displayDetail]" ng-repeat="item in vm.model.history">
       <!-- VARIABLES 1: expandirHistorial, minimizarHistorial
            VARIABLES 2: historialHorarioSemanal ,historialHorarioSemanalSerenos, historialHorarioEspecial -->
            <div class="infoItem">
