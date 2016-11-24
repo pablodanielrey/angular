@@ -3,7 +3,7 @@
 </div>
 
 <div class="contentHistory">
-  <div class="itemHistory expandirHistorial historialHorarioSemanal" ng-repeat="item as vm.model.history">
+  <div class="itemHistory historialHorarioSemanal" ng-class="{true: 'expandirHistorial', false: 'minimizarHistorial'}[item.displayDetail]" ng-repeat="item in vm.model.history">
       <!-- VARIABLES 1: expandirHistorial, minimizarHistorial
            VARIABLES 2: historialHorarioSemanal ,historialHorarioSemanalSerenos, historialHorarioEspecial -->
            <div class="infoItem">
@@ -13,8 +13,8 @@
                    <div class="textHourSpecial">HORARIO ESPECIAL</div>
                </div>
                <div class="actionBtn">
-                   <div class="btnMax" title="Detalle"><i class="fa fa-chevron-down btnDown"></i><i class="fa fa-chevron-up btnUp"></i></div>
-                   <div class="btnDeleteItem" title="Eliminar"><i class="fa fa-ban" aria-hidden="true"></i></div>
+                   <div class="btnMax" title="Detalle" ng-click="vm.viewDetail(item)"><i class="fa fa-chevron-down btnDown"></i><i class="fa fa-chevron-up btnUp"></i></div>
+                   <div class="btnDeleteItem" title="Eliminar" ng-click="vm.remove(item)"><i class="fa fa-ban" aria-hidden="true"></i></div>
                </div>
            </div>
   </div>
