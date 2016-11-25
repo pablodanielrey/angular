@@ -14,7 +14,7 @@ import autobahn
 import wamp
 
 from model.assistance.logs import Log
-from model.assistance.schedules import Schedule
+from model.assistance.schedules import Schedule, ScheduleHistory
 from model.assistance.utils import Utils
 from model.assistance.assistance import AssistanceModel
 
@@ -120,6 +120,8 @@ class Assistance(wamp.SystemComponentSession):
         returnValue(r)
 
 
+    ############################# SCHEDULES #######################################
+
     def _findSchedulesWeek(self, userId, date, actualWeek, details):
         con = self.conn.get()
         try:
@@ -206,6 +208,77 @@ class Assistance(wamp.SystemComponentSession):
     @inlineCallbacks
     def persistScheduleSpecial(self, userId, schedules, details):
         r = yield threads.deferToThread(self._persistScheduleSpecial, userId, schedules, details)
+        returnValue(r)
+
+
+
+    def _findAllSchedules(self, userId, details):
+        con = self.conn.get()
+        try:
+            return ScheduleHistory.findByUserId(con, userId)
+        finally:
+            self.conn.put(con)
+
+    '''
+        retorna el history de horarios de un usuario
+    '''
+    @autobahn.wamp.register('assistance.find_all_schedules')
+    @inlineCallbacks
+    def findAllSchedules(self, userId, details):
+        r = yield threads.deferToThread(self._findAllSchedules, userId, details)
+        returnValue(r)
+
+
+    def _findSchedHistoryByIds(self, ids, details):
+        con = self.conn.get()
+        try:
+            return ScheduleHistory.findById(con, ids)
+        finally:
+            self.conn.put(con)
+
+    '''
+        busca el historial de horarios por id
+    '''
+    @autobahn.wamp.register('assistance.find_sched_history_by_ids')
+    @inlineCallbacks
+    def findSchedHistoryByIds(self, ids, details):
+        r = yield threads.deferToThread(self._findSchedHistoryByIds, ids, details)
+        returnValue(r)
+
+
+    def _findScheduleByIds(self, ids, details):
+        con = self.conn.get()
+        try:
+            return Schedule.findById(con, ids)
+        finally:
+            self.conn.put(con)
+
+    '''
+        busca los schedules por id
+    '''
+    @autobahn.wamp.register('assistance.find_schedule_by_ids')
+    @inlineCallbacks
+    def findScheduleByIds(self, ids, details):
+        r = yield threads.deferToThread(self._findScheduleByIds, ids, details)
+        returnValue(r)
+
+
+    def _removeScheduleHistory(self, sched, details):
+        con = self.conn.get()
+        try:
+            id = sched.delete(con)
+            con.commit()
+            return id
+        finally:
+            self.conn.put(con)
+
+    '''
+        elimina el schedule
+    '''
+    @autobahn.wamp.register('assistance.remove_schedule_history')
+    @inlineCallbacks
+    def removeScheduleHistory(self, sched, details):
+        r = yield threads.deferToThread(self._removeScheduleHistory, sched, details)
         returnValue(r)
 
     ############################# EXPORTACIONES #######################################

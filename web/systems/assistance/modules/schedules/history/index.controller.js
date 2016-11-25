@@ -5,14 +5,15 @@
         .module('assistance')
         .controller('HistoryCtrl', HistoryCtrl);
 
-    HistoryCtrl.$inject = ['$scope', 'Login'];
+    HistoryCtrl.$inject = ['$scope', 'Login', 'Assistance', '$routeParams', '$timeout'];
 
     /* @ngInject */
-    function HistoryCtrl($scope, Login) {
+    function HistoryCtrl($scope, Login, Assistance, $routeParams, $timeout) {
         var vm = this;
 
         vm.model = {
-          history: []
+          history: [],
+          selectedPerson: null
         }
 
         vm.view = {
@@ -35,6 +36,14 @@
             return;
           }
           vm.view.activate = true;
+
+          var params = $routeParams;
+          if ('personId' in params) {
+            vm.model.selectedPerson = params.personId;
+          } else {
+            vm.model.selectedPerson =  Login.getCredentials()['userId'];
+          }
+
           loadHistory();
         }
 
@@ -74,18 +83,41 @@
           return vm.view.styleHistory[item.description];
         }
 
+        function _parseHistory(elem) {
+          elem.displayDetail = false;
+          return elem;
+        }
+
         /*
           LLAMADAS AL SERVIDOR
         */
 
         function loadHistory() {
           vm.model.history = [];
-          vm.model.history.push({id: 1, created: new Date(), description: 'Horario especial', schedules: [], displayDetail: false});
-          vm.model.history.push({id: 2, created: new Date(), description: 'Cambio de horario semanal', schedules: [], displayDetail: false});
+          Assistance.findAllSchedules(vm.model.selectedPerson).then(Assistance.findSchedHistoryByIds).then(function(history) {
+            for (var i = 0; i < history.length; i++) {
+              vm.model.history.push(_parseHistory(history[i]));
+            }
+          }, function(error) {
+            console.log(error);
+          });
+          /*
+          var start = new Date(); start.setHours(8); start.setMinutes(0);
+          var end = new Date(); end.setHours(15); end.setMinutes(0);
+          vm.model.history.push({id: 1, created: new Date(), date: new Date(), description: 'Horario especial', schedules: [{date: new Date(), start: start, end:end}], displayDetail: false});
+          vm.model.history.push({id: 2, created: new Date(), date: new Date(), description: 'Cambio de horario semanal', schedules: [{date: new Date(), start: start, end:end}], displayDetail: false});
+          */
         }
 
         function remove(item) {
-          _deleteArray(item.id);
+          Assistance.removeScheduleHistory(item).then(function(id) {
+            $timeout(function () {
+              _deleteArray(item.id);
+            });
+          }, function(error) {
+            console.error(error);
+          })
+
         }
 
 

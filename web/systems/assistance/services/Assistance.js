@@ -29,7 +29,10 @@
 			this.loadSchedules = loadSchedules;
 			this.saveWatcherSchedules = saveWatcherSchedules;
 			this.saveSchedules = saveSchedules;
-
+			this.findScheduleByIds = findScheduleByIds;
+			this.findAllSchedules = findAllSchedules;
+			this.findSchedHistoryByIds = findSchedHistoryByIds;
+			this.removeScheduleHistory = removeScheduleHistory;
 
       function getLogs(initDate, endDate, initHour, endHour) {
         var di = initDate.toISOString();
@@ -144,8 +147,7 @@
 					 return Login.getPrivateTransport().call('assistance.set_worked_note', [userId, date, text])
 				 }
 
-				/*
-				stats= [{date: "2016-10-17T00:00:00+00:00",
+				/*				stats= [{date: "2016-10-17T00:00:00+00:00",
 								logStart: "2016-10-17T09:14:42+00:00",
 							  logEnd: "2016-10-17T15:14:42+00:00",
 								scheduleStart: "2016-10-17T06:00:00+00:00",
@@ -271,6 +273,26 @@
 				 function loadSchedules(userId, date, actualWeek) {
 					 var d = date.toISOString();
 	         return Login.getPrivateTransport().call('assistance.find_schedules_week', [userId, d, actualWeek]);
+				 }
+
+
+				 function findScheduleByIds(ids) {
+					 return Login.getPrivateTransport().call('assistance.find_schedule_by_ids', [ids]);
+				 }
+
+				 /*
+				 	Retorn el historial de operaciones
+				 */
+				 function findAllSchedules(userId) {
+					 return Login.getPrivateTransport().call('assistance.find_all_schedules', [userId]);
+				 }
+
+				 function findSchedHistoryByIds(ids) {
+					 return Login.getPrivateTransport().call('assistance.find_sched_history_by_ids', [ids]);
+				 }
+
+				 function removeScheduleHistory(sched) {
+					 return Login.getPrivateTransport().call('assistance.remove_schedule_history', [sched]);
 				 }
 
     }

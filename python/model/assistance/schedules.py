@@ -6,6 +6,7 @@ from model.assistance.assistanceDao import AssistanceDAO
 from model.assistance.utils import Utils
 from operator import attrgetter
 import uuid
+import logging
 
 class Schedule(JSONSerializable):
 
@@ -53,8 +54,16 @@ class Schedule(JSONSerializable):
         return ScheduleDAO.delete(con, [self.id])
 
     @classmethod
+    def deleteIds(cls, con, ids):
+        return ScheduleDAO.delete(con, ids)
+
+    @classmethod
     def findByUserId(cls, con, ids, startDate, endDate):
         return ScheduleDAO.findByUserId(con, ids, startDate, endDate)
+
+    @classmethod
+    def findById(cls, con, ids):
+        return ScheduleDAO.findById(con, ids)
 
     @classmethod
     def findByUserIdInDate(cls, con, userId, date):
@@ -184,6 +193,19 @@ class ScheduleDAO(AssistanceDAO):
         finally:
             cur.close()
 
+    @classmethod
+    def findById(cls, con, ids=[]):
+        assert isinstance(ids, list)
+        if len(ids) <= 0:
+            return []
+
+        cur = con.cursor()
+        try:
+            cur.execute('select * from assistance.schedules where id in %s', (tuple(ids),))
+            return [cls._fromResult(c) for c in cur]
+
+        finally:
+            cur.close()
 
 class ScheduleHistoryDAO(AssistanceDAO):
     dependencies = [ UserDAO ]
@@ -226,17 +248,18 @@ class ScheduleHistoryDAO(AssistanceDAO):
         try:
             s.id = str(uuid.uuid4())
             param = s.__dict__
-            cur.execute('insert into assistance.schedules_history (id, user_id, sdate, schedule_ids) '
-                        'values ( %(id)s, %(userId)s, %(date)s, %(schedules)s)', param)
+            cur.execute('insert into assistance.schedules_history (id, user_id, sdate, schedule_ids, description) '
+                        'values ( %(id)s, %(userId)s, %(date)s, %(schedules)s, %(description)s)', param)
             return s.id
         finally:
             cur.close()
 
     @classmethod
-    def findAll(cls, con):
+    def findByUserId(cls, con, userId):
         cur = con.cursor()
         try:
-            cur.execute('select id from assistance.schedules_history')
+            logging.info("buscado historial de {}".format(userId))
+            cur.execute('select id from assistance.schedules_history where user_id = %s', (userId,))
             return [c['id'] for c in cur]
 
         finally:
@@ -285,11 +308,12 @@ class ScheduleHistory(JSONSerializable):
         return self.dao.persist(con, self)
 
     def delete(self, con):
+        Schedule.deleteIds(con,self.schedules)
         return self.dao.delete(con, [self.id])
 
     @classmethod
-    def findAll(cls, con):
-        return cls.dao.findAll(con)
+    def findByUserId(cls, con, userId):
+        return cls.dao.findByUserId(con, userId)
 
     @classmethod
     def findById(cls, con, ids):
