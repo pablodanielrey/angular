@@ -77,6 +77,49 @@
 
         function viewDetail(item) {
           item.displayDetail = !item.displayDetail;
+          if (item.displayDetail && item.schedulesObj == null) {
+            Assistance.findScheduleByIds(item.schedules).then(function(schedules) {
+              var schedulesObj = [];
+              for (var i = 0; i < schedules.length; i++) {
+                if (schedules[i].isNull) {
+                  continue;
+                }
+                schedulesObj.push( _parseSchedule(schedules[i]));
+              }
+              $timeout(function () {
+                item.schedulesObj = schedulesObj;
+              });
+            }, function(error) {
+              console.error(error);
+            })
+          }
+        }
+
+        // daily,date,end,id,isNull,special,start,userId,weekday
+        function _parseSchedule(sc) {
+          // getDay() => [Sunday, Monday, ..., Saturday]
+          var sortDay = [6, 0, 1, 2, 3, 4, 5];
+          var date = new Date(sc.date);
+          var weekday = sortDay[date.getDay()];
+
+          var diff = (sc.weekday - weekday) * 24 * 3600 * 1000;
+
+
+          var millisStart = (sc.start == null) ? null : sc.start * 1000;
+          var start = (millisStart == null) ? null : new Date(date.getTime() + millisStart + diff);
+
+          var millisEnd =  (sc.end == null) ? null : sc.end * 1000;
+          var end = (millisEnd == null) ? null : new Date(date.getTime() + millisEnd + diff);
+
+          var limitMillis = 24 * 60 * 60 * 1000;
+          if (start != null && end != null && (end.getTime() - start.getTime()) > limitMillis) {
+            start = null;
+            end = null;
+          }
+
+          var hours = Math.trunc((end - start) / 1000 / 60 / 60);
+
+          return {date: date, weekday:sc.weekday, start: start, end: end, hours: hours}
         }
 
         function getStyleHistory(item) {
@@ -85,6 +128,7 @@
 
         function _parseHistory(elem) {
           elem.displayDetail = false;
+          elem.schedulesObj = null;
           return elem;
         }
 
@@ -98,6 +142,7 @@
             for (var i = 0; i < history.length; i++) {
               vm.model.history.push(_parseHistory(history[i]));
             }
+            console.log(vm.model.history);
           }, function(error) {
             console.log(error);
           });

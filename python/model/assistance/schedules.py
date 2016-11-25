@@ -201,6 +201,8 @@ class ScheduleDAO(AssistanceDAO):
 
         cur = con.cursor()
         try:
+            logging.info("buscado schedules ids: {}".format(ids))
+
             cur.execute('select * from assistance.schedules where id in %s', (tuple(ids),))
             return [cls._fromResult(c) for c in cur]
 

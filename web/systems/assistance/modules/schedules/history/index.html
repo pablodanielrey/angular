@@ -23,21 +23,21 @@
                  <div class="headerCurrentSchedule">
                      <div class="textSubTitleHistory"> A partir del {{item.date | date: 'dd/MM/yyyy'}}</div>
                  </div>
-                 <div class="itemDay" ng-repeat="sched in item.schedules"> <div class="day">{{sched.date | date: 'EEEE'}}</div><div>{{sched.start | date: 'HH:mm'}}</div><div>a</div><div>{{sched.end | date: 'HH:mm'}}</div> </div>
+                 <div class="itemDay" ng-repeat="sched in item.schedulesObj | orderBy: 'weekday'"> <div class="day">{{sched.start | date: 'EEEE'}}</div><div>{{sched.start | date: 'HH:mm'}}</div><div>a</div><div>{{sched.end | date: 'HH:mm'}}</div> </div>
              </div>
 
              <div class="contentCurrentScheduleSpecialHistory">
                  <div class="headerCurrentSchedule">
                      <div class="textSubTitleHistory">A partir del {{item.date | date: 'dd/MM/yyyy'}}</div>
                  </div>
-                 <div class="itemDay" ng-repeat="sched in item.schedules"> <div>{{sched.start | date: 'EEEE'}}</div><div>{{sched.start | date: 'HH:mm'}}</div> <div> a </div> <div>{{sched.end | date: 'EEEE'}}</div><div>{{sched.start | date: 'HH:mm'}}</div><div> | </div><div>{{sched.hours}} Horas</div></div>
+                 <div class="itemDay" ng-repeat="sched in item.schedulesObj | orderBy: 'weekday'"> <div>{{sched.start | date: 'EEEE'}}</div><div>{{sched.start | date: 'HH:mm'}}</div> <div> a </div> <div>{{sched.end | date: 'EEEE'}}</div><div>{{sched.end | date: 'HH:mm'}}</div><div> | </div><div>{{sched.hours}} Horas</div></div>
              </div>
 
              <div class="contentScheduleSpecialHistory">
                  <!-- <div class="headerCurrentSchedule">
                      <div class="textSubTitleHistory"> El día 10/09/2016</div>
                  </div> -->
-                 <div ng-repeat="sched in item.schedules">
+                 <div ng-repeat="sched in item.schedulesObj">
                    <div class="itemDay"> <div>Fecha </div><div>{{sched.start | date: 'dd/MM/yyyy'}}</div> <div> Entrada</div> <div>{{sched.start | date: 'HH:mm'}}</div></div>
                    <div class="itemDay"> <div>Fecha </div><div>{{sched.end | date: 'dd/MM/yyyy'}}</div> <div> Salida</div> <div>{{sched.end | date: 'HH:mm'}}</div></div>
                 </div>
