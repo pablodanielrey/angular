@@ -148,9 +148,9 @@ class Assistance(wamp.SystemComponentSession):
         try:
             logging.info("guardando schedules vigente a partir del: {}".format(date))
             date = self._parseDate(date).date()
-            ids = AssistanceModel.persistScheduleWeek(con, userId, date, schedules)
+            id = AssistanceModel.persistScheduleWeek(con, userId, date, schedules)
             con.commit()
-            return ids
+            return id
         finally:
             self.conn.put(con)
 
@@ -162,8 +162,9 @@ class Assistance(wamp.SystemComponentSession):
     @autobahn.wamp.register('assistance.persist_schedule_week')
     @inlineCallbacks
     def persistScheduleWeek(self, userId, date, schedules, details):
-        r = yield threads.deferToThread(self._persistScheduleWeek, userId, date, schedules, details)
-        returnValue(r)
+        id = yield threads.deferToThread(self._persistScheduleWeek, userId, date, schedules, details)
+        self.publish('assistance.add_schedules_event', id)
+        returnValue(id)
 
 
 
@@ -172,9 +173,9 @@ class Assistance(wamp.SystemComponentSession):
         try:
             logging.info("guardando schedules vigente a partir del: {}".format(date))
             date = self._parseDate(date).date()
-            ids = AssistanceModel.persistScheduleHours(con, userId, date, schedules)
+            id = AssistanceModel.persistScheduleHours(con, userId, date, schedules)
             con.commit()
-            return ids
+            return id
         finally:
             self.conn.put(con)
 
@@ -186,16 +187,17 @@ class Assistance(wamp.SystemComponentSession):
     @autobahn.wamp.register('assistance.persist_schedule_hours')
     @inlineCallbacks
     def persistScheduleHours(self, userId, date, schedules, details):
-        r = yield threads.deferToThread(self._persistScheduleHours, userId, date, schedules, details)
-        returnValue(r)
+        id = yield threads.deferToThread(self._persistScheduleHours, userId, date, schedules, details)
+        self.publish('assistance.add_schedules_event', id)
+        returnValue(id)
 
 
     def _persistScheduleSpecial(self, userId, schedules, details):
         con = self.conn.get()
         try:
-            ids = AssistanceModel.persistScheduleSpecial(con, userId, schedules)
+            id = AssistanceModel.persistScheduleSpecial(con, userId, schedules)
             con.commit()
-            return ids
+            return id
         finally:
             self.conn.put(con)
 
@@ -207,8 +209,10 @@ class Assistance(wamp.SystemComponentSession):
     @autobahn.wamp.register('assistance.persist_schedule_special')
     @inlineCallbacks
     def persistScheduleSpecial(self, userId, schedules, details):
-        r = yield threads.deferToThread(self._persistScheduleSpecial, userId, schedules, details)
-        returnValue(r)
+        id = yield threads.deferToThread(self._persistScheduleSpecial, userId, schedules, details)
+        self.publish('assistance.add_schedules_event', id)
+        logging.info("horario especial guardado id: {}".format(id))
+        returnValue(id)
 
 
 
@@ -278,8 +282,10 @@ class Assistance(wamp.SystemComponentSession):
     @autobahn.wamp.register('assistance.remove_schedule_history')
     @inlineCallbacks
     def removeScheduleHistory(self, sched, details):
-        r = yield threads.deferToThread(self._removeScheduleHistory, sched, details)
-        returnValue(r)
+        id = yield threads.deferToThread(self._removeScheduleHistory, sched, details)
+        self.publish('assistance.remove_schedules_event', id)
+        logging.info("historial eliminado: {}".format(id))
+        returnValue(id)
 
     ############################# EXPORTACIONES #######################################
 
