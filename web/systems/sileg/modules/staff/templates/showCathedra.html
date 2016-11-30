@@ -1,8 +1,8 @@
             <div>
-                <div class="titleCatedra"><b>{{vm.view.place.description}}</b></div>
+                <div class="titleCatedra"><b>{{vm.view.place.name}}</b></div>
                 <div  ng-repeat="d in vm.view.positions" >
                   <div class="titleDocente">
-                    {{d.position.description}}
+                    {{d.position.position}}
                   </div>
 
                   <div ng-repeat="de in d.designations" >

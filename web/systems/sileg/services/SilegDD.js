@@ -19,9 +19,9 @@
 		  function getUsers() { return Sileg.getUsers().then(
  			  function(users){ return self._defineLetter(users, "lastname"); }
 			)};
-			
+
 			function getPlaces() { return Sileg.getPlaces().then(
- 			  function(users){ return self._defineLetter(users, "description"); }
+ 			  function(users){ return self._defineLetter(users, "name"); }
 			)};
 
 			function findPositionsActiveByUser(userId) { return Sileg.findPositionsActiveByUser(userId); };

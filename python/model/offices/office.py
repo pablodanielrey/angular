@@ -111,7 +111,8 @@ class OfficeDAO(DAO):
         o.name = r['name']
         o.telephone = r['telephone']
         o.number = r['nro']
-        o.type = None if r['type'] is None else [t for t in Office.officeType if t['value'] == r['type']][0]
+        o.type = r['type']
+        #o.type = None if r['type'] is None else [t for t in Office.officeType if t['value'] == r['type']][0]
         o.email = r['email']
         o.parent = r['parent']
         o.public = r['public']
@@ -305,7 +306,6 @@ class OfficeModel():
         for u in userIds:
             (uid, version) = u
             if uid not in cls.cache.keys():
-                print(uid)
                 user = User.findById(con, [uid])[0]
                 cls.cache[uid] = user
             users.append(cls.cache[uid])

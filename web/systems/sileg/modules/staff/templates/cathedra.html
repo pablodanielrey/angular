@@ -3,13 +3,13 @@
 
             <div class="contentList">
 
-                  <div ng-repeat="c in vm.view.places | filter:searchPlace | orderBy:['description']" class="itemList" ng-click="vm.selectPlace(c)">
+                  <div ng-repeat="c in vm.view.places | filter:searchPlace | orderBy:['name']" class="itemList" ng-click="vm.selectPlace(c)">
                     <div class="icoListCat">
                       {{c.letter}}
                     </div>
                     <div>
                         <div class="textNameCat">
-                          {{c.description}}
+                          {{c.name}}
                         </div>
                     </div>
                   </div>

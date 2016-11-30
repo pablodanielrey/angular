@@ -25,6 +25,10 @@ class Position(JSONSerializable):
     def findByUserId(cls, con, userId):
         return PositionDAO.findByUserId(con, userId)
 
+    @classmethod
+    def findByIds(cls, con, ids):
+        return PositionDAO.findByIds(con, ids)
+
 
 class PositionDAO(DAO):
 
@@ -53,6 +57,26 @@ class PositionDAO(DAO):
         d.position = r['position']
         d.type = r['type']
         return d
+
+
+    @classmethod
+    def findByIds(cls, con, ids):
+        assert ids is not None
+
+        if len(ids) <= 0:
+            return []
+
+        cur = con.cursor()
+        try:
+            cur.execute('select * from designations.positions where id in %s', (tuple(ids),))
+            if cur.rowcount <= 0:
+                return []
+
+            return [PositionDAO._fromResult(o) for o in cur.fetchall()]
+
+        finally:
+            cur.close()
+
 
     """
         TODO: HACK HORRIBLE PARA MANTENER FUNCIONANOD CODIGO DE ASISTENCIA Y OTROS SISTEMAS QUE

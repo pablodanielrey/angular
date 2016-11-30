@@ -1,9 +1,10 @@
-
+# -*- coding: utf-8 -*-
 import logging
 from model.designation.designation import Designation
 from model.offices.office import Office
 from model.users.users import User
 from model.offices.office import Office
+from model.designation.position import Position
 
 
 
@@ -17,7 +18,7 @@ class SilegModel:
 
     @classmethod
     def getUsers(cls, con):
-        placesIds = Office.findAll(con, [{"value":"cathedra"}])
+        placesIds = Office.findAll(con, [{"value":"cdepartment"}])
         designationIds = Designation.findByPlaces(con, placesIds)
         designations = Designation.findByIds(con, designationIds)
         userIds = [d.userId for d in designations]
@@ -25,7 +26,7 @@ class SilegModel:
 
     @classmethod
     def getCathedras(cls, con):
-        placesIds = Office.findAll(con, [{"value":"cathedra"}])
+        placesIds = Office.findAll(con, [{"value":"cdepartment"}])
         return Office.findByIds(con, placesIds)
 
 
@@ -34,19 +35,17 @@ class SilegModel:
         designationIds = Designation.findByUsers(con, [userId])
         designations = Designation.findByIds(con, designationIds)
 
-        designationsActive = [d for d in designations if d.out is None and d.description == 'original' and Office.findById(con, [d.placeId])[0].type == 'Catedra' ]
-
+        designationsActive = [d for d in designations if d.out is None and d.description == 'original' and Office.findByIds(con, [d.officeId])[0].type == 'cdepartment']
 
         data = {}
-
         for designation in designationsActive:
-            position = Position.findById(con, [designation.positionId])[0]
-            place = Office.findById(con, [designation.placeId])[0]
+            position = Position.findByIds(con, [designation.positionId])[0]
+            place = Office.findByIds(con, [designation.officeId])[0]
             designation.place = place
-            if position.description not in data:
-                data[position.description] = {"position":position, "designations":[]}
+            if position.position not in data:
+                data[position.position] = {"position":position, "designations":[]}
 
-            data[position.description]["designations"].append(designation)
+            data[position.position]["designations"].append(designation)
 
         return data
 
@@ -56,22 +55,24 @@ class SilegModel:
         designationIds = Designation.findByPlaces(con, [placeId])
         designations = Designation.findByIds(con, designationIds)
 
-        designationsActive = [d for d in designations if d.out is None and d.description == 'original' and Place.findById(con, [d.placeId])[0].type == 'Catedra' ]
+        designationsActive = [d for d in designations if d.out is None and d.description == 'original' and Office.findByIds(con, [d.officeId])[0].type == 'cdepartment' ]
 
         data = {}
 
         for designation in designationsActive:
-            position = Position.findById(con, [designation.positionId])[0]
+            position = Position.findByIds(con, [designation.positionId])[0]
             user = User.findById(con, [designation.userId])[0]
             designation.user = user
-            if position.description not in data:
-                data[position.description] = {"position":position, "designations":[]}
+            if position.position not in data:
+                data[position.position] = {"position":position, "designations":[]}
 
-            data[position.description]["designations"].append(designation)
+            data[position.position]["designations"].append(designation)
 
         return data
 
     """
+
+
     @classmethod
     def findPlacesByIds(cls, con, ids):
         return Place.findById(con, ids)

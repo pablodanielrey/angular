@@ -125,6 +125,7 @@ class DesignationDAO(DAO):
     def findByUsers(cls, con, userIds, history=False):
         assert userIds is not None
         assert isinstance(userIds, list)
+        cur = con.cursor()
         try:
             if history is None or not history:
                 cur.execute('select id from designations.designation where user_id IN %s and dout is null order by dstart',(tuple(userIds),))
