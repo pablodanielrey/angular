@@ -17,7 +17,7 @@
 </div>
 <div class="contentOffices">
     <!-- <div class="itemOffice" ng-repeat="office in vm.offices | filter: vm.model.search"> <span ng-click="vm.select(office)">{{office.name}}</span> <span ng-click="vm.remove(office)"> X </span></div> -->
-    <div class="itemOffice" ng-repeat="office in vm.offices | orderBy: 'name' | filter: vm.model.search" >
+    <div class="itemOffice" ng-repeat="office in vm.offices | orderBy: 'name' | filter: vm.model.search.name" >
         <div class="officesData" ng-click="vm.select(office)">
             <div class="officeType">{{office.type.name}}</div>
             <div class="officeName"><b>{{office.name}}</b></div>

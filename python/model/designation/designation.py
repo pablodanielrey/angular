@@ -114,7 +114,7 @@ class DesignationDAO(DAO):
         assert isinstance(ids, list)
         cur = con.cursor()
         try:
-            cur.execute('update designations.designation set dend = NOW() where id in %s', (tuple(ids),))
+            cur.execute('update designations.designation set dout = NOW() where id in %s', (tuple(ids),))
         finally:
             cur.close()
 

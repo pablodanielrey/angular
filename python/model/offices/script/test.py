@@ -17,15 +17,15 @@ from model.offices.office import Office
 if __name__ == '__main__':
 
     reg = inject.instance(Registry)
-    conn = connection.Connection(reg.getRegistry('sileg'))
+    conn = connection.Connection(reg.getRegistry('crossbar'))
     con = conn.get()
     try:
-
-        offices = Office.findAll(con)
-        for o in offices:
-            print(o)
-
+        
         """
+        offices = Office.findAll(con)
+        for oid in offices:
+            users = OfficeModel.getUsers(con, oid)
+            print(users)
 
         places = SilegModel.getCathedras(con)
         for place in places:
