@@ -2,7 +2,7 @@
 from model.serializer import JSONSerializable
 from model.dao import DAO
 from model.users.users import UserDAO, User
-from model.offices.designation import Designation
+from model.designation.designation import Designation
 
 import logging
 import datetime
