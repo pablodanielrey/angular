@@ -90,7 +90,8 @@ if __name__ == '__main__':
         print(copied)
 
     with open('/tmp/copied.txt','a') as f:
-        with imaplib.IMAP4_SSL('imap.gmail.com') as gmail:
+        gmail = imaplib.IMAP4_SSL('imap.gmail.com')
+        try:
             gmail.login(guser, gpass)
             rv, data = gmail.list()
             print(rv)
@@ -100,7 +101,8 @@ if __name__ == '__main__':
             print(data)
 
 
-            with imaplib.IMAP4_SSL('163.10.17.115') as m:
+            try:
+            m = imaplib.IMAP4_SSL('163.10.17.115'):
                 m.login(euser, epass)
                 for (n, fl, u) in getMessagesId(m, 'INBOX'):
                     fla = [bytes.decode(x) for x in fl if b'unknown' not in x]
@@ -112,3 +114,9 @@ if __name__ == '__main__':
                             if rv == 'OK':
                                 f.write(u + '\n')
                                 print(data)
+
+            finally:
+                m.close()
+                
+        finally:
+            gmail.close()
