@@ -43,7 +43,7 @@ def getMessagesId(imap, folder):
 def getMessage(imap, folder, n):
     rv, data = imap.select(folder)
     rv, data = imap.fetch(n, '(RFC822)')
-    yield data[0][1]
+    return data[0][1]
 
 def getFlags(imap, folder):
     ''' Obtiene los ids de los correos dentro de una carpeta especifica '''
@@ -105,12 +105,12 @@ if __name__ == '__main__':
                     fla = [bytes.decode(x) for x in fl if b'unknown' not in x]
                     print(fla)
                     if u not in copied:
-                        for message in getMessage(m, 'INBOX', n):
-                            print(u)
-                            rv,data = gmail.append('copiados', ' '.join(fla), None, message)
-                            if rv == 'OK':
-                                f.write(u + '\n')
-                                print(data)
+                        message = getMessage(m, 'INBOX', n):
+                        print(u)
+                        rv,data = gmail.append('copiados', ' '.join(fla), None, message)
+                        if rv == 'OK':
+                            f.write(u + '\n')
+                            print(data)
 
             finally:
                 m.close()
