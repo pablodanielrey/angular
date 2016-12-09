@@ -93,25 +93,35 @@ if __name__ == '__main__':
     epass = sys.argv[4]
 
     home = os.path.expanduser('~')
-    copiedLog = home + '/.imapSync/copied.log'
-    errorsLog = home + '/.imapSync/errors.log'
+    configFolder = home + '/.imapSync'
+    try:
+        os.mkdir(configFolder)
+    except Exception as e:
+        pass
+
+    copiedLog = configFolder + '/copied.log'
+    errorsLog = configFolder + '/errors.log'
 
     ''' cargo la info de los mails ya procesados '''
     copied = []
     try:
         with open(copiedLog,'r') as f:
             copied = [n.replace('\n','') for n in f]
+    except Exception as e:
+        pass
+
+    try:
         with open(errorsLog,'r') as f:
             copied.extend([n.replace('\n','') for n in f])
-    finally:
+    except Exception as e:
         pass
+
 
     with open(copiedLog,'a') as f, open(errorsLog, 'a') as err:
         gmail = imaplib.IMAP4_SSL('imap.gmail.com')
         try:
             gmail.login(guser, gpass)
             try:
-
                 try:
                     rv, data = gmail.create('copiados')
                     print(rv)
