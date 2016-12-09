@@ -105,7 +105,7 @@ if __name__ == '__main__':
                     fla = [bytes.decode(x) for x in fl if b'unknown' not in x]
                     print(fla)
                     if u not in copied:
-                        message = getMessage(m, 'INBOX', n):
+                        message = getMessage(m, 'INBOX', n)
                         print(u)
                         rv,data = gmail.append('copiados', ' '.join(fla), None, message)
                         if rv == 'OK':
