@@ -93,12 +93,10 @@ if __name__ == '__main__':
         gmail = imaplib.IMAP4_SSL('imap.gmail.com')
         try:
             gmail.login(guser, gpass)
-            rv, data = gmail.list()
-            print(rv)
-            print(data)
-            rv, data = gmail.create('copiados')
-            print(rv)
-            print(data)
+
+            #rv, data = gmail.create('copiados')
+            #print(rv)
+            #print(data)
 
             m = imaplib.IMAP4_SSL('163.10.17.115')
             try:
