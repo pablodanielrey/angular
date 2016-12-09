@@ -1,5 +1,6 @@
 import imaplib
 from email.parser import BytesParser
+import socket
 import re
 import sys
 import os
@@ -101,6 +102,7 @@ if __name__ == '__main__':
     except Exception as e:
         pass
 
+    foldersLog = configFolder + '/folders.log'
     copiedLog = configFolder + '/copied.log'
     errorsLog = configFolder + '/errors.log'
 
@@ -118,9 +120,17 @@ if __name__ == '__main__':
     except Exception as e:
         pass
 
+    foldersProcessed = []
+    try:
+        with open(foldersLog,'r') as f:
+            foldersProcessed = [n.replace('\n','') for n in f]
+    except Exception as e:
+        pass
+
+
 
     parser = BytesParser()
-    with open(copiedLog,'a') as f, open(errorsLog, 'a') as err:
+    with open(copiedLog,'a') as f, open(errorsLog, 'a') as err, open(foldersLog, 'a') as fold:
         gmail = imaplib.IMAP4_SSL('imap.gmail.com')
         try:
             gmail.login(guser, gpass)
@@ -139,6 +149,9 @@ if __name__ == '__main__':
                     try:
                         rv, data = m.select('INBOX')
                         for folder in getFolders(m):
+                            if folder in foldersProcessed:
+                                continue
+
                             if 'grupos' in folder:
                                 print('Ignorando carpeta {}'.format(folder))
                                 continue
@@ -168,6 +181,8 @@ if __name__ == '__main__':
                                         except Exception as e:
                                             err.write(u + '\n')
                                             print(e)
+
+                            fold.write(folder + '\n')
 
                     finally:
                         m.logout()
