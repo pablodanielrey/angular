@@ -1,10 +1,19 @@
 import imaplib
 import re
 import sys
+import os
 
 
 pattern_uid = re.compile('\d+ \(UID (?P<uid>\d+)\)')
 pattern_validity = re.compile('.* \(UIDVALIDITY (?P<val>\d+)\)')
+pattern_folder = re.compile('\(.*\) \".*\" \"(?P<folder>.*)\"')
+
+def getFolders(imap):
+    rv, data = imap.list()
+    for d in data:
+        match = pattern_folder.match(bytes.decode(d))
+        if match:
+            yield match.group('folder')
 
 def getUidValidity(imap, folder):
     rv, data = imap.status(folder, '(UIDVALIDITY)')
@@ -37,7 +46,6 @@ def getMessagesId(imap, folder):
     nums = data[0].split()
     for n in nums:
         rv, data = imap.fetch(n, "(FLAGS BODY.PEEK[HEADER.FIELDS (Message-Id)])")
-        print(data)
         yield (n, imaplib.ParseFlags(data[0][0]), bytes.decode(data[0][1]).replace('Message-ID:','').strip())
 
 def getMessage(imap, folder, n):
@@ -84,36 +92,69 @@ if __name__ == '__main__':
     euser = sys.argv[3]
     epass = sys.argv[4]
 
-    copied = None
-    with open('/tmp/copied.txt','r') as f:
-        copied = [n.replace('\n','') for n in f]
-        print(copied)
+    home = os.path.expanduser('~')
+    copiedLog = home + '/.imapSync/copied.log'
+    errorsLog = home + '/.imapSync/errors.log'
 
-    with open('/tmp/copied.txt','a') as f:
+    ''' cargo la info de los mails ya procesados '''
+    copied = []
+    try:
+        with open(copiedLog,'r') as f:
+            copied = [n.replace('\n','') for n in f]
+        with open(errorsLog,'r') as f:
+            copied.extend([n.replace('\n','') for n in f])
+    finally:
+        pass
+
+    with open(copiedLog,'a') as f, open(errorsLog, 'a') as err:
         gmail = imaplib.IMAP4_SSL('imap.gmail.com')
         try:
             gmail.login(guser, gpass)
-
-            #rv, data = gmail.create('copiados')
-            #print(rv)
-            #print(data)
-
-            m = imaplib.IMAP4_SSL('163.10.17.115')
             try:
-                m.login(euser, epass)
-                for (n, fl, u) in getMessagesId(m, 'INBOX'):
-                    fla = [bytes.decode(x) for x in fl if b'unknown' not in x]
-                    print(fla)
-                    if u not in copied:
-                        message = getMessage(m, 'INBOX', n)
-                        print(u)
-                        rv,data = gmail.append('copiados', ' '.join(fla), None, message)
-                        if rv == 'OK':
-                            f.write(u + '\n')
-                            print(data)
+
+                try:
+                    rv, data = gmail.create('copiados')
+                    print(rv)
+                    print(data)
+                except Exception as e:
+                    print(e)
+
+
+                m = imaplib.IMAP4_SSL('163.10.17.115')
+                try:
+                    m.login(euser, epass)
+                    try:
+                        rv, data = m.select('INBOX')
+                        for folder in getFolders(m):
+                            if 'grupos' in folder:
+                                print('Ignorando carpeta {}'.format(folder))
+                                continue
+
+                            print('Seleccionando carpeta {}'.format(folder))
+                            for (n, fl, u) in getMessagesId(m, folder):
+                                fla = [bytes.decode(x) for x in fl if b'unknown' not in x]
+                                print('{} {}'.format(n, u))
+                                if u not in copied:
+                                    message = getMessage(m, folder, n)
+                                    print(u)
+                                    try:
+                                        rv,data = gmail.append('copiados', ' '.join(fla), None, message)
+                                        print(rv)
+                                        if rv == 'OK':
+                                            f.write(u + '\n')
+                                            print(data)
+                                    except Exception as e:
+                                        err.write(u + '\n')
+                                        print(e)
+
+                    finally:
+                        m.logout()
+                finally:
+                    #m.close()
+                    pass
 
             finally:
-                m.close()
-
+                gmail.logout()
         finally:
-            gmail.close()
+            #gmail.close()
+            pass
