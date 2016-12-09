@@ -100,9 +100,8 @@ if __name__ == '__main__':
             print(rv)
             print(data)
 
-
+            m = imaplib.IMAP4_SSL('163.10.17.115')
             try:
-            m = imaplib.IMAP4_SSL('163.10.17.115'):
                 m.login(euser, epass)
                 for (n, fl, u) in getMessagesId(m, 'INBOX'):
                     fla = [bytes.decode(x) for x in fl if b'unknown' not in x]
@@ -117,6 +116,6 @@ if __name__ == '__main__':
 
             finally:
                 m.close()
-                
+
         finally:
             gmail.close()
