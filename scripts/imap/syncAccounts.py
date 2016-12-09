@@ -1,4 +1,5 @@
 import imaplib
+from email.parser import BytesParser
 import re
 import sys
 import os
@@ -118,6 +119,7 @@ if __name__ == '__main__':
         pass
 
 
+    parser = BytesParser()
     with open(copiedLog,'a') as f, open(errorsLog, 'a') as err:
         gmail = imaplib.IMAP4_SSL('imap.gmail.com')
         try:
@@ -144,19 +146,28 @@ if __name__ == '__main__':
                             print('Seleccionando carpeta {}'.format(folder))
                             for (n, total, fl, u) in getMessagesId(m, folder):
                                 fla = [bytes.decode(x) for x in fl if b'unknown' not in x]
-                                print('{} {} {}'.format(n, total, u))
+                                print('{} {} {} {}'.format(n, total, folder, u))
                                 if u not in copied:
                                     message = getMessage(m, folder, n)
-                                    print(u)
-                                    try:
-                                        rv,data = gmail.append('copiados', ' '.join(fla), None, message)
-                                        print(rv)
-                                        if rv == 'OK':
-                                            f.write(u + '\n')
-                                            print(data)
-                                    except Exception as e:
-                                        err.write(u + '\n')
-                                        print(e)
+                                    headers = parser.parsebytes(message, True)
+                                    if 'X-Gm-Spam' in headers.keys():
+                                        f.write(u + '\n')
+                                        print(u)
+                                    else:
+                                        print(u)
+                                        try:
+                                            rv,data = gmail.append('copiados', ' '.join(fla), None, message)
+                                            print(rv)
+                                            if rv == 'OK':
+                                                f.write(u + '\n')
+                                                print(data)
+                                        except socket.error as v:
+                                            gmail = imaplib.IMAP4_SSL('imap.gmail.com')
+                                            gmail.login(guser, gpass)
+
+                                        except Exception as e:
+                                            err.write(u + '\n')
+                                            print(e)
 
                     finally:
                         m.logout()
