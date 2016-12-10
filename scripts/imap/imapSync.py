@@ -3,6 +3,7 @@ from email.parser import BytesParser
 import socket
 import sys
 import re
+import datetime
 
 pattern_folder = re.compile('\(.*\) \".*\" \"(?P<folder>.*)\"')
 pattern_fetch_response = re.compile('.* INTERNALDATE (?P<date>\".*\") RFC822.SIZE (?P<size>\d+)')
@@ -18,10 +19,11 @@ def getMessagesToSync(imap, folder):
     rv, data = imap.select(folder)
     if 'OK' not in rv:
         return
-    totalMessages = int(bytes.decode(data[0]))
+    #totalMessages = int(bytes.decode(data[0]))
     print('Buscando mensajes a sincronizar en : {}'.format(folder))
     rv, data = imap.search(None, 'NOT KEYWORD synched')
     nums = data[0].split()
+    totalMessages = len(nums)
     for n in nums:
         print('Obteniendo mensaje {}'.format(n))
         rv, data = imap.fetch(n, '(FLAGS INTERNALDATE RFC822.SIZE RFC822)')
@@ -63,8 +65,31 @@ if __name__ == '__main__':
                             print('Ignorando {}'.format(folder))
                             continue
 
+                        count = 0
+                        totalSeconds = 0
+                        time1 = datetime.datetime.now()
+
                         for (n, totalMessages, flags, internalDate, size, message) in getMessagesToSync(m, folder):
-                            print('Sincronizando mensaje {} {} {} {}'.format(folder, totalMessages, n, size))
+
+                            time2 = datetime.datetime.now()
+                            seconds = (time2 - time1).seconds
+                            time1 = time2
+
+                            ''' calculo el tiempo restante en promedio '''
+                            count = count + 1
+                            totalSeconds = totalSeconds + seconds
+                            average = count / totalSeconds if totalSeconds > 0 else 0
+                            remainingMessages = totalMessages - count
+                            remainingHours = int((remainingMessages * average) // 60)
+                            remainingMinutes = int((remainingMessages * average) % 60)
+
+                            print('')
+                            print('Mensajes totales :            {}'.format(totalMessages))
+                            print('Mensaje actual :              {}'.format(bytes.decode(n)))
+                            print('Mensajes restantes :          {}'.format(remainingMessages))
+                            print('Tamaño de mensaje :           {}'.format(size))
+                            print('Tiempo promedio por mensaje : {}'.format(average))
+                            print('Timepo restante :             {:0>2d}:{:0>2d}'.format(remainingHours, remainingMinutes))
 
                             ''' chequeo que no haya venido de gmail '''
                             headers = parser.parsebytes(message, True)
