@@ -18,6 +18,7 @@ def getMessagesToSync(imap, folder):
     rv, data = imap.select(folder)
     if 'OK' not in rv:
         return
+    totalMessages = int(bytes.decode(data[0]))
     print('Buscando mensajes a sincronizar en : {}'.format(folder))
     rv, data = imap.search(None, 'NOT KEYWORD synched')
     nums = data[0].split()
@@ -25,7 +26,7 @@ def getMessagesToSync(imap, folder):
         print('Obteniendo mensaje {}'.format(n))
         rv, data = imap.fetch(n, '(FLAGS INTERNALDATE RFC822.SIZE RFC822)')
         match = pattern_fetch_response.match(bytes.decode(data[0][0]))
-        yield (n, imaplib.ParseFlags(data[0][0]), match.group('date'), int(match.group('size')), data[0][1])
+        yield (n, totalMessages, imaplib.ParseFlags(data[0][0]), match.group('date'), int(match.group('size')), data[0][1])
 
 
 if __name__ == '__main__':
@@ -62,8 +63,8 @@ if __name__ == '__main__':
                             print('Ignorando {}'.format(folder))
                             continue
 
-                        for (n, flags, internalDate, size, message) in getMessagesToSync(m, folder):
-                            print('Sincronizando mensaje {} {} {}'.format(folder, n, size))
+                        for (n, totalMessages, flags, internalDate, size, message) in getMessagesToSync(m, folder):
+                            print('Sincronizando mensaje {} {} {} {}'.format(folder, totalMessages, n, size))
 
                             ''' chequeo que no haya venido de gmail '''
                             headers = parser.parsebytes(message, True)
