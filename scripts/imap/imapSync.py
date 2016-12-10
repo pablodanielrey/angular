@@ -16,20 +16,23 @@ def getFolders(imap):
             yield match.group('folder')
 
 def getMessagesToSync(imap, folder):
-    rv, data = imap.select(folder)
-    if 'OK' not in rv:
-        return
-    #totalMessages = int(bytes.decode(data[0]))
-    print('Buscando mensajes a sincronizar en : {}'.format(folder))
-    rv, data = imap.search(None, 'NOT KEYWORD synched')
-    nums = data[0].split()
-    totalMessages = len(nums)
-    for n in nums:
-        print('Obteniendo mensaje {}'.format(n))
-        rv, data = imap.fetch(n, '(FLAGS INTERNALDATE RFC822.SIZE RFC822)')
-        match = pattern_fetch_response.match(bytes.decode(data[0][0]))
-        yield (n, totalMessages, imaplib.ParseFlags(data[0][0]), match.group('date'), int(match.group('size')), data[0][1])
+    try:
+        rv, data = imap.select(folder)
+        if 'OK' not in rv:
+            return
+        #totalMessages = int(bytes.decode(data[0]))
+        print('Buscando mensajes a sincronizar en : {}'.format(folder))
+        rv, data = imap.search(None, 'NOT KEYWORD synched')
+        nums = data[0].split()
+        totalMessages = len(nums)
+        for n in nums:
+            print('Obteniendo mensaje {}'.format(n))
+            rv, data = imap.fetch(n, '(FLAGS INTERNALDATE RFC822.SIZE RFC822)')
+            match = pattern_fetch_response.match(bytes.decode(data[0][0]))
+            yield (n, totalMessages, imaplib.ParseFlags(data[0][0]), match.group('date'), int(match.group('size')), data[0][1])
 
+    except Exception as e:
+        yield None
 
 if __name__ == '__main__':
 
@@ -69,8 +72,12 @@ if __name__ == '__main__':
                         totalSeconds = 0
                         time1 = datetime.datetime.now()
 
-                        for (n, totalMessages, flags, internalDate, size, message) in getMessagesToSync(m, folder):
+                        for data in getMessagesToSync(m, folder):
 
+                            if data is None:
+                                continue
+
+                            (n, totalMessages, flags, internalDate, size, message) = data
                             time2 = datetime.datetime.now()
                             seconds = (time2 - time1).seconds
                             time1 = time2
