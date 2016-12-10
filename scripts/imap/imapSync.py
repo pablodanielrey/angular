@@ -6,7 +6,9 @@ import re
 import datetime
 
 pattern_folder = re.compile('\(.*\) \".*\" \"(?P<folder>.*)\"')
+pattern_size_response = re.compile('.*RFC822.SIZE (?P<size>\d+)')
 pattern_fetch_response = re.compile('.* INTERNALDATE (?P<date>\".*\") RFC822.SIZE (?P<size>\d+)')
+GMAIL_LIMIT = 25000000
 
 def getFolders(imap):
     rv, data = imap.list()
@@ -27,6 +29,19 @@ def getMessagesToSync(imap, folder):
         totalMessages = len(nums)
         for n in nums:
             print('Obteniendo mensaje {}'.format(n))
+
+            ''' chequeo el tamaño primero '''
+            rv, data = imap.fetch(n, '(RFC822.SIZE)')
+            if 'OK' not in rv:
+                continue
+            match = pattern_size_response.match(bytes.decode(data[0]))
+            if not match:
+                continue
+            size = int(match.group('size'))
+            if size >= GMAIL_LIMIT:
+                print('Ignorando correo con tamaño : {}'.format(size))
+                continue
+
             rv, data = imap.fetch(n, '(FLAGS INTERNALDATE RFC822.SIZE RFC822)')
             match = pattern_fetch_response.match(bytes.decode(data[0][0]))
             yield (n, totalMessages, imaplib.ParseFlags(data[0][0]), match.group('date'), int(match.group('size')), data[0][1])
@@ -40,6 +55,7 @@ if __name__ == '__main__':
     gpass = sys.argv[2]
     euser = sys.argv[3]
     epass = sys.argv[4]
+
 
     parser = BytesParser()
 
