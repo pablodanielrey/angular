@@ -5,6 +5,7 @@ import sys
 import re
 
 pattern_folder = re.compile('\(.*\) \".*\" \"(?P<folder>.*)\"')
+pattern_fetch_response = re.compile('.* INTERNALDATE (?P<date>\".*\") RFC822.SIZE (?P<size>\d+)')
 
 def getFolders(imap):
     rv, data = imap.list()
@@ -22,8 +23,9 @@ def getMessagesToSync(imap, folder):
     nums = data[0].split()
     for n in nums:
         print('Obteniendo mensaje {}'.format(n))
-        rv, data = imap.fetch(n, '(FLAGS RFC822)')
-        yield (n, imaplib.ParseFlags(data[0][0]), data[0][1])
+        rv, data = imap.fetch(n, '(FLAGS INTERNALDATE RFC822.SIZE RFC822)')
+        match = pattern_fetch_response.match(bytes.decode(data[0][0]))
+        yield (n, imaplib.ParseFlags(data[0][0]), match.group('date'), int(match.group('size')), data[0][1])
 
 
 if __name__ == '__main__':
@@ -60,8 +62,8 @@ if __name__ == '__main__':
                             print('Ignorando {}'.format(folder))
                             continue
 
-                        for (n, flags, message) in getMessagesToSync(m, folder):
-                            print('Sincronizando mensaje {} {}'.format(folder, n))
+                        for (n, flags, internalDate, size, message) in getMessagesToSync(m, folder):
+                            print('Sincronizando mensaje {} {} {}'.format(folder, n, size))
 
                             ''' chequeo que no haya venido de gmail '''
                             headers = parser.parsebytes(message, True)
