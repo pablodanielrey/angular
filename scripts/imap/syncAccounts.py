@@ -45,7 +45,7 @@ def getUids(imap, folder):
 def getMessagesId(imap, folder):
     rv, data = imap.select(folder)
     totalMessages = int(bytes.decode(data[0]))
-    rv, data = imap.search(None, 'ALL')
+    rv, data = imap.search(None, 'NOT KEYWORD synched')
     nums = data[0].split()
     for n in nums:
         rv, data = imap.fetch(n, "(FLAGS BODY.PEEK[HEADER.FIELDS (Message-Id)])")
@@ -160,10 +160,13 @@ if __name__ == '__main__':
                             for (n, total, fl, u) in getMessagesId(m, folder):
                                 fla = [bytes.decode(x) for x in fl if b'unknown' not in x]
                                 print('{} {} {} {}'.format(n, total, folder, u))
-                                if u not in copied:
+                                if u in copied:
+                                    m.store(n, '+FLAGS', '(synched)')
+                                else:
                                     message = getMessage(m, folder, n)
                                     headers = parser.parsebytes(message, True)
                                     if 'X-Gm-Spam' in headers.keys():
+                                        m.store(n, '+FLAGS', '(synched)')
                                         f.write(u + '\n')
                                         print(u)
                                     else:
@@ -173,7 +176,9 @@ if __name__ == '__main__':
                                             print(rv)
                                             if rv == 'OK':
                                                 f.write(u + '\n')
+                                                m.store(n, '+FLAGS', '(synched)')
                                                 print(data)
+
                                         except socket.error as v:
                                             gmail = imaplib.IMAP4_SSL('imap.gmail.com')
                                             gmail.login(guser, gpass)
