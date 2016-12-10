@@ -46,7 +46,12 @@ SCOPE = [
 
 if __name__ == '__main__':
 
+    import base64
     guser = sys.argv[1]
 
     gmail = GAuth.getService('gmail','v1', SCOPE, guser)
-    print(gmail.users().labels().list(userId='me').execute())
+    messages = gmail.users().messages().list(userId='me').execute()
+    for m in messages['messages']:
+        message = gmail.users().messages().get(userId='me',id=m['id'],format='raw').execute()
+        print(base64.urlsafe_b64decode(message['raw']))
+        sys.exit(1)
