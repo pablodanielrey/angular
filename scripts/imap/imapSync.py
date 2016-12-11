@@ -51,6 +51,7 @@ def getMessagesToSync(imap, folder):
 
 if __name__ == '__main__':
 
+
     guser = sys.argv[1]
     gpass = sys.argv[2]
     euser = sys.argv[3]

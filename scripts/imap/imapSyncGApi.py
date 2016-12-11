@@ -52,6 +52,8 @@ if __name__ == '__main__':
     gmail = GAuth.getService('gmail','v1', SCOPE, guser)
     messages = gmail.users().messages().list(userId='me').execute()
     for m in messages['messages']:
-        message = gmail.users().messages().get(userId='me',id=m['id'],format='raw').execute()
-        print(base64.urlsafe_b64decode(message['raw']))
-        sys.exit(1)
+        message = gmail.users().messages().get(userId='me',id=m['id'],format='metadata').execute()
+        for m in message:
+            print('-------------------')
+            print(message[m])
+            print('-------------------')
