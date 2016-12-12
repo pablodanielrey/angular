@@ -97,6 +97,7 @@ class OfficeDAO(DAO):
                   parent VARCHAR REFERENCES offices.offices (id),
                   type VARCHAR NOT NULL,
                   removed TIMESTAMPTZ,
+                  public boolean default false,
                   UNIQUE (name)
                 );
 

@@ -148,7 +148,7 @@
       displayHistory();
     }
 
-    function displayHisotry() {
+    function displayHistory() {
       var style = (vm.view.profile == 'admin') ? vm.view.profileAdmin : vm.view.profileUser;
       vm.view.style = vm.view.displayHistory;
     }
@@ -312,12 +312,12 @@
           displayMessageLoading();
           Assistance.removeScheduleHistory(vm.model.selected).then(function(id) {
             $timeout(function () {
-              displayHisotry();
+              displayHistory();
             });
           }, function(error) {
             displayMessageError(error);
             $timeout(function () {
-              displayHisotry();
+              displayHistory();
             }, 1500);
           })
 
