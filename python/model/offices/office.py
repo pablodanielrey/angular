@@ -217,7 +217,7 @@ class OfficeModel():
 
     @classmethod
     def getOfficesByUser(cls, con, userId, types=None, tree=False):
-        idsD = Designation.findAllByUser(con, userId)
+        idsD = Designation.findByUsers(con, [userId])
         desig = Designation.findByIds(con, idsD)
         oIds = set()
         oIds.update([d.officeId for d in desig])

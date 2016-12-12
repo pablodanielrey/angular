@@ -15,20 +15,20 @@ from model.sileg.sileg import SilegModel
 if __name__ == '__main__':
 
     reg = inject.instance(Registry)
-    conn = connection.Connection(reg.getRegistry('sileg'))
+    conn = connection.Connection(reg.getRegistry('crossbar'))
     con = conn.get()
     try:
-        """
+
         users = SilegModel.getUsers(con)
         for user in users:
             positions = SilegModel.findPositionsActiveByUser(con, user.id)
-            print(positions)
+            #print(positions)
         """
 
         places = SilegModel.getCathedras(con)
         for place in places:
             positions = SilegModel.findPositionsActiveByPlace(con, place.id)
-
+        """
 
 
     finally:

@@ -41,6 +41,7 @@ class Designation(JSONSerializable):
     def findByOffice(cls, con, officeId, history=False):
         return DesignationDAO.getDesignationsByOffice(con, officeId, history)
 
+
     """
     @classmethod
     def getDesignationByPosition(cls, con, position, history=False):

@@ -35,7 +35,7 @@ class SilegModel:
         designationIds = Designation.findByUsers(con, [userId])
         designations = Designation.findByIds(con, designationIds)
 
-        designationsActive = [d for d in designations if d.out is None and d.description == 'original' and Office.findByIds(con, [d.officeId])[0].type == 'cdepartment']
+        designationsActive = [d for d in designations if d.out is None and d.description == 'original' and Office.findByIds(con, [d.officeId])[0].type["value"] == 'cdepartment']
 
         data = {}
         for designation in designationsActive:
@@ -55,7 +55,7 @@ class SilegModel:
         designationIds = Designation.findByPlaces(con, [placeId])
         designations = Designation.findByIds(con, designationIds)
 
-        designationsActive = [d for d in designations if d.out is None and d.description == 'original' and Office.findByIds(con, [d.officeId])[0].type == 'cdepartment' ]
+        designationsActive = [d for d in designations if d.out is None and d.description == 'original' and Office.findByIds(con, [d.officeId])[0].type["value"] == 'cdepartment' ]
 
         data = {}
 

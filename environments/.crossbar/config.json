@@ -386,7 +386,7 @@
                     }
                 },
 
-		{
+		            {
                     "id": "issues",
                     "type": "class",
                     "classname": "actions.systems.issues.issues.Issues",

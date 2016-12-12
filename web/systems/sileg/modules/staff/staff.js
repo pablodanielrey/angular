@@ -21,7 +21,7 @@
           vm.view.user = user;
 
           SilegDD.findPositionsActiveByUser(user.id).then(
-            function(positions){ vm.view.positions = positions;  },
+            function(positions){ $scope.$apply(vm.view.positions = positions);  },
             function(error){ console.log(error); }
           );
         };
@@ -31,7 +31,7 @@
           vm.view.place = place;
 
           SilegDD.findPositionsActiveByPlace(place.id).then(
-            function(positions){ vm.view.positions = positions;  },
+            function(positions){ $scope.$apply(vm.view.positions = positions);  },
             function(error){ console.log(error); }
           );
         };
@@ -43,16 +43,16 @@
 
         function activate(){
           if (vm.view.activate || Login.getPublicTransport() == null) return;
-            
+
           vm.view.activate = true;
 
           SilegDD.getUsers().then(
-              function(users){ vm.view.users = users; },
+              function(users){ $scope.$apply(vm.view.users = users); },
               function(error){ console.log(error); }
           );
 
           SilegDD.getPlaces().then(
-              function(places){ vm.view.places = places; },
+              function(places){ $scope.$apply(vm.view.places = places); },
               function(error){ console.log(error); }
           );
         }
