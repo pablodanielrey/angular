@@ -86,7 +86,15 @@ class PositionDAO(DAO):
     def findByUserId(cls, con, userId):
         cur = con.cursor()
         try:
-            cur.execute('select dp.* from designations.positions dp, designations.designations d where d.position_id = dp.id and d.user_id = %s order by dstart desc limit 1', (userId,))
+            cur.execute("""
+              SELECT dp.* from designations.positions dp
+              INNER JOIN designations.designation dd ON (dd.position_id = dp.id)
+              WHERE dd.position_id = dp.id
+              AND dd.user_id = %s
+              ORDER BY dstart DESC
+              LIMIT 1;
+            """, (userId,));
+
             return [cls._fromResult(r) for r in cur]
         finally:
             cur.close()

@@ -13,7 +13,7 @@ from model.assistance.justifications import *
 from model.assistance.justifications.justifications import Justification
 from model.assistance.justifications.justifications import Status
 
-from model.offices.designation import Position
+from model.designation.position import Position
 from model.offices.office import Office, OfficeModel
 from model.assistance.statistics import WpStatistics, WorkedNote
 from model.assistance.utils import Utils
