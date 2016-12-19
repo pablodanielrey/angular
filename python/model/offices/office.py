@@ -28,7 +28,9 @@ class Office(JSONSerializable):
         {'value': 'center', 'name': 'Centro'},
         {'value': 'unity', 'name': 'Unidad'},
         {'value': 'area', 'name': 'Area'},
-        {'value': 'group', 'name': 'Grupo'}
+        {'value': 'group', 'name': 'Grupo'},
+        {'value': 'master', 'name': 'Maestría'}
+
     ]
 
     def __init__(self):
