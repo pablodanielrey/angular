@@ -5,15 +5,18 @@ import sys
 import re
 import datetime
 
-pattern_folder = re.compile('\(.*\) \".*\" \"(?P<folder>.*)\"')
+pattern_folder = re.compile('\(.*?\) \".*?\" \"(?P<folder>.*?)\"')
 pattern_size_response = re.compile('.*RFC822.SIZE (?P<size>\d+)')
 pattern_fetch_response = re.compile('.* INTERNALDATE (?P<date>\".*\") RFC822.SIZE (?P<size>\d+)')
 GMAIL_LIMIT = 25000000
 
 def getFolders(imap):
     rv, data = imap.list()
+    print(data)
     for d in data:
+        print(d)
         match = pattern_folder.match(bytes.decode(d))
+        print(match)
         if match:
             yield match.group('folder')
 
@@ -47,6 +50,7 @@ def getMessagesToSync(imap, folder):
             yield (n, totalMessages, imaplib.ParseFlags(data[0][0]), match.group('date'), int(match.group('size')), data[0][1])
 
     except Exception as e:
+        print(e)
         yield None
 
 if __name__ == '__main__':
@@ -60,8 +64,10 @@ if __name__ == '__main__':
 
     parser = BytesParser()
 
+    print('Conectandose a gmail')
     gmail = imaplib.IMAP4_SSL('imap.gmail.com')
     try:
+        print('Logueandose en gmail')
         gmail.login(guser, gpass)
         try:
             try:
@@ -72,14 +78,19 @@ if __name__ == '__main__':
             except Exception as e:
                 print(e)
 
-            m = imaplib.IMAP4_SSL('163.10.17.115')
+            print('Contectandose a econo')
+            m = imaplib.IMAP4('163.10.17.115')
             try:
+                print('logueandose a econo')
                 m.login(euser, epass)
                 try:
-                    for folder in getFolders(m):
-                        if 'grupos/' in folder:
-                            print('Ignorando {}'.format(folder))
-                            continue
+                    folders = list(getFolders(m))
+                    folders.append('INBOX')
+                    for folder in folders:
+                        print(folder)
+                        #if 'grupos/' in folder:
+                        #    print('Ignorando {}'.format(folder))
+                        #    continue
 
                         if 'Trash' in folder:
                             print('Ignorando {}'.format(folder))
@@ -89,50 +100,55 @@ if __name__ == '__main__':
                         totalSeconds = 0
                         time1 = datetime.datetime.now()
 
+                        print('Obteniendo mensajes de {}'.format(folder))
                         for data in getMessagesToSync(m, folder):
-
-                            if data is None:
-                                continue
-
-                            (n, totalMessages, flags, internalDate, size, message) = data
-                            time2 = datetime.datetime.now()
-                            seconds = (time2 - time1).seconds
-                            time1 = time2
-
-                            ''' calculo el tiempo restante en promedio '''
-                            count = count + 1
-                            totalSeconds = totalSeconds + seconds
-                            average = count / totalSeconds if totalSeconds > 0 else 0
-                            remainingMessages = totalMessages - count
-                            remainingHours = int((remainingMessages * average) // 60)
-                            remainingMinutes = int((remainingMessages * average) % 60)
-
-                            print('')
-                            print('Mensajes totales :            {}'.format(totalMessages))
-                            print('Mensaje actual :              {}'.format(bytes.decode(n)))
-                            print('Mensajes restantes :          {}'.format(remainingMessages))
-                            print('Tamaño de mensaje :           {}'.format(size))
-                            print('Tiempo promedio por mensaje : {}'.format(average))
-                            print('Timepo restante :             {:0>2d}:{:0>2d}'.format(remainingHours, remainingMinutes))
-
-                            ''' chequeo que no haya venido de gmail '''
-                            headers = parser.parsebytes(message, True)
-                            if 'X-Gm-Spam' in headers.keys():
-                                m.store(n, '+FLAGS', '(synched)')
-                                print('Mensaje {} ya sincronizado'.format(n))
-                                continue
-
-                            ''' subo el correo a gmail '''
-                            fla = [bytes.decode(x) for x in flags if b'unknown' not in x]
                             try:
-                                rv,data = gmail.append('copiados', ' '.join(fla), None, message)
-                                if 'OK' in rv:
-                                    m.store(n, '+FLAGS', '(synched)')
-                                    print(data)
 
-                            except socket.error as v:
-                                gmail = imaplib.IMAP4_SSL('imap.gmail.com')
-                                gmail.login(guser, gpass)
+                                if data is None:
+                                    continue
+
+                                (n, totalMessages, flags, internalDate, size, message) = data
+                                time2 = datetime.datetime.now()
+                                seconds = (time2 - time1).seconds
+                                time1 = time2
+
+                                ''' calculo el tiempo restante en promedio '''
+                                count = count + 1
+                                totalSeconds = totalSeconds + seconds
+                                average = count / totalSeconds if totalSeconds > 0 else 0
+                                remainingMessages = totalMessages - count
+                                remainingHours = int((remainingMessages * average) // 60)
+                                remainingMinutes = int((remainingMessages * average) % 60)
+
+                                print('')
+                                print('Mensajes totales :            {}'.format(totalMessages))
+                                print('Mensaje actual :              {}'.format(bytes.decode(n)))
+                                print('Mensajes restantes :          {}'.format(remainingMessages))
+                                print('Tamaño de mensaje :           {}'.format(size))
+                                print('Tiempo promedio por mensaje : {}'.format(average))
+                                print('Timepo restante :             {:0>2d}:{:0>2d}'.format(remainingHours, remainingMinutes))
+
+                                ''' chequeo que no haya venido de gmail '''
+                                headers = parser.parsebytes(message, True)
+                                if 'X-Gm-Spam' in headers.keys():
+                                    m.store(n, '+FLAGS', '(synched)')
+                                    print('Mensaje {} ya sincronizado'.format(n))
+                                    continue
+
+                                ''' subo el correo a gmail '''
+                                fla = [bytes.decode(x) for x in flags if b'unknown' not in x]
+                                try:
+                                    rv,data = gmail.append('copiados', ' '.join(fla), None, message)
+                                    if 'OK' in rv:
+                                        m.store(n, '+FLAGS', '(synched)')
+                                        print(data)
+
+                                except socket.error as v:
+                                    gmail = imaplib.IMAP4_SSL('imap.gmail.com')
+                                    gmail.login(guser, gpass)
+
+                                except Exception as e:
+                                    print(e)
 
                             except Exception as e:
                                 print(e)
