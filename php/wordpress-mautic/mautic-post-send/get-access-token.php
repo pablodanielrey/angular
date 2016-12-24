@@ -3,15 +3,6 @@
 * @package mautic_post_send
 * @version 0.1
 */
-/*
-Plugin Name: Mautic Post Send
-Plugin URI:
-Description: Plugin for sending emails with mautic whenever a post is updated.
-Author: Pablo Daniel Rey
-Version: 0.1
-Author URI:
-*/
-
 
 $params2 = __DIR__ . '/oauth_token.txt';
 if (file_exists($params2)) {

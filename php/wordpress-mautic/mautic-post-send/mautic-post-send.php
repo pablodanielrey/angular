@@ -11,19 +11,14 @@ Author: Pablo Daniel Rey
 Version: 0.1
 Author URI:
 */
-
 include __DIR__ . '/vendor/autoload.php';
 
 use Mautic\Auth\ApiAuth;
 use Mautic\MauticApi;
 
-session_start();
-
 function mautic_post_send_email( $post_id ) {
 
-	// If this is just a revision, don't send the email.
-	//if ( wp_is_post_revision( $post_id ) )
-	//	return;
+	error_log('mautic post send email');
 
 	$post_title = get_the_title( $post_id );
 	$post_url = get_permalink( $post_id );
@@ -32,10 +27,9 @@ function mautic_post_send_email( $post_id ) {
 	$message = "Se ha actualizado un post en el wordpress:\n\n";
 	$message .= $post_title . ": " . $post_url;
 
-	error_log('ejecute codigo de wp');
+	error_log('inicio auth mautic');
 
 	try {
-
 		$settings = json_decode(file_get_contents(__DIR__ . '/oauth_params.txt'), true);
 		$settings2 = json_decode(file_get_contents(__DIR__ . '/oauth_token.txt'), true);
 
@@ -50,14 +44,9 @@ function mautic_post_send_email( $post_id ) {
 		}
 
 		$api = new MauticApi();
-		$emailApi = $api->newApi('emails', $auth, settings['baseUrl']);
-
-		echo(json_encode($emailApi->get(9)));
-
+		$emailApi = $api->newApi('emails', $auth, $settings['baseUrl']);
 
 		error_log(json_encode($emailApi->send(9)));
-
-		error_log('enviado');
 
 	} catch (Exception $e) {
 		error_log('error');
