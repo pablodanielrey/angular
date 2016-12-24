@@ -17,6 +17,8 @@ include __DIR__ . '/vendor/autoload.php';
 use Mautic\Auth\ApiAuth;
 use Mautic\MauticApi;
 
+session_start();
+
 function mautic_post_send_email( $post_id ) {
 
 	// If this is just a revision, don't send the email.
@@ -34,45 +36,23 @@ function mautic_post_send_email( $post_id ) {
 
 	try {
 
-		$baseUrl = 'http://www.mautic.econo.unlp.edu.ar';
-		$publicKey = '';
-		$secretKey = '';
+		$settings = json_decode(file_get_contents(__DIR__ . '/oauth_params.txt'), true);
+		$settings2 = json_decode(file_get_contents(__DIR__ . '/oauth_token.txt'), true);
 
-		$accessToken = '';
-		$accessTokenSecret = '';
-
-		// ApiAuth::initiate will accept an array of OAuth settings
-		$settings = array(
-		    'baseUrl'          => $baseUrl,       // Base URL of the Mautic instance
-		    'version'          => 'OAuth1a', // Version of the OAuth can be OAuth2 or OAuth1a. OAuth2 is the default value.
-		    'clientKey'        => $publicKey,       // Client/Consumer key from Mautic
-  	    'clientSecret'     => $secretKey,       // Client/Consumer secret key from Mautic
-		    'callback'         => '',        // Redirect URI/Callback URI for this script
-				'accessToken'			 => $accessToken,
-				'accessTokenSecret' => $accessTokenSecret
-		);
-
-		error_log('inicializo auth');
-		// Initiate the auth object
 		$initAuth = new ApiAuth();
 		$auth = $initAuth->newAuth($settings);
-
-		error_log('auth inicializada');
-		$api = new MauticApi();
-		$emailApi = $api->newApi('emails', $auth, $baseUrl);
-
-		/*
+		$auth->setAccessTokenDetails($settings2);
 		if ($auth->validateAccessToken()) {
 		    if ($auth->accessTokenUpdated()) {
 		        $accessTokenData = $auth->getAccessTokenData();
-
-		        //error_log(json_encode($accessTokenData));
+						file_put_contents(__DIR__ . '/oauth_token.txt', json_encode($accessTokenData));
 		    }
 		}
-		*/
 
-		error_log('api inicializada');
-		error_log(json_encode($emailApi->get(9)));
+		$api = new MauticApi();
+		$emailApi = $api->newApi('emails', $auth, settings['baseUrl']);
+
+		echo(json_encode($emailApi->get(9)));
 
 
 		error_log(json_encode($emailApi->send(9)));
@@ -83,8 +63,6 @@ function mautic_post_send_email( $post_id ) {
 		error_log('error');
 		error_log($e);
 	}
-
-	error_log('finalizo');
 
 }
 
