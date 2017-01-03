@@ -13,7 +13,9 @@
 
         vm.model = {
           history: [],
-          selectedPerson: null
+          selectedPerson: null,
+
+          selected: null
         }
 
         vm.view = {
@@ -23,7 +25,7 @@
 
         vm.viewDetail = viewDetail;
         vm.getStyleHistory = getStyleHistory;
-        vm.remove = remove;
+        vm.deleteItem = deleteItem;
 
         $scope.$on('wamp.open', function(event, args) {
           activate();
@@ -45,6 +47,7 @@
           }
 
           loadHistory();
+          registerEventManagers();
         }
 
         /*
@@ -93,6 +96,11 @@
               console.error(error);
             })
           }
+        }
+
+        function deleteItem(item) {
+          vm.model.selected = item;
+          $scope.$parent.vm.displayMessageDelete(item);
         }
 
         // daily,date,end,id,isNull,special,start,userId,weekday
@@ -154,16 +162,6 @@
           */
         }
 
-        function remove(item) {
-          Assistance.removeScheduleHistory(item).then(function(id) {
-            $timeout(function () {
-              _deleteArray(item.id);
-            });
-          }, function(error) {
-            console.error(error);
-          })
-
-        }
 
 
     }

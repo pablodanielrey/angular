@@ -33,6 +33,11 @@
 			this.findAllSchedules = findAllSchedules;
 			this.findSchedHistoryByIds = findSchedHistoryByIds;
 			this.removeScheduleHistory = removeScheduleHistory;
+			this.subscribe = subscribe;
+
+			function subscribe(event, func) {
+				Login.getPrivateTransport().subscribe(event, func);
+			}			
 
       function getLogs(initDate, endDate, initHour, endHour) {
         var di = initDate.toISOString();

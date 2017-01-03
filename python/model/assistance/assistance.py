@@ -616,9 +616,7 @@ class AssistanceModel:
         sh.date = date
         sh.schedules = ids
         sh.description = description
-        sh.persist(con)
-
-        return ids
+        return sh.persist(con)
 
     '''
         guarda el horario semanal en formato de horas
@@ -654,9 +652,8 @@ class AssistanceModel:
         sh.date = date
         sh.schedules = ids
         sh.description = description
-        sh.persist(con)
+        return sh.persist(con)
 
-        return ids
 
     '''
         guarda un horario especial
@@ -692,12 +689,10 @@ class AssistanceModel:
             logging.info("presistiendo date:{} start:{} end:{}".format(s.date, s.start, s.end))
             ids.append(s.persist(con))
 
-        if date is not None:
-            sh = ScheduleHistory()
-            sh.userId = userId
-            sh.date = date
-            sh.schedules = ids
-            sh.description = description
-            sh.persist(con)
 
-        return ids
+        sh = ScheduleHistory()
+        sh.userId = userId
+        sh.date = date
+        sh.schedules = ids
+        sh.description = description
+        return sh.persist(con)

@@ -28,6 +28,8 @@
           saveMessage: 'pantallaEdicion nuevoHorarioSemanal mensajes mensajeGuardado',
           loadingMessage: 'pantallaEdicion nuevoHorarioSemanal mensajes mensajeCargando',
           errorMessage: 'pantallaEdicion nuevoHorarioSemanal mensajes mensajeError',
+          displayHistory: 'pantallaHistorial',
+          deleteMessage: 'pantallaEdicion nuevoHorarioSemanal mensajes mensajeEliminarhorario',
           profile: 'user',
           activate: false,
           error: ''
@@ -43,6 +45,12 @@
         vm.clearSched = clearSched;
         vm.addSched = addSched;
         vm.isSplitSchedule = isSplitSchedule;
+
+        vm.cancelDelete = cancelDelete;
+        vm.displayMessageDelete = displayMessageDelete;
+        vm.displayHistory = displayHistory;
+        vm.removeSchedule = removeSchedule;
+
 
         $scope.$on('wamp.open', function(event, args) {
           activate();
@@ -103,6 +111,24 @@
           return (vm.model.user == null || !'photoSrc' in vm.model.user) ? 'img/avatarMan.jpg' : vm.model.user.photoSrc
         }
 
+        function displayMessageDelete(item) {
+          vm.model.selected = item;
+          var style = (vm.view.profile == 'admin') ? vm.view.profileAdmin : vm.view.profileUser;
+          $timeout(function () {
+            vm.view.style = style + ' ' + vm.view.deleteMessage;
+          });
+        }
+
+        function cancelDelete() {
+          vm.model.selected = null;
+          displayHistory();
+        }
+
+        function displayHistory() {
+          var style = (vm.view.profile == 'admin') ? vm.view.profileAdmin : vm.view.profileUser;
+          vm.view.style = vm.view.displayHistory;
+        }
+
         function getHours() {
           var totalMillis = 0;
           var dayMillis = 24 * 60 * 60 * 1000;
@@ -152,10 +178,13 @@
               vm.model.user = (users.length <= 0) ? null : users[0];
             },0);
           }, function(err) {
-            displayMessageError(error);
             $timeout(function() {
-                vm.displayEditWeeklySch();
-            }, 1500);
+              displayMessageError(error);
+              $timeout(function() {
+                  displayEditWeeklySch();
+              }, 1500);
+            })
+
           })
         }
 
@@ -210,13 +239,15 @@
                 for (var i = 0; i < schedules.length; i++) {
                   vm.model.schedules.push(_parseSchedule(schedules[i]));
                 }
-                vm.displayEditWeeklySch();
+                displayEditWeeklySch();
               }, function(error) {
-                console.error(error);
-                displayMessageError(error);
-                $timeout(function () {
-                  vm.displayEditWeeklySch();
-                }, 1500);
+                $timeout(function() {
+                  displayMessageError(error);
+                  $timeout(function () {
+                    displayEditWeeklySch();
+                  }, 1500);
+                })
+
               })
 
             }
@@ -256,6 +287,22 @@
               console.log(vm.model.schedules);
             }
 
+
+            function removeSchedule() {
+              displayMessageLoading();
+              Assistance.removeScheduleHistory(vm.model.selected).then(function(id) {
+                $timeout(function () {
+                  displayHistory();
+                });
+              }, function(error) {
+                displayMessageError(error);
+                $timeout(function () {
+                  displayHistory();
+                }, 1500);
+              })
+
+            }
+            
             /* **************************************************************************************************
                                                 GUARDAR
             * ************************************************************************************************ */
@@ -268,17 +315,20 @@
                 return;
               }
 
-              vm.view.style = displayMessageLoading();
+              displayMessageLoading();
               Assistance.saveSchedules(vm.model.selectedPerson, vm.model.date, vm.model.schedules).then(function() {
-                vm.view.style = displayMessageSave();
+                displayMessageSave();
                 $timeout(function () {
                   $location.path("/schedules/" + vm.model.selectedPerson);
                 }, 2000);
               }, function(error) {
-                displayMessageError(error);
                 $timeout(function() {
-                  vm.view.displayEditWeeklySch;
-                }, 3000)
+                  displayMessageError(error);
+                  $timeout(function() {
+                    displayEditWeeklySch();
+                  }, 4000)
+                })
+
               });
             }
     }

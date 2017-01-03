@@ -15,7 +15,8 @@
 
           selectedPerson: null,
           date: null,
-          user: null
+          user: null,
+          selected: null
         }
 
         vm.view = {
@@ -25,8 +26,10 @@
           displayListUsers: 'pantallaUsuarios verHorario',
           displayPerson: 'pantallaEdicion verHorario',
           displayQuestions: 'pantallaEdicion verPreguntaDeHorario',
+          displayHistory: 'pantallaHistorial',
           loadingMessage: 'pantallaEdicion verHorario mensajes mensajeCargando',
           errorMessage: 'pantallaEdicion verHorario mensajes mensajeError',
+          deleteMessage: 'pantallaEdicion verHorario mensajes mensajeEliminarhorario',
           profile: 'user',
           activate: false,
           error: ''
@@ -43,6 +46,10 @@
         vm.getHours = getHours;
         vm.getContentSchedStyle = getContentSchedStyle;
 
+        vm.displayMessageDelete = displayMessageDelete;
+        vm.cancelDelete = cancelDelete;
+        vm.removeSchedule = removeSchedule;
+
         $scope.$on('wamp.open', function(event, args) {
           activate();
         });
@@ -55,6 +62,7 @@
           }
           vm.view.activate = true;
 
+          vm.model.selected = null;
           var params = $routeParams;
           if ('personId' in params) {
             vm.model.selectedPerson = params.personId;
@@ -63,9 +71,25 @@
           }
           loadProfile();
           loadUser();
-          vm.model.date = new Date();
+          vm.model.date = new Date(); 3
+          registerEventManagers();
 
         }
+
+        /* **************************************************************************************************
+                                            EVENTOS
+        * ************************************************************************************************ */
+        function registerEventManagers() {
+          Assistance.subscribe('assistance.remove_schedules_event', function(params) {
+            console.log("remove");
+          });
+
+          Assistance.subscribe('assistance.add_schedules_event', function(params) {
+            var historyId = params[0];
+            console.log("add");
+          });
+        }
+
 
     /* **************************************************************************************************
                                         MANEJO VISUAL
@@ -111,10 +135,32 @@
       });
     }
 
+    function displayMessageDelete(item) {
+      vm.model.selected = item;
+      var style = (vm.view.profile == 'admin') ? vm.view.profileAdmin : vm.view.profileUser;
+      $timeout(function () {
+        vm.view.style = style + ' ' + vm.view.deleteMessage;
+      });
+    }
+
+    function cancelDelete() {
+      vm.model.selected = null;
+      displayHistory();
+    }
+
+    function displayHistory() {
+      var style = (vm.view.profile == 'admin') ? vm.view.profileAdmin : vm.view.profileUser;
+      vm.view.style = vm.view.displayHistory;
+    }
+
     function displayMessageError(error) {
       var style = (vm.view.profile == 'admin') ? vm.view.profileAdmin : vm.view.profileUser;
       vm.view.error = error;
       vm.view.style = style + ' ' + vm.view.errorMessage;
+      var style = (vm.view.profile == 'admin') ? vm.view.profileAdmin : vm.view.profileUser;
+      $timeout(function () {
+        vm.view.style = style + ' ' + vm.view.displayHistory;
+      });
     }
 
     function getHours(schedules) {
@@ -259,6 +305,24 @@
           })
 
         }
+
+
+
+        function removeSchedule() {
+          displayMessageLoading();
+          Assistance.removeScheduleHistory(vm.model.selected).then(function(id) {
+            $timeout(function () {
+              displayHistory();
+            });
+          }, function(error) {
+            displayMessageError(error);
+            $timeout(function () {
+              displayHistory();
+            }, 1500);
+          })
+
+        }
+
 
     }
 })();
