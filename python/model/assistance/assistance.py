@@ -14,7 +14,9 @@ from model.assistance.justifications.justifications import Justification
 from model.assistance.justifications.justifications import Status
 
 from model.designation.position import Position
-from model.offices.office import Office, OfficeModel
+from model.offices.office import Office
+from model.offices.officeModel import OfficeModel
+
 from model.assistance.statistics import WpStatistics, WorkedNote
 from model.assistance.utils import Utils
 

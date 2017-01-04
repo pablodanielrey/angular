@@ -8,6 +8,7 @@ import uuid
 
 class Designation(JSONSerializable):
 
+
     def __init__(self):
         self.id = None
         self.officeId = None
@@ -20,6 +21,10 @@ class Designation(JSONSerializable):
         self.resolution = None
         self.record = None
         self.originalId = None
+
+    @classmethod
+    def findByFields(cls, con, params):
+        return DesignationDAO.findByFields(con, params)
 
 
     @classmethod
@@ -39,8 +44,12 @@ class Designation(JSONSerializable):
 
     @classmethod
     def findByOffice(cls, con, officeId, history=False):
-        return DesignationDAO.getDesignationsByOffice(con, officeId, history)
+        if history:
+            cond = {"office_id":[officeId], "dout":"IS NOT NULL"}
+        else:
+            cond = {"office_id":[officeId]}
 
+        return DesignationDAO.findByFields(con, cond, {"dstart":"asc"})
 
     """
     @classmethod
@@ -54,6 +63,8 @@ class Designation(JSONSerializable):
 
 
 class DesignationDAO(DAO):
+    _schema = "designations."
+    _table = "designation"
 
     @classmethod
     def _createSchema(cls, con):
@@ -174,20 +185,7 @@ class DesignationDAO(DAO):
         finally:
             cur.close()
 
-    @classmethod
-    def getDesignationsByOffice(cls, con, officeId, history=False):
-        assert officeId is not None
-        cur = con.cursor()
-        try:
-            if history is None or not history:
-                cur.execute('select id from designations.designation where office_id = %s and dout is null order by dstart asc',(officeId,))
-            else:
-                cur.execute('select id from designations.designation where office_id = %s order by dstart asc',(officeId,))
 
-            return [d['id'] for d in cur]
-
-        finally:
-            cur.close()
 
 
 

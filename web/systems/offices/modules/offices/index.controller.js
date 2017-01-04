@@ -129,7 +129,7 @@
           Utils.findAll().then(
               function(offices) {
                 vm.model.offices = offices;
-                
+
                 // actualizo el objeto de la oficina seleccionada. en el caso de que exista
                 var office = vm.model.office;
                 if (office != null) {

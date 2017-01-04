@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
-from model.offices.office import Office, OfficeModel
+from model.offices.office import Office
+from model.offices.officeModel import OfficeModel
 
 import datetime
 
