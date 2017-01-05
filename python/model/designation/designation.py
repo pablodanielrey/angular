@@ -44,12 +44,7 @@ class Designation(JSONSerializable):
 
     @classmethod
     def findByOffice(cls, con, officeId, history=False):
-        if history:
-            cond = {"office_id":[officeId], "dout":"IS NOT NULL"}
-        else:
-            cond = {"office_id":[officeId]}
-
-        return DesignationDAO.findByFields(con, cond, {"dstart":"asc"})
+        return DesignationDAO.findByOffice(con, officeId, history);
 
     """
     @classmethod
@@ -185,8 +180,14 @@ class DesignationDAO(DAO):
         finally:
             cur.close()
 
+    @classmethod
+    def findByOffice(cls, con, officeId, history=False):
+        if history:
+            cond = {"office_id":[officeId], "dout":"IS NOT NULL"}
+        else:
+            cond = {"office_id":[officeId]}
 
-
+        return DesignationDAO.findByFields(con, cond, {"dstart":"asc"})
 
 
 
