@@ -5,7 +5,6 @@ from model.users.users import User
 from model.designation.designation import Designation
 
 import logging
-import datetime
 
 import uuid
 
