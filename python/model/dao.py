@@ -62,15 +62,28 @@ class DAO:
 
 
     @classmethod
-    def findByIds(cls, con, ids):
+    def findByIds(cls, con, ids, ord = {}):
         assert ids is not None
-
         if len(ids) <= 0:
             return []
 
+        #Definir ordenamiento
+        orderBy = list()
+        for k in ord:
+            orderBy.append(k + " " + ord[k])
+
+        sql = 'SELECT * FROM ' + cls._schema + cls._table + ' WHERE id IN %s'
+
+        if len(orderBy):
+            sql = sql + " ORDER BY "
+            sql = sql + ', ' .join(orderBy)
+
+        sql = sql + "; "
+
+
         cur = con.cursor()
         try:
-            cur.execute('SELECT * FROM ' + cls._schema + cls._table + ' WHERE id IN %s', (tuple(ids),))
+            cur.execute(sql, (tuple(ids),))
             if cur.rowcount <= 0:
                 return []
 

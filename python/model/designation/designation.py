@@ -145,20 +145,13 @@ class DesignationDAO(DAO):
 
     @classmethod
     def findByPlaces(cls, con, placeIds, history=False):
-        assert placeIds is not None
-        assert isinstance(placeIds, list)
+        if not history:
+            cond = {"office_id":placeIds, "dout":"NULL"}
+        else:
+            cond = {"office_id":placeIds}
 
-        if len(placeIds) <= 0:
-            return []
-        cur = con.cursor()
-        try:
-            if history is None or not history:
-                cur.execute('select id from designations.designation where office_id IN %s and dout is null order by dstart',(tuple(placeIds),))
-            else:
-                cur.execute('select id from designations.designation where office_id IN %s order by dstart',(tuple(placeIds),))
-            return [d['id'] for d in cur]
-        finally:
-            cur.close()
+        return DesignationDAO.findByFields(con, cond, {"dstart":"asc"})
+
 
 
     @classmethod
