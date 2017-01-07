@@ -1,5 +1,9 @@
 import logging
 
+
+class SqlDAO:
+    pass
+
 class DAO:
 
     dependencies = []

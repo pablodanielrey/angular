@@ -15,7 +15,6 @@ system_user = crossbar.get('system_user')
 system_password = crossbar.get('system_password')
 conn = None
 
-
 def getWampCredentials():
     global system_user, system_password
     return {'username': system_user, 'password': system_password}

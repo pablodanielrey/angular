@@ -33,13 +33,40 @@ class Offices(wamp.SystemComponentSession):
 
     conn = wamp.getConnectionManager()
 
+    def _getCtx(self, daos):
+        return Context(self.conn.get(), daos)
+
+    def _commit(self, ctx):
+        ctx.con.commit()
+
+    def _putCtx(self, ctx):
+        self.conn.put(ctx.con)
+
+
     @autobahn.wamp.register('offices.find_offices_by_user')
     def findOfficesByUser(self, userId, types, tree):
-        con = self.conn.get()
+        ctx = self._getCtx(SqlDAO)
         try:
-            return Office.findByUser(con, userId, types, tree=tree)
+            return Office.findByUser(ctx, userId, types, tree=tree)
         finally:
-            self.conn.put(con)
+            self._putCtx(ctx)
+
+    @autobahn.wamp.register('offices.persist')
+    @inlineCallbacks
+    def persist(self, office):
+        ctx = self._getCtx(SqlDAO)
+        try:
+            id = office.persist(ctx)
+            self._commit(ctx)
+            yield self.publish('offices.persist_event', id)
+            return id
+        finally:
+            self._putCtx(ctx)
+
+
+
+
+
 
     @autobahn.wamp.register('offices.find_users_by_regex')
     def findUsersByRegex(self, regex):
@@ -84,17 +111,6 @@ class Offices(wamp.SystemComponentSession):
             self.conn.put(con)
 
 
-    @autobahn.wamp.register('offices.persist')
-    @inlineCallbacks
-    def persist(self, office):
-        con = self.conn.get()
-        try:
-            id = office.persist(con)
-            con.commit()
-            yield self.publish('offices.persist_event', id)
-            return id
-        finally:
-            self.conn.put(con)
 
     @autobahn.wamp.register('offices.persist_with_users')
     @inlineCallbacks
