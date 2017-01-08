@@ -1,10 +1,11 @@
 import logging
+from model import DAO, SqlContext
 
+class SqlDAO(DAO):
 
-class SqlDAO:
-    pass
-
-class DAO:
+    @classmethod
+    def _select(cls, ctx):
+        return isinstance(ctx, SqlContext)
 
     dependencies = []
     _schema = None

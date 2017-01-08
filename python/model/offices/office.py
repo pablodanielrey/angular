@@ -1,14 +1,10 @@
 # -*- coding: utf-8 -*-
-from model.serializer import JSONSerializable
-from model.dao import DAO
-from model.users.users import User
-from model.designation.designation import Designation
-
 import logging
-
 import uuid
 
-daos = [OfficeSqlDAO]
+from model.serializer import JSONSerializable
+from model.designation.designation import Designation
+from model.offices.dao import OfficeDAO
 
 class Office(JSONSerializable):
 
@@ -34,11 +30,8 @@ class Office(JSONSerializable):
     ]
 
     @classmethod
-    def _getDAO(cls, ctx):
-        for d in daos:
-            if issubclass(d, ctx.daoType):
-                return d
-        raise Error('No existe dao para el tipo {}'.format(ctx.daoType))
+    def _prueba(cls, ctx):
+        return ctx.dao(cls)
 
     @classmethod
     def findByUser(cls, ctx, userId, types=None, tree=False):
@@ -68,12 +61,11 @@ class Office(JSONSerializable):
 
     @classmethod
     def findByIds(cls, ctx, ids):
-        return cls._getDAO(ctx).findByIds(ctx, ids)
+        return ctx.dao(cls).findByIds(ctx, ids)
 
     @classmethod
     def findChildIds(cls, ctx, oId):
-        return cls._getDAO(ctx).findChilds(ctx, oId, tree=True)
-
+        return ctx.dao(cls).findChilds(ctx, oId, tree=True)
 
 
 
@@ -104,22 +96,3 @@ class Office(JSONSerializable):
     @classmethod
     def findAll(cls, con, type=None):
         return OfficeDAO.findAll(con, type)
-
-
-class OfficeDAO(DAO):
-
-    @classmethod
-    def findChilds(cls, ctx, oid, types=None, tree=False):
-        raise NotImplementedError()
-
-    @classmethod
-    def findAll(cls, ctx, types=None):
-        raise NotImplementedError()
-
-    @classmethod
-    def persist(cls, ctx, office):
-        raise NotImplementedError()
-
-    @classmethod
-    def remove(cls, ctx, id):
-        raise NotImplementedError()

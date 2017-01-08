@@ -1,8 +1,8 @@
 
 from model.dao import SqlDAO
-from model.offices.office import OfficeDAO
+from model.offices.dao import OfficeDAO
 
-class OfficeSqlDAO(OfficeDAO, SqlDAO):
+class OfficeSqlDAO(SqlDAO, OfficeDAO):
 
     _schema = "offices."
     _table  = "offices"

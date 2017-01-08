@@ -33,8 +33,8 @@ class Offices(wamp.SystemComponentSession):
 
     conn = wamp.getConnectionManager()
 
-    def _getCtx(self, daos):
-        return Context(self.conn.get(), daos)
+    def _getCtx(self, daoType):
+        return Context(self.conn.get(), daoType)
 
     def _commit(self, ctx):
         ctx.con.commit()
