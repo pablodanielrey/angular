@@ -1,15 +1,14 @@
-
 from model.dao import SqlDAO
-from model.offices.dao import OfficeDAO
+from model.offices.office import Office
 
-class OfficeSqlDAO(SqlDAO, OfficeDAO):
+class OfficeSqlDAO(SqlDAO):
 
     _schema = "offices."
     _table  = "offices"
 
     @classmethod
-    def _createSchema(cls, con):
-        super()._createSchema(con)
+    def _createSchema(cls, ctx):
+        super()._createSchema(ctx)
         cur = con.cursor()
         try:
             cur.execute("""
@@ -32,14 +31,12 @@ class OfficeSqlDAO(SqlDAO, OfficeDAO):
         finally:
             cur.close()
 
-    @staticmethod
-    def _fromResult(r):
-        o = Office()
+    @classmethod
+    def _fromResult(cls, o, r):
         o.id = r['id']
         o.name = r['name']
         o.telephone = r['telephone']
         o.number = r['nro']
-        #o.type = r['type']
         o.type = None if r['type'] is None else [t for t in Office.officeType if t['value'] == r['type']][0]
         o.email = r['email']
         o.parent = r['parent']
@@ -47,12 +44,12 @@ class OfficeSqlDAO(SqlDAO, OfficeDAO):
         return o
 
     @classmethod
-    def findChilds(cls, con, oid, types=None, tree=False):
+    def findChilds(cls, ctx, oid, types=None, tree=False):
         cids = set()
         pids = set()
         pids.add(oid)
 
-        cur = con.cursor()
+        cur = ctx.con.cursor()
         try:
             while (len(pids) > 0):
                 pid = pids.pop()
@@ -76,8 +73,8 @@ class OfficeSqlDAO(SqlDAO, OfficeDAO):
             cur.close()
 
     @classmethod
-    def findAll(cls, con, types=None):
-        cur = con.cursor()
+    def findAll(cls, ctx, types=None):
+        cur = ctx.con.cursor()
         try:
             if types is None:
                 cur.execute('select id from offices.offices where removed is null')
@@ -92,9 +89,9 @@ class OfficeSqlDAO(SqlDAO, OfficeDAO):
             cur.close()
 
     @classmethod
-    def persist(cls, con, office):
+    def persist(cls, ctx, office):
         ''' inserta o actualiza una oficia '''
-        cur = con.cursor()
+        cur = ctx.con.cursor()
         try:
             if office.id is None:
                 office.id = str(uuid.uuid4())
@@ -111,8 +108,8 @@ class OfficeSqlDAO(SqlDAO, OfficeDAO):
 
 
     @classmethod
-    def remove(cls, con, id):
-        cur = con.cursor()
+    def remove(cls, ctx, id):
+        cur = ctx.con.cursor()
         try:
             cur.execute('update offices.offices set removed = NOW() where id = %s', (id,))
             return id

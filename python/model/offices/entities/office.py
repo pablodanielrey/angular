@@ -1,10 +1,8 @@
 # -*- coding: utf-8 -*-
 import logging
-import uuid
 
 from model.serializer import JSONSerializable
 from model.designation.designation import Designation
-from model.offices.dao import OfficeDAO
 
 class Office(JSONSerializable):
 
@@ -26,12 +24,21 @@ class Office(JSONSerializable):
         {'value': 'area', 'name': 'Area'},
         {'value': 'group', 'name': 'Grupo'},
         {'value': 'master', 'name': 'Maestría'}
-
     ]
 
+    def __init__(self):
+        self.id = None
+        self.name = None
+        self.telephone = None
+        self.number = None
+        self.type = None
+        self.email = None
+        self.parent = None
+        self.public = None
+
     @classmethod
-    def _prueba(cls, ctx):
-        return ctx.dao(cls)
+    def getTypes(cls):
+        return cls.officeType
 
     @classmethod
     def findByUser(cls, ctx, userId, types=None, tree=False):
@@ -67,32 +74,16 @@ class Office(JSONSerializable):
     def findChildIds(cls, ctx, oId):
         return ctx.dao(cls).findChilds(ctx, oId, tree=True)
 
+    @classmethod
+    def findAll(cls, ctx, Type=None):
+        return ctx.dao(cls).findAll(ctx, Type)
 
 
-    def __init__(self):
-        self.id = None
-        self.name = None
-        self.telephone = None
-        self.number = None
-        self.type = None
-        self.email = None
-        self.parent = None
-        self.public = None
-
-    def persist(self, con):
-        return OfficeDAO.persist(con, self)
+    def persist(self, ctx):
+        return ctx.dao(self).persist(ctx, self)
 
     def remove(self, con):
-        return OfficeDAO.remove(con, self.id)
-
+        return ctx.dao(self).remove(ctx, self.id)
 
     def findChilds(self, con, types=None, tree=False):
-        return OfficeDAO.findChilds(con, self.id, types, tree)
-
-    @classmethod
-    def getTypes(cls):
-        return cls.officeType
-
-    @classmethod
-    def findAll(cls, con, type=None):
-        return OfficeDAO.findAll(con, type)
+        return ctx.dao(self).findChilds(ctx, self.id, types, tree)

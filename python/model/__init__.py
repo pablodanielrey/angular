@@ -14,12 +14,18 @@ class Context:
         """
             obtengo las clases que se encuentran dentro del paquete .dao. relativo al paquete raiz de la entidad
         """
-        pname = entity.__module__[0:entity.__module__.rfind('.')]
+        name = None
+        if inspect.isclass(entity):
+            name = entity.__name__
+        else:
+            name = entity.__class__.__name__
+
+        pname = entity.__module__[0:entity.__module__.rfind('.entities.')]
         mtoi = pname + '.dao'
         module = importlib.import_module(mtoi)
         root = module.__path__[0]
 
-        files = [ f for f in listdir(root) if isfile(join(root,f)) ]
+        files = [ f for f in listdir(root) if isfile(join(root,f)) and f.startswith(name) ]
         modules = [importlib.import_module(mtoi + '.' + f.replace('.py','')) for f in files]
 
         clss = []
@@ -43,7 +49,6 @@ class SqlContext(Context):
     """
         Contexto de referencia general usado por los daos que acceden a bases SQL.
     """
-
     def __init__(self, con):
         self.con = con
 
