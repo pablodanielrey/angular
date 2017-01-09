@@ -48,7 +48,7 @@ class MailSqlDAO(SqlDAO):
             cur.close()
 
     @classmethod
-    def findByIds(cls ctx, ids):
+    def findByIds(cls, ctx, ids):
         ''' Obtiene el email identificado por el id '''
         cur = ctx.con.cursor()
         try:
@@ -59,9 +59,9 @@ class MailSqlDAO(SqlDAO):
             cur.close()
 
     @classmethod
-    def persist(con, mail):
+    def persist(cls, ctx, mail):
         ''' crea o actualiza un email de usuario '''
-        cur = con.cursor()
+        cur = ctx.con.cursor()
         try:
             if not hasattr(mail, 'id') or mail.id is None:
                 mail.id = str(uuid.uuid4())
@@ -76,10 +76,10 @@ class MailSqlDAO(SqlDAO):
         finally:
             cur.close()
 
-    @staticmethod
-    def delete(con, mid):
+    @classmethod
+    def delete(cls, ctx, mid):
         ''' Elimina el email dado por el id '''
-        cur = con.cursor()
+        cur = ctx.con.cursor()
         try:
             cur.execute('delete from profile.mails where id = %s', (mid,))
 
