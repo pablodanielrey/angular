@@ -1,15 +1,14 @@
 # -*- coding: utf-8 -*-
-from model.offices.office import Office
-from model.offices.officeModel import OfficeModel
-
 import datetime
+import logging
+logging.getLogger().setLevel(logging.INFO)
 
 import wamp
 import autobahn
 from twisted.internet.defer import inlineCallbacks
 
-import logging
-logging.getLogger().setLevel(logging.INFO)
+from model.offices.office import Office
+from model.offices.officeModel import OfficeModel
 
 
 
@@ -34,7 +33,7 @@ class Offices(wamp.SystemComponentSession):
     conn = wamp.getConnectionManager()
 
     def _getCtx(self, daoType):
-        return Context(self.conn.get(), daoType)
+        return Context(self.conn.get())
 
     def _commit(self, ctx):
         ctx.con.commit()
