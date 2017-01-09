@@ -1,50 +1,14 @@
 # -*- coding: utf-8 -*-
 import uuid
-import hashlib
-from model.dao import DAO
+from model.dao import SqlDAO
+from model.files.entities.file import File
 
-from model.serializer import JSONSerializable
-
-class File(JSONSerializable):
-
-    def __init__(self):
-        self.id = None
-        self.name = None
-        self.hash = None
-        self.content = None
-        self.mimetype = None
-        self.codec = None
-        self.size = 0
-        self.created = None
-        self.modified = None
-
-    def _calculateHash(self):
-        self.hash = File._calculateHashStatic(self.content)
-
-    def getContent(self, con):
-        return self.getContentById(con, self.id)
-
-    @staticmethod
-    def _calculateHashStatic(content):
-        m = hashlib.md5()
-        m.update(content.encode('utf8'))
-        return m.hexdigest()
+class FileSqlDAO(SqlDAO):
 
     @classmethod
-    def findById(cls, con, id):
-        return FileDAO.findById(con, id)
-
-    @classmethod
-    def getContentById(cls, con, id):
-        return FileDAO.getContent(con, id)
-
-
-class FileDAO(DAO):
-
-    @classmethod
-    def _createSchema(cls, con):
-        super()._createSchema(con)
-        cur = con.cursor()
+    def _createSchema(cls, ctx):
+        super()._createSchema(ctx)
+        cur = ctx.con.cursor()
         try:
             sql = """
               CREATE SCHEMA IF NOT EXISTS files;
@@ -66,9 +30,8 @@ class FileDAO(DAO):
         finally:
             cur.close()
 
-    @staticmethod
-    def _fromResult(r):
-        f = File()
+    @classmethod
+    def _fromResult(cls, f, r):
         f.id = r['id']
         f.name = r['name']
         f.hash = r['hash']
@@ -79,10 +42,10 @@ class FileDAO(DAO):
         f.modified = r['modified']
         return f
 
-    @staticmethod
-    def persist(con, f):
+    @classmethod
+    def persist(cls, ctx, f):
         ''' inserta o actualiza un archivo dentro de la base de datos '''
-        cur = con.cursor()
+        cur = ctx.con.cursor()
         if f.id is None:
             f.id = str(uuid.uuid4())
             p = f.__dict__
@@ -102,42 +65,40 @@ class FileDAO(DAO):
         return f.id
 
 
-    @staticmethod
-    def findAll(con):
-        cur = con.cursor()
+    @classmethod
+    def findAll(cls, ctx):
+        cur = ctx.con.cursor()
         try:
             cur.execute('select id from files.files')
-            ins = [ x['id'] for x in cur ]
-            return ins
+            return [ x['id'] for x in cur ]
+
         finally:
             cur.close()
 
-    @staticmethod
-    def findById(con, id):
-        cur = con.cursor()
+    @classmethod
+    def findByIds(cls, ctx, ids):
+        cur = ctx.con.cursor()
         try:
-            cur.execute('select id, name, hash, mimetype, codec, size, created, modified from files.files where id = %s', (id,))
-            ins = [ FileDAO._fromResult(x) for x in cur ]
-            return ins[0] if (len(ins) > 0) else None
+            cur.execute('select * from files.files where id in %s', (tuple(ids),))
+            return [cls._fromResult(File(), x) for x in cur]
 
         finally:
             cur.close()
 
-    @staticmethod
-    def findByHash(con, hash):
-        cur = con.cursor()
+    @classmethod
+    def findByHash(cls, ctx, hash):
+        cur = ctx.con.cursor()
         try:
-            cur.execute('select id, name, hash, mimetype, codec, size, created, modified from files.files where hash = %s', (hash,))
-            ins = [ FileDAO._fromResult(x) for x in cur ]
-            return ins
+            cur.execute('select id from files.files where hash = %s', (hash,))
+            return [c['id'] for c in cur]
 
         finally:
             cur.close()
 
-    @staticmethod
-    def getContent(con, id):
+    @classmethod
+    def getContentById(cls, ctx, id):
         ''' retorna el contenido del archivo identificado por el id '''
-        cur = con.cursor()
+        cur = ctx.con.cursor()
         try:
             cur.execute('select content from files.files where id = %s', (id,))
             if cur.rowcount <= 0:
@@ -147,12 +108,12 @@ class FileDAO(DAO):
         finally:
             cur.close()
 
-    @staticmethod
-    def check(con, id):
+    @classmethod
+    def exists(cls, ctx, id):
         ''' chequea que exista el file cargado en la base '''
-        cur = con.cursor()
+        cur = ctx.con.cursor()
         try:
-            cur.execute('select id from files.files where id = %s', (id,))
+            cur.execute('select 1 from files.files where id = %s', (id,))
             return (cur.rowcount > 0)
 
         finally:

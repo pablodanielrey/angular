@@ -2,7 +2,7 @@ import datetime
 import uuid
 
 from model.dao import SqlDAO
-from model.files.files import File
+from model.files.entities.file import File
 from model.users.entities.user import User, Telephone
 
 class UserSqlDAO(SqlDAO):
@@ -134,7 +134,7 @@ class UserSqlDAO(SqlDAO):
 
     @classmethod
     def findPhoto(cls, ctx, pId):
-        f = File.findById(ctx, pId)
+        f = File.findByIds(ctx, [pId])[0]
         if f is not None:
             content = f.getContent(ctx).tobytes().decode('utf-8')
             f.content = content

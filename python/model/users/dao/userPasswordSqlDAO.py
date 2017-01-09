@@ -1,7 +1,8 @@
 import uuid
 from model.dao import SqlDAO
+from model.users.entities.userPassword import UserPassword
 
-class UserPasswordDAO(SqlDAO):
+class UserPasswordSqlDAO(SqlDAO):
 
     @classmethod
     def _createSchema(cls, ctx):

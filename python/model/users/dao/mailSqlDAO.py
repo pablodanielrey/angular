@@ -1,5 +1,6 @@
-
+import uuid
 from model.dao import SqlDAO
+from model.users.entities.mail import Mail
 
 class MailSqlDAO(SqlDAO):
 
@@ -42,7 +43,7 @@ class MailSqlDAO(SqlDAO):
         cur = ctx.con.cursor()
         try:
             cur.execute('select id, user_id, email, confirmed, hash, created from profile.mails where user_id = %s', (userId,))
-            return [ MailDAO._fromResult(Mail(), c) for c in cur ]
+            return [ cls._fromResult(Mail(), c) for c in cur ]
 
         finally:
             cur.close()
@@ -53,7 +54,7 @@ class MailSqlDAO(SqlDAO):
         cur = ctx.con.cursor()
         try:
             cur.execute('select * from profile.mails where id = %s', (eid,))
-            return [ MailDAO._fromResult(Mail(), c) for c in cur ]
+            return [ cls._fromResult(Mail(), c) for c in cur ]
 
         finally:
             cur.close()
