@@ -1,3 +1,4 @@
+import flask
 from flask import Flask
 from flask_oauthlib.provider import OAuth2Provider
 
@@ -36,7 +37,7 @@ def createOauth(ctx):
             return BearerToken.findByRefreshToken(ctx, refresh_token).fetch(ctx)[0]
 
     @oauth.tokensetter
-    def save_token(token, request, *args, **kargs):
+    def save_token(token, request, *args, **kwargs):
         if token['token_type'] != 'Bearer':
             raise NotImplementedError()
 
@@ -55,7 +56,7 @@ def createOauth(ctx):
         tk.persist(ctx)
 
     @oauth.usergetter
-    def get_user(username, password, *args, **kargs):
+    def get_user(username, password, *args, **kwargs):
         users = UserPassword.findByUsernameAndPassword(ctx, username, password).fetch(ctx)
         if len(users) <= 0:
             return None
@@ -67,6 +68,23 @@ def createOauth(ctx):
 def createApp(oauth):
     app = Flask(__name__)
     oauth.init_app(app)
+
+    @app.route('/oauth/authorize', method=['GET','POST'])
+    @oauth.authorize_handler
+    def authorize_handler(*args, **kwargs):
+        if flask.request.method == 'GET':
+            return flask.render_template('authorize.html')
+
+        if flask.request.method == 'HEAD':
+            response = flask.make_response('',200)
+            response.headers['X-Client-ID'] = kwargs.get('client_id')
+            return response
+
+        if flask.request.method == 'POST':
+            confirm = flask.request.form.get('confirm', 'no')
+            return confirm == 'yes'
+
+        raise NotImplementedError()
 
     @app.route('/')
     def helloWorld():
