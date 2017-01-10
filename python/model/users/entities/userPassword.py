@@ -29,5 +29,5 @@ class UserPassword(JSONSerializable):
         return Ids(cls, ctx.dao(cls).findByUsername(ctx, username))
 
     @classmethod
-    def findByUserPassword(cls, ctx, username, password):
+    def findByUsernameAndPassword(cls, ctx, username, password):
         return Ids(cls, ctx.dao(cls).findByUserPassword(ctx, username, password))

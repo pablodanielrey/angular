@@ -63,13 +63,14 @@ class DAO:
 
 
 class Ids:
+    """ iterador para los ids de las entidades que soporta el método fetch """
 
     def __init__(self, clazz, values):
         self.clazz = clazz
         self.values = values
 
     def fetch(self, ctx):
-        return ctx.dao(self.clazz).findByIds(self.values)
+        return [] if (self.values is None or len(self.values) <= 0) else ctx.dao(self.clazz).findByIds(self.values)
 
     def __iter__(self):
         return self.values.__iter__()
