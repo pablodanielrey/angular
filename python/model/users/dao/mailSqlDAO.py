@@ -38,26 +38,27 @@ class MailSqlDAO(SqlDAO):
         return m
 
     @classmethod
-    def findByUserId(cls, ctx, userId):
-        ''' Obtiene los emails de un usuario '''
+    def findByIds(cls, ctx, ids):
+        ''' Obtiene el email identificado por el id '''
+        assert isinstance(ids, list)
         cur = ctx.con.cursor()
         try:
-            cur.execute('select id, user_id, email, confirmed, hash, created from profile.mails where user_id = %s', (userId,))
-            return [ cls._fromResult(Mail(), c) for c in cur ]
+            cur.execute('select * from profile.mails where id = %s', (eid,))
+            return [cls._fromResult(Mail(), c) for c in cur]
 
         finally:
             cur.close()
 
     @classmethod
-    def findByIds(cls, ctx, ids):
-        ''' Obtiene el email identificado por el id '''
+    def findByUserId(cls, ctx, userId):
         cur = ctx.con.cursor()
         try:
-            cur.execute('select * from profile.mails where id = %s', (eid,))
-            return [ cls._fromResult(Mail(), c) for c in cur ]
+            cur.execute('select id from profile.mails where user_id = %s', (userId,))
+            return [c['id'] for c in cur]
 
         finally:
             cur.close()
+
 
     @classmethod
     def persist(cls, ctx, mail):

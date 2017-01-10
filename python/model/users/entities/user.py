@@ -1,3 +1,4 @@
+from model.dao import Ids
 from model.serializer import JSONSerializable
 
 
@@ -36,17 +37,16 @@ class User(JSONSerializable):
         return today.year - born.year - ((today.month, today.day) < (born.month, born.day))
 
     def persist(self, ctx):
-        return ctx.dao(self).persist(ctx, self)
+        ctx.dao(self).persist(ctx, self)
+        return self
 
     def delete(self, ctx):
-        return ctx.dao(self).deleteById(ctx, [self.id])
+        ctx.dao(self).deleteById(ctx, [self.id])
+        return self
 
     def updateType(self, ctx):
-        return ctx.dao(self).updateType(ctx, self.id, self.type)
-
-    @classmethod
-    def search(cls, ctx, regex):
-        return ctx.dao(cls).search(con, regex)
+        ctx.dao(self).updateType(ctx, self.id, self.type)
+        return self
 
     @classmethod
     def findByIds(cls, ctx, ids):
@@ -54,20 +54,22 @@ class User(JSONSerializable):
         return ctx.dao(cls).findByIds(ctx, ids)
 
     @classmethod
+    def search(cls, ctx, regex):
+        return Ids(cls, ctx.dao(cls).search(con, regex))
+
+    @classmethod
     def findAll(cls, ctx):
-        return ctx.dao(cls).findAll(ctx)
+        return Ids(cls, ctx.dao(cls).findAll(ctx))
 
     @classmethod
     def findByType(cls, ctx, types):
-        return ctx.dao(cls).findByType(ctx, types)
-
-    @classmethod
-    def findByDni(cls, ctx, dnis):
-        return ctx.dao(cls).findByDni(ctx, dnis)
+        return Ids(cls, ctx.dao(cls).findByType(ctx, types))
 
     @classmethod
     def findByDnis(cls, ctx, dnis):
-        return ctx.dao(cls).findByDni(ctx, dnis)
+        return Ids(cls, ctx.dao(cls).findByDni(ctx, dnis))
+
+
 
     @classmethod
     def findPhoto(cls, ctx, pId):
@@ -86,4 +88,5 @@ class Student(User):
         self.condition = None
 
     def persist(self, ctx):
-        return ctx.dao(self).persist(ctx, self)
+        ctx.dao(self).persist(ctx, self)
+        return self

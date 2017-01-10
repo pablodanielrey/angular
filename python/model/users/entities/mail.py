@@ -1,3 +1,4 @@
+from model.dao import Ids
 from model.serializer import JSONSerializable
 
 class Mail(JSONSerializable):
@@ -18,15 +19,17 @@ class Mail(JSONSerializable):
         return self.persist(ctx)
 
     def persist(self, ctx):
-        return ctx.dao(self).persist(ctx, self)
+        ctx.dao(self).persist(ctx, self)
+        return self
 
     def delete(self, ctx):
-        return ctx.dao(self).delete(ctx, self.id)
+        ctx.dao(self).delete(ctx, self.id)
+        return self
+
+    @classmethod
+    def findByIds(cls, ctx, ids):
+        return ctx.dao(cls).findByIds(ctx, ids)
 
     @classmethod
     def findByUserId(cls, ctx, userId):
-        return ctx.dao(cls).findByUserId(ctx, userId)
-
-    @classmethod
-    def findById(cls, ctx, eid):
-        return ctx.dao(cls).findById(ctx, eid)
+        return Ids(cls, ctx.dao(cls).findByUserId(ctx, userId))

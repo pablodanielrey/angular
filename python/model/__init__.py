@@ -60,3 +60,16 @@ class DAO:
             Retorna True cuando el DAO puede trabajar con el contexto indicado
         """
         raise NotImplementedError()
+
+
+class Ids:
+
+    def __init__(self, clazz, values):
+        self.clazz = clazz
+        self.values = values
+
+    def fetch(self, ctx):
+        return ctx.dao(self.clazz).findByIds(self.values)
+
+    def __iter__(self):
+        return self.values.__iter__()

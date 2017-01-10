@@ -1,3 +1,4 @@
+from model.dao import Ids
 from model.serializer import JSONSerializable
 
 class UserPassword(JSONSerializable):
@@ -12,7 +13,8 @@ class UserPassword(JSONSerializable):
         self.password = passw
 
     def persist(self, ctx):
-        return ctx.dao(self).persist(ctx, self)
+        ctx.dao(self).persist(ctx, self)
+        return self
 
     @classmethod
     def findByIds(cls, ctx, ids):
@@ -20,12 +22,12 @@ class UserPassword(JSONSerializable):
 
     @classmethod
     def findByUserId(cls, ctx, userId):
-        return ctx.dao(cls).findByUserId(ctx, userId)
+        return Ids(cls, ctx.dao(cls).findByUserId(ctx, userId))
 
     @classmethod
     def findByUsername(cls, ctx, username):
-        return ctx.dao(cls).findByUsername(ctx, username)
+        return Ids(cls, ctx.dao(cls).findByUsername(ctx, username))
 
     @classmethod
     def findByUserPassword(cls, ctx, username, password):
-        return ctx.dao(cls).findByUserPassword(ctx, username, password)
+        return Ids(cls, ctx.dao(cls).findByUserPassword(ctx, username, password))
