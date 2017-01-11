@@ -1,4 +1,4 @@
-from model import Entity
+from model.entity import Entity
 
 class UserPassword(Entity):
 
