@@ -67,44 +67,7 @@ class SqlDAO(DAO):
 
 
 
-    @classmethod
-    def findByIds(cls, con, ids, *args, **kwargs):
-        assert ids is not None
-
-        condition = cls._condition(**kwargs)
-        orderBy = cls._orderBy(**kwargs);
-
-        if len(condition["list"]) and len(orderBy):
-            c = ' AND ' .join(condition["list"])
-            o = ', ' .join(orderBy)
-            sql = "SELECT id FROM {}{} WHERE {} ORDER BY {}".format(cls._schema, cls._table, c, o)
-
-        elif len(condition["list"]) and not len(orderBy):
-            c = ' AND ' .join(condition["list"])
-            sql = "SELECT id FROM {}{} WHERE {};".format(cls._schema, cls._table, c)
-
-        elif not len(condition["list"]) and len(orderBy):
-            o = ', ' .join(orderBy)
-            sql = "SELECT id FROM {}{} ORDER BY {};".format(cls._schema, cls._table, o)
-
-        else:
-            sql = "SELECT id FROM {}{};".format(cls._schema, cls._table)
-
-        print(sql)
-        print(condition["values"])
-
-        """
-        cur = con.cursor()
-        try:
-            cur.execute(sql, (tuple(ids),tuples(condition["values"])))
-            if cur.rowcount <= 0:
-                return []
-
-            return [cls._fromResult(o) for o in cur.fetchall()]
-
-        finally:
-            cur.close()
-        """
+    
 
 
 

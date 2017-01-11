@@ -7,3 +7,6 @@ class UserPassword(Entity):
         self.userId = None
         self.username = None
         self.password = None
+
+
+    
