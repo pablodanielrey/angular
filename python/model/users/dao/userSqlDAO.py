@@ -6,6 +6,7 @@ from model.files.entities.file import File
 from model.users.entities.user import User, Telephone
 
 class UserSqlDAO(SqlDAO):
+
     ''' DAO para los usuarios '''
 
     @classmethod

@@ -30,7 +30,7 @@ class Context:
         clss = []
         for module in modules:
             for (name, clazz) in inspect.getmembers(module, inspect.isclass):
-                if name.startswith(ename):
+                if name.startswith(ename + self._suffix()):
                     clss.append(clazz)
         return clss
 
@@ -51,6 +51,9 @@ class SqlContext(Context):
     """
     def __init__(self, con):
         self.con = con
+
+    def _suffix(self):
+        return 'Sql'
 
 
 class DAO:
