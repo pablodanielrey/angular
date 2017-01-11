@@ -7,6 +7,9 @@ from model.users.entities.user import User, Telephone
 
 class UserSqlDAO(SqlDAO):
 
+    _schema = "profile."
+    _table = "users"
+
     ''' DAO para los usuarios '''
 
     @classmethod
@@ -74,8 +77,9 @@ class UserSqlDAO(SqlDAO):
         t.type = r['type']
         return t
 
+
     @classmethod
-    def findByIds(cls, ctx, uids):
+    def findByIds(cls, ctx, uids, *args, **kwargs):
         assert isinstance(uids, list)
         if len(uids) <= 0:
             return []
@@ -83,20 +87,22 @@ class UserSqlDAO(SqlDAO):
         cur = ctx.con.cursor()
         try:
             cur.execute('select * from profile.users where id in %s order by lastname, name, dni asc', (tuple(uids),))
-            if cur.rowcount <= 0:
-                return []
-
             users = []
-            for user in cur.fetchall():
+            for user in cur:
                 ouser = cls._fromResult(User(), user)
-                cur.execute('select * from profile.telephones where user_id = %s', (ouser.id,))
-                ouser.telephones = [ cls._telephoneFromResult(Telephone(), r) for r in cur ]
-                users.append(ouser)
+                cur2 = ctx.con.cursor()
+                try:
+                    cur2.execute('select * from profile.telephones where user_id = %s', (ouser.id,))
+                    ouser.telephones = [ cls._telephoneFromResult(Telephone(), r) for r in cur2 ]
+                    users.append(ouser)
+                finally:
+                    cur2.close()
 
             return users
 
         finally:
             cur.close()
+
 
     @classmethod
     def search(cls, ctx, regexp):
@@ -109,16 +115,6 @@ class UserSqlDAO(SqlDAO):
                         'dni ~* %s '
                         'LIMIT 50', (regexp, regexp, regexp))
             return [c['id'] for c in cur]
-
-        finally:
-            cur.close()
-
-    @classmethod
-    def findAll(cls, ctx):
-        cur = ctx.con.cursor()
-        try:
-            cur.execute('select id from profile.users')
-            return [u['id'] for u in cur]
 
         finally:
             cur.close()
@@ -165,17 +161,6 @@ class UserSqlDAO(SqlDAO):
         finally:
             cur.close()
 
-    @classmethod
-    def findByDni(ctx, dnis):
-        if len(dnis) <= 0:
-            return []
-        cur = ctx.con.cursor()
-        try:
-            cur.execute('select id from profile.users where dni in %s', (tuple(dnis),))
-            return [c['id'] for c in cur]
-
-        finally:
-            cur.close()
 
     @classmethod
     def persist(ctx, user):
@@ -223,7 +208,7 @@ class UserSqlDAO(SqlDAO):
             cur.close()
 
     @classmethod
-    def deleteById(cls, ctx, ids):
+    def deleteByIds(cls, ctx, ids):
         cur = ctx.con.cursor()
         try:
             cur.execute("""
@@ -237,6 +222,8 @@ class UserSqlDAO(SqlDAO):
 
 
 class StudentSqlDAO(UserSqlDAO):
+    _schema = "students."
+    _table = "users"
 
     @classmethod
     def _createSchema(cls, ctx):
@@ -264,18 +251,9 @@ class StudentSqlDAO(UserSqlDAO):
         s.condition = r['condition']
         return s
 
-    @classmethod
-    def findAll(cls, ctx):
-        cur = ctx.con.cursor()
-        try:
-            cur.execute('select id from students.users')
-            return [ s['id'] for s in cur ]
-
-        finally:
-            cur.close()
 
     @classmethod
-    def findByIds(ctx, ids):
+    def findByIds(ctx, ids, *args, **kwargs):
         assert isinstance(ids,list)
         if len(ids) <= 0:
             return []

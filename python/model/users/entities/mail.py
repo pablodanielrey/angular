@@ -1,4 +1,4 @@
-from model.dao import Ids
+from model import Ids
 from model.serializer import JSONSerializable
 
 class Mail(JSONSerializable):

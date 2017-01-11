@@ -12,13 +12,7 @@ class Telephone(JSONSerializable):
         self.type = None
 
 
-class User(JSONSerializable):
-
-
-    @classmethod
-    def findBy(cls, ctx):
-        ctx.dao(cls)
-
+class User(Entity):
     ''' usuario básico del sistema '''
 
     def __init__(self):
@@ -44,40 +38,13 @@ class User(JSONSerializable):
         born = self.birthdate
         return today.year - born.year - ((today.month, today.day) < (born.month, born.day))
 
-    def persist(self, ctx):
-        ctx.dao(self).persist(ctx, self)
-        return self
-
-    def delete(self, ctx):
-        ctx.dao(self).deleteById(ctx, [self.id])
-        return self
-
     def updateType(self, ctx):
         ctx.dao(self).updateType(ctx, self.id, self.type)
         return self
 
     @classmethod
-    def findByIds(cls, ctx, ids):
-        assert isinstance(ids, list)
-        return ctx.dao(cls).findByIds(ctx, ids)
-
-    @classmethod
     def search(cls, ctx, regex):
         return Ids(cls, ctx.dao(cls).search(con, regex))
-
-    @classmethod
-    def findAll(cls, ctx):
-        return Ids(cls, ctx.dao(cls).findAll(ctx))
-
-    @classmethod
-    def findByType(cls, ctx, types):
-        return Ids(cls, ctx.dao(cls).findByType(ctx, types))
-
-    @classmethod
-    def findByDnis(cls, ctx, dnis):
-        return Ids(cls, ctx.dao(cls).findByDni(ctx, dnis))
-
-
 
     @classmethod
     def findPhoto(cls, ctx, pId):
@@ -88,13 +55,9 @@ class User(JSONSerializable):
         return ctx.dao(cls).findPhotos(ctx, userIds)
 
 
-class Student(User):
+class Student(User, Entity):
 
     def __init__(self):
         super().__init__()
         self.studentNumber = None
         self.condition = None
-
-    def persist(self, ctx):
-        ctx.dao(self).persist(ctx, self)
-        return self
