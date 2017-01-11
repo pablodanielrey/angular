@@ -1,0 +1,10 @@
+{% extends "layout.html" %}
+
+{% block body %}
+<h2>FCE</h2>
+<form action="/oauth/authorize" method="post">
+  <input type='text' name='username'></input>
+  <input type='password' name='password'></input>
+  <button type='submit'>ENTRAR</button>
+</form>
+{% endblock %}

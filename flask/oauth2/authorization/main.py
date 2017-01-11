@@ -1,3 +1,7 @@
+import os
+os.environ['DEBUG'] = 'true'
+os.environ['OAUTHLIB_INSECURE_TRANSPORT'] = 'true'
+
 import flask
 from flask import Flask
 from flask_oauthlib.provider import OAuth2Provider
@@ -65,15 +69,17 @@ def createOauth(ctx):
     return oauth
 
 
-def createApp(oauth):
-    app = Flask(__name__)
-    oauth.init_app(app)
+def createAuthorization(app, oauth):
 
-    @app.route('/oauth/authorize', method=['GET','POST'])
+    @app.route('/oauth/authorize', methods=['GET','POST'])
     @oauth.authorize_handler
     def authorize_handler(*args, **kwargs):
+        global logged
         if flask.request.method == 'GET':
-            return flask.render_template('authorize.html')
+            if logged:
+                return flask.render_template('authorize.html')
+            else:
+                return flask.render_template('login.html')
 
         if flask.request.method == 'HEAD':
             response = flask.make_response('',200)
@@ -81,10 +87,30 @@ def createApp(oauth):
             return response
 
         if flask.request.method == 'POST':
-            confirm = flask.request.form.get('confirm', 'no')
-            return confirm == 'yes'
+            confirm = flask.request.form.get('confirm', None)
+            if confirm:
+                return confirm == 'yes'
+
+            username = flask.request.form.get('username', None)
+            password = flask.request.form.get('password', None)
+            if username and password:
+                logged = True
+                return flask.render_template('authorize.html')
 
         raise NotImplementedError()
+
+    @app.route('/oauth/token', methods=['POST'])
+    @oauth.token_handler
+    def access_token():
+        return None
+
+
+
+def createApp(oauth):
+    app = Flask(__name__)
+    oauth.init_app(app)
+
+    createAuthorization(app, oauth)
 
     @app.route('/')
     def helloWorld():
