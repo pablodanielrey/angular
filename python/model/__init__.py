@@ -58,10 +58,7 @@ class SqlContext(Context):
 
     @property
     def con(self):
-        if self._con:
-            return self._con
-        self._con = self.pool.getconn()
-        return self._con
+        return self.pool.getconn()
 
 
 class DAO:

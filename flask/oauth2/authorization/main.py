@@ -63,7 +63,7 @@ def createOauth(ctx):
 
     @oauth.usergetter
     def get_user(username, password, *args, **kwargs):
-        usersP = UserPassword.find(ctx, username=username, password=password).fetch(ctx)
+        usersP = UserPassword.find(ctx, username=[username], password=[password]).fetch(ctx)
         if len(usersP) <= 0:
             return None
         users = User.findByIds(ctx, [usersP.values[0].userId])
@@ -87,7 +87,7 @@ def createLogin(app, ctx):
         if flask.request.method == 'POST':
             u = flask.request.form.get('username')
             p = flask.request.form.get('password')
-            users = UserPassword.find(ctx, username=u, password=p)
+            users = UserPassword.find(ctx, username=[u], password=[p])
             if len(users.values) <= 0:
                 return flask.render_template('login.html', error='Usuario y/o Clave inválidos')
 
@@ -152,7 +152,7 @@ def createTestingContext(host, db, u, p):
     from psycopg2.extras import DictCursor
 
     pool = psycopg2.pool.ThreadedConnectionPool(1, 1, host=host, database=db, user=u, password=p, cursor_factory=DictCursor)
-    ctx = SqlContext(pool.getconn())
+    ctx = SqlContext(pool)
     return ctx
 
 
@@ -166,4 +166,4 @@ if __name__ == '__main__':
     oauth = createOauth(ctx)
     app = createApp(oauth, ctx)
     app.run()
-    ctx.con.closeall()
+    ctx.pool.closeall()
