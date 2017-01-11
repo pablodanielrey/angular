@@ -51,14 +51,18 @@ class SqlContext(Context):
     """
     def __init__(self, pool):
         self.pool = pool
-        self._con = None
+        self.con = None
 
     def _suffix(self):
         return 'Sql'
 
-    @property
-    def con(self):
-        return self.pool.getconn()
+    def getConn(self):
+        if self.con:
+            self.pool.putconn(self.con)
+        self.con = self.pool.getconn()
+
+    def closeAll(self):
+        self.pool.closeall()
 
 
 class DAO:
