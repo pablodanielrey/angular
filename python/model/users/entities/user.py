@@ -1,4 +1,6 @@
-from model.dao import Ids
+import datetime
+from model import Ids
+from model.entity import Entity
 from model.serializer import JSONSerializable
 
 
@@ -11,6 +13,12 @@ class Telephone(JSONSerializable):
 
 
 class User(JSONSerializable):
+
+
+    @classmethod
+    def findBy(cls, ctx):
+        ctx.dao(cls)
+
     ''' usuario básico del sistema '''
 
     def __init__(self):
