@@ -1,4 +1,5 @@
 
+
 import sys
 sys.path.append('/home/ivan/www/angular/python') #definir ruta de acceso al modelo
 
@@ -11,21 +12,25 @@ ctx = SqlContext(con)
 user = User()
 
 
-User.findBy(ctx)
+User.find(ctx)
 
 
 
-User.findBy(ctx, userId=["123"])
+User.find(ctx, userId=["123"])
 
 
 
-User.findBy(ctx, userId=["123"], officeId=["123", "345"])
+User.find(ctx, userId=["123"], officeId=["123", "345"])
 
 
 
-User.findBy(ctx, userId=True, valorBooleano=False, officeId=["123", "345"], orderBy={"officeId":True})
+User.find(ctx, userId=True, valorBooleano=False, officeId=["123", "345"], orderBy={"officeId":True})
 
 
+
+User.findByIds(ctx, [123])
+
+User.findByIds(ctx, [123], userId=True, officeId=["123", "445"])
 
 
 
