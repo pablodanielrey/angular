@@ -51,9 +51,17 @@ class SqlContext(Context):
     """
     def __init__(self, con):
         self.con = con
+        self._con = None
 
     def _suffix(self):
         return 'Sql'
+
+    @property
+    def con(self):
+        if self._con:
+            return self._con
+        self._con = self.con.getconn()
+        return self._con
 
 
 class DAO:
