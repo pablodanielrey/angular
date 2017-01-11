@@ -7,6 +7,11 @@ from model.users.entities.user import User, Telephone
 
 class UserSqlDAO(SqlDAO):
 
+
+
+    _schema = "profile."
+    _table = "users"
+
     ''' DAO para los usuarios '''
 
     @classmethod

@@ -12,13 +12,7 @@ class Telephone(JSONSerializable):
         self.type = None
 
 
-class User(JSONSerializable):
-
-
-    @classmethod
-    def findBy(cls, ctx):
-        ctx.dao(cls)
-
+class User(Entity):
     ''' usuario básico del sistema '''
 
     def __init__(self):
