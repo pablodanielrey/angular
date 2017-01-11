@@ -56,7 +56,7 @@ class UserPasswordSqlDAO(SqlDAO):
             cur.close()
 
     @classmethod
-    def findByIds(ctx, ids):
+    def findByIds(cls, ctx, ids):
         assert isinstance(ids, list)
         if len(ids) <= 0:
             return []
