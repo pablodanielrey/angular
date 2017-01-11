@@ -138,7 +138,7 @@ class SqlDAO(DAO):
         else:
             sql = "SELECT id FROM {}{};".format(cls._schema, cls._table)
 
-        cur = con.cursor()
+        cur = ctx.con.cursor()
         try:
             cur.execute(sql, tuple(condition["values"]))
             if cur.rowcount <= 0:
