@@ -138,10 +138,6 @@ class SqlDAO(DAO):
         else:
             sql = "SELECT id FROM {}{};".format(cls._schema, cls._table)
 
-        print(sql)
-        print(condition["values"])
-
-        """
         cur = con.cursor()
         try:
             cur.execute(sql, tuple(condition["values"]))
@@ -152,4 +148,3 @@ class SqlDAO(DAO):
 
         finally:
             cur.close()
-        """
