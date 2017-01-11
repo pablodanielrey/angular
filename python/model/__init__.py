@@ -14,24 +14,24 @@ class Context:
         """
             obtengo las clases que se encuentran dentro del paquete .dao. relativo al paquete raiz de la entidad
         """
-        name = None
+        ename = None
         if inspect.isclass(entity):
-            name = entity.__name__
+            ename = entity.__name__
         else:
-            name = entity.__class__.__name__
+            ename = entity.__class__.__name__
 
         pname = entity.__module__[0:entity.__module__.rfind('.entities.')]
         mtoi = pname + '.dao'
         module = importlib.import_module(mtoi)
         root = module.__path__._path[0]
-
-        files = [ f for f in listdir(root) if isfile(join(root,f)) and f.startswith(name) ]
+        files = [f for f in listdir(root) if isfile(join(root,f))]
         modules = [importlib.import_module(mtoi + '.' + f.replace('.py','')) for f in files]
 
         clss = []
         for module in modules:
             for (name, clazz) in inspect.getmembers(module, inspect.isclass):
-                clss.append(clazz)
+                if name.startswith(ename):
+                    clss.append(clazz)
         return clss
 
     def dao(self, entity):
@@ -42,7 +42,7 @@ class Context:
         for c in clazzes:
             if hasattr(c, '_select') and c._select(self):
                 return c
-        raise Error('No se encuentra dao correcto')
+        raise RuntimeError('No se encuentra dao correcto en {}'.format(clazzes))
 
 
 class SqlContext(Context):
