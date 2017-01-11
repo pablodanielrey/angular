@@ -91,7 +91,9 @@ def createLogin(app, ctx):
             if len(users.values) <= 0:
                 return flask.render_template('login.html', error='Usuario y/o Clave inválidos')
 
-            flask.session['user'] = users.fetch(ctx)[0]
+            user = users.fetch(ctx)[0]
+            print(user)
+            flask.session['user'] = user
             flask.session.modified = True
             return flask.redirect('/oauth/authorize')
 

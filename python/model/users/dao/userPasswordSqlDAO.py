@@ -55,40 +55,16 @@ class UserPasswordSqlDAO(SqlDAO):
         finally:
             cur.close()
 
+    @classmethod
+    def findByIds(ctx, ids):
+        assert isinstance(ids, list)
+        if len(ids) <= 0:
+            return []
 
+        cur = ctx.con.cursor()
+        try:
+            cur.execute('select * from credentials.user_password where id in %s', (tuple(ids),))
+            return [cls._fromResult(UserPassword(), c) for c in cur ]
 
-
-
-        @classmethod
-        def findByIds(cls, ctx, ids, *args, **kwargs):
-            assert ids is not None
-
-            condition = cls._condition(**kwargs)
-            orderBy = cls._orderBy(**kwargs);
-
-            if len(condition["list"]) and len(orderBy):
-                c = ' AND ' .join(condition["list"])
-                o = ', ' .join(orderBy)
-                sql = "SELECT id FROM {}{} WHERE {} ORDER BY {}".format(cls._schema, cls._table, c, o)
-
-            elif len(condition["list"]) and not len(orderBy):
-                c = ' AND ' .join(condition["list"])
-                sql = "SELECT id FROM {}{} WHERE {};".format(cls._schema, cls._table, c)
-
-            elif not len(condition["list"]) and len(orderBy):
-                o = ', ' .join(orderBy)
-                sql = "SELECT id FROM {}{} ORDER BY {};".format(cls._schema, cls._table, o)
-
-            else:
-                sql = "SELECT id FROM {}{};".format(cls._schema, cls._table)
-            cur = ctx.con.cursor()
-
-            try:
-                cur.execute(sql, (tuple(ids),tuple(condition["values"])))
-                if cur.rowcount <= 0:
-                    return []
-
-                return [cls._fromResult(UserPassword(), o) for o in cur.fetchall()]
-
-            finally:
-                cur.close()
+        finally:
+            cur.close()

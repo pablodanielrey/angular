@@ -65,20 +65,11 @@ class SqlDAO(DAO):
     def _getDependencies(cls):
         return cls.dependencies
 
-
-
-    
-
-
-
     @classmethod
     def findById(cls, con, id):
         assert id is not None
         res = cls.findByIds(con, [id])
         return res[0] if len(res) else None
-
-
-
 
     @classmethod
     def find(cls, ctx, *args, **kwargs):
