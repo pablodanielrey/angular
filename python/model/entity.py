@@ -3,6 +3,9 @@ from model import Ids
 
 class Entity(JSONSerializable):
 
+    def __init__(self):
+        super().__init__()
+
     def persist(self, ctx):
         ctx.dao(self).persist(ctx, self)
         return self

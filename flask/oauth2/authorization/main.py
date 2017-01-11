@@ -93,7 +93,7 @@ def createLogin(app, ctx):
 
             user = users.fetch(ctx)[0]
             print(user)
-            flask.session['user'] = user
+            flask.session['user'] = user.userId
             flask.session.modified = True
             return flask.redirect('/oauth/authorize')
 
@@ -134,7 +134,9 @@ def createAuthorization(app, oauth):
 
 
 def createApp(oauth, ctx):
+    import uuid
     app = Flask(__name__)
+    app.secret_key = str(uuid.uuid4()).replace('-','')
     oauth.init_app(app)
 
     createLogin(app, ctx)
@@ -165,6 +167,7 @@ if __name__ == '__main__':
     u = sys.argv[3]
     p = sys.argv[4]
     ctx = createTestingContext(h,d,u,p)
+    ctx.getConn()
     oauth = createOauth(ctx)
     app = createApp(oauth, ctx)
     app.run()
