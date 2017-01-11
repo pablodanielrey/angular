@@ -78,7 +78,7 @@ class Ids:
         self.values = values
 
     def fetch(self, ctx):
-        return [] if (self.values is None or len(self.values) <= 0) else ctx.dao(self.clazz).findByIds(self.values)
+        return [] if (self.values is None or len(self.values) <= 0) else ctx.dao(self.clazz).findByIds(ctx, self.values)
 
     def __iter__(self):
         return self.values.__iter__()
