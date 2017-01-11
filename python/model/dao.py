@@ -30,7 +30,7 @@ class SqlDAO(DAO):
                 conditionList.append("({} IN %s)".format(SqlDAO.decamelize(k)))
                 conditionValues.append(tuple(condition[k]))
 
-        return{"list":conditionList, "values":conditionValues}
+        return {"list":conditionList, "values":conditionValues}
 
     @staticmethod
     def _orderBy(**kwargs):
