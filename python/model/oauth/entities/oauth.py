@@ -10,8 +10,8 @@ class Grant:
 
         self.client_id = None
         #self.client = None
-        #self.user_id = None
-        self.user = None
+        self.user_id = None
+        #self.user = None
 
         self.code = None
         self.scopes = []
