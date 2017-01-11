@@ -4,6 +4,9 @@ from model.users.entities.userPassword import UserPassword
 
 class UserPasswordSqlDAO(SqlDAO):
 
+    _schema = "credentials."
+    _table = "user_password"
+
     @classmethod
     def _createSchema(cls, ctx):
         super()._createSchema(ctx)
@@ -34,50 +37,6 @@ class UserPasswordSqlDAO(SqlDAO):
         up.password = r['password']
         up.updated = r['updated']
         return up
-
-    @classmethod
-    def findByIds(cls, ctx, ids):
-        assert isinstance(ids, list)
-        cur = ctx.con.cursor()
-        try:
-            cur.execute('select * from credentials.user_password where id in %s', (tuple(ids),))
-            if cur.rowcount <= 0:
-                return []
-            data = [cls._fromResult(UserPassword(), c) for c in cur]
-            return data
-
-        finally:
-            cur.close()
-
-    @classmethod
-    def findByUserPassword(cls, ctx, username, password):
-        cur = ctx.con.cursor()
-        try:
-            cur.execute('select id from credentials.user_password where username = %s and password = %s', (username, password))
-            return [c['id'] for c in cur]
-
-        finally:
-            cur.close()
-
-    @classmethod
-    def findByUsername(cls, ctx, username):
-        cur = ctx.con.cursor()
-        try:
-            cur.execute('select id from credentials.user_password where username = %s', (username,))
-            return [c['id'] for c in cur]
-
-        finally:
-            cur.close()
-
-    @classmethod
-    def findByUserId(cls, ctx, userId):
-        cur = ctx.con.cursor()
-        try:
-            cur.execute('select id from credentials.user_password where user_id = %s', (userId,))
-            return [c['id'] for c in cur]
-
-        finally:
-            cur.close()
 
     @classmethod
     def persist(cls, ctx, up):
