@@ -9,6 +9,8 @@ from flask_oauthlib.provider import OAuth2Provider
 import sys
 sys.path.append('../python')
 
+from model.users.entities.user import User
+from model.users.entities.userPassword import UserPassword
 from model.oauth.entities.oauth import Client, Grant, BearerToken
 
 
@@ -61,12 +63,46 @@ def createOauth(ctx):
 
     @oauth.usergetter
     def get_user(username, password, *args, **kwargs):
-        users = UserPassword.findByUsernameAndPassword(ctx, username, password).fetch(ctx)
+        usersP = UserPassword.find(ctx, username=username, password=password).fetch(ctx)
+        if len(usersP) <= 0:
+            return None
+        users = User.findByIds(ctx, [usersP.values[0].userId])
         if len(users) <= 0:
             return None
-        return users
+        return users[0]
 
     return oauth
+
+
+def createLogin(app, ctx):
+
+    @app.route('/login', methods=['GET','POST'])
+    def login_handler(*args, **kwargs):
+        if 'user' in flask.session:
+            return flask.redirect('/oauth/authorize')
+
+        if flask.request.method == 'GET':
+            return flask.render_template('login.html')
+
+        if flask.request.method == 'POST':
+            u = flask.request.form.get('username')
+            p = flask.request.form.get('password')
+            users = UserPassword.find(ctx, username=u, password=p)
+            if len(users.values) <= 0:
+                return flask.render_template('login.html', error='Usuario y/o Clave inválidos')
+
+            flask.session['user'] = users.fetch(ctx)[0]
+            flask.session.modified = True
+            return flask.redirect('/oauth/authorize')
+
+        raise NotImplementedError()
+
+    @app.route('/logout', methods=['GET','POST'])
+    def logout_handler(*args, **kwargs):
+        if flask.session['user']:
+            del flask.session['user']
+            flask.session.modified = True
+        return flask.redirect('/login')
 
 
 def createAuthorization(app, oauth):
@@ -74,12 +110,8 @@ def createAuthorization(app, oauth):
     @app.route('/oauth/authorize', methods=['GET','POST'])
     @oauth.authorize_handler
     def authorize_handler(*args, **kwargs):
-        global logged
         if flask.request.method == 'GET':
-            if logged:
-                return flask.render_template('authorize.html')
-            else:
-                return flask.render_template('login.html')
+            return flask.render_template('authorize.html')
 
         if flask.request.method == 'HEAD':
             response = flask.make_response('',200)
@@ -87,15 +119,9 @@ def createAuthorization(app, oauth):
             return response
 
         if flask.request.method == 'POST':
-            confirm = flask.request.form.get('confirm', None)
+            confirm = flask.request.form.get('confirm', 'no')
             if confirm:
                 return confirm == 'yes'
-
-            username = flask.request.form.get('username', None)
-            password = flask.request.form.get('password', None)
-            if username and password:
-                logged = True
-                return flask.render_template('authorize.html')
 
         raise NotImplementedError()
 
@@ -105,11 +131,11 @@ def createAuthorization(app, oauth):
         return None
 
 
-
-def createApp(oauth):
+def createApp(oauth, ctx):
     app = Flask(__name__)
     oauth.init_app(app)
 
+    createLogin(app, ctx)
     createAuthorization(app, oauth)
 
     @app.route('/')
@@ -119,8 +145,25 @@ def createApp(oauth):
     return app
 
 
+def createTestingContext(host, db, u, p):
+    from model import SqlContext
+    import psycopg2
+    import psycopg2.pool
+    from psycopg2.extras import DictCursor
+
+    pool = psycopg2.pool.ThreadedConnectionPool(1, 1, host=host, database=db, user=u, password=p, cursor_factory=DictCursor)
+    ctx = SqlContext(pool.getconn())
+    return ctx
+
+
 if __name__ == '__main__':
-    ctx = None
+
+    h = sys.argv[1]
+    d = sys.argv[2]
+    u = sys.argv[3]
+    p = sys.argv[4]
+    ctx = createTestingContext(h,d,u,p)
     oauth = createOauth(ctx)
-    app = createApp(oauth)
+    app = createApp(oauth, ctx)
     app.run()
+    ctx.con.closeall()

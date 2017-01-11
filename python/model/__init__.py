@@ -49,8 +49,8 @@ class SqlContext(Context):
     """
         Contexto de referencia general usado por los daos que acceden a bases SQL.
     """
-    def __init__(self, con):
-        self.con = con
+    def __init__(self, pool):
+        self.pool = pool
         self._con = None
 
     def _suffix(self):
@@ -60,7 +60,7 @@ class SqlContext(Context):
     def con(self):
         if self._con:
             return self._con
-        self._con = self.con.getconn()
+        self._con = self.pool.getconn()
         return self._con
 
 
