@@ -22,8 +22,9 @@ class Context:
 
         pname = entity.__module__[0:entity.__module__.rfind('.entities.')]
         mtoi = pname + '.dao'
+        print(mtoi)
         module = importlib.import_module(mtoi)
-        root = module.__path__._path[0]
+        root = module.__path__[0]
         files = [f for f in listdir(root) if isfile(join(root,f))]
         modules = [importlib.import_module(mtoi + '.' + f.replace('.py','')) for f in files]
 
