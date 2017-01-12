@@ -107,3 +107,17 @@ class SqlDAO(DAO):
 
         finally:
             cur.close()
+
+
+    @classmethod
+    def deleteByIds(cls, ctx, ids, *args, **kwargs):
+        ''' eliminar entidades  '''
+        assert ids is not None
+        assert isinstance(ids, list)
+
+        cur = ctx.con.cursor()
+        try:
+            sql = 'delete from {}{} where id in %s'.format(cls._schema, cls._table)
+            cur.execute(sql, (tuple(ids),))
+        finally:
+            cur.close()

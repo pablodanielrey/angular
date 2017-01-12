@@ -13,6 +13,8 @@ from model.users.entities.userPassword import UserPassword
 from model.users.entities.user import User
 from model.users.entities.mail import Mail
 from model.offices.entities.office import Office
+from model.laboralinsertion.entities.company import Company
+from model.laboralinsertion.entities.contact import Contact
 
 
 #from model.designation.entities.designation import Designation
@@ -28,35 +30,17 @@ ctx = SqlContext(pool)
 ctx.getConn()
 
 
-clazz = Office
+clazz = Contact
 
-orderBy = {"name":True} #separamos para incluirlo en el fetch
+orderBy = {} #separamos para incluirlo en el fetch
 #orderBy = {"position":True} #separamos para incluirlo en el fetch
 ids = clazz.find(ctx)
 for o in ids.fetch(ctx, orderBy=orderBy):
   print(o.__dict__)
 
 
+c = clazz()
+c.id = "AAA"
+c.delete(ctx)
+
 ctx.pool.closeall()
-
-"""
-
-#ups = UserPassword.find(ctx, username=['39958407', '39117339'], orderBy={"username":False}).fetch(ctx, orderBy={"username":False})
-
-#buscar designaciones historicas (out=True)
-#ids = User.find(ctx)
-#for i in designations:
-#    print(i.__dict__)
-
-
-ids = User.find(ctx, dni=["31073351", "27294557"], orderBy={"name":False})
-
-print(ids)
-
-for id in ids:
-   print(id)
-
-users = ids.fetch(ctx)
-for user in users:
-    print(user.__dict__)
-"""

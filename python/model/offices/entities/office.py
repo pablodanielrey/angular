@@ -41,6 +41,8 @@ class Office(Entity):
     def getTypes(cls):
         return cls.officeType
 
+
+
     @classmethod
     def findByUser(cls, ctx, userId, types=None, tree=False):
         desig = Designation.find(ctx, userId=[userId]).fetch(ctx)
