@@ -81,8 +81,9 @@ class Ids:
         self.clazz = clazz
         self.values = values
 
-    def fetch(self, ctx):
-        return [] if (self.values is None or len(self.values) <= 0) else ctx.dao(self.clazz).findByIds(ctx, self.values)
+    def fetch(self, ctx, *args, **kwargs):
+        print(kwargs)
+        return [] if (self.values is None or len(self.values) <= 0) else ctx.dao(self.clazz).findByIds(ctx, self.values, *args, **kwargs)
 
     def __iter__(self):
         return self.values.__iter__()

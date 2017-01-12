@@ -1,15 +1,12 @@
 # -*- coding: utf-8 -*-
-from model.designation.designation import DesignationDAO, Designation
+from model.dao import SqlDAO
+from model.designation.designation import Designation
 
-class DesignationSqlDAO(DesignationDAO):
+class DesignationSqlDAO(SqlDAO):
+    ''' DAO designation '''
+
     _schema = "designations."
     _table = "designation"
-
-    @classmethod
-    def prueba(cls, con):
-        print('prueba')
-        print(con.__dict__)
-
 
     @classmethod
     def _createSchema(cls, con):
@@ -47,9 +44,26 @@ class DesignationSqlDAO(DesignationDAO):
         finally:
             cur.close()
 
+    @classmethod
+    def getEntity(cls):
+        return Designation()
+
+    @classmethod
+    def namemapping(cls, name):
+        if name == "start":
+            return "dstart"
+
+        if name == "end":
+            return "dend"
+
+        if name == "out":
+            return "dout"
+
+        return super().namemapping(name)
+
+
     @staticmethod
-    def _fromResult(r):
-        d = Designation()
+    def _fromResult(cls, d, r):
         d.id = r['id']
         d.start = r['dstart']
         d.end = r['dend']
@@ -75,59 +89,10 @@ class DesignationSqlDAO(DesignationDAO):
         finally:
             cur.close()
 
-    @classmethod
-    def findByUsers(cls, con, userIds, history=False):
-        assert userIds is not None
-        assert isinstance(userIds, list)
-        cur = con['con'].cursor()
-        try:
-            if history is None or not history:
-                cur.execute('select id from designations.designation where user_id IN %s and dout is null order by dstart',(tuple(userIds),))
-            else:
-                cur.execute('select id from designations.designation where user_id IN %s order by dstart',(tuple(userIds),))
-            return [d['id'] for d in cur]
-        finally:
-            cur.close()
 
     @classmethod
-    def findByPlaces(cls, con, placeIds, history=False):
-        if not history:
-            cond = {"office_id":placeIds, "dout":"NULL"}
-        else:
-            cond = {"office_id":placeIds}
-        return cls.findByFields(con, cond, {"dstart":"asc"})
-
-    @classmethod
-    def findByIds(cls, con, ids):
-        assert ids is not None
-        assert isinstance(ids, list)
-
-        if len(ids) <= 0:
-            return []
-
-        cur = con['con'].cursor()
-        try:
-            cur.execute('select * from designations.designation where id in %s order by dstart asc', (tuple(ids),))
-            if cur.rowcount <= 0:
-                return []
-
-            return [cls._fromResult(d) for d in cur.fetchall()]
-
-        finally:
-            cur.close()
-
-    @classmethod
-    def findByOffice(cls, con, officeId, history=False):
-        if history:
-            cond = {"office_id":[officeId], "dout":"IS NOT NULL"}
-        else:
-            cond = {"office_id":[officeId]}
-
-        return cls.findByFields(con, cond, {"dstart":"asc"})
-
-    @classmethod
-    def persist(cls, con, desig):
-        cur = con['con'].cursor()
+    def persist(cls, ctx, desig):
+        cur = ctx.con.cursor()
         try:
             if not hasattr(desig, 'id'):
                 desig.id = str(uuid.uuid4())

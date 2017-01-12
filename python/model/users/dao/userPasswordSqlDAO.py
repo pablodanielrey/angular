@@ -1,4 +1,5 @@
 import uuid
+import re
 from model.dao import SqlDAO
 from model.users.entities.userPassword import UserPassword
 
@@ -6,6 +7,11 @@ class UserPasswordSqlDAO(SqlDAO):
 
     _schema = "credentials."
     _table = "user_password"
+
+    
+    @classmethod
+    def getEntity(cls):
+        return UserPassword()
 
     @classmethod
     def _createSchema(cls, ctx):
@@ -55,6 +61,8 @@ class UserPasswordSqlDAO(SqlDAO):
         finally:
             cur.close()
 
+    """
+    TODO ELIMINAR, CONVIENE USAR EL DE DAO PORQUE PERMITE ORDENAMIENTO Y CONDICION
     @classmethod
     def findByIds(cls, ctx, ids):
         assert isinstance(ids, list)
@@ -68,3 +76,4 @@ class UserPasswordSqlDAO(SqlDAO):
 
         finally:
             cur.close()
+    """

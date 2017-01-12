@@ -14,8 +14,8 @@ class SqlDAO(DAO):
     def _select(cls, ctx):
         return isinstance(ctx, SqlContext)
 
-    @staticmethod
-    def _condition(**kwargs):
+    @classmethod
+    def _condition(cls, **kwargs):
         condition = kwargs
         if "orderBy" in kwargs:
             del condition["orderBy"]
@@ -25,28 +25,29 @@ class SqlDAO(DAO):
         for k in condition:
             if type(condition[k]) == bool:
                 cond = "({} IS NOT NULL)" if condition[k] else "({} IS NULL)"
-                conditionList.append(cond.format(SqlDAO.decamelize(k)))
+                conditionList.append(cond.format(cls.namemapping(k)))
             else:
-                conditionList.append("({} IN %s)".format(SqlDAO.decamelize(k)))
+                conditionList.append("({} IN %s)".format(cls.namemapping(k)))
                 conditionValues.append(tuple(condition[k]))
 
         return {"list":conditionList, "values":conditionValues}
 
-    @staticmethod
-    def _orderBy(**kwargs):
+    @classmethod
+    def _orderBy(cls, **kwargs):
         orderBy = kwargs["orderBy"] if "orderBy" in kwargs else {}
 
         orderByList = list()
 
         for k in orderBy:
             orderByType = "ASC" if orderBy[k] else "DESC"
-            orderByList.append("{} {}".format(SqlDAO.decamelize(k), orderByType))
+            orderByList.append("{} {}".format(cls.namemapping(k), orderByType))
 
         return orderByList
 
 
-    @staticmethod
-    def decamelize(name):
+
+    @classmethod
+    def namemapping(cls, name):
         s1 = re.sub('(.)([A-Z][a-z]+)', r'\1_\2', name)
         return re.sub('([a-z0-9])([A-Z])', r'\1_\2', s1).lower()
 
@@ -66,32 +67,40 @@ class SqlDAO(DAO):
         return cls.dependencies
 
     @classmethod
+    def getEntity(cls):
+        raise NotImplementedError()
+
+    @classmethod
     def findById(cls, con, id):
         assert id is not None
         res = cls.findByIds(con, [id])
         return res[0] if len(res) else None
 
     @classmethod
+    def findByIds(cls, ctx, ids, *args, **kwargs):
+        orderBy = cls._orderBy(**kwargs)
+        o = " ORDER BY {}".format(', ' .join(orderBy)) if len(orderBy) else ""
+        sql = "SELECT * FROM {}{} WHERE id IN %s {};".format(cls._schema, cls._table, o)
+
+        cur = ctx.con.cursor()
+        try:
+            cur.execute(sql, (tuple(ids),))
+            return [cls._fromResult(cls.getEntity(), c) for c in cur ]
+
+
+        finally:
+            cur.close()
+
+    @classmethod
     def find(cls, ctx, *args, **kwargs):
+        print(kwargs)
         condition = cls._condition(**kwargs)
         orderBy = cls._orderBy(**kwargs);
 
-        if len(condition["list"]) and len(orderBy):
-            c = ' AND ' .join(condition["list"])
-            o = ', ' .join(orderBy)
-            sql = "SELECT id FROM {}{} WHERE {} ORDER BY {}".format(cls._schema, cls._table, c, o)
-
-        elif len(condition["list"]) and not len(orderBy):
-            c = ' AND ' .join(condition["list"])
-            sql = "SELECT id FROM {}{} WHERE {};".format(cls._schema, cls._table, c)
-
-        elif not len(condition["list"]) and len(orderBy):
-            o = ', ' .join(orderBy)
-            sql = "SELECT id FROM {}{} ORDER BY {};".format(cls._schema, cls._table, o)
-
-        else:
-            sql = "SELECT id FROM {}{};".format(cls._schema, cls._table)
-
+        c = " WHERE {}".format(' AND ' .join(condition["list"])) if len(condition["list"]) else ""
+        o = " ORDER BY {}".format(', ' .join(orderBy)) if len(orderBy) else ""
+        sql = "SELECT id FROM {}{}{}{};".format(cls._schema, cls._table, c, o)
+        print(sql)
         cur = ctx.con.cursor()
         try:
             cur.execute(sql, tuple(condition["values"]))
