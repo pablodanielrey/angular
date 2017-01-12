@@ -4,6 +4,10 @@ from model.users.entities.mail import Mail
 
 class MailSqlDAO(SqlDAO):
 
+    _schema = "profile."
+    _table = "mails"
+    _entity = Mail
+
     @classmethod
     def _createSchema(cls, ctx):
         super()._createSchema(ctx)
@@ -37,28 +41,6 @@ class MailSqlDAO(SqlDAO):
         m.created = r['created']
         return m
 
-    @classmethod
-    def findByIds(cls, ctx, ids):
-        ''' Obtiene el email identificado por el id '''
-        assert isinstance(ids, list)
-        cur = ctx.con.cursor()
-        try:
-            cur.execute('select * from profile.mails where id = %s', (eid,))
-            return [cls._fromResult(Mail(), c) for c in cur]
-
-        finally:
-            cur.close()
-
-    @classmethod
-    def findByUserId(cls, ctx, userId):
-        cur = ctx.con.cursor()
-        try:
-            cur.execute('select id from profile.mails where user_id = %s', (userId,))
-            return [c['id'] for c in cur]
-
-        finally:
-            cur.close()
-
 
     @classmethod
     def persist(cls, ctx, mail):
@@ -79,11 +61,11 @@ class MailSqlDAO(SqlDAO):
             cur.close()
 
     @classmethod
-    def delete(cls, ctx, mid):
+    def deleteByIds(cls, ctx, ids):
         ''' Elimina el email dado por el id '''
         cur = ctx.con.cursor()
         try:
-            cur.execute('delete from profile.mails where id = %s', (mid,))
+            cur.execute('delete from profile.mails where id in %s', (tuple(mid),))
 
         finally:
             cur.close()

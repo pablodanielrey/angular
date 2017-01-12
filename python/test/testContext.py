@@ -11,9 +11,10 @@ from psycopg2.extras import DictCursor
 from model import SqlContext
 from model.users.entities.userPassword import UserPassword
 from model.users.entities.user import User
+from model.users.entities.mail import Mail
 
-from model.designation.entities.designation import Designation
-from model.designation.entities.position import Position
+#from model.designation.entities.designation import Designation
+#from model.designation.entities.position import Position
 
 h = sys.argv[1]
 d = sys.argv[2]
@@ -25,11 +26,11 @@ ctx = SqlContext(pool)
 ctx.getConn()
 
 
-clazz = Position
+clazz = Mail
 
-
-orderBy = {"position":True} #separamos para incluirlo en el fetch
-ids = clazz.find(ctx, orderBy=orderBy)
+orderBy = {} #separamos para incluirlo en el fetch
+#orderBy = {"position":True} #separamos para incluirlo en el fetch
+ids = clazz.find(ctx, email=["marinaventuro@hotmail.com"])
 for o in ids.fetch(ctx, orderBy=orderBy):
   print(o.__dict__)
 
@@ -57,5 +58,3 @@ users = ids.fetch(ctx)
 for user in users:
     print(user.__dict__)
 """
-
-ctx.pool.closeall()

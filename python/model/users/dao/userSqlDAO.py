@@ -10,6 +10,7 @@ class UserSqlDAO(SqlDAO):
 
     _schema = "profile."
     _table = "users"
+    _entity = User
 
     @classmethod
     def _createSchema(cls, con):

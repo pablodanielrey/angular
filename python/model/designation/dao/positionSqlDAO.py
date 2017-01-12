@@ -7,12 +7,7 @@ class PositionSqlDAO(SqlDAO):
 
     _schema = "designations."
     _table = "positions"
-
-    @classmethod
-    def getEntity(cls):
-        return Position()
-
-
+    _entity = Position
 
     @classmethod
     def _createSchema(cls, con):
