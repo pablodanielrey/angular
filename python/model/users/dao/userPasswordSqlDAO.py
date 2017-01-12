@@ -7,11 +7,7 @@ class UserPasswordSqlDAO(SqlDAO):
 
     _schema = "credentials."
     _table = "user_password"
-
-    
-    @classmethod
-    def getEntity(cls):
-        return UserPassword()
+    _entity = UserPassword
 
     @classmethod
     def _createSchema(cls, ctx):
