@@ -9,6 +9,7 @@ class SqlDAO(DAO):
     dependencies = []
     _schema = None
     _table = None
+    _mappings = None
 
     @classmethod
     def _select(cls, ctx):
@@ -44,15 +45,9 @@ class SqlDAO(DAO):
 
         return orderByList
 
-
-    @classmethod
-    def _getNameMappings(cls):
-        return None
-
     @classmethod
     def namemapping(cls, name):
-        mappings = cls._getNameMappings()
-        name = mappings[name] if mappings is not None and name in mappings else name
+        name = cls._mappings[name] if cls._mappings is not None and name in cls._mappings else name
         s1 = re.sub('(.)([A-Z][a-z]+)', r'\1_\2', name)
         return re.sub('([a-z0-9])([A-Z])', r'\1_\2', s1).lower()
 

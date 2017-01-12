@@ -9,6 +9,12 @@ class DesignationSqlDAO(SqlDAO):
 
     _schema = "designations."
     _table = "designation"
+    _entity = Designation
+    _mappings = {
+                'start':'dstart',
+                'end':'dend',
+                'out':'dout'
+            }
 
     @classmethod
     def _createSchema(cls, con):
@@ -45,18 +51,6 @@ class DesignationSqlDAO(SqlDAO):
           print("error")
         finally:
             cur.close()
-
-    @classmethod
-    def getEntity(cls):
-        return Designation()
-
-    @classmethod
-    def _getNameMappings(cls):
-        return {
-            'start':'dstart',
-            'end':'dend',
-            'out':'dout'
-        }
 
     @classmethod
     def _fromResult(cls, d, r):
