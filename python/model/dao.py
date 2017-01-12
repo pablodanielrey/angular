@@ -9,6 +9,7 @@ class SqlDAO(DAO):
     dependencies = []
     _schema = None
     _table = None
+    _entity = None
     _mappings = None
 
     @classmethod
