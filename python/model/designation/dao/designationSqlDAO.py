@@ -49,16 +49,12 @@ class DesignationSqlDAO(SqlDAO):
         return Designation()
 
     @classmethod
-    def namemapping(cls, name):
-        mappings = {
+    def _getNameMappings(cls):
+        return {
             'start':'dstart',
             'end':'dend',
             'out':'dout'
         }
-        if name in mappings:
-            return mappings[name]
-        return super().namemapping(name)
-
 
     @classmethod
     def _fromResult(cls, d, r):

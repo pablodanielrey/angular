@@ -45,9 +45,14 @@ class SqlDAO(DAO):
         return orderByList
 
 
+    @classmethod
+    def _getNameMappings(cls):
+        raise NotImplementedError()
 
     @classmethod
     def namemapping(cls, name):
+        mappings = cls._getNameMappings()
+        name = mappings[name] if name in mappings else name
         s1 = re.sub('(.)([A-Z][a-z]+)', r'\1_\2', name)
         return re.sub('([a-z0-9])([A-Z])', r'\1_\2', s1).lower()
 
@@ -99,7 +104,7 @@ class SqlDAO(DAO):
         c = " WHERE {}".format(' AND ' .join(condition["list"])) if len(condition["list"]) else ""
         o = " ORDER BY {}".format(', ' .join(orderBy)) if len(orderBy) else ""
         sql = "SELECT id FROM {}{}{}{};".format(cls._schema, cls._table, c, o)
-        
+
         cur = ctx.con.cursor()
         try:
             cur.execute(sql, tuple(condition["values"]))
