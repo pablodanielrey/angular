@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+import uuid
+
 from model.dao import SqlDAO
 from model.designation.entities.designation import Designation
 

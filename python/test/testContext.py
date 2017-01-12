@@ -13,6 +13,7 @@ from model.users.entities.userPassword import UserPassword
 from model.users.entities.user import User
 
 from model.designation.entities.designation import Designation
+from model.designation.entities.position import Position
 
 h = sys.argv[1]
 d = sys.argv[2]
@@ -24,20 +25,25 @@ ctx = SqlContext(pool)
 ctx.getConn()
 
 
+clazz = Position
 
-#ups = UserPassword.find(ctx, username=['39958407', '39117339'], orderBy={"username":False}).fetch(ctx, orderBy={"username":False})
 
-#buscar designaciones historicas (out=True)
-ids = User.find(ctx)
-#for i in designations:
-#    print(i.__dict__)
-
-"""
+orderBy = {} #separamos para incluirlo en el fetch
+ids = clazz.find(ctx, orderBy=orderBy)
+for o in ids.fetch(ctx):
+  print(o.__dict__)
 
 
 ctx.pool.closeall()
 
+"""
 
+#ups = UserPassword.find(ctx, username=['39958407', '39117339'], orderBy={"username":False}).fetch(ctx, orderBy={"username":False})
+
+#buscar designaciones historicas (out=True)
+#ids = User.find(ctx)
+#for i in designations:
+#    print(i.__dict__)
 
 
 ids = User.find(ctx, dni=["31073351", "27294557"], orderBy={"name":False})
