@@ -50,7 +50,11 @@ class DesignationSqlDAO(SqlDAO):
 
     @classmethod
     def namemapping(cls, name):
-        mappings = {'start':'dstart', 'end':'dend', 'out':'dout'}
+        mappings = {
+            'start':'dstart',
+            'end':'dend',
+            'out':'dout'
+        }
         if name in mappings:
             return mappings[name]
         return super().namemapping(name)
