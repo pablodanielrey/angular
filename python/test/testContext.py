@@ -28,9 +28,9 @@ ctx.getConn()
 clazz = Position
 
 
-orderBy = {} #separamos para incluirlo en el fetch
+orderBy = {"position":True} #separamos para incluirlo en el fetch
 ids = clazz.find(ctx, orderBy=orderBy)
-for o in ids.fetch(ctx):
+for o in ids.fetch(ctx, orderBy=orderBy):
   print(o.__dict__)
 
 
