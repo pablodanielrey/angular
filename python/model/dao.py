@@ -47,7 +47,7 @@ class SqlDAO(DAO):
 
     @classmethod
     def _getNameMappings(cls):
-        raise None
+        return None
 
     @classmethod
     def namemapping(cls, name):
