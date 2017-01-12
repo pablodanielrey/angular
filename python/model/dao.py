@@ -47,12 +47,12 @@ class SqlDAO(DAO):
 
     @classmethod
     def _getNameMappings(cls):
-        raise NotImplementedError()
+        raise None
 
     @classmethod
     def namemapping(cls, name):
         mappings = cls._getNameMappings()
-        name = mappings[name] if name in mappings else name
+        name = mappings[name] if mappings is not None and name in mappings else name
         s1 = re.sub('(.)([A-Z][a-z]+)', r'\1_\2', name)
         return re.sub('([a-z0-9])([A-Z])', r'\1_\2', s1).lower()
 
