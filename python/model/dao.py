@@ -72,10 +72,6 @@ class SqlDAO(DAO):
         return cls.dependencies
 
     @classmethod
-    def getEntity(cls):
-        raise NotImplementedError()
-
-    @classmethod
     def findById(cls, con, id):
         assert id is not None
         res = cls.findByIds(con, [id])
@@ -90,7 +86,7 @@ class SqlDAO(DAO):
         cur = ctx.con.cursor()
         try:
             cur.execute(sql, (tuple(ids),))
-            return [cls._fromResult(cls.getEntity(), c) for c in cur ]
+            return [cls._fromResult(cls._entity(), c) for c in cur ]
 
 
         finally:
