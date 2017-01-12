@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
 import logging
 
-from model.serializer import JSONSerializable
-from model.designation.designation import Designation
+from model.entity import Entity
+from model.designation.entities.designation import Designation
 
-class Office(JSONSerializable):
+class Office(Entity):
 
     officeType = [
         {'value': 'university', 'name': 'Universidad'},
@@ -35,6 +35,7 @@ class Office(JSONSerializable):
         self.email = None
         self.parent = None
         self.public = None
+        self.removed = None
 
     @classmethod
     def getTypes(cls):
@@ -42,8 +43,7 @@ class Office(JSONSerializable):
 
     @classmethod
     def findByUser(cls, ctx, userId, types=None, tree=False):
-        idsD = Designation.findByUsers(ctx, [userId])
-        desig = Designation.findByIds(ctx, idsD)
+        desig = Designation.find(ctx, userId=[userId]).fetch(ctx)
         oIds = set()
         oIds.update([d.officeId for d in desig])
 
@@ -66,24 +66,6 @@ class Office(JSONSerializable):
 
         return [o for o in oIds if o not in toRemove]
 
-    @classmethod
-    def findByIds(cls, ctx, ids):
-        return ctx.dao(cls).findByIds(ctx, ids)
-
-    @classmethod
-    def findChildIds(cls, ctx, oId):
-        return ctx.dao(cls).findChilds(ctx, oId, tree=True)
-
-    @classmethod
-    def findAll(cls, ctx, Type=None):
-        return ctx.dao(cls).findAll(ctx, Type)
-
-
-    def persist(self, ctx):
-        return ctx.dao(self).persist(ctx, self)
-
-    def remove(self, con):
-        return ctx.dao(self).remove(ctx, self.id)
 
     def findChilds(self, con, types=None, tree=False):
         return ctx.dao(self).findChilds(ctx, self.id, types, tree)

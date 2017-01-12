@@ -65,7 +65,7 @@ class MailSqlDAO(SqlDAO):
         ''' Elimina el email dado por el id '''
         cur = ctx.con.cursor()
         try:
-            cur.execute('delete from profile.mails where id in %s', (tuple(mid),))
+            cur.execute('delete from profile.mails where id in %s', (tuple(ids),))
 
         finally:
             cur.close()

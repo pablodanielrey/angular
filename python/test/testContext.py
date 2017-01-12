@@ -12,6 +12,8 @@ from model import SqlContext
 from model.users.entities.userPassword import UserPassword
 from model.users.entities.user import User
 from model.users.entities.mail import Mail
+from model.offices.entities.office import Office
+
 
 #from model.designation.entities.designation import Designation
 #from model.designation.entities.position import Position
@@ -26,11 +28,11 @@ ctx = SqlContext(pool)
 ctx.getConn()
 
 
-clazz = Mail
+clazz = Office
 
-orderBy = {} #separamos para incluirlo en el fetch
+orderBy = {"name":True} #separamos para incluirlo en el fetch
 #orderBy = {"position":True} #separamos para incluirlo en el fetch
-ids = clazz.find(ctx, email=["marinaventuro@hotmail.com"])
+ids = clazz.find(ctx)
 for o in ids.fetch(ctx, orderBy=orderBy):
   print(o.__dict__)
 

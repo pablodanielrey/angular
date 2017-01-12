@@ -1,10 +1,12 @@
 from model.dao import SqlDAO
-from model.offices.office import Office
+from model.offices.entities.office import Office
 
 class OfficeSqlDAO(SqlDAO):
 
     _schema = "offices."
     _table  = "offices"
+    _mappings = {"number":"nro"}
+    _entity = Office
 
     @classmethod
     def _createSchema(cls, ctx):
@@ -41,6 +43,7 @@ class OfficeSqlDAO(SqlDAO):
         o.email = r['email']
         o.parent = r['parent']
         o.public = r['public']
+        o.removed = r['removed']
         return o
 
     @classmethod
@@ -72,21 +75,7 @@ class OfficeSqlDAO(SqlDAO):
         finally:
             cur.close()
 
-    @classmethod
-    def findAll(cls, ctx, types=None):
-        cur = ctx.con.cursor()
-        try:
-            if types is None:
-                cur.execute('select id from offices.offices where removed is null')
-                return [o['id'] for o in cur]
-            else:
-                assert isinstance(types, list)
-                t = [o['value'] for o in types]
-                cur.execute('select id from offices.offices where removed is null and type in %s',(tuple(t),))
-                return [o['id'] for o in cur]
 
-        finally:
-            cur.close()
 
     @classmethod
     def persist(cls, ctx, office):
@@ -107,11 +96,12 @@ class OfficeSqlDAO(SqlDAO):
             cur.close()
 
 
+
     @classmethod
-    def remove(cls, ctx, id):
+    def deleteByIds(cls, ctx, ids):
         cur = ctx.con.cursor()
         try:
-            cur.execute('update offices.offices set removed = NOW() where id = %s', (id,))
-            return id
+            cur.execute('update offices.offices set removed = NOW() where id in %s', (tuple(ids),))
+            return ids
         finally:
             cur.close()
