@@ -93,14 +93,13 @@ class SqlDAO(DAO):
 
     @classmethod
     def find(cls, ctx, *args, **kwargs):
-        print(kwargs)
         condition = cls._condition(**kwargs)
         orderBy = cls._orderBy(**kwargs);
 
         c = " WHERE {}".format(' AND ' .join(condition["list"])) if len(condition["list"]) else ""
         o = " ORDER BY {}".format(', ' .join(orderBy)) if len(orderBy) else ""
         sql = "SELECT id FROM {}{}{}{};".format(cls._schema, cls._table, c, o)
-        print(sql)
+        
         cur = ctx.con.cursor()
         try:
             cur.execute(sql, tuple(condition["values"]))

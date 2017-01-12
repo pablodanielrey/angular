@@ -17,4 +17,4 @@ class Designation(Entity):
         self.originalId = None
 
     def expire(self, ctx):
-        con['dao'].expireByIds(ctx, [self.id])
+        ctx.dao(self).expireByIds(ctx, [self.id])

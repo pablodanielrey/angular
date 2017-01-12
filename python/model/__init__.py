@@ -22,7 +22,6 @@ class Context:
 
         pname = entity.__module__[0:entity.__module__.rfind('.entities.')]
         mtoi = pname + '.dao'
-        print(mtoi)
         module = importlib.import_module(mtoi)
         root = module.__path__[0]
         files = [f for f in listdir(root) if isfile(join(root,f))]
@@ -83,7 +82,6 @@ class Ids:
         self.values = values
 
     def fetch(self, ctx, *args, **kwargs):
-        print(kwargs)
         return [] if (self.values is None or len(self.values) <= 0) else ctx.dao(self.clazz).findByIds(ctx, self.values, *args, **kwargs)
 
     def __iter__(self):

@@ -11,8 +11,8 @@ from psycopg2.extras import DictCursor
 from model import SqlContext
 from model.users.entities.userPassword import UserPassword
 from model.users.entities.user import User
-from model.designation.entities.designation import Designation
 
+from model.designation.entities.designation import Designation
 
 h = sys.argv[1]
 d = sys.argv[2]
@@ -24,12 +24,16 @@ ctx = SqlContext(pool)
 ctx.getConn()
 
 
+
+#ups = UserPassword.find(ctx, username=['39958407', '39117339'], orderBy={"username":False}).fetch(ctx, orderBy={"username":False})
+
 #buscar designaciones historicas (out=True)
-ups = UserPassword.find(ctx, username=['39958407', '39117339'], orderBy={"username":False}).fetch(ctx, orderBy={"username":False})
-designations = Designation.find(ctx, userId=["d224eaa5-4b15-40bb-9d22-319f78808bca"], out=True)
+ids = User.find(ctx)
+#for i in designations:
+#    print(i.__dict__)
+
 """
-for up in ups:
-    print(up.__dict__)
+
 
 ctx.pool.closeall()
 
@@ -46,7 +50,6 @@ for id in ids:
 users = ids.fetch(ctx)
 for user in users:
     print(user.__dict__)
-
+"""
 
 ctx.pool.closeall()
-"""

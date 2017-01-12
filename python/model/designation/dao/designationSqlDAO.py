@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from model.dao import SqlDAO
-from model.designation.designation import Designation
+from model.designation.entities.designation import Designation
 
 class DesignationSqlDAO(SqlDAO):
     ''' DAO designation '''
@@ -62,7 +62,7 @@ class DesignationSqlDAO(SqlDAO):
         return super().namemapping(name)
 
 
-    @staticmethod
+    @classmethod
     def _fromResult(cls, d, r):
         d.id = r['id']
         d.start = r['dstart']
@@ -80,10 +80,10 @@ class DesignationSqlDAO(SqlDAO):
         return d
 
     @classmethod
-    def expireByIds(cls, con, ids):
+    def expireByIds(cls, ctx, ids):
         assert ids is not None
         assert isinstance(ids, list)
-        cur = con['con'].cursor()
+        cur = ctx.con.cursor()
         try:
             cur.execute('update designations.designation set dout = NOW() where id in %s', (tuple(ids),))
         finally:
