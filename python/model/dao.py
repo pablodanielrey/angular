@@ -26,8 +26,8 @@ class SqlDAO(DAO):
         conditionValues = list()
         for k in condition:
             if type(condition[k]) == bool:
-                cond = "({} IS NOT NULL)" if condition[k] else "({} IS NULL)"
-                conditionList.append(cond.format(cls.namemapping(k)))
+                cond = "({}{}{} IS NOT NULL)" if condition[k] else "({}{}{} IS NULL)"
+                conditionList.append(cond.format(cls._schema, cls._table, cls.namemapping(k)))
             else:
                 conditionList.append("({} IN %s)".format(cls.namemapping(k)))
                 conditionValues.append(tuple(condition[k]))
@@ -42,7 +42,7 @@ class SqlDAO(DAO):
 
         for k in orderBy:
             orderByType = "ASC" if orderBy[k] else "DESC"
-            orderByList.append("{} {}".format(cls.namemapping(k), orderByType))
+            orderByList.append("{}{}{} {}".format(cls._schema, cls._table, cls.namemapping(k), orderByType))
 
         return orderByList
 
