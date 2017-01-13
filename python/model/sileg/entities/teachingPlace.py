@@ -1,0 +1,4 @@
+
+
+class TeachingPlace(Place):
+    pass
