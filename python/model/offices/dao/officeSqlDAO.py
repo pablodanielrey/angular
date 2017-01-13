@@ -1,5 +1,6 @@
 from model.dao import SqlDAO
 from model.offices.entities.office import Office
+from model.designation.entities.designation import Designation
 
 class OfficeSqlDAO(SqlDAO):
 
@@ -39,7 +40,7 @@ class OfficeSqlDAO(SqlDAO):
         o.name = r['name']
         o.telephone = r['telephone']
         o.number = r['nro']
-        o.type = None if r['type'] is None else [t for t in Office.officeType if t['value'] == r['type']][0]
+        o.type = r['type']
         o.email = r['email']
         o.parent = r['parent']
         o.public = r['public']
@@ -47,34 +48,36 @@ class OfficeSqlDAO(SqlDAO):
         return o
 
     @classmethod
-    def findChilds(cls, ctx, oid, types=None, tree=False):
-        cids = set()
-        pids = set()
-        pids.add(oid)
+    def findByUserId(cls, ctx, userId, tree=False, *args, **kwargs):
+        """
+        Buscar oficinas por usuario
+        Parameters:
+          userId (string) - Un unico valor de usuario (no es una lista)
+          tree (bool) - flag para indicar si se deben buscar hijos
+        """
+        designations = Designation.find(ctx, userId=[userId]).fetch(ctx)
+        ids = [d.officeId for d in designations]
 
-        cur = ctx.con.cursor()
-        try:
-            while (len(pids) > 0):
-                pid = pids.pop()
-                cur.execute('select id from offices.offices where parent = %s and removed is null', (pid,))
-                currentIds = [o['id'] for o in cur if o['id'] not in cids]
-                if not tree:
-                    cids.update(currentIds)
-                else:
-                    ''' evito loops '''
-                    pids.update(set(currentIds) - cids)
-                    cids.update(currentIds)
+        if tree:
+            ids.extend(cls.findChildsByIds(ctx, ids, False, *args, **kwargs))
 
-            if types is not None and len(cids) > 0:
-                ''' de todos los hijos se seleccionan los de determinados tipos '''
-                cur.execute('select id from offices.offices where id in %s and type in %s', (tuple(cids), tuple(types)))
-                return [o['id'] for o in cur]
-            else:
-                return list(cids)
+        if(kwargs):
+            idsAux = cls.find(ctx, *args, **kwargs)
+            ids = list(set(ids) & set(idsAux))
 
-        finally:
-            cur.close()
+        return list(set(ids))
 
+
+    @classmethod
+    def findChildsByIds(cls, ctx, officeIds, tree=False, *args, **kwargs):
+        childIds = cls.find(ctx, parent=officeIds, *args, **kwargs)
+
+        if(tree):
+            officeIdsAux = list(set(childIds) - set(officeIds))
+            childIdsAux = cls.findChildsByIds(ctx, officeIdsAux, False, *args, **kwargs)
+            childIds.extend(childIdsAux)
+
+        return list(set(childIds))
 
 
     @classmethod

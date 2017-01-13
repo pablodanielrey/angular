@@ -30,17 +30,14 @@ ctx = SqlContext(pool)
 ctx.getConn()
 
 
-clazz = Contact
-
-orderBy = {} #separamos para incluirlo en el fetch
-#orderBy = {"position":True} #separamos para incluirlo en el fetch
-ids = clazz.find(ctx)
-for o in ids.fetch(ctx, orderBy=orderBy):
-  print(o.__dict__)
+users = User.find(ctx, dni=["31073351"]).fetch(ctx)
+for u in users:
+    offices = Office.findByUserId(ctx, u.id, email=["soporte@econo.unlp.edu.ar"]).fetch(ctx)
+    for o in offices:
+        print(o.__dict__)
 
 
-c = clazz()
-c.id = "AAA"
-c.delete(ctx)
+
+
 
 ctx.pool.closeall()
