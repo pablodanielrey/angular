@@ -11,14 +11,13 @@ class OfficeSqlDAO(SqlDAO):
 
     @classmethod
     def _createSchema(cls, ctx):
-        super()._createSchema(ctx)
-        cur = con.cursor()
+        cur = ctx.con.cursor()
         try:
             cur.execute("""
                 CREATE SCHEMA IF NOT EXISTS offices;
 
                 CREATE TABLE IF NOT EXISTS offices.offices (
-                  id VARCHAR NOT NULL PRIMARY KEY,
+                id VARCHAR NOT NULL PRIMARY KEY REFERENCES designations.place (id),
                   name VARCHAR NOT NULL,
                   telephone VARCHAR,
                   nro VARCHAR,
@@ -46,6 +45,52 @@ class OfficeSqlDAO(SqlDAO):
         o.public = r['public']
         o.removed = r['removed']
         return o
+
+
+    @classmethod
+    def findByIds(cls, ctx, ids, *args, **kwargs):
+        orderBy = cls._orderBy(**kwargs)
+        o = " ORDER BY {}".format(', ' .join(orderBy)) if len(orderBy) else ""
+        sql = """
+            SELECT * FROM {}{}
+            INNER JOIN designations.place p ON (o.id = p.id)
+            WHERE id IN %s
+            {}
+        """.format(cls._schema, cls._table, o)
+
+        cur = ctx.con.cursor()
+        try:
+            cur.execute(sql, (tuple(ids),))
+            return [cls._fromResult(cls._entity(), c) for c in cur ]
+
+
+        finally:
+            cur.close()
+
+    @classmethod
+    def find(cls, ctx, *args, **kwargs):
+        condition = cls._condition(**kwargs)
+        orderBy = cls._orderBy(**kwargs);
+
+        c = " WHERE {}".format(' AND ' .join(condition["list"])) if len(condition["list"]) else ""
+        o = " ORDER BY {}".format(', ' .join(orderBy)) if len(orderBy) else ""
+        sql = """
+            SELECT id FROM {}{}
+            INNER JOIN designations.place p ON (o.id = p.id)
+            {}{}
+        """.format(cls._schema, cls._table, c, o)
+
+        cur = ctx.con.cursor()
+        try:
+            cur.execute(sql, tuple(condition["values"]))
+            if cur.rowcount <= 0:
+                return []
+
+            return [r['id'] for r in cur]
+
+        finally:
+            cur.close()
+
 
     @classmethod
     def findByUserId(cls, ctx, usersIds, tree=False, *args, **kwargs):
