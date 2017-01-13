@@ -61,6 +61,11 @@ class SqlContext(Context):
             self.pool.putconn(self.con)
         self.con = self.pool.getconn()
 
+    def closeConn(self):
+        if self.con:
+            self.pool.putconn(self.con)
+            self.con = None
+
     def closeAll(self):
         self.pool.closeall()
 

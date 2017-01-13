@@ -48,18 +48,18 @@ class OfficeSqlDAO(SqlDAO):
         return o
 
     @classmethod
-    def findByUserId(cls, ctx, userId, tree=False, *args, **kwargs):
+    def findByUserId(cls, ctx, usersIds, tree=False, *args, **kwargs):
         """
         Buscar oficinas por usuario
         Parameters:
-          userId (string) - Un unico valor de usuario (no es una lista)
+          usersIds (lista) - lista de usuarios a consutlar.
           tree (bool) - flag para indicar si se deben buscar hijos
         """
-        designations = Designation.find(ctx, userId=[userId]).fetch(ctx)
+        designations = Designation.find(ctx, userId=[userId], positionId=[1]).fetch(ctx)
         ids = [d.officeId for d in designations]
 
         if tree:
-            ids.extend(cls.findChildsByIds(ctx, ids, False, *args, **kwargs))
+            ids.extend(cls.findChildsByIds(ctx, ids, False))
 
         if(kwargs):
             idsAux = cls.find(ctx, *args, **kwargs)

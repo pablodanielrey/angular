@@ -79,7 +79,6 @@ class DesignationSqlDAO(SqlDAO):
         finally:
             cur.close()
 
-
     @classmethod
     def persist(cls, ctx, desig):
         cur = ctx.con.cursor()
