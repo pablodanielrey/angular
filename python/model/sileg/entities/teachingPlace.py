@@ -1,4 +1,6 @@
-
+# -*- coding: utf-8 -*-
+from model import Ids
+from model.designation.entities.place import Place
 
 class TeachingPlace(Place):
 

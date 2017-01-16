@@ -1,6 +1,4 @@
 # -*- coding: utf-8 -*-
-import logging
-
 from model import Ids
 from model.designation.entities.place import Place
 

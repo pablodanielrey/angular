@@ -24,7 +24,7 @@ class OfficeSqlDAO(PlaceSqlDAO):
         for k in condition:
             if type(condition[k]) == bool:
                 if k in ["telephone", "number", "email"]:
-                  cond = "({} IS NOT NULL)" if condition[k] else "({}{}{} IS NULL)"
+                  cond = "({} IS NOT NULL)" if condition[k] else "({} IS NULL)"
                 else:
                   cond = "(designations.place.{} IS NOT NULL)" if condition[k] else "(designations.place.{} IS NULL)"
 
@@ -91,11 +91,12 @@ class OfficeSqlDAO(PlaceSqlDAO):
         orderBy = cls._orderBy(**kwargs)
         o = " ORDER BY {}".format(', ' .join(orderBy)) if len(orderBy) else ""
         sql = """
-            SELECT * FROM {}{}
-            INNER JOIN designations.place ON ({}{}.id = designations.place.id)
-            WHERE {}{}.id IN %s
+            SELECT *
+            FROM offices.office
+            INNER JOIN designations.place ON (offices.office.id = designations.place.id)
+            WHERE offices.office.id IN %s
             {}
-        """.format(cls._schema, cls._table, cls._schema, cls._table, cls._schema, cls._table, o)
+        """.format(o)
 
         cur = ctx.con.cursor()
         try:
@@ -114,10 +115,11 @@ class OfficeSqlDAO(PlaceSqlDAO):
         c = " WHERE {}".format(' AND ' .join(condition["list"])) if len(condition["list"]) else ""
         o = " ORDER BY {}".format(', ' .join(orderBy)) if len(orderBy) else ""
         sql = """
-            SELECT {}{}.id FROM {}{}
-            INNER JOIN designations.place ON ({}{}.id = designations.place.id)
+            SELECT offices.office.id
+            FROM offices.office
+            INNER JOIN designations.place ON (offices.office.id = designations.place.id)
             {}{}
-        """.format(cls._schema, cls._table, cls._schema, cls._table, cls._schema, cls._table, c, o)
+        """.format(c, o)
 
         cur = ctx.con.cursor()
         try:
@@ -177,8 +179,8 @@ class OfficeSqlDAO(PlaceSqlDAO):
 
             else:
                 params = office.__dict__
-                cur.execute('update offices.offices set name = %(name)s, type = %(type)s, parent = %(parent)s, public = %(public)s where id = %(id)s', params)
-                cur.execute('update offices.offices set telephone = %(telephone)s, nro = %(number)s, email = %(email)s, where id = %(id)s', params)
+                cur.execute('update designations.place set name = %(name)s, type = %(type)s, parent = %(parent)s, public = %(public)s where id = %(id)s', params)
+                cur.execute('update offices.office set telephone = %(telephone)s, nro = %(number)s, email = %(email)s, where id = %(id)s', params)
 
             return office
 
