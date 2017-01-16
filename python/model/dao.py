@@ -7,6 +7,7 @@ import re
 class SqlDAO(DAO):
 
     dependencies = []
+
     _schema = None
     _table = None
     _entity = None
@@ -26,8 +27,8 @@ class SqlDAO(DAO):
         conditionValues = list()
         for k in condition:
             if type(condition[k]) == bool:
-                cond = "({}{}{} IS NOT NULL)" if condition[k] else "({}{}{} IS NULL)"
-                conditionList.append(cond.format(cls._schema, cls._table, cls.namemapping(k)))
+                cond = "({} IS NOT NULL)" if condition[k] else "({} IS NULL)"
+                conditionList.append(cond.format(cls.namemapping(k)))
             else:
                 conditionList.append("({} IN %s)".format(cls.namemapping(k)))
                 conditionValues.append(tuple(condition[k]))
@@ -42,7 +43,7 @@ class SqlDAO(DAO):
 
         for k in orderBy:
             orderByType = "ASC" if orderBy[k] else "DESC"
-            orderByList.append("{}{}{} {}".format(cls._schema, cls._table, cls.namemapping(k), orderByType))
+            orderByList.append("{} {}".format(cls.namemapping(k), orderByType))
 
         return orderByList
 
@@ -54,18 +55,11 @@ class SqlDAO(DAO):
 
 
     @classmethod
-    def _createSchema(cls, con):
-        for dep in cls._getDependencies():
-            logging.debug('creando schema : {}'.format(dep.__name__))
-            dep._createSchema(con)
+    def _createSchema(cls, ctx):
 
-        for c in cls.__subclasses__():
-            logging.debug('creando schema : {}'.format(c.__name__))
-            c._createSchema(con)
+        for dep in cls.dependencies:
+            dep._createSchema(ctx)
 
-    @classmethod
-    def _getDependencies(cls):
-        return cls.dependencies
 
     @classmethod
     def findById(cls, con, id):

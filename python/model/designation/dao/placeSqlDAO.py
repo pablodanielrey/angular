@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from model.dao import SqlDAO
-from model.designation.entities.position import Place
+from model.designation.entities.place import Place
+
 
 
 class PlaceSqlDAO(SqlDAO):
@@ -11,6 +12,8 @@ class PlaceSqlDAO(SqlDAO):
 
     @classmethod
     def _createSchema(cls, ctx):
+        super()._createSchema(ctx)
+
         cur = ctx.con.cursor()
         try:
             cur.execute("""
@@ -20,12 +23,13 @@ class PlaceSqlDAO(SqlDAO):
                     id VARCHAR NOT NULL PRIMARY KEY,
                     name VARCHAR NOT NULL,
                     type VARCHAR NOT NULL,
-                    parent VARCHAR REFERENCES offices.offices (id),
+                    parent VARCHAR REFERENCES designations.place (id),
                     removed TIMESTAMPTZ,
                     public boolean default false,
                     UNIQUE (name)
                 );
             """)
+            print(cur.statusmessage)
         finally:
             cur.close()
 
@@ -39,3 +43,15 @@ class PlaceSqlDAO(SqlDAO):
         p.public = r['public']
         p.removed = r['removed']
         return p
+
+
+
+
+    @classmethod
+    def deleteByIds(cls, ctx, ids):
+        cur = ctx.con.cursor()
+        try:
+            cur.execute('update {}{} set removed = NOW() where id in %s'.format(PlaceSqlDAO._schema, PlaceSqlDAO._table), (tuple(ids),))
+            return ids
+        finally:
+            cur.close()

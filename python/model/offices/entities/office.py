@@ -2,20 +2,15 @@
 import logging
 
 from model import Ids
-from model.entity import Entity
+from model.designation.entities.place import Place
 
-class Office(Entity):
+class Office(Place):
 
     def __init__(self):
-        self.id = None
-        self.name = None
+        super().__init__();
         self.telephone = None
         self.number = None
-        self.type = None
         self.email = None
-        self.parent = None
-        self.public = None
-        self.removed = None
 
 
     @classmethod

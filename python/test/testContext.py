@@ -29,13 +29,18 @@ pool = psycopg2.pool.ThreadedConnectionPool(1, 4, host=h, database=d, user=u, pa
 ctx = SqlContext(pool)
 ctx.getConn()
 
+offices = Office.find(ctx).fetch(ctx, orderBy={"parent":False})
 
+for o in offices:
+    print(o.__dict__)
+
+"""
 users = User.find(ctx, dni=["31073351"]).fetch(ctx)
 for u in users:
     offices = Office.findByUserId(ctx, u.id, email=["soporte@econo.unlp.edu.ar"]).fetch(ctx)
     for o in offices:
         print(o.__dict__)
-
+"""
 
 
 

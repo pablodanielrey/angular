@@ -1,4 +1,8 @@
 
 
 class TeachingPlace(Place):
-    pass
+
+    def __init__(self):
+        super.__init__();
+        self.telephone = None
+        self.email = None

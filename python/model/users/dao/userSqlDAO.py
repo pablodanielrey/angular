@@ -13,9 +13,9 @@ class UserSqlDAO(SqlDAO):
     _entity = User
 
     @classmethod
-    def _createSchema(cls, con):
-        super()._createSchema(con)
-        cur = con.cursor()
+    def _createSchema(cls, ctx):
+        super()._createSchema(ctx)
+        cur = ctx.con.cursor()
         try:
             sql = """
               CREATE SCHEMA IF NOT EXISTS profile;

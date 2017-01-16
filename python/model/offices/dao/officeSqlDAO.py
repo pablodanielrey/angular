@@ -1,49 +1,88 @@
+import uuid
+
 from model.dao import SqlDAO
 from model.offices.entities.office import Office
+from model.designation.dao.placeSqlDAO import PlaceSqlDAO
 from model.designation.entities.designation import Designation
 
-class OfficeSqlDAO(SqlDAO):
+class OfficeSqlDAO(PlaceSqlDAO):
 
     _schema = "offices."
-    _table  = "offices"
+    _table  = "office"
     _mappings = {"number":"nro"}
     _entity = Office
 
+
+    @classmethod
+    def _condition(cls, **kwargs):
+        condition = kwargs
+        if "orderBy" in kwargs:
+            del condition["orderBy"]
+
+        conditionList = list()
+        conditionValues = list()
+        for k in condition:
+            if type(condition[k]) == bool:
+                if k in ["telephone", "number", "email"]:
+                  cond = "({} IS NOT NULL)" if condition[k] else "({}{}{} IS NULL)"
+                else:
+                  cond = "(designations.place.{} IS NOT NULL)" if condition[k] else "(designations.place.{} IS NULL)"
+
+                conditionList.append(cond.format(cls._schema, cls._table, cls.namemapping(k)))
+            else:
+                if k in ["telephone", "number", "email"]:
+                    conditionList.append("({} IN %s)".format(cls.namemapping(k)))
+                else:
+                    conditionList.append("((designations.place.{} IN %s)".format(cls.namemapping(k)))
+
+                conditionValues.append(tuple(condition[k]))
+
+        return {"list":conditionList, "values":conditionValues}
+
+
+
+    @classmethod
+    def _orderBy(cls, **kwargs):
+        orderBy = kwargs["orderBy"] if "orderBy" in kwargs else {}
+
+        orderByList = list()
+
+        for k in orderBy:
+            orderByType = "ASC" if orderBy[k] else "DESC"
+            if k in ["telephone", "number", "email"]:
+                orderByList.append("{}{}.{} {}".format(cls._schema, cls._table, cls.namemapping(k), orderByType))
+            else:
+                orderByList.append("{}{}.{} {}".format(super()._schema, super()._table, cls.namemapping(k), orderByType))
+
+        return orderByList
+
+
+
     @classmethod
     def _createSchema(cls, ctx):
+        super()._createSchema(ctx)
+
         cur = ctx.con.cursor()
         try:
             cur.execute("""
                 CREATE SCHEMA IF NOT EXISTS offices;
 
-                CREATE TABLE IF NOT EXISTS offices.offices (
-                id VARCHAR NOT NULL PRIMARY KEY REFERENCES designations.place (id),
-                  name VARCHAR NOT NULL,
+                CREATE TABLE IF NOT EXISTS offices.office (
+                  id VARCHAR NOT NULL PRIMARY KEY REFERENCES designations.place (id),
                   telephone VARCHAR,
                   nro VARCHAR,
-                  email VARCHAR,
-                  parent VARCHAR REFERENCES offices.offices (id),
-                  type VARCHAR NOT NULL,
-                  removed TIMESTAMPTZ,
-                  public boolean default false,
-                  UNIQUE (name)
+                  email VARCHAR
                 );
-
             """)
         finally:
             cur.close()
 
     @classmethod
     def _fromResult(cls, o, r):
-        o.id = r['id']
-        o.name = r['name']
+        super()._fromResult(o, r)
         o.telephone = r['telephone']
         o.number = r['nro']
-        o.type = r['type']
         o.email = r['email']
-        o.parent = r['parent']
-        o.public = r['public']
-        o.removed = r['removed']
         return o
 
 
@@ -53,10 +92,10 @@ class OfficeSqlDAO(SqlDAO):
         o = " ORDER BY {}".format(', ' .join(orderBy)) if len(orderBy) else ""
         sql = """
             SELECT * FROM {}{}
-            INNER JOIN designations.place p ON (o.id = p.id)
-            WHERE id IN %s
+            INNER JOIN designations.place ON ({}{}.id = designations.place.id)
+            WHERE {}{}.id IN %s
             {}
-        """.format(cls._schema, cls._table, o)
+        """.format(cls._schema, cls._table, cls._schema, cls._table, cls._schema, cls._table, o)
 
         cur = ctx.con.cursor()
         try:
@@ -75,10 +114,10 @@ class OfficeSqlDAO(SqlDAO):
         c = " WHERE {}".format(' AND ' .join(condition["list"])) if len(condition["list"]) else ""
         o = " ORDER BY {}".format(', ' .join(orderBy)) if len(orderBy) else ""
         sql = """
-            SELECT id FROM {}{}
-            INNER JOIN designations.place p ON (o.id = p.id)
+            SELECT {}{}.id FROM {}{}
+            INNER JOIN designations.place ON ({}{}.id = designations.place.id)
             {}{}
-        """.format(cls._schema, cls._table, c, o)
+        """.format(cls._schema, cls._table, cls._schema, cls._table, cls._schema, cls._table, c, o)
 
         cur = ctx.con.cursor()
         try:
@@ -133,23 +172,15 @@ class OfficeSqlDAO(SqlDAO):
             if office.id is None:
                 office.id = str(uuid.uuid4())
                 params = office.__dict__
-                cur.execute('insert into offices.offices (id, name, telephone, nro, type, parent, email, public) values (%(id)s, %(name)s, %(telephone)s, %(number)s, %(type)s, %(parent)s, %(email)s, %(public)s)', params)
+                cur.execute('insert into designations.place (id, name, type, parent, public) values (%(id)s, %(name)s, %(type)s, %(parent)s, %(public)s)', params)
+                cur.execute('insert into offices.office (id, telephone, nro, email) values (%(id)s, %(telephone)s, %(number)s, %(email)s)', params)
+
             else:
                 params = office.__dict__
-                cur.execute('update offices.offices set name = %(name)s, telephone = %(telephone)s, nro = %(number)s, type = %(type)s, parent = %(parent)s, email = %(email)s, public = %(public)s where id = %(id)s', params)
+                cur.execute('update offices.offices set name = %(name)s, type = %(type)s, parent = %(parent)s, public = %(public)s where id = %(id)s', params)
+                cur.execute('update offices.offices set telephone = %(telephone)s, nro = %(number)s, email = %(email)s, where id = %(id)s', params)
 
-            return office.id
+            return office
 
-        finally:
-            cur.close()
-
-
-
-    @classmethod
-    def deleteByIds(cls, ctx, ids):
-        cur = ctx.con.cursor()
-        try:
-            cur.execute('update offices.offices set removed = NOW() where id in %s', (tuple(ids),))
-            return ids
         finally:
             cur.close()
