@@ -1,13 +1,16 @@
 # -*- coding: utf-8 -*-
 import uuid
 
-from model.designation.dao.designationSqlDAO import DesignationSqlDAO
 from model.sileg.entities.teachingDesignation import TeachingDesignation
+from model.designation.dao.designationSqlDAO import DesignationSqlDAO
+from model.sileg.dao.teachingPlaceSqlDAO import TeachingPlaceSqlDAO
+from model.sileg.dao.teachingPositionSqlDAO import TeachingPositionSqlDAO
 
 
 class TeachingDesignationSqlDAO(DesignationSqlDAO):
     ''' DAO teachingDesignation '''
 
+    dependencies = [TeachingPlaceSqlDAO, TeachingPositionSqlDAO]
     _schema = "sileg."
     _table = "designation"
     _entity = TeachingDesignation
@@ -64,7 +67,7 @@ class TeachingDesignationSqlDAO(DesignationSqlDAO):
 
             cur.execute("""
                 INSERT INTO sileg.designation (id, dout, resolution, record)
-                VALUES (%(id)s, %(dout)s, %(resolution)s, %(record)s);
+                VALUES (%(id)s, %(out)s, %(resolution)s, %(record)s);
             """, entity.__dict__)
 
             return entity
@@ -79,7 +82,7 @@ class TeachingDesignationSqlDAO(DesignationSqlDAO):
 
             cur.execute("""
                 UPDATE sileg.designation
-                SET dout = %(dout)s, resolution = %(resolution)s, record = %(record)s
+                SET dout = %(out)s, resolution = %(resolution)s, record = %(record)s
                 WHERE id = %(id)s
             """, entity.__dict__)
 

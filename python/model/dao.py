@@ -1,6 +1,7 @@
 import logging
 from model import DAO, SqlContext
 import re
+import uuid
 
 
 
@@ -119,7 +120,7 @@ class SqlDAO(DAO):
 
     @classmethod
     def persist(cls, ctx, entity):
-        if not hasattr(entity, 'id'):
+        if not hasattr(entity, 'id') or entity.id is None:
             entity.id = str(uuid.uuid4())
 
         aux = cls.findById(ctx, entity.id)

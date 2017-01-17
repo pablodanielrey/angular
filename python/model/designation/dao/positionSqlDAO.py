@@ -17,7 +17,7 @@ class PositionSqlDAO(SqlDAO):
             cur.execute("""
                 CREATE SCHEMA IF NOT EXISTS designations;
 
-                CREATE TABLE IF NOT EXISTS designations.positions (
+                CREATE TABLE IF NOT EXISTS designations.position (
                   id VARCHAR PRIMARY KEY,
                   position VARCHAR,
                   type INTEGER,
@@ -33,3 +33,30 @@ class PositionSqlDAO(SqlDAO):
         p.position = r['position']
         p.type = r['type']
         return p
+
+    @classmethod
+    def insert(cls, ctx, entity):
+        cur = ctx.con.cursor()
+        try:
+            cur.execute("""
+                INSERT INTO designations.position (id, position, type)
+                VALUES (%(id)s, %(position)s, %(type)s)
+            """, entity.__dict__)
+
+            return entity
+        finally:
+            cur.close()
+
+    @classmethod
+    def update(cls, ctx, entity):
+        cur = ctx.con.cursor()
+        try:
+            cur.execute("""
+                UPDATE designations.position
+                SET position = %(position)s, type = %(type)s
+                WHERE id = %(id)s;
+            """, entity.__dict__)
+
+            return entity
+        finally:
+            cur.close()

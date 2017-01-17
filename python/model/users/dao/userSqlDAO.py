@@ -164,7 +164,7 @@ class UserSqlDAO(SqlDAO):
 
 
     @classmethod
-    def persist(ctx, user):
+    def persist(cls, ctx, user):
         cur = ctx.con.cursor()
         try:
             params = user.__dict__

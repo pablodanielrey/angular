@@ -25,7 +25,7 @@ class TeachingPlaceSqlDAO(SqlDAO):
                 CREATE TABLE IF NOT EXISTS sileg.place (
                   id VARCHAR NOT NULL PRIMARY KEY REFERENCES designations.place (id),
                   telephone VARCHAR,
-                  email VARCHAR,
+                  email VARCHAR
                 );
 
             """)

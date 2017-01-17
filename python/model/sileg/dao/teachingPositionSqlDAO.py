@@ -5,9 +5,7 @@ from model.designation.dao.positionSqlDAO import PositionSqlDAO
 from model.sileg.entities.teachingPosition import TeachingPosition
 
 
-class TeachingPositionSqlDAO(SqlDAO):
-
-    dependencies = [PlaceSqlDAO]
+class TeachingPositionSqlDAO(PositionSqlDAO):
 
     _schema = "sileg."
     _table  = "place"
@@ -24,7 +22,7 @@ class TeachingPositionSqlDAO(SqlDAO):
 
                 CREATE TABLE IF NOT EXISTS sileg.position (
                   id VARCHAR NOT NULL PRIMARY KEY REFERENCES designations.position (id),
-                  detail VARCHAR,
+                  detail VARCHAR
                 );
 
             """)
@@ -82,7 +80,7 @@ class TeachingPositionSqlDAO(SqlDAO):
     def _fromResult(cls, entity, r):
         super()._fromResult(entity, r)
         entity.detail = r['detail']
-        return o
+        return entity
 
 
     @classmethod
@@ -133,25 +131,33 @@ class TeachingPositionSqlDAO(SqlDAO):
 
 
 
-
-
     @classmethod
-    def persist(cls, ctx, entity):
-        ''' inserta o actualiza una oficia '''
+    def insert(cls, ctx, entity):
+        PositionSqlDAO.insert(ctx, entity)
+
         cur = ctx.con.cursor()
         try:
-            if entity.id is None:
-                entity.id = str(uuid.uuid4())
-                params = entity.__dict__
-                cur.execute('insert into designations.position (id, position, type) values (%(id)s, %(position)s, %(type)s)', params)
-                cur.execute('insert into sileg.position (id, detail) values (%(id)s, %(detail)s)', params)
+            cur.execute("""
+                INSERT INTO sileg.position (id, detail)
+                VALUES (%(id)s, %(detail)s)
+            """, entity.__dict__)
 
-            else:
-                params = entity.__dict__
-                cur.execute('update designations.position set position = %(position)s, type = %(type)s where id = %(id)s', params)
-                cur.execute('update sileg.position set position = %(position)s, type = %(type)s where id = %(id)s', params)
+            return entity
+        finally:
+            cur.close()
 
-            return office
+    @classmethod
+    def update(cls, ctx, entity):
+        PositionSqlDAO.update(ctx, entity)
 
+        cur = ctx.con.cursor()
+        try:
+            cur.execute("""
+                UPDATE sileg.position
+                SET detail = %(detail)s
+                WHERE id = %(id)s
+            """, entity.__dict__)
+
+            return entity
         finally:
             cur.close()

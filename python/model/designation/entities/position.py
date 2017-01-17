@@ -8,6 +8,6 @@ class Position(Entity):
     TEACHING = 2
 
     def __init__(self):
-        self.id = '1'
+        self.id = None
         self.position = 'Cumple función'
         self.type = self.SUPPORT

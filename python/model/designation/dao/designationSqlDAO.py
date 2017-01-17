@@ -36,7 +36,7 @@ class DesignationSqlDAO(SqlDAO):
 
                     user_id VARCHAR NOT NULL REFERENCES profile.users (id),
                     place_id VARCHAR REFERENCES designations.place (id),
-                    position_id VARCHAR REFERENCES designations.positions (id),
+                    position_id VARCHAR REFERENCES designations.position (id),
                     parent_id VARCHAR REFERENCES designations.designation (id),
                     start_id VARCHAR REFERENCES designations.designation (id),
 
@@ -75,8 +75,8 @@ class DesignationSqlDAO(SqlDAO):
     def insert(cls, ctx, entity):
         cur = ctx.con.cursor()
         try:
-            cur.execute("insert into designations.designation (id, place_id, user_id, position_id, dstart, dend) "
-                        "values (%(id)s, %(placeId)s, %(userId)s, %(positionId)s, %(start)s, %(end)s)",
+            cur.execute("insert into designations.designation (id, place_id, user_id, position_id, dstart, dend, type) "
+                        "values (%(id)s, %(placeId)s, %(userId)s, %(positionId)s, %(start)s, %(end)s, %(type)s)",
                         entity.__dict__)
 
             return entity

@@ -5,7 +5,7 @@ from model.designation.entities.designation import Designation
 class TeachingDesignation(Designation):
 
     def __init__(self):
-        super.__init__();
+        super().__init__();
         self.out = None
         self.resolution = None
         self.record = None
