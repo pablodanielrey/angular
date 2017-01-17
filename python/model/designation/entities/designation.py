@@ -10,10 +10,12 @@ class Designation(Entity):
         self.userId = None
 
         self.parentId = None
-        self.originalId = None
+        self.startId = None
 
         self.start = None
         self.end = None
+
+        self.type = None
 
 
     def expire(self, ctx):

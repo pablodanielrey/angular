@@ -115,3 +115,25 @@ class SqlDAO(DAO):
             cur.execute(sql, (tuple(ids),))
         finally:
             cur.close()
+
+
+    @classmethod
+    def persist(cls, ctx, entity):
+        if not hasattr(entity, 'id'):
+            entity.id = str(uuid.uuid4())
+
+        aux = cls.findById(ctx, entity.id)
+
+        if aux is not None:
+            return cls.update(ctx, entity)
+
+        else:
+            return cls.insert(ctx, entity)
+
+    @classmethod
+    def insert(cls, ctx, entity):
+      raise NotImplementedError
+
+    @classmethod
+    def update(cls, ctx, entity):
+      raise NotImplementedError

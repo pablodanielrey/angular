@@ -2,12 +2,15 @@
 import uuid
 
 from model.dao import SqlDAO
+from model.users.dao.userSqlDAO import UserSqlDAO
+from model.designation.dao.placeSqlDAO import PlaceSqlDAO
+from model.designation.dao.positionSqlDAO import PositionSqlDAO
 from model.designation.entities.designation import Designation
 
 class DesignationSqlDAO(SqlDAO):
     ''' DAO designation '''
 
-    dependencies = [UsersSqlDAO, PlaceSqlDAO, PositionsSqlDAO]
+    dependencies = [UserSqlDAO, PlaceSqlDAO, PositionSqlDAO]
     _schema = "designations."
     _table = "designation"
     _entity = Designation
@@ -18,7 +21,7 @@ class DesignationSqlDAO(SqlDAO):
 
     @classmethod
     def _createSchema(cls, ctx):
-        super()._createSchema(con)
+        super()._createSchema(ctx)
         cur = ctx.con.cursor()
         try:
             cur.execute("""
@@ -28,11 +31,14 @@ class DesignationSqlDAO(SqlDAO):
                     id VARCHAR PRIMARY KEY,
                     type VARCHAR NOT NULL,
 
+                    dstart DATE,
+                    dend DATE,
+
                     user_id VARCHAR NOT NULL REFERENCES profile.users (id),
                     place_id VARCHAR REFERENCES designations.place (id),
                     position_id VARCHAR REFERENCES designations.positions (id),
                     parent_id VARCHAR REFERENCES designations.designation (id),
-                    original_id VARCHAR REFERENCES designations.designation (id),
+                    start_id VARCHAR REFERENCES designations.designation (id),
 
                     created timestamptz default now()
                 );
@@ -47,7 +53,7 @@ class DesignationSqlDAO(SqlDAO):
         d.end = r['dend']
         d.type = r["type"]
         d.parentId = r["parent_id"]
-        d.originalId = r["original_id"]
+        d.startId = r["start_id"]
         d.placeId = r['place_id']
         d.positionId = r['position_id']
         d.userId = r['user_id']
@@ -64,15 +70,29 @@ class DesignationSqlDAO(SqlDAO):
         finally:
             cur.close()
 
+
     @classmethod
-    def persist(cls, ctx, desig):
+    def insert(cls, ctx, entity):
         cur = ctx.con.cursor()
         try:
-            if not hasattr(desig, 'id'):
-                desig.id = str(uuid.uuid4())
             cur.execute("insert into designations.designation (id, place_id, user_id, position_id, dstart, dend) "
                         "values (%(id)s, %(placeId)s, %(userId)s, %(positionId)s, %(start)s, %(end)s)",
-                        desig.__dict__)
-            return desig.id
+                        entity.__dict__)
+
+            return entity
+        finally:
+            cur.close()
+
+    @classmethod
+    def update(cls, ctx, entity):
+        cur = ctx.con.cursor()
+        try:
+            cur.execute("""
+                UPDATE designations.designation
+                SET place_id = %(placeId)s, user_id = %(userId)s, position_id = %(positionId)s, dstart = %(start)s, dend = %(end)s
+                WHERE id = %(id)s
+            """, entity.__dict__)
+
+            return entity
         finally:
             cur.close()

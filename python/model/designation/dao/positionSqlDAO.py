@@ -10,9 +10,9 @@ class PositionSqlDAO(SqlDAO):
     _entity = Position
 
     @classmethod
-    def _createSchema(cls, con):
-        super()._createSchema(con)
-        cur = con.cursor()
+    def _createSchema(cls, ctx):
+        super()._createSchema(ctx)
+        cur = ctx.con.cursor()
         try:
             cur.execute("""
                 CREATE SCHEMA IF NOT EXISTS designations;

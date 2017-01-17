@@ -1,8 +1,9 @@
 # -*- coding: utf-8 -*-
 import uuid
 
-from model.designation.dao.DesignationSqlDAO import DesignationSqlDAO
+from model.designation.dao.designationSqlDAO import DesignationSqlDAO
 from model.sileg.entities.teachingDesignation import TeachingDesignation
+
 
 class TeachingDesignationSqlDAO(DesignationSqlDAO):
     ''' DAO teachingDesignation '''
@@ -16,14 +17,14 @@ class TeachingDesignationSqlDAO(DesignationSqlDAO):
 
     @classmethod
     def _createSchema(cls, ctx):
-        super()._createSchema(con)
+        super()._createSchema(ctx)
         cur = ctx.con.cursor()
         try:
             cur.execute("""
-                CREATE SCHEMA IF NOT EXISTS designations;
+                CREATE SCHEMA IF NOT EXISTS sileg;
 
                 CREATE TABLE IF NOT EXISTS sileg.designation (
-                    id VARCHAR PRIMARY KEY VARCHAR NOT NULL REFERENCES designations.designation (id),
+                    id VARCHAR PRIMARY KEY NOT NULL REFERENCES designations.designation (id),
 
                     dout DATE,
                     resolution VARCHAR,
@@ -54,70 +55,82 @@ class TeachingDesignationSqlDAO(DesignationSqlDAO):
         finally:
             cur.close()
 
+
     @classmethod
-    def persist(cls, ctx, desig):
+    def insert(cls, ctx, entity):
         cur = ctx.con.cursor()
         try:
-            if not hasattr(desig, 'id'):
-                desig.id = str(uuid.uuid4())
+            DesignationSqlDAO.persist(ctx, entity)
 
             cur.execute("""
-              insert into designations.designation (id, office_id, user_id, position_id, dstart, dend)
-              values (%(id)s, %(officeId)s, %(userId)s, %(positionId)s, %(start)s, %(end)s)
-            """, desig.__dict__)
+                INSERT INTO sileg.designation (id, dout, resolution, record)
+                VALUES (%(id)s, %(dout)s, %(resolution)s, %(record)s);
+            """, entity.__dict__)
+
+            return entity
+        finally:
+            cur.close()
+
+    @classmethod
+    def update(cls, ctx, entity):
+        cur = ctx.con.cursor()
+        try:
+            DesignationSqlDAO.persist(ctx, entity)
 
             cur.execute("""
-              insert into sileg.designation (id, dout, resolution, record)
-              values (%(id)s, %(dout)s, %(resolution)s, %(record)s)
-            """, desig.__dict__)
+                UPDATE sileg.designation
+                SET dout = %(dout)s, resolution = %(resolution)s, record = %(record)s
+                WHERE id = %(id)s
+            """, entity.__dict__)
 
-            return desig
+            return entity
         finally:
             cur.close()
 
 
-        @classmethod
-        def _condition(cls, **kwargs):
-            condition = kwargs
-            if "orderBy" in kwargs:
-                del condition["orderBy"]
 
-            conditionList = list()
-            conditionValues = list()
-            for k in condition:
-                if type(condition[k]) == bool:
-                    if k in ["out", "resolution", "record"]:
-                      cond = "(sileg.designation.{} IS NOT NULL)" if condition[k] else "(sileg.place.{} IS NULL)"
-                    else:
-                      cond = "(designations.designation.{} IS NOT NULL)" if condition[k] else "(designations.place.{} IS NULL)"
+    @classmethod
+    def _condition(cls, **kwargs):
+        condition = kwargs
+        if "orderBy" in kwargs:
+            del condition["orderBy"]
 
-                    conditionList.append(cond.format(cls.namemapping(k)))
-                else:
-                    if k in ["out", "resolution", "record"]:
-                        conditionList.append("(sileg.designation.{} IN %s)".format(cls.namemapping(k)))
-                    else:
-                        conditionList.append("(designations.designation.{} IN %s)".format(cls.namemapping(k)))
-
-                    conditionValues.append(tuple(condition[k]))
-
-            return {"list":conditionList, "values":conditionValues}
-
-
-
-        @classmethod
-        def _orderBy(cls, **kwargs):
-            orderBy = kwargs["orderBy"] if "orderBy" in kwargs else {}
-
-            orderByList = list()
-
-            for k in orderBy:
-                orderByType = "ASC" if orderBy[k] else "DESC"
+        conditionList = list()
+        conditionValues = list()
+        for k in condition:
+            if type(condition[k]) == bool:
                 if k in ["out", "resolution", "record"]:
-                    orderByList.append("sileg.designation.{} {}".format(cls.namemapping(k), orderByType))
+                  cond = "(sileg.designation.{} IS NOT NULL)" if condition[k] else "(sileg.place.{} IS NULL)"
                 else:
-                    orderByList.append("designations.designation.{} {}".format(cls.namemapping(k), orderByType))
+                  cond = "(designations.designation.{} IS NOT NULL)" if condition[k] else "(designations.place.{} IS NULL)"
 
-            return orderByList
+                conditionList.append(cond.format(cls.namemapping(k)))
+            else:
+                if k in ["out", "resolution", "record"]:
+                    conditionList.append("(sileg.designation.{} IN %s)".format(cls.namemapping(k)))
+                else:
+                    conditionList.append("(designations.designation.{} IN %s)".format(cls.namemapping(k)))
+
+                conditionValues.append(tuple(condition[k]))
+
+        return {"list":conditionList, "values":conditionValues}
+
+
+
+    @classmethod
+    def _orderBy(cls, **kwargs):
+        orderBy = kwargs["orderBy"] if "orderBy" in kwargs else {}
+
+        orderByList = list()
+
+        for k in orderBy:
+            orderByType = "ASC" if orderBy[k] else "DESC"
+            if k in ["out", "resolution", "record"]:
+                orderByList.append("sileg.designation.{} {}".format(cls.namemapping(k), orderByType))
+            else:
+                orderByList.append("designations.designation.{} {}".format(cls.namemapping(k), orderByType))
+
+        return orderByList
 
 
 

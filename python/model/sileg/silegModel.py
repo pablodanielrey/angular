@@ -24,28 +24,25 @@ class SilegModel:
 
 
     @classmethod
-    def findPositionsActiveByUser(cls, con, userId):
+    def findPositionsActiveByUser(cls, ctx, userId):
         placesIds = TeachingPlace.find(ctx, type=["cdepartment"])
         designations = TeachingDesignation.find(ctx, userId=[userId], out=False, placeId=placesIds).fetch(ctx)
 
-        """
         data = {}
-        for designation in designations:
-            position = Position.findByIds(con, [designation.positionId])[0]
-            place = Office.findByIds(con, [designation.officeId])[0]
-            designation.place = place
+        for d in designations:
+            position = TeachingPosition.findByIds(con, [d.positionId])[0]
+            place = TeachingPlacefindByIds(con, [d.placeId])[0]
+            d.place = place
             if position.position not in data:
                 data[position.position] = {"position":position, "designations":[]}
 
-            data[position.position]["designations"].append(designation)
+            data[position.position]["designations"].append(d)
 
         return data
-        """
 
     @classmethod
-    def findPositionsActiveByPlace(cls, con, placeId):
-        designationIds = Designation.findByPlaces(con, [placeId])
-        designations = Designation.findByIds(con, designationIds)
+    def findPositionsActiveByPlace(cls, ctx, placeId):
+        designations = TeachingDesignation.find(con, out=False, placeId=[placeId]).fetch(ctx)
 
         designationsActive = [d for d in designations if d.out is None and d.description == 'original' and Office.findByIds(con, [d.officeId])[0].type["value"] == 'cdepartment' ]
 

@@ -9,6 +9,8 @@ from model import SqlContext
 from psycopg2.extras import DictCursor
 
 from model.offices.dao.officeSqlDAO import OfficeSqlDAO
+from model.sileg.dao.teachingDesignationSqlDAO import TeachingDesignationSqlDAO
+
 
 
 
@@ -24,7 +26,8 @@ pool = psycopg2.pool.ThreadedConnectionPool(1,1, host=h, database=d, user=u, pas
 ctx = SqlContext(pool)
 ctx.getConn()
 
-OfficeSqlDAO._createSchema(ctx)
+#OfficeSqlDAO._createSchema(ctx)
+TeachingDesignationSqlDAO._createSchema(ctx)
 
 
 ctx.con.commit()

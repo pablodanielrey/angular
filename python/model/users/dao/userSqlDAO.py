@@ -3,11 +3,13 @@ import uuid
 
 from model.dao import SqlDAO
 from model.files.entities.file import File
+from model.files.dao.fileSqlDAO import FileSqlDAO
 from model.users.entities.user import User, Telephone
 
 class UserSqlDAO(SqlDAO):
     ''' DAO usuarios '''
 
+    dependencies = [FileSqlDAO]
     _schema = "profile."
     _table = "users"
     _entity = User
@@ -34,8 +36,7 @@ class UserSqlDAO(SqlDAO):
                 residence_city VARCHAR,
                 created TIMESTAMPTZ DEFAULT now(),
                 version BIGINT DEFAULT 0,
-                photo VARCHAR REFERENCES files.files (id),
-                type VARCHAR
+                photo VARCHAR REFERENCES files.files (id)
               );
 
               CREATE TABLE IF NOT EXISTS profile.telephones (
