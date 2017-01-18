@@ -168,18 +168,20 @@ class OfficeSqlDAO(PlaceSqlDAO):
 
     @classmethod
     def persist(cls, ctx, office):
+        super().persist(ctx, office)
+
         ''' inserta o actualiza una oficia '''
         cur = ctx.con.cursor()
         try:
             if office.id is None:
                 office.id = str(uuid.uuid4())
                 params = office.__dict__
-                cur.execute('insert into designations.place (id, name, type, parent, public) values (%(id)s, %(name)s, %(type)s, %(parent)s, %(public)s)', params)
+                #cur.execute('insert into designations.place (id, name, type, parent, public) values (%(id)s, %(name)s, %(type)s, %(parent)s, %(public)s)', params)
                 cur.execute('insert into offices.office (id, telephone, nro, email) values (%(id)s, %(telephone)s, %(number)s, %(email)s)', params)
 
             else:
                 params = office.__dict__
-                cur.execute('update designations.place set name = %(name)s, type = %(type)s, parent = %(parent)s, public = %(public)s where id = %(id)s', params)
+                #cur.execute('update designations.place set name = %(name)s, type = %(type)s, parent = %(parent)s, public = %(public)s where id = %(id)s', params)
                 cur.execute('update offices.office set telephone = %(telephone)s, nro = %(number)s, email = %(email)s, where id = %(id)s', params)
 
             return office
