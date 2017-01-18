@@ -30,41 +30,27 @@ def do_cprofile(func):
 
 class Offices(wamp.SystemComponentSession):
 
-    conn = wamp.getConnectionManager()
-
-    def _getCtx(self, daoType):
-        return Context(self.conn.get())
-
-    def _commit(self, ctx):
-        ctx.con.commit()
-
-    def _putCtx(self, ctx):
-        self.conn.put(ctx.con)
-
-
     @autobahn.wamp.register('offices.find_offices_by_user')
     def findOfficesByUser(self, userId, types, tree):
-        ctx = self._getCtx(SqlDAO)
+        ctx = wamp.getContextManager()
+        ctx.getConn()
         try:
             return Office.findByUser(ctx, userId, types, tree=tree)
         finally:
-            self._putCtx(ctx)
+            ctx.closeConn()
 
     @autobahn.wamp.register('offices.persist')
     @inlineCallbacks
     def persist(self, office):
-        ctx = self._getCtx(SqlDAO)
+        ctx = wamp.getContextManager()
+        ctx.getConn()
         try:
             id = office.persist(ctx)
-            self._commit(ctx)
+            ctx.con.commit()
             yield self.publish('offices.persist_event', id)
             return id
         finally:
-            self._putCtx(ctx)
-
-
-
-
+            ctx.closeConn()
 
 
     @autobahn.wamp.register('offices.find_users_by_regex')

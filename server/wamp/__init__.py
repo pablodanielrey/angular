@@ -6,6 +6,7 @@ inject.configure_once()
 
 import logging
 
+from model import SqlContext
 from model.registry import Registry
 from model.connection.connection import Connection
 
@@ -13,17 +14,20 @@ reg = inject.instance(Registry)
 crossbar = reg.getRegistry('crossbar')
 system_user = crossbar.get('system_user')
 system_password = crossbar.get('system_password')
-conn = None
+
+dbhost = crossbar.get('host')
+dbdatabase = crossbar.get('database')
+dbuser = crossbar.get('user')
+dbpassword = crossbar.get('password')
+dbpool = psycopg2.pool.ThreadedConnectionPool(1, 50, host=dbhost, database=dbdatabase, user=dbuser, password=dbpassword, cursor_factory=DictCursor)
 
 def getWampCredentials():
     global system_user, system_password
     return {'username': system_user, 'password': system_password}
 
-def getConnectionManager():
-    global conn
-    if conn == None:
-        conn = Connection(crossbar)
-    return conn
+def getContextManager():
+    global dbpool
+    return SqlContext(dbpool)
 
 """
     Se define un componente que puede ser cargado por corssbar.io en la config.
