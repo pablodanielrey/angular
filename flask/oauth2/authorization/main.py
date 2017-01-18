@@ -5,6 +5,7 @@ os.environ['OAUTHLIB_INSECURE_TRANSPORT'] = 'true'
 import flask
 from flask import Flask
 from flask_oauthlib.provider import OAuth2Provider
+from flask_oauthlib.provider import OAuth1Provider
 
 import sys
 sys.path.append('../python')
@@ -12,6 +13,21 @@ sys.path.append('../python')
 from model.users.entities.user import User
 from model.users.entities.userPassword import UserPassword
 from model.oauth.entities.oauth import Client, Grant, BearerToken
+
+
+def createOauth1Provider(ctx, app):
+    app.config.update({
+        'OAUTH1_PROVIDER_ENFORCE_SSL': False,
+        'OAUTH1_PROVIDER_KEY_LENGTH': (10, 100),
+    })
+
+    oauth1 = OAuth1Provider(app)
+
+    @oauth1.clientgetter
+    def load_client(client_key):
+        return Client.find(ctx, client_key=client_key).fetch(ctx)[0]
+
+
 
 
 def createOauth(ctx):
@@ -142,6 +158,10 @@ def createApp(oauth, ctx):
     createLogin(app, ctx)
     createAuthorization(app, oauth)
 
+    # aca van las vistas adicionales
+    from oauth2.authorization.admin import createAdminViews
+    createAdminViews(app, ctx)
+
     @app.route('/')
     def helloWorld():
         return "hola mundo"
@@ -162,12 +182,16 @@ def createTestingContext(host, db, u, p):
 
 if __name__ == '__main__':
 
+    sys.path.append('.')
+
     h = sys.argv[1]
     d = sys.argv[2]
     u = sys.argv[3]
     p = sys.argv[4]
+
     ctx = createTestingContext(h,d,u,p)
     ctx.getConn()
+
     oauth = createOauth(ctx)
     app = createApp(oauth, ctx)
     app.run()

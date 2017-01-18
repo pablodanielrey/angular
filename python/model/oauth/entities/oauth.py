@@ -1,4 +1,5 @@
 
+from model.entity import Entity
 
 
 class Grant:
@@ -30,23 +31,20 @@ class Grant:
         return Ids(cls, ctx.dao(cls).findByClientAndCode(ctx, clientId, code))
 
 
-class Client:
+class Client(Entity):
 
     TYPES = ['public','confidential']
 
     def __init__(self):
-        self.client_id = None
-        self.client_secret = None
-        self.client_type = self.TYPES[0]
+        self.id = None
+        self.key = None
+        self.secret = None
+        self.type = self.TYPES[0]
         self.redirect_uris = []
         self.default_redirect_uri = None
         self.default_scopes = []
         self.default_scope = None
         self.allowed_grant_types = Grant.TYPES
-
-    @classmethod
-    def findByIds(cls, ctx, ids):
-        return ctx.dao(cls).findByIds(ctx, ids)
 
 
 class Token:
