@@ -3,7 +3,7 @@ import uuid
 import datetime
 
 from model.offices.office import Office
-from model.designation.designation import Designation
+from model.offices.entities.officeDesignation import OfficeDesignation
 from model.users.users import User
 from model.offices.userIssueData import UserIssueData
 from model.serializer import JSONSerializable
@@ -21,8 +21,8 @@ class UserOfficeData(JSONSerializable):
 class OfficeModel():
 
     @classmethod
-    def getOfficesByUser(cls, ctx, userId, types=None, tree=False):
-        Office.findByUser(ctx, userId, types, tree)
+    def getOfficesByUser(cls, ctx, userId, tree=False):
+        Office.findByUserId(ctx, userId, tree)
 
     @classmethod
     def persistDesignations(cls, ctx, oid, userIds):
@@ -33,20 +33,16 @@ class OfficeModel():
         assert oid is not None
         assert isinstance(userIds, list)
 
-        eids = Designation.findByOffice(ctx, oid, history=False)
-        existent = Designation.findByIds(ctx, eids)
+        existent = OfficeDesignation.find(ctx, placeId=[oid], end=True).fetch(ctx)
 
         if len(userIds) <= 0:
-            """ elimino todas las deisgnaciones """
             for d in existent:
-                d.expire(ctx)
+                d.delete(ctx)
             return
 
         toRemove = [d for d in existent if d.userId not in userIds]
-
-        """ elimno las designaciones que no deberían existir """
         for d in toRemove:
-            d.expire(ctx)
+            d.delete(ctx)
 
         remaining = set(existent) - set(toRemove)
         remainingUsers = [d.userId for d in remaining]
@@ -54,12 +50,11 @@ class OfficeModel():
 
         """ genero y persisto las designaciones adicionales """
         for uid in toGenerate:
-            d = Designation()
-            d.id = str(uuid.uuid4())
+            d = OfficeDesignation()
             d.officeId = oid
             d.userId = uid
             d.start = datetime.datetime.now()
-            d.persist(con)
+            d.persist(ctx)
 
     @classmethod
     def findOfficesUsers(cls, ctx, oids):
@@ -83,17 +78,17 @@ class OfficeModel():
         return users
 
     @classmethod
-    def findUsersByIds(cls, con, uids):
-        users = User.findById(con, uids)
-        return [cls._getUserData(con, u) for u in users]
+    def findUsersByIds(cls, ctx, uids):
+        users = User.findById(ctx, uids)
+        return [cls._getUserData(ctx, u) for u in users]
 
     @classmethod
-    def _getUserData(cls, con, user):
+    def _getUserData(cls, ctx, user):
         u = UserOfficeData()
         u.name = user.name
         u.lastname = user.lastname
         u.dni = user.dni
         u.id = user.id
         u.gender = user.gender
-        u.photo = [User.findPhoto(con, user.photo) if 'photo' in dir(user) and user.photo is not None and user.photo != '' else None][0]
+        u.photo = [User.findPhoto(ctx, user.photo) if 'photo' in dir(user) and user.photo is not None and user.photo != '' else None][0]
         return u

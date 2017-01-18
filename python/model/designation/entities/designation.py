@@ -6,7 +6,7 @@ class Designation(Entity):
     def __init__(self):
         self.id = None
         self.placeId = None
-        self.positionId = '1'
+        self.positionId = None
         self.userId = None
 
         self.parentId = None
@@ -16,7 +16,3 @@ class Designation(Entity):
         self.end = None
 
         self.type = None
-
-
-    def expire(self, ctx):
-        ctx.dao(self).expireByIds(ctx, [self.id])

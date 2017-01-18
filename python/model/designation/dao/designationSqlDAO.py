@@ -60,15 +60,7 @@ class DesignationSqlDAO(SqlDAO):
 
         return d
 
-    @classmethod
-    def deleteByIds(cls, ctx, ids):
-        assert ids is not None
-        assert isinstance(ids, list)
-        cur = ctx.con.cursor()
-        try:
-            cur.execute('update designations.designation set dend = NOW() where id in %s', (tuple(ids),))
-        finally:
-            cur.close()
+
 
 
     @classmethod

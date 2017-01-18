@@ -134,7 +134,7 @@ class OfficeSqlDAO(PlaceSqlDAO):
 
 
     @classmethod
-    def findByUserId(cls, ctx, usersIds, tree=False, *args, **kwargs):
+    def findByUserId(cls, ctx, usersId, tree=False, *args, **kwargs):
         """
         Buscar oficinas por usuario
         Parameters:
