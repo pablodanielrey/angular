@@ -5,9 +5,8 @@ from model.designation.dao.placeSqlDAO import PlaceSqlDAO
 from model.sileg.entities.teachingPlace import TeachingPlace
 
 
-class TeachingPlaceSqlDAO(SqlDAO):
+class TeachingPlaceSqlDAO(PlaceSqlDAO):
 
-    dependencies = [PlaceSqlDAO]
 
     _schema = "sileg."
     _table  = "place"

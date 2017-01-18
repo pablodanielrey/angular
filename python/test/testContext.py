@@ -8,13 +8,9 @@ import psycopg2.pool
 from model import SqlContext
 from psycopg2.extras import DictCursor
 
-from model import SqlContext
-from model.users.entities.userPassword import UserPassword
-from model.users.entities.user import User
-from model.users.entities.mail import Mail
-from model.offices.entities.office import Office
-from model.laboralinsertion.entities.company import Company
-from model.laboralinsertion.entities.contact import Contact
+from model.sileg.silegModel import SilegModel
+
+
 
 
 #from model.designation.entities.designation import Designation
@@ -29,18 +25,17 @@ pool = psycopg2.pool.ThreadedConnectionPool(1, 4, host=h, database=d, user=u, pa
 ctx = SqlContext(pool)
 ctx.getConn()
 
-offices = Office.find(ctx).fetch(ctx, orderBy={"parent":False})
+place = SilegModel.findPositionsActiveByPlace(ctx, "986d7028-6914-4051-af23-ba37999e3caa")
 
-for o in offices:
-    print(o.__dict__)
 
-"""
-users = User.find(ctx, dni=["31073351"]).fetch(ctx)
-for u in users:
-    offices = Office.findByUserId(ctx, u.id, email=["soporte@econo.unlp.edu.ar"]).fetch(ctx)
-    for o in offices:
-        print(o.__dict__)
-"""
+for k in place:
+    print(place[k]["position"].__dict__)
+    for d in place[k]["designations"]:
+        print (d.__dict__)
+        print (d.user.__dict__)
+
+
+
 
 
 

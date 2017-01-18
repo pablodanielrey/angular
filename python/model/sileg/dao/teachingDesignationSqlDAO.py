@@ -103,9 +103,9 @@ class TeachingDesignationSqlDAO(DesignationSqlDAO):
         for k in condition:
             if type(condition[k]) == bool:
                 if k in ["out", "resolution", "record"]:
-                  cond = "(sileg.designation.{} IS NOT NULL)" if condition[k] else "(sileg.place.{} IS NULL)"
+                  cond = "(sileg.designation.{} IS NOT NULL)" if condition[k] else "(sileg.designation.{} IS NULL)"
                 else:
-                  cond = "(designations.designation.{} IS NOT NULL)" if condition[k] else "(designations.place.{} IS NULL)"
+                  cond = "(designations.designation.{} IS NOT NULL)" if condition[k] else "(designations.designation.{} IS NULL)"
 
                 conditionList.append(cond.format(cls.namemapping(k)))
             else:
@@ -169,7 +169,7 @@ class TeachingDesignationSqlDAO(DesignationSqlDAO):
         sql = """
             SELECT sileg.designation.id
             FROM sileg.designation
-            INNER JOIN designations.designation ON ({}{}.id = designations.designation.id)
+            INNER JOIN designations.designation ON (sileg.designation.id = designations.designation.id)
             {}{}
         """.format(c, o)
 
