@@ -2,10 +2,9 @@ import re
 import uuid
 import datetime
 
-from model.offices.office import Office
+from model.offices.entities.office import Office
 from model.offices.entities.officeDesignation import OfficeDesignation
-from model.users.users import User
-from model.offices.userIssueData import UserIssueData
+from model.users.entities.user import User
 from model.serializer import JSONSerializable
 
 class UserOfficeData(JSONSerializable):
@@ -15,6 +14,7 @@ class UserOfficeData(JSONSerializable):
         self.name = ''
         self.lastname = ''
         self.dni = ''
+        self.gender = ''
         self.photo = ''
 
 
@@ -63,13 +63,11 @@ class OfficeModel():
             users.update(cls.getUsers(ctx, oid))
         return list(users)
 
+
     @classmethod
     def getUsers(cls, ctx, oId):
-        idsD = Designation.findByOffice(ctx, oId)
-        desig = Designation.findByIds(ctx, idsD)
-        uIds = set()
-        uIds.update([d.userId for d in desig])
-        return list(uIds)
+        desig = Designation.find(ctx, officeId=[oId]).fetch(ctx)
+        list(set([d.userId for d in desig]))
 
     @classmethod
     def searchUsers(cls, ctx, regexp):
@@ -79,7 +77,7 @@ class OfficeModel():
 
     @classmethod
     def findUsersByIds(cls, ctx, uids):
-        users = User.findById(ctx, uids)
+        users = User.findByIds(ctx, uids)
         return [cls._getUserData(ctx, u) for u in users]
 
     @classmethod

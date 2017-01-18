@@ -59,36 +59,34 @@ class TeachingDesignationSqlDAO(DesignationSqlDAO):
             cur.close()
 
 
+
     @classmethod
-    def insert(cls, ctx, entity):
+    def persist(cls, ctx, entity):
+        hasId = 'id' in entity or entity.id is not None
+        super().persist(ctx, entity)
+
+        ''' inserta o actualiza una oficia '''
         cur = ctx.con.cursor()
         try:
-            DesignationSqlDAO.persist(ctx, entity)
+            if not hasId:
+                cur.execute("""
+                    INSERT INTO sileg.designation (id, dout, resolution, record)
+                    VALUES (%(id)s, %(out)s, %(resolution)s, %(record)s);
+                """, entity.__dict__)
 
-            cur.execute("""
-                INSERT INTO sileg.designation (id, dout, resolution, record)
-                VALUES (%(id)s, %(out)s, %(resolution)s, %(record)s);
-            """, entity.__dict__)
+            else:
+                cur.execute("""
+                    UPDATE sileg.designation
+                    SET dout = %(out)s, resolution = %(resolution)s, record = %(record)s
+                    WHERE id = %(id)s
+                """, entity.__dict__)
 
             return entity
+
         finally:
             cur.close()
 
-    @classmethod
-    def update(cls, ctx, entity):
-        cur = ctx.con.cursor()
-        try:
-            DesignationSqlDAO.persist(ctx, entity)
 
-            cur.execute("""
-                UPDATE sileg.designation
-                SET dout = %(out)s, resolution = %(resolution)s, record = %(record)s
-                WHERE id = %(id)s
-            """, entity.__dict__)
-
-            return entity
-        finally:
-            cur.close()
 
 
 

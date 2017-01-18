@@ -29,7 +29,7 @@ class DesignationSqlDAO(SqlDAO):
 
                 CREATE TABLE IF NOT EXISTS designations.designation (
                     id VARCHAR PRIMARY KEY,
-                    type VARCHAR NOT NULL,
+                    type VARCHAR,
 
                     dstart DATE,
                     dend DATE,
@@ -61,30 +61,25 @@ class DesignationSqlDAO(SqlDAO):
         return d
 
 
-
-
     @classmethod
-    def insert(cls, ctx, entity):
+    def persist(cls, ctx, entity):
+        ''' inserta o actualiza una oficia '''
         cur = ctx.con.cursor()
         try:
-            cur.execute("insert into designations.designation (id, place_id, user_id, position_id, dstart, dend, type) "
-                        "values (%(id)s, %(placeId)s, %(userId)s, %(positionId)s, %(start)s, %(end)s, %(type)s)",
-                        entity.__dict__)
+            if 'id' not in entity or entity.id is None:
+                cur.execute("insert into designations.designation (id, place_id, user_id, position_id, dstart, dend, type) "
+                            "values (%(id)s, %(placeId)s, %(userId)s, %(positionId)s, %(start)s, %(end)s, %(type)s)",
+                            entity.__dict__)
+
+            else:
+                cur.execute("""
+                    UPDATE designations.designation
+                    SET place_id = %(placeId)s, user_id = %(userId)s, position_id = %(positionId)s, dstart = %(start)s, dend = %(end)s
+                    WHERE id = %(id)s
+                """, entity.__dict__)
+
 
             return entity
-        finally:
-            cur.close()
 
-    @classmethod
-    def update(cls, ctx, entity):
-        cur = ctx.con.cursor()
-        try:
-            cur.execute("""
-                UPDATE designations.designation
-                SET place_id = %(placeId)s, user_id = %(userId)s, position_id = %(positionId)s, dstart = %(start)s, dend = %(end)s
-                WHERE id = %(id)s
-            """, entity.__dict__)
-
-            return entity
         finally:
             cur.close()

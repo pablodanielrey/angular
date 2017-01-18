@@ -6,7 +6,7 @@ from model.designation.dao.designationSqlDAO import DesignationSqlDAO
 
 class OfficeDesignationSqlDAO(DesignationSqlDAO):
 
-    _schema = "designation."
+    _schema = "designations."
     _table  = "designation"
     _entity = OfficeDesignation
 
