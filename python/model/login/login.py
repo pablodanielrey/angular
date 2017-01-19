@@ -10,7 +10,12 @@ from model.registry import Registry
 from model.session.session import Session
 from model.login.profiles import Profile
 # from model.users.users import UserPassword, UserPasswordDAO, User, UserDAO, UserModel
-from model.users.users import UserPassword, User, Mail
+# from model.users.users import UserPassword, User, Mail
+
+from model.users.entities.user import User
+from model.users.entities.mail import Mail
+
+
 
 
 class LoginMail:
@@ -85,13 +90,15 @@ class ResetPassword:
         return emails[0]
 
     @classmethod
-    def findByDni(cls, con, dni):
-        data = User.findByDni(con, dni)
-        if data is None:
+    def findByDni(cls, ctx, dni):
+        ids = User.find(con, dni=[dni]).fetch(ctx)
+
+
+        if ids is None:
             raise Exception()
 
-        uid, version = data
-        user = User.findById(con, [uid])[0]
+        uid, version = data[0]
+        user = User.findByIds(con, [uid])[0]
 
         mails = Mail.findByUserId(con, uid)
         emails = []

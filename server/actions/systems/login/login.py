@@ -3,7 +3,7 @@ import autobahn
 
 from wamp import SystemComponentSession
 from model.serializer import JSONSerializable
-from model.login.login import Login
+#from model.login.login import Login
 
 from twisted.internet.defer import inlineCallbacks, returnValue
 from twisted.internet import threads
@@ -11,17 +11,19 @@ from twisted.internet import threads
 
 class LoginPublicSession(SystemComponentSession):
 
-    conn = wamp.getConnectionManager()
+    ctx = wamp.getContextManager()
 
     @autobahn.wamp.register('login.get_public_data')
     def getPublicData(self, dni):
+        return {}
+        """
         con = self.conn.get()
         self.conn.readOnly(con)
         try:
             return Login.getPublicData(con, dni)
         finally:
             self.conn.put(con)
-
+        """
 class LoginSession(SystemComponentSession):
 
     def getRegisterOptions(self):

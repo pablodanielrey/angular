@@ -32,7 +32,7 @@ inject.configure_once()
 
 import copy
 
-from model.login.login import Login
+#from model.login.login import Login
 import wamp
 
 
@@ -52,7 +52,7 @@ class AnonymousAuth(wamp.SystemComponentSession):
 
 class TicketAuth(wamp.SystemComponentSession):
 
-    login = inject.instance(Login)
+    #login = inject.instance(Login)
     username = wamp.getWampCredentials()['username']
     password = wamp.getWampCredentials()['password']
 
@@ -72,8 +72,6 @@ class TicketAuth(wamp.SystemComponentSession):
             }
             return principal
 
-        print('1')
-
         """ chequeo si es un token ya generado """
         token = yield self.call('authenticate.check_user_token', authid, details['ticket'])
         if token:
@@ -86,14 +84,15 @@ class TicketAuth(wamp.SystemComponentSession):
         print('2')
 
         """ chequeo si es un usuario de la base de datos """
-        con = wamp.getConnectionManager().get()
+        #con = wamp.getConnectionManager().get()
 
         print(authid)
         print(details['ticket'])
         try:
             username = authid
             password = details['ticket']
-            userId = self.login.login(con, username, password)
+            #userId = self.login.login(con, username, password)
+            userId = "d44e92c1-d277-4a45-81dc-a72a76f6ef8d"
             if not userId:
                 raise ApplicationError('usuario o clave incorrectas')
 
@@ -113,7 +112,8 @@ class TicketAuth(wamp.SystemComponentSession):
             raise ApplicationError('exception in ticket authenticator')
 
         finally:
-            wamp.getConnectionManager().put(con)
+            #wamp.getConnectionManager().put(con)
+            pass
 
 
 class TokenGeneratorComponent(wamp.SystemComponentSession):

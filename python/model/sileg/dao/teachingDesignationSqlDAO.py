@@ -12,7 +12,7 @@ class TeachingDesignationSqlDAO(DesignationSqlDAO):
 
     dependencies = [TeachingPlaceSqlDAO, TeachingPositionSqlDAO]
     _schema = "sileg."
-    _table = "designation"
+    _table = "designation_"
     _entity = TeachingDesignation
     _mappings = {
         'out':'dout'
@@ -26,8 +26,8 @@ class TeachingDesignationSqlDAO(DesignationSqlDAO):
             cur.execute("""
                 CREATE SCHEMA IF NOT EXISTS sileg;
 
-                CREATE TABLE IF NOT EXISTS sileg.designation (
-                    id VARCHAR PRIMARY KEY NOT NULL REFERENCES designations.designation (id),
+                CREATE TABLE IF NOT EXISTS sileg.designation_ (
+                    id VARCHAR PRIMARY KEY NOT NULL REFERENCES designations.designation_ (id),
 
                     dout DATE,
                     resolution VARCHAR,
@@ -54,7 +54,7 @@ class TeachingDesignationSqlDAO(DesignationSqlDAO):
         assert isinstance(ids, list)
         cur = ctx.con.cursor()
         try:
-            cur.execute('update sileg.designation set dout = NOW() where id in %s', (tuple(ids),))
+            cur.execute('update sileg.designation_ set dout = NOW() where id in %s', (tuple(ids),))
         finally:
             cur.close()
 
@@ -62,7 +62,7 @@ class TeachingDesignationSqlDAO(DesignationSqlDAO):
 
     @classmethod
     def persist(cls, ctx, entity):
-        hasId = 'id' in entity or entity.id is not None
+        hasId = hasattr(entity, 'id') and entity.id is not None
         super().persist(ctx, entity)
 
         ''' inserta o actualiza una oficia '''
@@ -70,13 +70,13 @@ class TeachingDesignationSqlDAO(DesignationSqlDAO):
         try:
             if not hasId:
                 cur.execute("""
-                    INSERT INTO sileg.designation (id, dout, resolution, record)
+                    INSERT INTO sileg.designation_ (id, dout, resolution, record)
                     VALUES (%(id)s, %(out)s, %(resolution)s, %(record)s);
                 """, entity.__dict__)
 
             else:
                 cur.execute("""
-                    UPDATE sileg.designation
+                    UPDATE sileg.designation_
                     SET dout = %(out)s, resolution = %(resolution)s, record = %(record)s
                     WHERE id = %(id)s
                 """, entity.__dict__)
@@ -101,16 +101,16 @@ class TeachingDesignationSqlDAO(DesignationSqlDAO):
         for k in condition:
             if type(condition[k]) == bool:
                 if k in ["out", "resolution", "record"]:
-                  cond = "(sileg.designation.{} IS NOT NULL)" if condition[k] else "(sileg.designation.{} IS NULL)"
+                  cond = "(sileg.designation_.{} IS NOT NULL)" if condition[k] else "(sileg.designation_.{} IS NULL)"
                 else:
-                  cond = "(designations.designation.{} IS NOT NULL)" if condition[k] else "(designations.designation.{} IS NULL)"
+                  cond = "(designations.designation_.{} IS NOT NULL)" if condition[k] else "(designations.designation_.{} IS NULL)"
 
                 conditionList.append(cond.format(cls.namemapping(k)))
             else:
                 if k in ["out", "resolution", "record"]:
-                    conditionList.append("(sileg.designation.{} IN %s)".format(cls.namemapping(k)))
+                    conditionList.append("(sileg.designation_.{} IN %s)".format(cls.namemapping(k)))
                 else:
-                    conditionList.append("(designations.designation.{} IN %s)".format(cls.namemapping(k)))
+                    conditionList.append("(designations.designation_.{} IN %s)".format(cls.namemapping(k)))
 
                 conditionValues.append(tuple(condition[k]))
 
@@ -127,9 +127,9 @@ class TeachingDesignationSqlDAO(DesignationSqlDAO):
         for k in orderBy:
             orderByType = "ASC" if orderBy[k] else "DESC"
             if k in ["out", "resolution", "record"]:
-                orderByList.append("sileg.designation.{} {}".format(cls.namemapping(k), orderByType))
+                orderByList.append("sileg.designation_.{} {}".format(cls.namemapping(k), orderByType))
             else:
-                orderByList.append("designations.designation.{} {}".format(cls.namemapping(k), orderByType))
+                orderByList.append("designations.designation_.{} {}".format(cls.namemapping(k), orderByType))
 
         return orderByList
 
@@ -142,9 +142,9 @@ class TeachingDesignationSqlDAO(DesignationSqlDAO):
         o = " ORDER BY {}".format(', ' .join(orderBy)) if len(orderBy) else ""
         sql = """
             SELECT *
-            FROM sileg.designation
-            INNER JOIN designations.designation ON (sileg.designation.id = designations.designation.id)
-            WHERE sileg.designation.id IN %s
+            FROM sileg.designation_
+            INNER JOIN designations.designation_ ON (sileg.designation_.id = designations.designation_.id)
+            WHERE sileg.designation_.id IN %s
             {}
         """.format(o)
 
@@ -165,9 +165,9 @@ class TeachingDesignationSqlDAO(DesignationSqlDAO):
         c = " WHERE {}".format(' AND ' .join(condition["list"])) if len(condition["list"]) else ""
         o = " ORDER BY {}".format(', ' .join(orderBy)) if len(orderBy) else ""
         sql = """
-            SELECT sileg.designation.id
-            FROM sileg.designation
-            INNER JOIN designations.designation ON (sileg.designation.id = designations.designation.id)
+            SELECT sileg.designation_.id
+            FROM sileg.designation_
+            INNER JOIN designations.designation_ ON (sileg.designation_.id = designations.designation_.id)
             {}{}
         """.format(c, o)
 

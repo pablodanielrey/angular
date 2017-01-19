@@ -19,15 +19,28 @@ class SilegModel:
     @classmethod
     def getUsers(cls, ctx):
         placesIds = TeachingPlace.find(ctx, type=["catedra"])
+        if len(placesIds.values) == 0:
+            return []
+
         designations = TeachingDesignation.find(ctx, placeId=placesIds).fetch(ctx)
         userIds = [d.userId for d in designations]
         return User.findByIds(ctx, userIds)
 
 
     @classmethod
+    def getCathedras(cls, ctx):
+        return TeachingPlace.find(ctx, type=["catedra"]).fetch(ctx)
+
+
+    @classmethod
     def findPositionsActiveByUser(cls, ctx, userId):
         placesIds = TeachingPlace.find(ctx, type=["catedra"])
+        if len(placesIds.values) == 0:
+            return []
+
         designations = TeachingDesignation.find(ctx, userId=[userId], out=False, placeId=placesIds).fetch(ctx)
+        if len(designations) == 0:
+            return []
 
         data = {}
         for d in designations:

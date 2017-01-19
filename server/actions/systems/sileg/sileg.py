@@ -11,15 +11,9 @@ from twisted.internet import threads
 import autobahn
 import wamp
 
-from model.sileg.sileg import SilegModel
+from model.sileg.silegModel import SilegModel
 
 class Sileg(wamp.SystemComponentSession):
-
-    conn = wamp.getConnectionManager()
-    """
-    def getRegisterOptions(self):
-        return autobahn.wamp.RegisterOptions(details_arg='details')
-    """
 
     @autobahn.wamp.register('sileg.get_users')
     @inlineCallbacks
@@ -29,12 +23,14 @@ class Sileg(wamp.SystemComponentSession):
 
     def _getUsers(self):
         try:
-            con = self.conn.get()
-            self.conn.readOnly(con)
-            return SilegModel.getUsers(con)
+            ctx = wamp.getContextManager()
+            ctx.getConn()
+            #ctx.con.readOnly(ctx.con)
+            return SilegModel.getUsers(ctx)
 
         finally:
-            self.conn.put(con)
+            ctx.closeConn()
+
 
 
     @autobahn.wamp.register('sileg.get_cathedras')
@@ -45,12 +41,14 @@ class Sileg(wamp.SystemComponentSession):
 
     def _getCathedras(self):
         try:
-            con = self.conn.get()
-            self.conn.readOnly(con)
-            return SilegModel.getCathedras(con)
+            ctx = wamp.getContextManager()
+            ctx.getConn()
+            #ctx.con.readOnly(ctx.con)
+            return SilegModel.getCathedras(ctx)
 
         finally:
-            self.conn.put(con)
+            ctx.closeConn()
+
 
 
     @autobahn.wamp.register('sileg.find_positions_active_by_user')
@@ -61,12 +59,13 @@ class Sileg(wamp.SystemComponentSession):
 
     def _findPositionsActiveByUser(self, userId):
         try:
-            con = self.conn.get()
-            self.conn.readOnly(con)
-            return SilegModel.findPositionsActiveByUser(con, userId)
+            ctx = wamp.getContextManager()
+            ctx.getConn()
+            #ctx.con.readOnly(ctx.con)
+            return SilegModel.findPositionsActiveByUser(ctx, userId)
 
         finally:
-            self.conn.put(con)
+            ctx.closeConn()
 
 
 
@@ -78,9 +77,10 @@ class Sileg(wamp.SystemComponentSession):
 
     def _findPositionsActiveByPlace(self, placeId):
         try:
-            con = self.conn.get()
-            self.conn.readOnly(con)
-            return SilegModel.findPositionsActiveByPlace(con, placeId)
+            ctx = wamp.getContextManager()
+            ctx.getConn()
+            #ctx.con.readOnly(ctx.con)
+            return SilegModel.findPositionsActiveByPlace(ctx, placeId)
 
         finally:
-            self.conn.put(con)
+            ctx.closeConn()

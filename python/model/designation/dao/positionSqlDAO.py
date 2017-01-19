@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+import uuid
+
 from model.dao import SqlDAO
 from model.designation.entities.position import Position
 
@@ -6,7 +8,7 @@ from model.designation.entities.position import Position
 class PositionSqlDAO(SqlDAO):
 
     _schema = "designations."
-    _table = "positions"
+    _table = "position"
     _entity = Position
 
     @classmethod
@@ -34,28 +36,30 @@ class PositionSqlDAO(SqlDAO):
         p.type = r['type']
         return p
 
-    @classmethod
-    def insert(cls, ctx, entity):
-        cur = ctx.con.cursor()
-        try:
-            cur.execute("""
-                INSERT INTO designations.position (id, position, type)
-                VALUES (%(id)s, %(position)s, %(type)s)
-            """, entity.__dict__)
-
-            return entity
-        finally:
-            cur.close()
 
     @classmethod
-    def update(cls, ctx, entity):
+    def persist(cls, ctx, entity):
         cur = ctx.con.cursor()
         try:
-            cur.execute("""
-                UPDATE designations.position
-                SET position = %(position)s, type = %(type)s
-                WHERE id = %(id)s;
-            """, entity.__dict__)
+            if not hasattr(entity, 'id') or entity.id is None:
+                print(1)
+                entity.id = str(uuid.uuid4())
+                print(entity)
+
+                cur.execute("""
+                    INSERT INTO designations.position (id, position, type)
+                    VALUES (%(id)s, %(position)s, %(type)s)
+                """, entity.__dict__)
+
+            else:
+                print(2)
+                print(entity)
+
+                cur.execute("""
+                    UPDATE designations.position
+                    SET position = %(position)s, type = %(type)s
+                    WHERE id = %(id)s;
+                """, entity.__dict__)
 
             return entity
         finally:

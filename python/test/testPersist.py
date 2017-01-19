@@ -25,17 +25,27 @@ ctx.getConn()
 
 
 
-
 d = TeachingDesignation()
 d.resolution = "1/07"
 d.record = "11/07"
-d.placeId = "986d7028-6914-4051-af23-ba37999e3caa"
-d.positionId = 'c734729f-d535-4082-9270-a1035c06890b'
-d.userId = "9ef4a648-3039-4823-a18b-bc4a223813a4"
+d.placeId = "bd6b7d47-d7c6-46a7-bb92-b305dfdd631d"
+d.positionId = "d3384566-5e31-4cc3-8291-fd180208ffd1"
+d.userId = "d44e92c1-d277-4a45-81dc-a72a76f6ef8d"
 d.type = "original"
 d.persist(ctx)
 
+
 """
+p = TeachingPlace()
+p.name = "Matemática"qwq
+p.type = "catedra"
+p.persist(ctx)
+
+
+
+
+
+
 u = User()
 u.dni = '31073351'
 u.name = 'Juan'
@@ -44,17 +54,9 @@ u.gender = 'Masculino'
 u.persist(ctx)
 
 
-p = TeachingPosition()
-p.id = "c734729f-d535-4082-9270-a1035c06890b"
-p.position = "Titular"
-p.detail = "complejo"
-p.persist(ctx)
 
 
-p = TeachingPlace()
-p.name = "Matemática"
-p.type = "scatedra"
-p.persist(ctx)
+
 
 
 o = Office();

@@ -1,18 +1,19 @@
 # -*- coding: utf-8 -*-
 import json
 from model.dao import DAO
-from model.users.users import UserDAO
+from model.users.dao.UserSqlDAO import UserSqlDAO
 
 
 
 class ProfileDAO(DAO):
 
-    dependencies = [UserDAO]
-    @classmethod
-    def _createSchema(cls, con):
-        super()._createSchema(con)
+    dependencies = [UserSqlDAO]
 
-        cur = con.cursor()
+    @classmethod
+    def _createSchema(cls, ctx):
+        super()._createSchema(ctx)
+
+        cur = ctx.con.cursor()
         try:
             cur.execute("""
                 create schema if not exists credentials;

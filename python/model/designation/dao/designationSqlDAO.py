@@ -12,7 +12,7 @@ class DesignationSqlDAO(SqlDAO):
 
     dependencies = [UserSqlDAO, PlaceSqlDAO, PositionSqlDAO]
     _schema = "designations."
-    _table = "designation"
+    _table = "designation_"
     _entity = Designation
     _mappings = {
         'start':'dstart',
@@ -27,7 +27,7 @@ class DesignationSqlDAO(SqlDAO):
             cur.execute("""
                 CREATE SCHEMA IF NOT EXISTS designations;
 
-                CREATE TABLE IF NOT EXISTS designations.designation (
+                CREATE TABLE IF NOT EXISTS designations.designation_ (
                     id VARCHAR PRIMARY KEY,
                     type VARCHAR,
 
@@ -37,8 +37,8 @@ class DesignationSqlDAO(SqlDAO):
                     user_id VARCHAR NOT NULL REFERENCES profile.users (id),
                     place_id VARCHAR REFERENCES designations.place (id),
                     position_id VARCHAR REFERENCES designations.position (id),
-                    parent_id VARCHAR REFERENCES designations.designation (id),
-                    start_id VARCHAR REFERENCES designations.designation (id),
+                    parent_id VARCHAR REFERENCES designations.designation_ (id),
+                    start_id VARCHAR REFERENCES designations.designation_ (id),
 
                     created timestamptz default now()
                 );
@@ -66,14 +66,16 @@ class DesignationSqlDAO(SqlDAO):
         ''' inserta o actualiza una oficia '''
         cur = ctx.con.cursor()
         try:
-            if 'id' not in entity or entity.id is None:
-                cur.execute("insert into designations.designation (id, place_id, user_id, position_id, dstart, dend, type) "
+
+            if not hasattr(entity, 'id') or entity.id is None:
+                entity.id = str(uuid.uuid4())
+                cur.execute("insert into designations.designation_ (id, place_id, user_id, position_id, dstart, dend, type) "
                             "values (%(id)s, %(placeId)s, %(userId)s, %(positionId)s, %(start)s, %(end)s, %(type)s)",
                             entity.__dict__)
 
             else:
                 cur.execute("""
-                    UPDATE designations.designation
+                    UPDATE designations.designation_
                     SET place_id = %(placeId)s, user_id = %(userId)s, position_id = %(positionId)s, dstart = %(start)s, dend = %(end)s
                     WHERE id = %(id)s
                 """, entity.__dict__)

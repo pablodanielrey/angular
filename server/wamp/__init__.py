@@ -1,7 +1,9 @@
 """
     Se definen métodos y propiedades comunes a todas las clases wamp
 """
+from psycopg2.extras import DictCursor
 import inject
+import psycopg2
 inject.configure_once()
 
 import logging
@@ -9,6 +11,8 @@ import logging
 from model import SqlContext
 from model.registry import Registry
 from model.connection.connection import Connection
+
+
 
 reg = inject.instance(Registry)
 crossbar = reg.getRegistry('crossbar')
@@ -85,17 +89,19 @@ from twisted.internet.defer import inlineCallbacks
 from autobahn.twisted.wamp import ApplicationSession
 import autobahn
 
-from model.login.login import Login
+
 
 class SystemComponentSession(ApplicationSession):
 
     def getLogger(self):
         return logging.getLogger('{}.{}'.format(self.__module__, self.__class__.__name__))
 
+    """
     def getUserId(self, con, details):
         wampSessionId = details.caller
         username = details.caller_authid
         return Login.getUserIdByUsername(con, username)
+    """
 
     def getRegisterOptions(self):
         """

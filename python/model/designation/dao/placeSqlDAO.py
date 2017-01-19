@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+import uuid
+
 from model.dao import SqlDAO
 from model.designation.entities.place import Place
 
@@ -53,5 +55,22 @@ class PlaceSqlDAO(SqlDAO):
         try:
             cur.execute('update {}{} set removed = NOW() where id in %s'.format(PlaceSqlDAO._schema, PlaceSqlDAO._table), (tuple(ids),))
             return ids
+        finally:
+            cur.close()
+
+
+
+    @classmethod
+    def persist(cls, ctx, entity):
+        cur = ctx.con.cursor()
+        try:
+            if not hasattr(entity, 'id') or entity.id is None:
+                entity.id = str(uuid.uuid4())
+                cur.execute('insert into designations.place (id, name, type, parent, public) values (%(id)s, %(name)s, %(type)s, %(parent)s, %(public)s)', entity.__dict__)
+
+            else:
+                cur.execute('update designations.place set name = %(name)s, type = %(type)s, parent = %(parent)s, public = %(public)s where id = %(id)s', entity.__dict__)
+
+            return entity
         finally:
             cur.close()

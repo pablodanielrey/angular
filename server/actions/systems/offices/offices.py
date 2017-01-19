@@ -7,7 +7,7 @@ import wamp
 import autobahn
 from twisted.internet.defer import inlineCallbacks
 
-from model.offices.office import Office
+from model.offices.entities.office import Office
 from model.offices.officeModel import OfficeModel
 
 
@@ -89,11 +89,13 @@ class Offices(wamp.SystemComponentSession):
 
     @autobahn.wamp.register('offices.find_all')
     def findAll(self, types):
-        con = self.conn.get()
+        ctx = wamp.getContextManager()
+        ctx.getConn()
         try:
-            return Office.findAll(con, types)
+            return Office.find(ctx, type=types)
         finally:
-            self.conn.put(con)
+            ctx.closeConn()
+
 
 
 
@@ -102,87 +104,28 @@ class Offices(wamp.SystemComponentSession):
     def persistWithUsers(self, office, userIds):
         assert office is not None
         assert isinstance(userIds, list)
-        con = self.conn.get()
+        ctx = wamp.getContextManager()
+        ctx.getConn()
         try:
-            id = office.persist(con)
-            OfficeModel.persistDesignations(con, id, userIds)
-            con.commit()
-            yield self.publish('offices.persist_event', id)
-            return id
+            office.persist(con)
+            OfficeModel.persistDesignations(ctx, office.id, userIds)
+            ctx.con.commit()
+            yield self.publish('offices.persist_event', office.id)
+            return office.id
         finally:
-            self.conn.put(con)
+            ctx.closeConn()
+
 
     @autobahn.wamp.register('offices.remove')
     @inlineCallbacks
     def remove(self, office):
-        con = self.conn.get()
+        ctx = wamp.getContextManager()
+        ctx.getConn()
+
         try:
-            id = office.remove(con)
-            con.commit()
-            yield self.publish('offices.remove_event', id)
-            return id
+            office.delete(ctx)
+            ctx.con.commit()
+            yield self.publish('offices.remove_event', office.id)
+            return office.id
         finally:
-            self.conn.put(con)
-
-"""
-
-class OfficeWamp(ApplicationSession):
-
-    def __init__(self, config=None):
-        logging.debug('instanciando')
-        ApplicationSession.__init__(self, config)
-        reg = inject.instance(Registry)
-
-        self.conn = connection.Connection(reg.getRegistry('dcsys'))
-        self.loginModel = inject.instance(Login)
-
-    @coroutine
-    def onJoin(self, details):
-        logging.debug('registering methods')
-        yield from self.register(self.getOfficesByUserRole_async, 'office.getOfficesByUserRole')
-        yield from self.register(self.getOfficesByUser_async, 'office.getOfficesByUser')
-        yield from self.register(self.findById_async, 'office.findById')
-        yield from self.register(self.getOfficesUsers_async, 'office.getOfficesUsers')
-
-    def getOfficesByUserRole(self, userId, tree, role):
-        con = self.conn.get()
-        try:
-            return Office.getOfficesByUserRole(con, userId, tree, role)
-        finally:
-            self.conn.put(con)
-
-    @coroutine
-    def getOfficesByUserRole_async(self, userId, tree = False, role = 'autoriza'):
-        loop = asyncio.get_event_loop()
-        r = yield from loop.run_in_executor(None, self.getOfficesByUserRole, userId, tree, role)
-        return r
-
-    def getOfficesByUser(self, userId, tree):
-
-    @coroutine
-    def getOfficesByUser_async(self, userId, tree = False):
-        loop = asyncio.get_event_loop()
-        r = yield from loop.run_in_executor(None, self.getOfficesByUser, userId, tree)
-        return r
-
-    def findById(self, ids):
-
-    @coroutine
-    def findById_async(self, ids):
-        loop = asyncio.get_event_loop()
-        r = yield from loop.run_in_executor(None, self.findById, ids)
-        return r
-
-    def getOfficesUsers(self, ids):
-        con = self.conn.get()
-        try:
-            return Office.getOfficesUsers(con, ids)
-        finally:
-            self.conn.put(con)
-
-    @coroutine
-    def getOfficesUsers_async(self, ids):
-        loop = asyncio.get_event_loop()
-        r = yield from loop.run_in_executor(None, self.getOfficesUsers, ids)
-        return r
-"""
+            ctx.closeConn()

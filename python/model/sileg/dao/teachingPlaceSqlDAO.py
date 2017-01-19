@@ -21,7 +21,7 @@ class TeachingPlaceSqlDAO(PlaceSqlDAO):
             cur.execute("""
                 CREATE SCHEMA IF NOT EXISTS sileg;
 
-                CREATE TABLE IF NOT EXISTS sileg.place (
+                CREATE TABLE IF NOT EXISTS sileg.place_ (
                   id VARCHAR NOT NULL PRIMARY KEY REFERENCES designations.place (id),
                   telephone VARCHAR,
                   email VARCHAR
@@ -43,14 +43,14 @@ class TeachingPlaceSqlDAO(PlaceSqlDAO):
         for k in condition:
             if type(condition[k]) == bool:
                 if k in ["telephone", "email"]:
-                  cond = "(sileg.place.{} IS NOT NULL)" if condition[k] else "(sileg.place.{} IS NULL)"
+                  cond = "(sileg.place_.{} IS NOT NULL)" if condition[k] else "(sileg.place_.{} IS NULL)"
                 else:
                   cond = "(designations.place.{} IS NOT NULL)" if condition[k] else "(designations.place.{} IS NULL)"
 
                 conditionList.append(cond.format(cls.namemapping(k)))
             else:
                 if k in ["telephone", "email"]:
-                    conditionList.append("(sileg.place.{} IN %s)".format(cls.namemapping(k)))
+                    conditionList.append("(sileg.place_.{} IN %s)".format(cls.namemapping(k)))
                 else:
                     conditionList.append("(designations.place.{} IN %s)".format(cls.namemapping(k)))
 
@@ -69,7 +69,7 @@ class TeachingPlaceSqlDAO(PlaceSqlDAO):
         for k in orderBy:
             orderByType = "ASC" if orderBy[k] else "DESC"
             if k in ["telephone", "email"]:
-                orderByList.append("sileg.place.{} {}".format(cls.namemapping(k), orderByType))
+                orderByList.append("sileg.place_.{} {}".format(cls.namemapping(k), orderByType))
             else:
                 orderByList.append("designations.place.{} {}".format(cls.namemapping(k), orderByType))
 
@@ -92,9 +92,9 @@ class TeachingPlaceSqlDAO(PlaceSqlDAO):
         o = " ORDER BY {}".format(', ' .join(orderBy)) if len(orderBy) else ""
         sql = """
             SELECT *
-            FROM sileg.place
-            INNER JOIN designations.place ON (sileg.place.id = designations.place.id)
-            WHERE sileg.place.id IN %s
+            FROM sileg.place_
+            INNER JOIN designations.place ON (sileg.place_.id = designations.place.id)
+            WHERE sileg.place_.id IN %s
             {}
         """.format(o)
 
@@ -115,9 +115,9 @@ class TeachingPlaceSqlDAO(PlaceSqlDAO):
         c = " WHERE {}".format(' AND ' .join(condition["list"])) if len(condition["list"]) else ""
         o = " ORDER BY {}".format(', ' .join(orderBy)) if len(orderBy) else ""
         sql = """
-            SELECT sileg.place.id
-            FROM sileg.place
-            INNER JOIN designations.place ON (sileg.place.id = designations.place.id)
+            SELECT sileg.place_.id
+            FROM sileg.place_
+            INNER JOIN designations.place ON (sileg.place_.id = designations.place.id)
             {}{}
         """.format(c, o)
 
@@ -135,24 +135,20 @@ class TeachingPlaceSqlDAO(PlaceSqlDAO):
 
 
 
-
     @classmethod
-    def persist(cls, ctx, office):
-        ''' inserta o actualiza una oficia '''
+    def persist(cls, ctx, entity):
+        hasId = hasattr(entity, 'id') and entity.id is not None
+        super().persist(ctx, entity)
+
         cur = ctx.con.cursor()
         try:
-            if office.id is None:
-                office.id = str(uuid.uuid4())
-                params = office.__dict__
-                cur.execute('insert into designations.place (id, name, type, parent, public) values (%(id)s, %(name)s, %(type)s, %(parent)s, %(public)s)', params)
-                cur.execute('insert into sileg.place (id, telephone, email) values (%(id)s, %(telephone)s, %(email)s)', params)
+            if not hasId:
+                cur.execute('insert into sileg.place_ (id, telephone, email) values (%(id)s, %(telephone)s, %(email)s)', entity.__dict__)
 
             else:
-                params = office.__dict__
-                cur.execute('update designations.place set name = %(name)s, type = %(type)s, parent = %(parent)s, public = %(public)s where id = %(id)s', params)
-                cur.execute('update sileg.place set telephone = %(telephone)s, email = %(email)s, where id = %(id)s', params)
+                cur.execute('update sileg.place_ set telephone = %(telephone)s, email = %(email)s, where id = %(id)s', entity.__dict__)
 
-            return office
+            return entity
 
         finally:
             cur.close()

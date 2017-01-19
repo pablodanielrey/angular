@@ -8,7 +8,7 @@ from model.sileg.entities.teachingPosition import TeachingPosition
 class TeachingPositionSqlDAO(PositionSqlDAO):
 
     _schema = "sileg."
-    _table  = "place"
+    _table  = "position_"
     _entity = TeachingPosition
 
     @classmethod
@@ -20,7 +20,7 @@ class TeachingPositionSqlDAO(PositionSqlDAO):
             cur.execute("""
                 CREATE SCHEMA IF NOT EXISTS sileg;
 
-                CREATE TABLE IF NOT EXISTS sileg.position (
+                CREATE TABLE IF NOT EXISTS sileg.position_ (
                   id VARCHAR NOT NULL PRIMARY KEY REFERENCES designations.position (id),
                   detail VARCHAR
                 );
@@ -41,14 +41,14 @@ class TeachingPositionSqlDAO(PositionSqlDAO):
         for k in condition:
             if type(condition[k]) == bool:
                 if k in ["detail"]:
-                  cond = "(sileg.position.{} IS NOT NULL)" if condition[k] else "(sileg.position.{} IS NULL)"
+                  cond = "(sileg.position_.{} IS NOT NULL)" if condition[k] else "(sileg.position_.{} IS NULL)"
                 else:
                   cond = "(designations.position.{} IS NOT NULL)" if condition[k] else "(designations.position.{} IS NULL)"
 
                 conditionList.append(cond.format(cls.namemapping(k)))
             else:
                 if k in ["detail"]:
-                    conditionList.append("(sileg.position.{} IN %s)".format(cls.namemapping(k)))
+                    conditionList.append("(sileg.position_.{} IN %s)".format(cls.namemapping(k)))
                 else:
                     conditionList.append("(designations.position.{} IN %s)".format(cls.namemapping(k)))
 
@@ -67,7 +67,7 @@ class TeachingPositionSqlDAO(PositionSqlDAO):
         for k in orderBy:
             orderByType = "ASC" if orderBy[k] else "DESC"
             if k in ["detail"]:
-                orderByList.append("sileg.position.{} {}".format(cls.namemapping(k), orderByType))
+                orderByList.append("sileg.position_.{} {}".format(cls.namemapping(k), orderByType))
             else:
                 orderByList.append("designations.position.{} {}".format(cls.namemapping(k), orderByType))
 
@@ -89,9 +89,9 @@ class TeachingPositionSqlDAO(PositionSqlDAO):
         o = " ORDER BY {}".format(', ' .join(orderBy)) if len(orderBy) else ""
         sql = """
             SELECT *
-            FROM sileg.position
-            INNER JOIN designations.position ON (sileg.position.id = designations.position.id)
-            WHERE sileg.position.id IN %s
+            FROM sileg.position_
+            INNER JOIN designations.position ON (sileg.position_.id = designations.position.id)
+            WHERE sileg.position_.id IN %s
             {}
         """.format(o)
 
@@ -112,9 +112,9 @@ class TeachingPositionSqlDAO(PositionSqlDAO):
         c = " WHERE {}".format(' AND ' .join(condition["list"])) if len(condition["list"]) else ""
         o = " ORDER BY {}".format(', ' .join(orderBy)) if len(orderBy) else ""
         sql = """
-            SELECT sileg.position.id
-            FROM sileg.position
-            INNER JOIN designations.position ON (sileg.position.id = designations.position.id)
+            SELECT sileg.position_.id
+            FROM sileg.position_
+            INNER JOIN designations.position ON (sileg.position_.id = designations.position.id)
             {}{}
         """.format(c, o)
 
@@ -132,32 +132,25 @@ class TeachingPositionSqlDAO(PositionSqlDAO):
 
 
     @classmethod
-    def insert(cls, ctx, entity):
-        PositionSqlDAO.insert(ctx, entity)
+    def persist(cls, ctx, entity):
+        hasId = hasattr(entity, 'id') and entity.id is not None
+        super().persist(ctx, entity)
 
         cur = ctx.con.cursor()
         try:
-            cur.execute("""
-                INSERT INTO sileg.position (id, detail)
-                VALUES (%(id)s, %(detail)s)
-            """, entity.__dict__)
+            if not hasId:
+                cur.execute("""
+                    INSERT INTO sileg.position_ (id, detail)
+                    VALUES (%(id)s, %(detail)s)
+                """, entity.__dict__)
 
+            else:
+                cur.execute("""
+                    UPDATE sileg.position_
+                    SET detail = %(detail)s
+                    WHERE id = %(id)s
+                """, entity.__dict__)
             return entity
-        finally:
-            cur.close()
 
-    @classmethod
-    def update(cls, ctx, entity):
-        PositionSqlDAO.update(ctx, entity)
-
-        cur = ctx.con.cursor()
-        try:
-            cur.execute("""
-                UPDATE sileg.position
-                SET detail = %(detail)s
-                WHERE id = %(id)s
-            """, entity.__dict__)
-
-            return entity
         finally:
             cur.close()
