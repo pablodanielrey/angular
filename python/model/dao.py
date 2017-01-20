@@ -32,13 +32,13 @@ class SqlDAO(DAO):
                 conditionList.append(cond.format(cls.namemapping(k)))
 
             elif not condition[k]:
-                cond = "({} = false)"
+                cond = "(false)"
                 conditionList.append(cond.format(cls.namemapping(k)))
 
             elif isinstance(condition[k], list):
                 conditionList.append("({} IN %s)".format(cls.namemapping(k)))
                 conditionValues.append(tuple(condition[k]))
-                
+
             else:
                 conditionList.append('({} = %s)'.format(cls.namemapping(k)))
                 conditionValues.append(condition[k])
