@@ -12,23 +12,16 @@ class Office(Place):
 
 
     @classmethod
+    def getTypes(cls):
+      return  [
+        {'value': 'departamento', 'name': 'departamento'},
+      ],
+
+
+    @classmethod
     def findByUserId(cls, ctx, userId, tree=False, *args, **kwargs):
         return Ids(cls, ctx.dao(cls).findByUserId(ctx, userId, tree=False, *args, **kwargs))
 
     @classmethod
     def findChildsByIds(cls, ctx, ids, tree=False, *args,  **kwargs):
         return Ids(cls, ctx.dao(cls).findChildsByIds(ctx, ids, tree, *args, **kwargs))
-
-
-    @classmethod
-    def persist(cls, ctx, entity):
-        if not hasattr(entity, 'id') or entity.id is None:
-            entity.id = str(uuid.uuid4())
-
-        aux = cls.findById(ctx, entity.id)
-
-        if aux is not None:
-            return cls.update(ctx, entity)
-
-        else:
-            return cls.insert(ctx, entity)

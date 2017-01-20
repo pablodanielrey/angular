@@ -24,18 +24,21 @@ class OfficeSqlDAO(PlaceSqlDAO):
         for k in condition:
             if type(condition[k]) == bool:
                 if k in ["telephone", "number", "email"]:
-                  cond = "({} IS NOT NULL)" if condition[k] else "({} IS NULL)"
+                  cond = "(offices.office.{} IS NOT NULL)" if condition[k] else "(offices.office.{} IS NULL)"
                 else:
                   cond = "(designations.place.{} IS NOT NULL)" if condition[k] else "(designations.place.{} IS NULL)"
 
                 conditionList.append(cond.format(cls._schema, cls._table, cls.namemapping(k)))
             else:
+                if not condition[k]:
+                  continue
+
                 if k in ["telephone", "number", "email"]:
                     conditionList.append("({} IN %s)".format(cls.namemapping(k)))
                 else:
                     conditionList.append("((designations.place.{} IN %s)".format(cls.namemapping(k)))
-
-                conditionValues.append(tuple(condition[k]))
+                print(condition[k])
+                conditionValues.append(tuple(condition))
 
         return {"list":conditionList, "values":conditionValues}
 
@@ -50,9 +53,9 @@ class OfficeSqlDAO(PlaceSqlDAO):
         for k in orderBy:
             orderByType = "ASC" if orderBy[k] else "DESC"
             if k in ["telephone", "number", "email"]:
-                orderByList.append("{}{}.{} {}".format(cls._schema, cls._table, cls.namemapping(k), orderByType))
+                orderByList.append("offices.office.{} {}".format(cls.namemapping(k), orderByType))
             else:
-                orderByList.append("{}{}.{} {}".format(super()._schema, super()._table, cls.namemapping(k), orderByType))
+                orderByList.append("designations.place.{} {}".format(cls.namemapping(k), orderByType))
 
         return orderByList
 
@@ -168,7 +171,7 @@ class OfficeSqlDAO(PlaceSqlDAO):
 
     @classmethod
     def persist(cls, ctx, entity):
-        hasId = 'id' in entity or entity.id is not None
+        hasId = hasattr(entity, 'id') and entity.id is not None
         super().persist(ctx, entity)
 
         cur = ctx.con.cursor()

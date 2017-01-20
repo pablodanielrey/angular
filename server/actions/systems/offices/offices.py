@@ -55,32 +55,36 @@ class Offices(wamp.SystemComponentSession):
 
     @autobahn.wamp.register('offices.find_users_by_regex')
     def findUsersByRegex(self, regex):
-        logging.info('searchUsers')
-        logging.info(regex)
-        con = self.conn.get()
+        ctx = wamp.getContextManager()
+        ctx.getConn()
         try:
-            return OfficeModel.searchUsers(con, regex)
+            return OfficeModel.searchUsers(ctx, regex)
         finally:
-            self.conn.put(con)
+            ctx.closeConn()
+
 
     @autobahn.wamp.register('offices.find_by_id')
     def findById(self, ids):
-        con = self.conn.get()
+        ctx = wamp.getContextManager()
+        ctx.getConn()
         try:
-            offices = Office.findByIds(con, ids)
+            offices = Office.findByIds(ctx, ids)
             for office in offices:
-                office.users = OfficeModel.getUsers(con, office.id)
+                office.users = OfficeModel.getUsers(ctx, office.id)
             return offices
         finally:
-            self.conn.put(con)
+            ctx.closeConn()
+
 
     @autobahn.wamp.register('offices.find_users_by_ids')
     def searchUsers(self, ids):
-        con = self.conn.get()
+        ctx = wamp.getContextManager()
+        ctx.getConn()
         try:
-            return OfficeModel.findUsersByIds(con, ids)
+            return OfficeModel.findUsersByIds(ctx, ids)
         finally:
-            self.conn.put(con)
+            ctx.closeConn()
+
 
     @autobahn.wamp.register('offices.get_office_types')
     def getOfficeTypes(self):
@@ -92,7 +96,8 @@ class Offices(wamp.SystemComponentSession):
         ctx = wamp.getContextManager()
         ctx.getConn()
         try:
-            return Office.find(ctx, type=types)
+            return Office.find(ctx, type=types).values
+
         finally:
             ctx.closeConn()
 

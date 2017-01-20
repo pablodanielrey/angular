@@ -66,14 +66,14 @@ class OfficeModel():
 
     @classmethod
     def getUsers(cls, ctx, oId):
-        desig = Designation.find(ctx, officeId=[oId]).fetch(ctx)
+        desig = OfficeDesignation.find(ctx, officeId=[oId]).fetch(ctx)
         list(set([d.userId for d in desig]))
 
     @classmethod
     def searchUsers(cls, ctx, regexp):
-        ids = User.search(ctx, regexp)
-        users = [cls._getUserData(uid) for uid in ids]
-        return users
+        users = User.search(ctx, regexp).fetch(ctx)
+        users_ = [cls._getUserData(u) for u in users]
+        return users_
 
     @classmethod
     def findUsersByIds(cls, ctx, uids):
@@ -88,5 +88,5 @@ class OfficeModel():
         u.dni = user.dni
         u.id = user.id
         u.gender = user.gender
-        u.photo = [User.findPhoto(ctx, user.photo) if 'photo' in dir(user) and user.photo is not None and user.photo != '' else None][0]
+        #u.photo = [User.findPhoto(ctx, user.photo) if 'photo' in dir(user) and user.photo is not None and user.photo != '' else None][0]
         return u
