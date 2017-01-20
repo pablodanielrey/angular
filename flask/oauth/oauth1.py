@@ -2,7 +2,7 @@
 import flask
 
 from model.oauth.entities.oauth import Client
-from model.oauth.entities.oauth1 import RequestToken
+from model.oauth.entities.oauth1 import RequestToken, AccessToken, Nonce
 
 class FlaskOAuth1:
 
@@ -75,7 +75,7 @@ class FlaskOAuth1:
                     verifier = {
                         u'oauth_verifier': u'Gqm3id67MdkrASOCQIAlb3XODaPlun',
                         u'oauth_token': u'eTYP46AJbhp8u4LE5QMjXeItRGGoAI',
-                        u'resource_owner_key': u'eTYP46AJbhp8u4LE5QMjXeItRGGoAI'
+                        u'resource_owner_key': u'eTYP46AJbhp8u4LE5QMjXeItRGGoAI'            // esto es client_key
                     }
             """
             ctx.getConn()
@@ -112,6 +112,34 @@ class FlaskOAuth1:
 
             finally:
                 ctx.closeConn()
+
+        @provider.tokengetter
+        def load_access_token(clientKey, token, *args, **kwargs):
+            ctx.getConn()
+            try:
+                return AccessToken.find(ctx, clientKey=clientKey, token=token).fetch(ctx)[0]
+            finally:
+                ctx.closeConn()
+
+        @provider.tokensetter
+        def save_access_token(token, request):
+            """
+                token = {
+                    u'oauth_token_secret': u'H1xGH4X1ZkRAulHHdLfdFm7NR350tr',
+                    u'oauth_token': u'aXNlKcjkVImnTfTKj8CgFpc1XRZr6P',
+                    u'oauth_authorized_realms': u'email'
+                }
+            """
+            tk = AccessToken()
+            tk.userId = request.user.id
+            tk.clientId = request.client.id
+            tk.token = token['oauth_token']
+            tk.secret = token['oauth_token_secret']
+            tk.scopes = token['oauth_authorized_realms']
+            tk.persist(ctx)
+            ctx.con.commit()
+            return
+
 
         @app.route('/oauth/request_token')
         @provider.request_token_handler
