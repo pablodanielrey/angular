@@ -23,7 +23,7 @@ def is_logged():
 def current_user():
     return flask.session['user']
 
-def loggin(user):
+def login(user):
     flask.session['user'] = user
 
 def logout():
