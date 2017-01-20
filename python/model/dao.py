@@ -31,8 +31,12 @@ class SqlDAO(DAO):
                 cond = "({} IS NOT NULL)" if condition[k] else "({} IS NULL)"
                 conditionList.append(cond.format(cls.namemapping(k)))
             else:
-                conditionList.append("({} IN %s)".format(cls.namemapping(k)))
-                conditionValues.append(tuple(condition[k]))
+                if isinstance(condition[k], list):
+                    conditionList.append("({} IN %s)".format(cls.namemapping(k)))
+                    conditionValues.append(tuple(condition[k]))
+                else:
+                    conditionList.append('({} = %s)'.format(cls.namemapping(k)))
+                    conditionValues.append(condition[k])
 
         return {"list":conditionList, "values":conditionValues}
 
