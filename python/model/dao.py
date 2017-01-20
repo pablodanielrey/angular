@@ -35,8 +35,8 @@ class SqlDAO(DAO):
                     if len(condition[k]) <= 0:
                         conditionList.append("(false)")
                     else:
-                    conditionList.append("({} IN %s)".format(cls.namemapping(k)))
-                    conditionValues.append(tuple(condition[k]))
+                        conditionList.append("({} IN %s)".format(cls.namemapping(k)))
+                        conditionValues.append(tuple(condition[k]))
                 else:
                     conditionList.append('({} = %s)'.format(cls.namemapping(k)))
                     conditionValues.append(condition[k])
