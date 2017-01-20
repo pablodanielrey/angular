@@ -7,28 +7,25 @@ os.environ['OAUTHLIB_INSECURE_TRANSPORT'] = 'true'
 import sys
 sys.path.append('../python')
 
-
-
 def createApp(ctx):
     import uuid
     import flask
     from flask import Flask
     from flask_session import Session
 
+    import dflask
     from model import serializer
     from model.users.entities.user import User
     from model.users.entities.userPassword import UserPassword
 
     app = Flask(__name__)
     app.secret_key = str(uuid.uuid4()).replace('-','')
-    #app.config['SESSION_TYPE'] = 'filesystem'
-    app.config['SESSION_TYPE'] = 'memcached'
-    Session(app)
+    dflask.configure_session(app)
 
     @app.route('/', methods=['GET'])
     def index():
-        if 'user' in flask.session:
-            user = flask.session['user']
+        if dflask.is_logged():
+            user = dflask.current_user()
             return flask.render_template('login.html', user='{} {}'.format(user.name, user.lastname))
         else:
             return flask.render_template('login.html')
@@ -47,7 +44,7 @@ def createApp(ctx):
                     user = User.find(ctx, id=[up.userId]).fetch(ctx)[0]
                     print(user.__dict__)
 
-                    flask.session['user'] = user
+                    dflask.login(user)
                     return index()
             finally:
                 ctx.closeConn()
@@ -58,9 +55,13 @@ def createApp(ctx):
 
     @app.route('/logout', methods=['GET','POST'])
     def logout():
-        if 'user' in flask.session:
-            flask.session.clear()
+        dflask.logout()
         return flask.redirect('/')
+
+    @app.route('/algo')
+    @dflask.logged
+    def algo():
+        return flask.render_template('authorize.html')
 
     return app
 
