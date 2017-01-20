@@ -5,20 +5,23 @@
         .module('users')
         .controller('ListUsersCtrl', ListUsersCtrl);
 
-    ListUsersCtrl.$inject = ['$scope', 'Login', 'Users', 'Utils'];
+    ListUsersCtrl.$inject = ['$scope', 'Login', 'Users', 'Utils', "$timeout"];
 
 
-    function ListUsersCtrl($scope, Login, Users, Utils) {
+    function ListUsersCtrl($scope, Login, Users, Utils, $timeout) {
 
-      $scope.$on('wamp.open', function(event, args) {
-            Users.findAll().then(
-              function(r){
-                 console.log(r)
-                  $scope.rows = r;
-                }
-            )
-      });
 
+      $scope.loadUser = function(){
+         Users.findAll().then(
+        function(r){
+           console.log(r)
+            $scope.rows = r;
+          }
+      )
+    }
+
+
+      $timeout($scope.loadUser, 500);
 
     }
 })();
