@@ -17,8 +17,9 @@ class AccessToken(Entity):
     def __init__(self):
         self.id = None
         self.userId = None
-        self.accessToken = None
-        self.secretToken = None
+        self.clientId = None
+        self.token = None
+        self.secret = None
         self.scopes = []
 
 
