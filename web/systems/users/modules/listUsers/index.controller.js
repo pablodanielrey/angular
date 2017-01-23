@@ -5,23 +5,42 @@
         .module('users')
         .controller('ListUsersCtrl', ListUsersCtrl);
 
-    ListUsersCtrl.$inject = ['$scope', 'Login', 'Users', 'Utils', "$timeout"];
+    ListUsersCtrl.$inject = ['$scope', '$timeout', 'Users'];
 
 
-    function ListUsersCtrl($scope, Login, Users, Utils, $timeout) {
+    function ListUsersCtrl($scope, $timeout, Users) {
 
+      $scope.searchDisabled = true; //flag para habilitar formulario de busqueda
+      $scope.search = null; //busqueda
+      $scope.searchMessage = null; //Mensaje
 
-      $scope.loadUser = function(){
-         Users.findAll().then(
-        function(r){
-           console.log(r)
-            $scope.rows = r;
-          }
-      )
-    }
+      $scope.users = []; //lista de usuarios
 
+      var activate = function(){
+        $scope.searchDisabled = false;
+      }
 
-      $timeout($scope.loadUser, 500);
+      $scope.searchUsers = function(){
+
+        if($scope.search.length > 3){
+          $scope.searchDisabled = true;
+          $scope.searchMessage = "Buscando";
+
+          Users.search($scope.search).then(
+            function(ids){
+                Users.findByIds(ids).then(
+                  function(users){
+                    $scope.searchMessage = null; //Mensaje
+                    $scope.users = users;
+                    $scope.$apply();
+                  }
+                )
+            }
+          )
+        }
+      }
+
+      $timeout(activate, 0);
 
     }
 })();

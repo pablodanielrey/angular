@@ -44,7 +44,7 @@ class User(Entity):
 
     @classmethod
     def search(cls, ctx, regex):
-        return Ids(cls, ctx.dao(cls).search(con, regex))
+        return Ids(cls, ctx.dao(cls).search(ctx, regex))
 
     @classmethod
     def findPhoto(cls, ctx, pId):

@@ -21,3 +21,7 @@ class Entity(JSONSerializable):
     @classmethod
     def findByIds(cls, ctx, ids, *args, **kwargs):
         return ctx.dao(cls).findByIds(ctx, ids, *args, **kwargs)
+
+    @classmethod
+    def findById(cls, ctx, ids, *args, **kwargs):
+        return ctx.dao(cls).findById(ctx, ids, *args, **kwargs)

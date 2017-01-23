@@ -8,14 +8,31 @@
 
     function Users($rootScope, Login, $q, Files) {
 
+      //Buscar usuarios a partir de un string
+      //@param search Busqueda
+      this.search = function (search){ return Login.getPrivateTransport().call('users.search', [search]); }
+
+      //Administrar (define un usuario para administracion)
+      //@param id de usuario o null (si esta definido el id buscara el usuario en la base)
+      this.admin = function(id){ return Login.getPrivateTransport().call('users.admin', [id]); }
+
+      //Persistir usuario
+      //@param user User a persistir
+      this.persist = function(user){ return Login.getPrivateTransport().call('users.persist', [user]); }
+
+
       this.fromIdsToUsers = fromIdsToUsers;         // transforma lista de [ids] a lista de [{id:id1}, {id:id2}, ...] para encardenar promesas
       this.fromUserToList = fromUserToList;
-      this.findById = findById;
+      this.findByIds = findByIds;
       this.findByDni = findByDni;
       this.findAll = findAll;
       this.findPhotos = findPhotos;
       this.findPhoto = findPhoto;
       this.photoToDataUri = photoToDataUri;
+
+
+
+
 
 
       //////////////////// INDICES SECUNDARIOS /////////////////////////////
@@ -40,11 +57,11 @@
 
 
 
-      function findById(ids) {
+      function findByIds(ids) {
         if (ids.length <= 0) {
           return $q.when([]);
         }
-        return Login.getPrivateTransport().call('users.find_by_id', [ids]);
+        return Login.getPrivateTransport().call('users.find_by_ids', [ids]);
       }
 
       /*

@@ -15,9 +15,50 @@ import wamp
 
 class Users(wamp.SystemComponentSession):
 
+    @autobahn.wamp.register('users.search')
+    def search(self, search):
+        #busqueda de usuario
+        ctx = wamp.getContextManager()
+        ctx.getConn()
+        try:
+            return User.search(ctx, search).values
 
-    @autobahn.wamp.register('users.find_by_id')
-    def findById(self, ids):
+        finally:
+            ctx.closeConn()
+
+    @autobahn.wamp.register('users.admin')
+    def admin(self, id):
+        #administracion de usuario
+        ctx = wamp.getContextManager()
+        ctx.getConn()
+        try:
+            user = None
+            if id is not None:
+                user = User.findById(ctx, id)
+
+            return user if user is not None else User()
+
+        finally:
+            ctx.closeConn()
+
+
+    @autobahn.wamp.register('users.persist')
+    def persist(self, user):
+        #administracion de usuario
+        ctx = wamp.getContextManager()
+        ctx.getConn()
+        try:
+            user.persist(ctx)
+            ctx.con.commit()
+
+        finally:
+            ctx.closeConn()
+
+
+
+
+    @autobahn.wamp.register('users.find_by_ids')
+    def findByIds(self, ids):
         ctx = wamp.getContextManager()
         ctx.getConn()
         try:
@@ -61,6 +102,6 @@ class Users(wamp.SystemComponentSession):
         ctx = wamp.getContextManager()
         ctx.getConn()
         try:
-            return User.find(ctx)
+            return User.find(ctx).values
         finally:
             ctx.closeConn()
