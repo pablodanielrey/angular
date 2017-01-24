@@ -5,11 +5,10 @@
         .module('users')
         .controller('AdminUserCtrl', AdminUserCtrl);
 
-    AdminUserCtrl.$inject = ['$scope', '$timeout', '$q', '$location', 'Users'];
+    AdminUserCtrl.$inject = ['$scope', '$timeout', '$q', '$location', 'Users', 'Utils'];
 
 
-    function AdminUserCtrl($scope, $timeout, $q, $location, Users) {
-
+    function AdminUserCtrl($scope, $timeout, $q, $location, Users, Utils) {
 
       //Inicializar variables del formulario
       var initForm = function(){
@@ -27,9 +26,9 @@
         if("id" in urlParams) $scope.form.id = urlParams["id"];
       };
 
-      //inicializar fields
-      var initFields = function(){
-        Users.admin($scope.form.id).then(
+      //Inicializar usuario
+      var initUser = function(){
+        Utils.admin($scope.form.id).then(
           function(user){
             $scope.user = user;
             $scope.form.disabled = false;
@@ -45,13 +44,13 @@
         )
       }
 
+      //Enviar formulario
       $scope.submit = function(){
         $scope.form.disabled = true;
         $scope.form.message = "Procesando";
 
-        Users.persist($scope.user).then(
+        Utils.persist($scope.user).then(
           function(response){
-            console.log(response)
             $scope.form.message = "Guardado";
             $scope.$apply();
           },
@@ -62,16 +61,24 @@
         )
       }
 
-      //Agregar telefono
+      //Agregar / eliminar telefono
       $scope.addTelephone = function() { $scope.user.telephones.push({__json_class__:"Telephone", __json_module__
 :"model.users.entities.user", number:null, type:null}) };
+      $scope.deleteTelephone = function(index){ $scope.user.telephones.splice(index, 1); }; //Eliminar telefono
 
-      //Eliminar telefono
-      $scope.deleteTelephone = function(index){ $scope.user.telephones.splice(index, 1); };
+      //Agregar / eliminar email
+      $scope.addEmail = function() { $scope.user.emails.push({__json_class__:"Mail", __json_module__
+      :"model.users.entities.mail", confirmed:false, hash:null}) };
+      $scope.deleteEmail = function(index){ $scope.user.emails.splice(index, 1); };
 
+      //Agregar / eliminar tipo
+      $scope.addType = function() { $scope.user.types.push({description:null}) };
+      $scope.deleteType = function(index){ $scope.user.types.splice(index, 1); };
+
+      //Inicializar
       initForm();
       initParams();
-      $timeout(initFields, 500); //TODO REEMPLAZAR POR EVENTO DE INICIALIZACION DE LOGIN
+      $timeout(initUser, 500); //TODO REEMPLAZAR POR EVENTO DE INICIALIZACION DE LOGIN
 
     }
 })();

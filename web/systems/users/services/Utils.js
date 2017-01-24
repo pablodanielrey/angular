@@ -10,10 +10,37 @@
     /* @ngInject */
     function Utils(Users, $q, $window, $timeout) {
 
+      //Administrar (define un usuario para administracion)
+      //@param id de usuario o null (si esta definido el id buscara el usuario en la base)
+      this.admin = function(id){
+        return Users.admin(id).then(
+          function(user){
+            var types = (!user.type) ? [] : user.type.split(" ");
+            user.types = [];
+            for(var i = 0; i < types.length; i++) user.types.push({description:types[i]});
+            return user;
+          }
+        )
+      }
+
+      //Persistir usuario
+      //@param user User a persistir
+      this.persist = function(user){
+        var types = [];
+        for(var i = 0; i < user.types.length; i++) types.push(user.types[i].description);
+        user.type = types.join(" ")
+
+
+        console.log(types)
+        console.log(user)
+        return Users.persist(user);
+      }
+
+
+
         this.getOfficeTypes = getOfficeTypes;
         this.findAll = findAll;
         this.findByIds = findByIds;
-        this.persist = persist;
         this.remove = remove;
 
         function getOfficeTypes() {
@@ -91,11 +118,11 @@
           $window.sessionStorage.removeItem(office.id);
           return Offices.remove(office);
         }
-
+/*
         function persist(office) {
           var off = convertOffice(office);
           return Offices.persistWithUsers(off, office.users);
-        }
+        }*/
 
         function convertOffice(office) {
           var off = {};

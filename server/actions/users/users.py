@@ -7,6 +7,10 @@ import uuid
 # from autobahn.asyncio.wamp import ApplicationSession
 
 from model.users.entities.user import User
+from model.users.entities.user import Telephone
+from model.users.entities.mail import Mail
+
+
 
 # from model.exceptions import *
 
@@ -35,11 +39,17 @@ class Users(wamp.SystemComponentSession):
             user = None
             if id is not None:
                 user = User.findById(ctx, id)
+                if user is not None:
+                    user.emails = Mail.find(ctx, userId=id).fetch(ctx)
 
-            return user if user is not None else User()
+            if user is None:
+                user = User()
+                user.emails = []
 
+            return user
         finally:
             ctx.closeConn()
+
 
 
     @autobahn.wamp.register('users.persist')
@@ -49,6 +59,16 @@ class Users(wamp.SystemComponentSession):
         ctx.getConn()
         try:
             user.persist(ctx)
+
+            email = Mail()
+            emailsToDelete = email.find(ctx, userId=user.id).fetch(ctx)
+            for e in emailsToDelete:
+                e.delete(ctx)
+
+            for e in user.emails:
+                e.userId = user.id
+                e.persist(ctx)
+
             ctx.con.commit()
 
         finally:

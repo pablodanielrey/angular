@@ -16,10 +16,11 @@
       //@param id de usuario o null (si esta definido el id buscara el usuario en la base)
       this.admin = function(id){ return Login.getPrivateTransport().call('users.admin', [id]); }
 
-  
       //Persistir usuario
       //@param user User a persistir
       this.persist = function(user){ return Login.getPrivateTransport().call('users.persist', [user]); }
+
+
 
 
       this.fromIdsToUsers = fromIdsToUsers;         // transforma lista de [ids] a lista de [{id:id1}, {id:id2}, ...] para encardenar promesas
