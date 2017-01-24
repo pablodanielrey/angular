@@ -10,6 +10,7 @@ sys.path.append('.')
 
 import flask
 import dflask
+import login
 
 def createApp(ctx):
     import uuid
@@ -21,6 +22,12 @@ def createApp(ctx):
 
     return app
 
+def configureOauth(ctx, app):
+    from oauth.oauth1 import FlaskOAuth1
+    FlaskOAuth1.setFlaskVars(a)
+    oauth1 = FlaskOAuth1.setFlaskHandlers(ctx, a)
+    FlaskOAuth1.setOauthHandlers(ctx, oauth1)
+
 def createTestingContext(host, db, u, p):
     from model import SqlContext
     import psycopg2
@@ -30,17 +37,6 @@ def createTestingContext(host, db, u, p):
     pool = psycopg2.pool.ThreadedConnectionPool(1, 1, host=host, database=db, user=u, password=p, cursor_factory=DictCursor)
     ctx = SqlContext(pool)
     return ctx
-
-
-def configureRoutes(ctx, app):
-
-    import login
-    login.configureRoutes(ctx, app)
-
-    @app.route('/algo')
-    @dflask.logged
-    def algo():
-        return flask.render_template('authorize.html')
 
 
 if __name__ == '__main__':
@@ -58,9 +54,13 @@ if __name__ == '__main__':
 
     ctx = createTestingContext(h,d,u,p)
     try:
-        app = createApp(ctx)
-        configureRoutes(ctx, app)
-        app.run(port=pp)
+        from oauth.oauth1 import FlaskOAuth1
+        FlaskOAuth1.createSchema(ctx)
+        #a = createApp(ctx)
+        #configureOauth(ctx, a)
+        #login.login.configureRoutes(ctx, a)
+        #login.app.configureRoutes(ctx, a)
+        #a.run(port=pp)
 
     finally:
         ctx.closeAll()

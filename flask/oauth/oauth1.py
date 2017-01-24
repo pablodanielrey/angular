@@ -1,10 +1,20 @@
 
 import flask
+from flask_oauthlib.provider import OAuth1Provider
 
-from model.oauth.entities.oauth import Client
-from model.oauth.entities.oauth1 import RequestToken, AccessToken, Nonce
+from model.oauth.entities.oauth1 import Client, RequestToken, AccessToken, Nonce
 
 class FlaskOAuth1:
+
+    @classmethod
+    def createSchema(cls, ctx):
+        ctx.getConn()
+        ctx.dao(Client)._createSchema(ctx)
+        ctx.dao(RequestToken)._createSchema(ctx)
+        ctx.dao(AccessToken)._createSchema(ctx)
+        ctx.dao(Nonce)._createSchema(ctx)
+        ctx.con.commit()
+        ctx.closeConn()
 
     @classmethod
     def setFlaskVars(cls, app):
@@ -16,13 +26,39 @@ class FlaskOAuth1:
         })
 
     @classmethod
-    def setFlaskHandlers(cls, ctx, provider, app):
+    def setFlaskHandlers(cls, ctx, app):
+
+        from flask_oauthlib.provider import OAuth1Provider
+        provider = OAuth1Provider(app)
+
+        @app.route('/oauth1/request')
+        @provider.request_token_handler
+        def request_token():
+            return {}
+
+        @app.route('/oauth1/authorize', methods=['GET','POST'])
+        @provider.authorize_handler
+        def authorize(*args, **kwargs):
+            if flask.request.method == 'GET':
+                client_key = kwargs.get('resource_owner_key')
+                client = Client.find(ctx, key=client_key).fetch(ctx)[0]
+                kwargs['client'] = client
+                return render_template('authorize.html', **kwargs)
+
+            confirm = flask.request.form.get('confirm', 'no')
+            return confirm == 'yes'
+
+        return provider
+
+
+    @classmethod
+    def setOauthHandlers(cls, ctx, provider):
 
         @provider.clientgetter
         def load_client(key):
             ctx.getConn()
             try:
-                return Client.find(ctx, client_key=key).fetch(ctx)[0]
+                return Client.find(ctx, key=key).fetch(ctx)[0]
             finally:
                 ctx.closeConn()
 
@@ -52,7 +88,7 @@ class FlaskOAuth1:
                 tk.secret = token['oauth_token_secret']
                 tk.clientId = request.client.id
                 tk.redirect_uri = request.redirect_uri
-                tk.sopes = provider.realms
+                tk.sopes = token['oauth_authorized_realms'].split()
                 tk.persist(ctx)
                 ctx.con.commit()
 
@@ -82,7 +118,7 @@ class FlaskOAuth1:
             try:
                 tk = RequestToken.find(ctx, token=token).fetch(ctx)[0]
                 tk.verifier = verifier['oauth_verifier']
-                tk.userId = flask.session['userId']
+                tk.userId = dflask.current_user().id
                 ctx.con.commit()
 
             finally:
@@ -139,21 +175,3 @@ class FlaskOAuth1:
             tk.persist(ctx)
             ctx.con.commit()
             return
-
-
-        @app.route('/oauth/request_token')
-        @provider.request_token_handler
-        def request_token():
-            return {}
-
-        @app.route('/oauth/authorize', methods=['GET','POST'])
-        @provider.authorize_handler
-        def authorize(*args, **kwargs):
-            if flask.request.method == 'GET':
-                client_key = kwargs.get('resource_owner_key')
-                client = Client.find(ctx, key=client_key).fetch(ctx)[0]
-                kwargs['client'] = client
-                return render_template('authorize.html', **kwargs)
-
-            confirm = flask.request.form.get('confirm', 'no')
-            return confirm == 'yes'

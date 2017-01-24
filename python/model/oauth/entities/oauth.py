@@ -46,6 +46,22 @@ class Client(Entity):
         self.default_scope = None
         self.allowed_grant_types = Grant.TYPES
 
+    """
+        propiedades que adaptan la entidad a los requerimientos de la librería flask_oauthlib
+
+            clientgetter
+                    - client_key: A random string
+                    - client_secret: A random string
+                    - redirect_uris: A list of redirect uris
+                    - default_realms: Default scopes of the client
+    """
+
+    @property
+    def client_secret(self):
+        return self.secret
+
+
+
 
 class Token:
 
