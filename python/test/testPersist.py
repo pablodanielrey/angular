@@ -12,6 +12,8 @@ from model.sileg.entities.teachingPlace import TeachingPlace
 from model.sileg.entities.teachingPosition import TeachingPosition
 from model.sileg.entities.teachingDesignation import TeachingDesignation
 from model.users.entities.user import User
+from model.offices.entities.office import Office
+
 
 
 h = sys.argv[1]
@@ -24,7 +26,14 @@ ctx = SqlContext(pool)
 ctx.getConn()
 
 
+o = Office();
+o.name = "Departamento de prueba"
+o.number = "1234"
+o.type = 'departamento'
+o.persist(ctx);
 
+
+"""
 d = TeachingDesignation()
 d.resolution = "1/07"
 d.record = "11/07"
@@ -35,7 +44,6 @@ d.type = "original"
 d.persist(ctx)
 
 
-"""
 p = TeachingPlace()
 p.name = "Matemática"qwq
 p.type = "catedra"
@@ -59,11 +67,7 @@ u.persist(ctx)
 
 
 
-o = Office();
-o.name = "Test Area"
-o.number = "1234"
-o.type = 'area'
-o.persist(ctx);
+
 
 o2 = Office()
 o2.name = "Test Subarea"

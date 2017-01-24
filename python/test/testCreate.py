@@ -26,8 +26,8 @@ pool = psycopg2.pool.ThreadedConnectionPool(1,1, host=h, database=d, user=u, pas
 ctx = SqlContext(pool)
 ctx.getConn()
 
-#OfficeSqlDAO._createSchema(ctx)
-TeachingDesignationSqlDAO._createSchema(ctx)
+OfficeSqlDAO._createSchema(ctx)
+#TeachingDesignationSqlDAO._createSchema(ctx)
 
 
 ctx.con.commit()

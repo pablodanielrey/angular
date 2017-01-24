@@ -35,6 +35,7 @@
             $scope.form.disabled = false;
             $scope.form.message = null;
             $scope.$apply();
+            console.log(user)
 
           },
           function(error){
@@ -61,6 +62,12 @@
         )
       }
 
+      //Agregar telefono
+      $scope.addTelephone = function() { $scope.user.telephones.push({__json_class__:"Telephone", __json_module__
+:"model.users.entities.user", number:null, type:null}) };
+
+      //Eliminar telefono
+      $scope.deleteTelephone = function(index){ $scope.user.telephones.splice(index, 1); };
 
       initForm();
       initParams();

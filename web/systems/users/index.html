@@ -2,8 +2,8 @@
 <html ng-app="users">
 <head>
   <meta charset="utf-8"/>
-  <meta name='viewport' content='width=device-width'/>
-  <title>Usuarios</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Usuarios</title>
 
   <script>
     //AUTOBAHN_DEBUG = true;
@@ -24,7 +24,6 @@
   <link rel="shortcut icon" href="/systems/fce/img/favicon2.ico">
 
   <!-- TODO: ver como se puede hacer esto -->
-  <link rel="stylesheet" type="text/css" href="../fce/index.css"/>
 
   <script src='../login/index.module.js'></script>
   <script src='../login/services/Login.js'></script>
@@ -51,7 +50,20 @@
 
 
   <style>
-  body { margin-top:60px; }
+
+  html {
+    display: flex;
+    display: -webkit-flex; /* Safari */
+    display: -moz-flex; /* mozilla */
+    flex-direction:column;
+    -webkit-flex-direction:column; /* Safari */
+    -moz-flex-direction:column; /* mozilla */
+    margin-top:60px;
+    padding: 0px;
+    width: 100%;
+    height: 100%;
+    font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  }
 
   </style>
 
