@@ -4,8 +4,6 @@ from model.entity import Entity
 
 class Client(Entity):
 
-    TYPES = ['public','confidential']
-
     def __init__(self):
         self.id = None
         self.key = None
