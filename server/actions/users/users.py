@@ -39,16 +39,55 @@ class Users(wamp.SystemComponentSession):
             user = None
             if id is not None:
                 user = User.findById(ctx, id)
-                if user is not None:
-                    user.emails = Mail.find(ctx, userId=id).fetch(ctx)
 
             if user is None:
                 user = User()
-                user.emails = []
 
             return user
         finally:
             ctx.closeConn()
+
+
+
+    @autobahn.wamp.register('users.add_mail')
+    def addMail(self, userId, email):
+        """
+            agrego el email a la persona si es que no existe.
+            si existe no hago nada
+        """
+        pass
+
+    @autobahn.wamp.register('users.remove_mail')
+    def removeMail(self, userId, emailId):
+        """
+            elimino el email de la persona si existe
+        """
+        pass
+
+
+    @autobahn.wamp.register('users.send_confirm_email')
+    def sendConfirmationMail(self, emailId):
+        """
+            envío el email para poder confirmar
+        """
+        pass
+
+    @autobahn.wamp.register('users.confirm_email')
+    def confirmMail(self, emailId, code):
+        """
+            chequeo el codigo de verificación y confirmo el email en caso de ser correcto.
+            lo hace el modelo a esto.
+        """
+        pass
+
+    @autobahn.wamp.register('users.admin_confirm_email')
+    def adminConfirmMail(self, emailId):
+        """
+            confirmo el correo sin importar que codigo tiene.
+            solo lo deberia ejecutar el administrador. perfiles se chequean en el modelo. despues cuando termine lo del login.
+            no hacerlo todavia.
+        """
+        pass
 
 
 
@@ -59,16 +98,6 @@ class Users(wamp.SystemComponentSession):
         ctx.getConn()
         try:
             user.persist(ctx)
-
-            email = Mail()
-            emailsToDelete = email.find(ctx, userId=user.id).fetch(ctx)
-            for e in emailsToDelete:
-                e.delete(ctx)
-
-            for e in user.emails:
-                e.userId = user.id
-                e.persist(ctx)
-
             ctx.con.commit()
 
         finally:

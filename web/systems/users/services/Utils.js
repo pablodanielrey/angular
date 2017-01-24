@@ -30,9 +30,6 @@
         for(var i = 0; i < user.types.length; i++) types.push(user.types[i].description);
         user.type = types.join(" ")
 
-
-        console.log(types)
-        console.log(user)
         return Users.persist(user);
       }
 

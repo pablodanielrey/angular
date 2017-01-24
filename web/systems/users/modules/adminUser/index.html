@@ -50,27 +50,6 @@
 
   <div  class="form-group">
     <div class="col-sm-12">
-      <label  for="dni">EMAILS (Email - Confirmado):</label>
-      <button class="btn btn-sm btn-info" class="form-control" type="button" ng-click="addEmail()" ng-disabled="form.disabled">Agregar</button>
-    </div>
-
-    <div ng-repeat="t in user.emails" class="row">
-      <div class="col-sm-7">
-        <input type="text" class="form-control" ng-model="t.email" ng-disabled="form.disabled">
-      </div>
-      <div class="col-sm-2">
-        <input type="checkbox" class="form-control" ng-model="t.confirmed" ng-disabled="form.disabled">
-      </div>
-      <div class="col-sm-3">
-        <button class="btn btn-sm btn-danger" class="form-control" type="button" ng-click="deleteEmail($index)"  ng-disabled="form.disabled">Eliminar</button>
-      </div>
-    </div>
-  </div>
-
-
-
-  <div  class="form-group">
-    <div class="col-sm-12">
       <label  for="dni">TELEFONOS (Numero - Tipo):</label>
 
       <button class="btn btn-sm btn-info" class="form-control" type="button" ng-click="addTelephone()" ng-disabled="form.disabled">Agregar</button>
@@ -96,8 +75,9 @@
 
 
   <div class="form-group">
-    <div class="col-sm-offset-2 col-sm-10">
-      <button type="submit" class="btn btn-default" ng-disabled="form.disabled">Aceptar</button>{{form.message}}
+    <div class="col-sm-offset-1 col-sm-10">
+      <button type="submit" class="btn btn-default" ng-disabled="form.disabled">Aceptar</button>
+      <button type="button" class="btn btn-default"  ng-show="form.id">Emails</button>{{form.message}}
     </div>
   </div>
 </form>

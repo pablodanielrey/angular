@@ -10,18 +10,14 @@
 
     function AdminUserCtrl($scope, $timeout, $q, $location, Users, Utils) {
 
-      //Inicializar variables del formulario
-      var initForm = function(){
+      //Inicializar componente
+      var init = function(){
         $scope.form = {
           disabled: true, //flag para indicar si el formulario esta deshabilitado o no
           message: "Inicializando", //mensaje
           id: null //Identificacion de la entidad que esta siendo administrada
         };
-      };
 
-      //Inicializar parametros.
-      //Si existe el parametro "id" se realiza una busqueda en la base de datos y se cargan los valores.
-      var initParams = function(){
         var urlParams = $location.search();
         if("id" in urlParams) $scope.form.id = urlParams["id"];
       };
@@ -66,18 +62,12 @@
 :"model.users.entities.user", number:null, type:null}) };
       $scope.deleteTelephone = function(index){ $scope.user.telephones.splice(index, 1); }; //Eliminar telefono
 
-      //Agregar / eliminar email
-      $scope.addEmail = function() { $scope.user.emails.push({__json_class__:"Mail", __json_module__
-      :"model.users.entities.mail", confirmed:false, hash:null}) };
-      $scope.deleteEmail = function(index){ $scope.user.emails.splice(index, 1); };
-
       //Agregar / eliminar tipo
       $scope.addType = function() { $scope.user.types.push({description:null}) };
       $scope.deleteType = function(index){ $scope.user.types.splice(index, 1); };
 
       //Inicializar
-      initForm();
-      initParams();
+      init();
       $timeout(initUser, 500); //TODO REEMPLAZAR POR EVENTO DE INICIALIZACION DE LOGIN
 
     }
