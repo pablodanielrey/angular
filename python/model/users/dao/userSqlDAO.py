@@ -81,9 +81,8 @@ class UserSqlDAO(SqlDAO):
 
     @classmethod
     def findByIds(cls, ctx, uids, *args, **kwargs):
-        assert isinstance(uids, list)
-        if len(uids) <= 0:
-            return []
+        if not uids:
+          return []
 
         cur = ctx.con.cursor()
         try:

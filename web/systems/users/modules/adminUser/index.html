@@ -1,0 +1,81 @@
+
+<h2>Usuarios</h2>
+
+<form novalidate class="form-horizontal" ng-submit="submit()" >
+  <div class="form-group">
+    <label class="control-label col-sm-3" for="name">Nombre:</label>
+    <div class="col-sm-9">
+      <input type="text" class="form-control" id="name" ng-model="user.name" ng-disabled="form.disabled">
+    </div>
+  </div>
+  <div class="form-group">
+    <label class="control-label col-sm-3" for="lastname">Apellido:</label>
+    <div class="col-sm-9">
+      <input type="text" class="form-control" id="lastname" ng-model="user.lastname" ng-disabled="form.disabled">
+    </div>
+  </div>
+  <div class="form-group">
+    <label class="control-label col-sm-3" for="dni">DNI:</label>
+    <div class="col-sm-9">
+      <input type="text" class="form-control" id="dni" ng-model="user.dni" ng-disabled="form.disabled">
+    </div>
+  </div>
+
+  <div  class="form-group">
+    <div class="col-sm-9">
+      <label  for="dni">CLASIFICACON (Numero - Tipo):</label>
+
+      <button class="btn btn-sm btn-info" class="form-control" type="button" ng-click="addTelephone()">Agregar</button>
+    </div>
+
+    <div ng-repeat="t in user.telephones" class="row">
+      <div class="col-sm-5">
+        <input type="text" class="form-control" ng-model="t.number" ng-disabled="form.disabled">
+      </div>
+      <div class="col-sm-4">
+        <select class="form-control" ng-model="t.type">
+            <option value="">--Tipo--</option>
+            <option value="movil">Móvil</option>
+            <option value="home">Casa</option>
+            <option value="work">Trabajo</option>
+        </select>
+      </div>
+      <div class="col-sm-3">
+        <button class="btn btn-sm btn-danger" class="form-control" type="button" ng-click="deleteTelephone($index)">Eliminar</button>
+      </div>
+    </div>
+  </div>
+
+
+  <div  class="form-group">
+    <div class="col-sm-9">
+      <label  for="dni">TELEFONOS (Numero - Tipo):</label>
+
+      <button class="btn btn-sm btn-info" class="form-control" type="button" ng-click="addTelephone()">Agregar</button>
+    </div>
+
+    <div ng-repeat="t in user.telephones" class="row">
+      <div class="col-sm-5">
+        <input type="text" class="form-control" ng-model="t.number" ng-disabled="form.disabled">
+      </div>
+      <div class="col-sm-4">
+        <select class="form-control" ng-model="t.type">
+            <option value="">--Tipo--</option>
+            <option value="movil">Móvil</option>
+            <option value="home">Casa</option>
+            <option value="work">Trabajo</option>
+        </select>
+      </div>
+      <div class="col-sm-3">
+        <button class="btn btn-sm btn-danger" class="form-control" type="button" ng-click="deleteTelephone($index)">Eliminar</button>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="form-group">
+    <div class="col-sm-offset-2 col-sm-10">
+      <button type="submit" class="btn btn-default" ng-disabled="form.disabled">Aceptar</button>{{form.message}}
+    </div>
+  </div>
+</form>
