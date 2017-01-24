@@ -173,8 +173,8 @@ class UserSqlDAO(SqlDAO):
                 params["id"] = str(uuid.uuid4())
                 params["version"] = 0
                 cur.execute("""
-                    INSERT INTO profile.users (id, dni, name, lastname, gender, birthdate, city, country, address, residence_city, version, photo)
-                    VALUES (%(id)s, %(dni)s, %(name)s, %(lastname)s, %(gender)s, %(birthdate)s, %(city)s, %(country)s, %(address)s, %(residence_city)s, %(version)s, %(city)s)
+                    INSERT INTO profile.users (id, dni, name, lastname, gender, birthdate, city, country, address, residence_city, version, photo, type)
+                    VALUES (%(id)s, %(dni)s, %(name)s, %(lastname)s, %(gender)s, %(birthdate)s, %(city)s, %(country)s, %(address)s, %(residence_city)s, %(version)s, %(photo)s, %(type)s)
                     """, params)
 
             else:
@@ -191,7 +191,8 @@ class UserSqlDAO(SqlDAO):
                       address = %(address)s,
                       residence_city = %(residence_city)s,
                       version = %(version)s,
-                      photo = %(photo)s
+                      photo = %(photo)s,
+                      type =  %(type)s
                     WHERE id = %(id)s
                  """, params)
 
