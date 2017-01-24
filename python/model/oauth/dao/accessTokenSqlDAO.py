@@ -2,13 +2,13 @@ import copy
 import uuid
 
 from model.dao import SqlDAO
-from model.oauth.entities.oauth1 import Client
+from model.oauth.entities.oauth1 import AccessToken
 
-class ClientSqlDAO(SqlDAO):
+class AccessTokenSqlDAO(SqlDAO):
 
     _schema = 'oauth.'
-    _table = 'client'
-    _entity = Client
+    _table = 'access_token'
+    _entity = AccessToken
 
     @classmethod
     def _createSchema(cls, ctx):
@@ -17,10 +17,11 @@ class ClientSqlDAO(SqlDAO):
             cur.execute("create schema if not exists {}".format(cls._schema.replace('.','')))
             cur.execute("""create table if not exists {}{} (
                              id varchar primary key default uuid_generate_v4(),
-                             key varchar,
+                             client_id varchar,
+                             user_id varchar,
+                             token varchar,
                              secret varchar,
-                             redirect_uris varchar,
-                             default_scopes varchar,
+                             scopes varchar,
                              created timestamptz default NOW()
                             )""".format(cls._schema, cls._table))
         finally:
@@ -29,10 +30,11 @@ class ClientSqlDAO(SqlDAO):
     @classmethod
     def _fromResult(cls, c, r):
         c.id = r['id']
-        c.key = r['key']
+        c.clientId = r['client_id']
+        c.userId = ['user_id']
+        c.token = r['token']
         c.secret = r['secret']
-        c.redirectUris = r['redirect_uris'].split()
-        c.defaultScopes = r['default_scopes'].split()
+        c.scopes = r['scopes'].split()
         return c
 
     @classmethod
@@ -42,24 +44,22 @@ class ClientSqlDAO(SqlDAO):
             if not hasattr(c, 'id') or c.id is None:
                 c.id = str(uuid.uuid4())
                 p = copy.copy(c)
-                p.default_scopes_transformed = ' '.join(p.defaultScopes)
-                p.redirect_uris_transpormed = ' '.join(p.redirectUris)
-                cur.execute("insert into {}{} (id, key, secret, redirect_uris, default_scopes) "
-                            "values (%(id)s, %(key)s, %(secret)s, %(redirect_uris_transpormed)s, %(default_scopes_transformed)s)"
+                p.scopes_transformed = ' '.join(p.scopes)
+                cur.execute("insert into {}{} (id, client_id, user_id, token, secret, scopes) "
+                            "values (%(id)s, %(clientId)s, %(userId)s, %(token)s, %(secret)s, %(scopes_transformed)s)"
                             .format(cls._schema, cls._table),
                             p.__dict__)
             else:
                 p = copy.copy(c)
-                p.default_scopes_transformed = ' '.join(p.defaultScopes)
-                p.redirect_uris_transpormed = ' '.join(p.redirectUris)
-                cur.execute("update {}{} set (key = %(key)s, "
+                p.scopes_transformed = ' '.join(p.scopes)
+                cur.execute("update {}{} set (client_id = %(clientId)s, "
+                                             "user_id = %(userId)s, "
+                                             "token = %(token)s, "
                                              "secret = %(secret)s, "
-                                             "redirect_uris = %(redirect_uris_transpormed)s, "
-                                             "default_scopes = %(default_scopes_transformed)s) "
+                                             "scopes = %(scopes_transformed)s "
                                              "where id = %(id)s"
                             .format(cls._schema, cls._table),
                             p.__dict__)
-
             return c
         finally:
             cur.close()
