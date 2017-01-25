@@ -1,9 +1,15 @@
 {% extends "layout.html" %}
 
+{% for scope in scopes %}
+    <li>
+      <div>Scope : {{ scope }}</div>
+    </li>
+{% endfor %}
+
 {% block body %}
-<h2>Allow?</h2>
+<h2>Permitir?</h2>
 <form action="" method="post">
-  <button name="confirm" value="yes">Confirm</button>
-  <button name="confirm" value="no">Cancel</button>
+  <button name="confirm" value="yes">Confirmar</button>
+  <button name="confirm" value="no">Cancelar</button>
 </form>
 {% endblock %}

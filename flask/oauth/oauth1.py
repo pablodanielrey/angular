@@ -25,6 +25,20 @@ class FlaskOAuth1:
             'OAUTH1_PROVIDER_KEY_LENGTH': (10, 100)
         })
 
+
+    @classmethod
+    def setFlaskHelperHandlers(cls, ctx, app):
+
+        @app.route('/clients', methods=['GET'])
+        def clients():
+            ctx.getConn()
+            try:
+                clients = Client.find(ctx).fetch(ctx)
+                return flask.render_template('client_list.html', clients=clients)
+
+            finally:
+                ctx.closeConn()
+
     @classmethod
     def setFlaskHandlers(cls, ctx, app):
 
@@ -43,7 +57,7 @@ class FlaskOAuth1:
                 client_key = kwargs.get('resource_owner_key')
                 client = Client.find(ctx, key=client_key).fetch(ctx)[0]
                 kwargs['client'] = client
-                return render_template('authorize.html', **kwargs)
+                return flask.render_template('authorize.html', **kwargs)
 
             confirm = flask.request.form.get('confirm', 'no')
             return confirm == 'yes'

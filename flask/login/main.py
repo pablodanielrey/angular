@@ -11,6 +11,7 @@ sys.path.append('.')
 import flask
 import dflask
 import login
+import app
 
 def createApp(ctx):
     import uuid
@@ -25,6 +26,8 @@ def createApp(ctx):
 def configureOauth(ctx, app):
     from oauth.oauth1 import FlaskOAuth1
     FlaskOAuth1.setFlaskVars(a)
+    FlaskOAuth1.setFlaskHelperHandlers(ctx, a)
+
     oauth1 = FlaskOAuth1.setFlaskHandlers(ctx, a)
     FlaskOAuth1.setOauthHandlers(ctx, oauth1)
 
@@ -54,13 +57,13 @@ if __name__ == '__main__':
 
     ctx = createTestingContext(h,d,u,p)
     try:
-        from oauth.oauth1 import FlaskOAuth1
-        FlaskOAuth1.createSchema(ctx)
-        #a = createApp(ctx)
-        #configureOauth(ctx, a)
-        #login.login.configureRoutes(ctx, a)
-        #login.app.configureRoutes(ctx, a)
-        #a.run(port=pp)
+        #from oauth.oauth1 import FlaskOAuth1
+        #FlaskOAuth1.createSchema(ctx)
+        a = createApp(ctx)
+        configureOauth(ctx, a)
+        login.configureRoutes(ctx, a)
+        app.configureRoutes(ctx, a)
+        a.run(port=pp)
 
     finally:
         ctx.closeAll()
