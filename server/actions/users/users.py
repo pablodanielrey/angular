@@ -62,12 +62,13 @@ class Users(wamp.SystemComponentSession):
 
 
     @autobahn.wamp.register('users.add_email')
-    def addMail(self, email):
+    def addEmail(self, email):
         ctx = wamp.getContextManager()
         ctx.getConn()
         try:
             email.persist(ctx)
             ctx.con.commit()
+            return email
 
         finally:
             ctx.closeConn()
