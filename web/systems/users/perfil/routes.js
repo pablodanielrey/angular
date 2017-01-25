@@ -5,8 +5,8 @@
     app.config(['$routeProvider', function($routeProvider) {
       $routeProvider
 
-      .when('/listEmails', {templateUrl: 'modules/listEmails/index.html', controller: 'ListEmailsCtrl'})
       .when('/adminUser', {templateUrl: 'modules/adminUser/index.html', controller: 'AdminUserCtrl'})
+      .when('/changePassword', {templateUrl: 'modules/changePassword/index.html', controller: 'ChangePasswordCtrl'})
 
       .otherwise({
         redirectTo: '/adminUser'

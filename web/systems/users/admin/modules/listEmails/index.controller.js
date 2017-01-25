@@ -62,7 +62,6 @@
            function (email) {
              $scope.emails.push(email);
            }, function (error) {
-               alert("Error");
                console.log(error);
            }
          );

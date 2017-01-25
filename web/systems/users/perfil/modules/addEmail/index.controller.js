@@ -35,14 +35,16 @@
         $scope.form.message = "Procesando";
 
         Users.addEmail($scope.email).then(
-          function(response){
+          function(email){
             $scope.form.message = "Guardado";
+            $scope.email.id = email.id
             $uibModalInstance.close($scope.email);
           },
           function(error){ $uibModalInstance.dismiss(error); }
         )
       }
 
+      
       //Inicializar
       init();
 
