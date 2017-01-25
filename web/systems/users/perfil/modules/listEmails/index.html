@@ -1,0 +1,25 @@
+
+<h2>Emails</h2>
+
+
+<table class="table table-striped table-bordered table-hover">
+   <thead>
+     <tr>
+       <th>Email</th>
+       <th>Confirmado</th>
+       <th>Opciones</th>
+     </tr>
+   </thead>
+   <tbody>
+     <tr ng-repeat="email in emails">
+       <td>{{email.email}}</td>
+       <td>{{email.confirmed}}</td>
+
+       <td><button type="button" ng-click="deleteEmail($index)">Eliminar</button>
+       <a ng-href="./#/?id={{email.id}}">Enviar Confirmación</a></td>
+
+     </tr>
+   </tbody>
+ </table>
+
+<button type="button" ng-click="addEmail()" class="btn btn-default">Agregar</button>

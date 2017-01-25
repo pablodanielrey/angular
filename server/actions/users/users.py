@@ -48,21 +48,40 @@ class Users(wamp.SystemComponentSession):
             ctx.closeConn()
 
 
+    @autobahn.wamp.register('users.find_emails_by_user_id')
+    def findEmailsByUserId(self, userId):
+        ctx = wamp.getContextManager()
+        ctx.getConn()
+        try:
+            return Mail.find(ctx, userId=userId).fetch(ctx)
 
-    @autobahn.wamp.register('users.add_mail')
-    def addMail(self, userId, email):
-        """
-            agrego el email a la persona si es que no existe.
-            si existe no hago nada
-        """
-        pass
+        finally:
+            ctx.closeConn()
 
-    @autobahn.wamp.register('users.remove_mail')
-    def removeMail(self, userId, emailId):
-        """
-            elimino el email de la persona si existe
-        """
-        pass
+
+
+
+    @autobahn.wamp.register('users.add_email')
+    def addMail(self, email):
+        ctx = wamp.getContextManager()
+        ctx.getConn()
+        try:
+            email.persist(ctx)
+            ctx.con.commit()
+
+        finally:
+            ctx.closeConn()
+
+    @autobahn.wamp.register('users.delete_email')
+    def deleteEmail(self, email):
+        ctx = wamp.getContextManager()
+        ctx.getConn()
+        try:
+            email.delete(ctx)
+            ctx.con.commit()
+
+        finally:
+            ctx.closeConn()
 
 
     @autobahn.wamp.register('users.send_confirm_email')

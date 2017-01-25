@@ -20,6 +20,20 @@
       //@param user User a persistir
       this.persist = function(user){ return Login.getPrivateTransport().call('users.persist', [user]); }
 
+      //Buscar emails de usuario
+      //@param user User a persistir
+      this.findEmailsByUserId = function(userId){ return Login.getPrivateTransport().call('users.find_emails_by_user_id', [userId]); }
+
+      //Agregar email
+      //@param email Email a persistir
+      this.addEmail = function(email){ return Login.getPrivateTransport().call('users.add_email', [email]); }
+
+      //Eliminar email
+      //@param email Email a eliminar
+      this.deleteEmail = function(email){ return Login.getPrivateTransport().call('users.delete_email', [email]); }
+
+
+
 
 
 
@@ -31,9 +45,6 @@
       this.findPhotos = findPhotos;
       this.findPhoto = findPhoto;
       this.photoToDataUri = photoToDataUri;
-
-
-
 
 
 

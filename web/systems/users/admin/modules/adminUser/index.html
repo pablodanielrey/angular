@@ -1,0 +1,85 @@
+
+<h2>Usuarios</h2>
+
+<form novalidate class="form-horizontal" ng-submit="submit()" >
+  <div class="form-group">
+    <label class="control-label col-sm-3 col-md-2 col-lg-1" for="name">Nombre:</label>
+    <div class="col-sm-6 col-md-5 col-lg-3">
+      <input type="text" class="form-control" id="name" ng-model="user.name" ng-disabled="form.disabled">
+    </div>
+  </div>
+  <div class="form-group">
+    <label class="control-label col-sm-3 col-md-2 col-lg-1" for="lastname">Apellido:</label>
+    <div class="col-sm-6 col-md-5 col-lg-3">
+      <input type="text" class="form-control" id="lastname" ng-model="user.lastname" ng-disabled="form.disabled">
+    </div>
+  </div>
+  <div class="form-group">
+    <label class="control-label col-sm-3 col-md-2 col-lg-1" for="dni">DNI:</label>
+    <div class="col-sm-6 col-md-5 col-lg-3">
+      <input type="text" class="form-control" id="dni" ng-model="user.dni" ng-disabled="form.disabled">
+    </div>
+  </div>
+
+  <div  class="form-group">
+    <div class="col-xs-12">
+      <label>CLASIFICACION:</label>
+
+      <button class="btn btn-sm btn-info" class="form-control" type="button" ng-click="addType()" ng-disabled="form.disabled">Agregar</button>
+    </div>
+
+    <div ng-repeat="t in user.types" class="row">
+      <div class="col-sm-9 col-md-7 col-lg-5">
+        <select class="form-control" ng-model="t.description" ng-disabled="form.disabled">
+            <option value="">--Clasificación--</option>
+            <option value="teacher">Docente</option>
+            <option value="student">Estudiante</option>
+            <option value="coworking">Coworking</option>
+            <option value="postgraduate">Postgrado</option>
+            <option value="assistance">Asistencia</option>
+            <option value="graduate">Graduado</option>
+            <option value="other">Otro</option>
+        </select>
+      </div>
+      <div class="col-sm-3 col-md-2 col-lg-1">
+        <button class="btn btn-sm btn-danger" class="form-control" type="button" ng-click="deleteType($index)" ng-disabled="form.disabled">Eliminar</button>
+      </div>
+    </div>
+  </div>
+
+
+  <div  class="form-group">
+    <div class="col-xs-12">
+      <label  for="dni">TELEFONOS (Numero - Tipo):</label>
+
+      <button class="btn btn-sm btn-info" class="form-control" type="button" ng-click="addTelephone()" ng-disabled="form.disabled">Agregar</button>
+    </div>
+
+    <div ng-repeat="t in user.telephones" class="row">
+      <div class="col-sm-5 col-md-4 col-lg-3">
+        <input type="text" class="form-control" ng-model="t.number" ng-disabled="form.disabled">
+      </div>
+      <div class="col-sm-4 col-md-3 col-lg-2">
+        <select class="form-control" ng-model="t.type" ng-disabled="form.disabled">
+            <option value="">--Tipo--</option>
+            <option value="movil">Móvil</option>
+            <option value="home">Casa</option>
+            <option value="work">Trabajo</option>
+        </select>
+      </div>
+      <div class="col-sm-3 col-md-2 col-lg-1">
+        <button class="btn btn-sm btn-danger" class="form-control" type="button" ng-click="deleteTelephone($index)"  ng-disabled="form.disabled">Eliminar</button>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="form-group">
+    <div class="col-sm-offset-1 col-sm-10">
+      <button type="submit" class="btn btn-default" ng-disabled="form.disabled">Aceptar</button>
+      <a ng-href="./#/listEmails?id={{user.id}}" class="btn btn-default"  ng-show="form.id">Emails</a>{{form.message}}
+    </div>
+  </div>
+</form>
+
+<!--div ng-include="'./modules/listEmails/index.html'" ng-controller="ListEmailsCtrl"></div-->

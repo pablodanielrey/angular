@@ -11,13 +11,15 @@
      </tr>
    </thead>
    <tbody>
-     <tr ng-repeat="user in users">
+     <tr ng-repeat="email in emails">
        <td>{{email.email}}</td>
        <td>{{email.confirmed}}</td>
 
-       <td><a ng-href="./#/?id={{email.id}}">Eliminar</a>
+       <td><button type="button" ng-click="deleteEmail($index)">Eliminar</button>
        <a ng-href="./#/?id={{email.id}}">Enviar Confirmación</a></td>
 
      </tr>
    </tbody>
  </table>
+
+<button type="button" ng-click="addEmail()" class="btn btn-default">Agregar</button>
