@@ -2,30 +2,27 @@
     'use strict';
 
     angular
-        .module('users')
+        .module('users.profile')
         .controller('AdminUserCtrl', AdminUserCtrl);
 
-    AdminUserCtrl.$inject = ['$scope', '$timeout', '$q', '$location', 'Users',  'Login'];
+    AdminUserCtrl.$inject = ['$scope', '$timeout', '$q', '$location', 'UsersProfile', 'Login'];
 
 
-    function AdminUserCtrl($scope, $timeout, $q, $location, Users,  Login) {
+    function AdminUserCtrl($scope, $timeout, $q, $location, UsersProfile, Login) {
 
-      //Inicializar componente
-      var init = function(){
-        $scope.form = {
-          disabled: true, //flag para indicar si el formulario esta deshabilitado o no
-          message: "Inicializando", //mensaje
-          id: null //Identificacion de la entidad que esta siendo administrada
-        };
-
-        $scope.form.id = Login.getCredentials()["userId"]
-
+      $scope.form = {
+        disabled: true, //flag para indicar si el formulario esta deshabilitado o no
+        message: "Inicializando", //mensaje
+        id: null //Identificacion de la entidad que esta siendo administrada
       };
+
+      $scope.form.id = Login.getCredentials()["userId"]
+
 
       //Inicializar usuario
       var initUser = function(){
 
-        Users.admin($scope.form.id).then(
+        UsersProfile.findById($scope.form.id).then(
           function(user){
             $scope.user = user;
             $scope.form.disabled = false;
@@ -46,7 +43,7 @@
         $scope.form.disabled = true;
         $scope.form.message = "Procesando";
 
-        Users.persist($scope.user).then(
+        UsersProfile.persist($scope.user).then(
           function(response){
             $scope.form.message = "Guardado";
             $scope.$apply();
@@ -66,7 +63,6 @@
 
 
       //Inicializar
-      init();
       $timeout(initUser, 500); //TODO REEMPLAZAR POR EVENTO DE INICIALIZACION DE LOGIN
 
     }

@@ -2,13 +2,13 @@
     'use strict';
 
     angular
-        .module('users')
+        .module('users.profile')
         .controller('ChangePasswordSendCodeCtrl', ChangePasswordSendCodeCtrl);
 
-    ChangePasswordSendCodeCtrl.$inject = ['$scope', '$timeout', '$q', '$location', 'Users', 'Utils', 'Login'];
+    ChangePasswordSendCodeCtrl.$inject = ['$scope', '$timeout', '$q', '$location', 'UsersProfile', 'Login'];
 
 
-    function ChangePasswordSendCodeCtrl($scope, $timeout, $q, $location, Users, Utils,  Login) {
+    function ChangePasswordSendCodeCtrl($scope, $timeout, $q, $location, UsersProfile, Login) {
 
       //Inicializar componente
       var init = function(){
@@ -32,7 +32,7 @@
         $scope.component.disabled = true;
         $scope.component.message = "Enviando Codigo";
 
-        Users.sendCode($scope.component.userId).then(
+        UsersProfile.sendCode($scope.component.userId).then(
           function(response){
             if(!response) {
               $scope.component.message = "Error";

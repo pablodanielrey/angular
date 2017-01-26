@@ -32,12 +32,7 @@
       //@param email Email a eliminar
       this.deleteEmail = function(email){ return Login.getPrivateTransport().call('users.admin.delete_email', [email]); }
 
-      //Buscar por ids
-      //@param ids Lista de ids a buscar
-      this.findByIds = function(ids) {
-        if (ids.length <= 0) return $q.when([]);
-        return Login.getPrivateTransport().call('users.admin.find_by_ids', [ids]);
-      }
+      
 
   }
 })();

@@ -2,13 +2,13 @@
    'use strict';
 
    angular
-       .module('users')
+       .module('users.profile')
        .controller('ChangePasswordCtrl', ChangePasswordCtrl);
 
-   ChangePasswordCtrl.$inject = ['$scope', '$timeout', '$q', '$location', 'Users', 'Utils', 'Login'];
+   ChangePasswordCtrl.$inject = ['$scope', '$timeout', '$q', '$location', 'UsersProfile', 'Login'];
 
 
-   function ChangePasswordCtrl($scope, $timeout, $q, $location, Users, Utils,  Login) {
+   function ChangePasswordCtrl($scope, $timeout, $q, $location, UsersProfile, Login) {
 
      //Inicializar componente
      var init = function(){
@@ -33,7 +33,7 @@
        $scope.component.disabled = true;
        $scope.component.message = "Procesando";
 
-       Users.changePassword($scope.password).then(
+       UsersProfile.changePassword($scope.password).then(
          function(response){
            if(!response) {
              $scope.component.message = "Error";

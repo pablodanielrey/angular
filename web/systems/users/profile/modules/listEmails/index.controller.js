@@ -2,48 +2,37 @@
     'use strict';
 
     angular
-        .module('users')
+        .module('users.profile')
         .controller('ListEmailsCtrl', ListEmailsCtrl);
 
-    ListEmailsCtrl.$inject = ['$scope', '$timeout', '$location', '$uibModal', 'Users', 'Login'];
+    ListEmailsCtrl.$inject = ['$scope', '$timeout', '$location', '$uibModal', 'UsersProfile', 'Login'];
 
 
-    function ListEmailsCtrl($scope, $timeout, $location, $uibModal, Users, Login) {
+    function ListEmailsCtrl($scope, $timeout, $location, $uibModal, UsersProfile, Login) {
+
+      $scope.component = {
+        disabled: true, //flag para indicar si el formulario esta deshabilitado o no
+        message: "Inicializando", //mensaje
+        userId: null //Identificacion del usuario que esta siendo administrado
+      };
+
 
       //Inicializar componente
       function init(){
-        $scope.component = {
-          disabled: true, //flag para indicar si el formulario esta deshabilitado o no
-          message: "Inicializando", //mensaje
-          userId: null //Identificacion del usuario que esta siendo administrado
-        };
-
         $scope.component.userId = Login.getCredentials()["userId"]
-
       };
 
       function initUser(){
-        var p = Users.findByIds([$scope.component.userId]).then(
-          function(users){ $scope.user = users[0]; },
+        UsersProfile.findEmailsByUserId($scope.component.userId).then(
+          function(emails){
+            $scope.emails = emails;
+            console.log($scope.emails);
+            $scope.$apply();
+          },
           function(error){
              alert("error")
-             console.log(error)
+
           }
-        )
-
-        p.then(
-          Users.findEmailsByUserId($scope.component.userId).then(
-            function(emails){
-              $scope.emails = emails;
-              console.log($scope.emails);
-              $scope.$apply();
-            },
-            function(error){
-               alert("error")
-
-            }
-          )
-
         )
       }
 
@@ -69,7 +58,7 @@
 
 
        $scope.deleteEmail = function(index){
-         Users.deleteEmail($scope.emails[index]).then(
+         UsersProfile.deleteEmail($scope.emails[index]).then(
            function(email){
              $scope.emails.splice(index, 1);
              $scope.$apply();
@@ -80,8 +69,6 @@
            }
          )
        }
-
-
 
 
       init();
