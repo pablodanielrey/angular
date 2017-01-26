@@ -62,7 +62,6 @@ class FlaskOAuth1:
             return {}
 
         @app.route('/oauth1/authorize', methods=['GET','POST'])
-        @dflask.logged
         @provider.authorize_handler
         def authorize(*args, **kwargs):
             if flask.request.method == 'GET':
