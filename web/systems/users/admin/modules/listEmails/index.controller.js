@@ -2,13 +2,13 @@
     'use strict';
 
     angular
-        .module('users')
+        .module('users.admin')
         .controller('ListEmailsCtrl', ListEmailsCtrl);
 
-    ListEmailsCtrl.$inject = ['$scope', '$timeout', '$location', '$uibModal', 'Users', 'Utils'];
+    ListEmailsCtrl.$inject = ['$scope', '$timeout', '$location', '$uibModal', 'UsersAdmin'];
 
 
-    function ListEmailsCtrl($scope, $timeout, $location, $uibModal, Users, Utils) {
+    function ListEmailsCtrl($scope, $timeout, $location, $uibModal, UsersAdmin) {
 
       //Inicializar componente
       function init(){
@@ -23,7 +23,7 @@
       };
 
       function initUser(){
-        var p = Users.findByIds([$scope.component.userId]).then(
+        var p = UsersAdmin.findByIds([$scope.component.userId]).then(
           function(users){ $scope.user = users[0]; },
           function(error){
              alert("error")
@@ -32,15 +32,15 @@
         )
 
         p.then(
-          Users.findEmailsByUserId($scope.component.userId).then(
+          UsersAdmin.findEmailsByUserId($scope.component.userId).then(
             function(emails){
               $scope.emails = emails;
               console.log($scope.emails);
               $scope.$apply();
             },
             function(error){
-               alert("error")
-
+               alert("error");
+               console.log(error);
             }
           )
 
@@ -69,7 +69,7 @@
 
 
        $scope.deleteEmail = function(index){
-         Users.deleteEmail($scope.emails[index]).then(
+         UsersAdmin.deleteEmail($scope.emails[index]).then(
            function(email){
              $scope.emails.splice(index, 1);
              $scope.$apply();

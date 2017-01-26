@@ -1,7 +1,7 @@
 (function() {
     'use strict'
     angular
-      .module('users')
+      .module('users.admin')
       .controller('IndexCtrl', IndexCtrl);
 
     IndexCtrl.$inject = ['$scope'];

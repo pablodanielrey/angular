@@ -34,5 +34,12 @@
         if (ids.length <= 0) return $q.when([]);
         return Login.getPrivateTransport().call('users.find_by_ids', [ids]);
       }
+
+      //Enviar codigo de confirmacion por email
+      this.sendCode = function(userId){ return Login.getPrivateTransport().call('users.send_code', [userId]); }
+
+      //Procesar codigo de confirmacion
+      this.processCode = function(code){ return Login.getPrivateTransport().call('users.process_code', [code]); }
+
   }
 })();

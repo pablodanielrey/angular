@@ -2,13 +2,13 @@
    'use strict';
 
    angular
-       .module('users')
+       .module('users.admin')
        .controller('ChangePasswordCtrl', ChangePasswordCtrl);
 
-   ChangePasswordCtrl.$inject = ['$scope', '$timeout', '$q', '$location', 'Users', 'Utils', 'Login'];
+   ChangePasswordCtrl.$inject = ['$scope', '$timeout', '$q', '$location', 'UsersAdmin', 'Login'];
 
 
-   function ChangePasswordCtrl($scope, $timeout, $q, $location, Users, Utils,  Login) {
+   function ChangePasswordCtrl($scope, $timeout, $q, $location, UsersAdmin, Login) {
 
      //Inicializar componente
      var init = function(){
@@ -22,7 +22,9 @@
      };
 
      var initUser = function(){
-       $scope.component.userId = Login.getCredentials()["userId"]
+       var urlParams = $location.search();
+       if("id" in urlParams)  $scope.component.userId = urlParams["id"];
+
        $scope.component.message = null;
        $scope.component.disabled = false;
      }
@@ -33,7 +35,7 @@
        $scope.component.disabled = true;
        $scope.component.message = "Procesando";
 
-       Users.changePassword($scope.password).then(
+       UsersAdmin.changePassword($scope.password).then(
          function(response){
            if(!response) {
              $scope.component.message = "Error";

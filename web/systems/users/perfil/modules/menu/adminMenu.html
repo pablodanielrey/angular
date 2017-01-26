@@ -10,9 +10,15 @@
       <div class="collapse navbar-collapse" ng-class="!navCollapsed && 'in'">
         <ul class="nav navbar-nav">
           <li><a href="#/adminUser">Editar Perfil</a></li>
-          <li><a href="#/changePassword">Cambiar Clave</a></li>
 
+          <li uib-dropdown>
+            <a uib-dropdown-toggle href="#">Cambiar Clave<span class="caret"></span></a>
+            <ul uib-dropdown-menu>
+              <li><a href="#/changePasswordSendCode">1) Enviar Codigo</a></li>
+              <li><a href="#/changePasswordSetCode">2) Ingresar Codigo</a></li>
 
+            </ul>
+          </li>
 
 
         </ul>

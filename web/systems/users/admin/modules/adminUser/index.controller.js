@@ -2,13 +2,13 @@
     'use strict';
 
     angular
-        .module('users')
+        .module('users.admin')
         .controller('AdminUserCtrl', AdminUserCtrl);
 
-    AdminUserCtrl.$inject = ['$scope', '$timeout', '$q', '$location', 'Users', 'Utils'];
+    AdminUserCtrl.$inject = ['$scope', '$timeout', '$q', '$location', 'UsersAdmin'];
 
 
-    function AdminUserCtrl($scope, $timeout, $q, $location, Users, Utils) {
+    function AdminUserCtrl($scope, $timeout, $q, $location, UsersAdmin) {
 
       //Inicializar componente
       var init = function(){
@@ -24,8 +24,9 @@
 
       //Inicializar usuario
       var initUser = function(){
-        Utils.admin($scope.form.id).then(
+        UsersAdmin.admin($scope.form.id).then(
           function(user){
+            console.log(user)
             $scope.user = user;
             $scope.form.disabled = false;
             $scope.form.message = null;
@@ -45,7 +46,8 @@
         $scope.form.disabled = true;
         $scope.form.message = "Procesando";
 
-        Utils.persist($scope.user).then(
+        console.log($scope.user);
+        UsersAdmin.persist($scope.user).then(
           function(response){
             $scope.form.message = "Guardado";
             $scope.$apply();
