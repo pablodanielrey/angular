@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html ng-app="users">
+<html ng-app="users.profile">
 <head>
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -33,18 +33,23 @@
 
   <script src='../../fce/index.module.js'></script>
 
+  <script src='../index.module.js'></script>
+  <script src='../services/Users.js'></script>
+  
   <script src='./index.module.js'></script>
   <script src='./index.controller.js'></script>
   <script src='./routes.js'></script>
-  <script src='./services/Utils.js'></script>
-  <script src='./services/Users.js'></script>
+  <script src='./services/UsersProfile.js'></script>
 
   <!-- <link rel="stylesheet" type="text/css" href="index.css"/> -->
 
   <script type="text/javascript" src="./modules/listEmails/index.controller.js"></script>
   <script type="text/javascript" src="./modules/adminUser/index.controller.js"></script>
   <script type="text/javascript" src="./modules/addEmail/index.controller.js"></script>
+  <script type="text/javascript" src="./modules/changePasswordSendCode/index.controller.js"></script>
+  <script type="text/javascript" src="./modules/changePasswordSetCode/index.controller.js"></script>
   <script type="text/javascript" src="./modules/changePassword/index.controller.js"></script>
+
 
 
 

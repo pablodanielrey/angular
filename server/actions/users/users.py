@@ -85,12 +85,28 @@ class Users(wamp.SystemComponentSession):
             ctx.closeConn()
 
 
-    @autobahn.wamp.register('users.send_confirm_email')
-    def sendConfirmationMail(self, emailId):
-        """
-            envío el email para poder confirmar
-        """
-        pass
+    @autobahn.wamp.register('users.send_code')
+    def sendCode(self, userId):
+        ctx = wamp.getContextManager()
+        ctx.getConn()
+        try:
+            mails = Mail.find(ctx, userId=userId).fetch(ctx)
+            mailToSend = None
+            for mail in mails:
+                if mail[i].confirmed and "@econo" not in mail[i].email:
+                    mailToSend = mail[i]
+                if mailToSend is not None:
+                    break
+
+            if mailToSend is None:
+                return False
+
+            """
+            TODO ENVIAR CODIGO DE CONFIRMACION A MAIL TO SEND
+            """
+        finally:
+            ctx.closeConn()
+
 
     @autobahn.wamp.register('users.confirm_email')
     def confirmMail(self, emailId, code):

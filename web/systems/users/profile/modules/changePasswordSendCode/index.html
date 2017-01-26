@@ -6,4 +6,8 @@
   <p>Haga click en Enviar Código para recibir en su email el código de confirmación.</p>
   <button class="btn btn-lg btn-primary" ng-disabled="component.disabled" ng-click="sendCode()">Enviar Código</button>{{component.message}}
 </div>
-<form novalidate class="form-horizontal" ng-submit="submit()" >
+
+<div ng-show="error">
+  <p>No se ha podido enviar el codigo de confirmación.<p>
+  <p>Verifique que posee un email alternativo confirmado.</p>
+</div>

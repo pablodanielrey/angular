@@ -2,12 +2,12 @@
     'use strict';
 
     angular
-        .module('users')
+        .module('users.profile')
         .controller('AddEmailCtrl', AddEmailCtrl);
 
-    AddEmailCtrl.$inject = ['$scope', '$uibModalInstance', 'Users', 'userId'];
+    AddEmailCtrl.$inject = ['$scope', '$uibModalInstance', 'UsersProfile', 'userId'];
 
-    function AddEmailCtrl($scope, $uibModalInstance, Users, userId) {
+    function AddEmailCtrl($scope, $uibModalInstance, UsersProfile, userId) {
 
 
       //Inicializar componente
@@ -34,7 +34,7 @@
         $scope.form.disabled = true;
         $scope.form.message = "Procesando";
 
-        Users.addEmail($scope.email).then(
+        UsersProfile.addEmail($scope.email).then(
           function(email){
             $scope.form.message = "Guardado";
             $scope.email.id = email.id
@@ -44,7 +44,7 @@
         )
       }
 
-      
+
       //Inicializar
       init();
 

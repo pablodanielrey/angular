@@ -2,20 +2,21 @@
     'use strict';
 
     angular
-        .module('users')
-        .controller('ChangePasswordCtrl', ChangePasswordCtrl);
+        .module('users.profile')
+        .controller('ChangePasswordSendCodeCtrl', ChangePasswordSendCodeCtrl);
 
-    ChangePasswordCtrl.$inject = ['$scope', '$timeout', '$q', '$location', 'Users', 'Utils', 'Login'];
+    ChangePasswordSendCodeCtrl.$inject = ['$scope', '$timeout', '$q', '$location', 'UsersProfile', 'Login'];
 
 
-    function ChangePasswordCtrl($scope, $timeout, $q, $location, Users, Utils,  Login) {
+    function ChangePasswordSendCodeCtrl($scope, $timeout, $q, $location, UsersProfile, Login) {
 
       //Inicializar componente
       var init = function(){
         $scope.component = {
           disabled: true, //flag para indicar si el formulario esta deshabilitado o no
           message: "Iniciando", //mensaje
-          userId: null //Identificacion de la entidad que esta siendo administrada
+          userId: null, //Identificacion de la entidad que esta siendo administrada
+          error: false  //flag para indicar error
         };
 
       };
@@ -26,22 +27,20 @@
         $scope.component.disabled = false;
       }
 
-
-
       //Enviar formulario
       $scope.sendCode = function(){
         $scope.component.disabled = true;
         $scope.component.message = "Enviando Codigo";
 
-          var p = Utils.findAlternativeAndConfirmedEmail($scope.component.userId).then(
-            function(email){
-
-              if(!email) {
-                $scope.component.message = "ERROR: No existen emails alternativos confirmados"
-                $scope.$apply();
-                return false;
-              }
+        UsersProfile.sendCode($scope.component.userId).then(
+          function(response){
+            if(!response) {
+              $scope.component.message = "Error";
+              $scope.component.error = true;
+            } else {
+              $location.path( "/changePasswordSetCode");
             }
+          }
         );
       }
 
