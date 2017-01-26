@@ -7,7 +7,7 @@ def logged(f):
     @wraps(f)
     def decorator(*args, **kwargs):
         if 'user' not in flask.session:
-            return flask.redirect('/')
+            return flask.redirect('/login')
         else:
             return f(*args, **kwargs)
     return decorator
