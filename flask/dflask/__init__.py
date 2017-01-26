@@ -21,7 +21,7 @@ def is_logged():
     return 'user' in flask.session
 
 def current_user():
-    return flask.session['user']
+    return flask.session['user'] if 'user' in flask.session else None
 
 def login(user):
     flask.session['user'] = user

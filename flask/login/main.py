@@ -18,6 +18,7 @@ def createApp(ctx):
     from flask import Flask
 
     app = Flask(__name__)
+    app.debug = True
     app.secret_key = str(uuid.uuid4()).replace('-','')
     dflask.configure_session(app)
 

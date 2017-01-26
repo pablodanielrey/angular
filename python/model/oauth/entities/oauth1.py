@@ -68,7 +68,7 @@ class RequestToken(Entity):
 
     @property
     def client_key(self):
-        return self.client.client_key
+        return self.client.key
 
     @property
     def realms(self):
@@ -78,6 +78,9 @@ class RequestToken(Entity):
     def redirect_uri(self):
         return self.redirectUri
 
+    @redirect_uri.setter
+    def redirect_uri(self, value):
+        self.redirectUri = value
 
 
 class AccessToken(Entity):

@@ -1,8 +1,11 @@
+import logging
+
 
 import flask
-from flask_oauthlib.provider import OAuth1Provider
+from flask_oauthlib.provider import oauth1, OAuth1Provider
 
 from model.oauth.entities.oauth1 import Client, RequestToken, AccessToken, Nonce
+from model.users.entities.user import User
 
 class FlaskOAuth1:
 
@@ -24,6 +27,8 @@ class FlaskOAuth1:
             'OAUTH1_PROVIDER_ENFORCE_SSL': False,
             'OAUTH1_PROVIDER_KEY_LENGTH': (10, 100)
         })
+        logging.getLogger('flask_oauthlib').setLevel(logging.DEBUG)
+        logging.getLogger('flask_oauthlib').addHandler(logging.FileHandler('/tmp/oauth.log'))
 
 
     @classmethod
@@ -45,19 +50,31 @@ class FlaskOAuth1:
         from flask_oauthlib.provider import OAuth1Provider
         provider = OAuth1Provider(app)
 
-        @app.route('/oauth1/request')
+        @app.route('/oauth1/request', methods=['GET','POST'])
         @provider.request_token_handler
         def request_token():
+            return {}
+
+        @app.route('/oauth1/access', methods=['GET','POST'])
+        @provider.access_token_handler
+        def access_token():
             return {}
 
         @app.route('/oauth1/authorize', methods=['GET','POST'])
         @provider.authorize_handler
         def authorize(*args, **kwargs):
             if flask.request.method == 'GET':
-                client_key = kwargs.get('resource_owner_key')
-                client = Client.find(ctx, key=client_key).fetch(ctx)[0]
-                kwargs['client'] = client
-                return flask.render_template('authorize.html', **kwargs)
+                ctx.getConn()
+                try:
+                    token = kwargs.get('resource_owner_key')
+                    tokens = RequestToken.find(ctx, token=token).fetch(ctx)
+                    if len(tokens) > 0:
+                        kwargs['client'] = tokens[0]
+                        return flask.render_template('authorize.html', **kwargs)
+                    else:
+                        return False
+                finally:
+                    ctx.closeConn()
 
             confirm = flask.request.form.get('confirm', 'no')
             return confirm == 'yes'
@@ -68,11 +85,22 @@ class FlaskOAuth1:
     @classmethod
     def setOauthHandlers(cls, ctx, provider):
 
+        def fetchRelatedTokenInfo(ctx, tk):
+            ''' obtiene las entidades relacionadas de requestToken y accessToken '''
+            import logging
+            if tk.clientId:
+                logging.getLogger('flask_oauthlib').debug('obteniendo client : {}'.format(tk.clientId))
+                tk.client = Client.find(ctx, id=tk.clientId).fetch(ctx)[0]
+            if tk.userId:
+                logging.getLogger('flask_oauthlib').debug('obteniendo usuario : {}'.format(tk.userId))
+                tk.user = User.find(ctx, id=tk.userId).fetch(ctx)[0]
+
+
         @provider.clientgetter
-        def load_client(key):
+        def load_client(client_key=''):
             ctx.getConn()
             try:
-                return Client.find(ctx, key=key).fetch(ctx)[0]
+                return Client.find(ctx, key=client_key).fetch(ctx)[0]
             finally:
                 ctx.closeConn()
 
@@ -80,7 +108,9 @@ class FlaskOAuth1:
         def load_request_token(token):
             ctx.getConn()
             try:
-                return RequestToken.find(ctx, token=token).fetch(ctx)[0]
+                tk = RequestToken.find(ctx, token=token).fetch(ctx)[0]
+                fetchRelatedTokenInfo(ctx, tk)
+                return tk
             finally:
                 ctx.closeConn()
 
@@ -102,7 +132,7 @@ class FlaskOAuth1:
                 tk.secret = token['oauth_token_secret']
                 tk.clientId = request.client.id
                 tk.redirect_uri = request.redirect_uri
-                tk.sopes = token['oauth_authorized_realms'].split()
+                tk.sopes = request.realms
                 tk.persist(ctx)
                 ctx.con.commit()
 
@@ -113,7 +143,10 @@ class FlaskOAuth1:
         def load_verifier(verifier, token):
             ctx.getConn()
             try:
-                return RequestToken.find(ctx, token=token, verifier=verifier).fetch(ctx)[0]
+                tk = RequestToken.find(ctx, token=token, verifier=verifier).fetch(ctx)[0]
+                fetchRelatedTokenInfo(ctx, tk)
+                return tk
+
             finally:
                 ctx.closeConn()
 
@@ -128,34 +161,40 @@ class FlaskOAuth1:
                         u'resource_owner_key': u'eTYP46AJbhp8u4LE5QMjXeItRGGoAI'            // esto es client_key
                     }
             """
+            import dflask
             ctx.getConn()
             try:
                 tk = RequestToken.find(ctx, token=token).fetch(ctx)[0]
                 tk.verifier = verifier['oauth_verifier']
                 tk.userId = dflask.current_user().id
+                tk.persist(ctx)
                 ctx.con.commit()
 
             finally:
                 ctx.closeConn()
 
         @provider.noncegetter
-        def load_nonce(clientKey, timestamp, nonce, requestToken, accessToken):
+        def load_nonce(client_key, timestamp, nonce, request_token, access_token):
             ctx.getConn()
             try:
-                return Nonce.find(ctx, clientKey=clientKey, timestamp=timestamp, nonce=nonce, requestToken=requestToken, accessToken=accessToken).fetch(ctx)[0]
+                ids = Nonce.find(ctx, clientKey=client_key, timestamp=timestamp, nonce=nonce, requestToken=request_token, accessToken=access_token).fetch(ctx)
+                if len(ids) <= 0:
+                    return None
+                else:
+                    return ids[0]
             finally:
                 ctx.closeConn()
 
         @provider.noncesetter
-        def save_nonce(clientKey, timestamp, nonce, requestToken, accessToken):
+        def save_nonce(client_key, timestamp, nonce, request_token, access_token):
             ctx.getConn()
             try:
                 n = Nonce()
-                n.clientKey=clientKey
+                n.clientKey=client_key
                 n.timestamp=timestamp
                 n.nonce=nonce
-                n.requestToken=requestToken
-                n.accessToken=accessToken
+                n.requestToken=request_token
+                n.accessToken=access_token
                 n.persist(ctx)
                 ctx.con.commit()
                 return n
@@ -164,10 +203,12 @@ class FlaskOAuth1:
                 ctx.closeConn()
 
         @provider.tokengetter
-        def load_access_token(clientKey, token, *args, **kwargs):
+        def load_access_token(client_key, token, *args, **kwargs):
             ctx.getConn()
             try:
-                return AccessToken.find(ctx, clientKey=clientKey, token=token).fetch(ctx)[0]
+                tk = AccessToken.find(ctx, clientKey=client_key, token=token).fetch(ctx)[0]
+                findRelatedTokenInfo(ctx, tk)
+                return tk
             finally:
                 ctx.closeConn()
 
@@ -180,12 +221,16 @@ class FlaskOAuth1:
                     u'oauth_authorized_realms': u'email'
                 }
             """
-            tk = AccessToken()
-            tk.userId = request.user.id
-            tk.clientId = request.client.id
-            tk.token = token['oauth_token']
-            tk.secret = token['oauth_token_secret']
-            tk.scopes = token['oauth_authorized_realms']
-            tk.persist(ctx)
-            ctx.con.commit()
-            return
+            ctx.getConn()
+            try:
+                tk = AccessToken()
+                tk.userId = request.user.id
+                tk.clientId = request.client.id
+                tk.token = token['oauth_token']
+                tk.secret = token['oauth_token_secret']
+                tk.scopes = token['oauth_authorized_realms']
+                tk.persist(ctx)
+                ctx.con.commit()
+                return tk
+            finally:
+                ctx.closeConn()
