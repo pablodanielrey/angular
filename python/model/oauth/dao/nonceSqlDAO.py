@@ -46,7 +46,7 @@ class NonceSqlDAO(SqlDAO):
                 cur.execute("insert into {}{} (id, client_key, timestamp, nonce, request_token, access_token) "
                             "values (%(id)s, %(clientKey)s, %(timestamp)s, %(nonce)s, %(requestToken)s, %(accessToken)s)"
                             .format(cls._schema, cls._table),
-                            p.__dict__)
+                            c.__dict__)
             else:
                 cur.execute("update {}{} set (clientKey = %(clientKey)s, "
                                              "timestamp = %(timestamp)s, "
@@ -55,7 +55,7 @@ class NonceSqlDAO(SqlDAO):
                                              "nonce = %(nonce)s "
                                              "where id = %(id)s"
                             .format(cls._schema, cls._table),
-                            p.__dict__)
+                            c.__dict__)
             return c
         finally:
             cur.close()

@@ -10,5 +10,6 @@ class OAuth1Model:
         c = Client()
         c.secret = gen_salt(40)
         c.key = gen_salt(50)
+        c.redirectUris = ['http://127.0.0.1']
         c.persist(ctx)
         return c

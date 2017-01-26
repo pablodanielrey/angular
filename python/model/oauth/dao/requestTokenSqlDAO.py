@@ -33,7 +33,7 @@ class RequestTokenSqlDAO(SqlDAO):
     def _fromResult(cls, c, r):
         c.id = r['id']
         c.clientId = r['client_id']
-        c.userId = ['user_id']
+        c.userId = r['user_id']
         c.token = r['token']
         c.secret = r['secret']
         c.redirectUri = r['redirect_uri']
@@ -56,13 +56,13 @@ class RequestTokenSqlDAO(SqlDAO):
             else:
                 p = copy.copy(c)
                 p.scopes_transformed = ' '.join(p.scopes)
-                cur.execute("update {}{} set (client_id = %(clientId)s, "
+                cur.execute("update {}{} set client_id = %(clientId)s, "
                                              "user_id = %(userId)s, "
                                              "token = %(token)s, "
                                              "secret = %(secret)s, "
                                              "redirect_uri = %(redirectUri)s, "
                                              "scopes = %(scopes_transformed)s, "
-                                             "verifier = %(verifier)s) where id = %(id)s"
+                                             "verifier = %(verifier)s where id = %(id)s"
                             .format(cls._schema, cls._table),
                             p.__dict__)
             return c
