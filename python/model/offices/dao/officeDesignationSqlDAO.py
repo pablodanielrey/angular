@@ -7,7 +7,7 @@ from model.designation.dao.designationSqlDAO import DesignationSqlDAO
 class OfficeDesignationSqlDAO(DesignationSqlDAO):
 
     _schema = "designations."
-    _table  = "designation"
+    _table  = "designation_"
     _entity = OfficeDesignation
 
     @classmethod
@@ -16,6 +16,6 @@ class OfficeDesignationSqlDAO(DesignationSqlDAO):
         assert isinstance(ids, list)
         cur = ctx.con.cursor()
         try:
-            cur.execute('update designations.designation set dend = NOW() where id in %s', (tuple(ids),))
+            cur.execute('UPDATE designations.designation_ set dend = NOW() WHERE id IN %s', (tuple(ids),))
         finally:
             cur.close()

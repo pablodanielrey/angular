@@ -9,6 +9,7 @@
     //AUTOBAHN_DEBUG = true;
   </script>
 
+  <link href="../../libs/bower_components/bootstrap/bootstrap-3.3.7-dist/css/bootstrap.min.css" rel="stylesheet">
   <script src="../../libs/bower_components/angular/angular.js"></script>
   <script src="../../libs/bower_components/angular-route/angular-route.js"></script>
   <script src="../../libs/bower_components/angular-cookies/angular-cookies.js"></script>
@@ -75,8 +76,7 @@
 
 </head>
 
-<body class="sistema  {{styleMenu}}" ng-controller="IndexCtrl">
-
+<body class="container-fluid sistema {{styleMenu}}" ng-controller="IndexCtrl">
     <div ng-include="'../fce/modules/header/index.html'" ng-controller="HeaderCtrl as vm"></div>
     <div class="main">
       <div class="MenuContent" ng-controller="MenuCtrl" ng-include="'modules/menu/index.html?t=' + time"></div>

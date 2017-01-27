@@ -4,22 +4,23 @@
 
 <form novalidate class="form-horizontal" ng-submit="submit()" >
   <div class="form-group">
-    <label class="control-label col-sm-3 col-md-2 col-lg-1" for="code">Clave:</label>
+    <label class="control-label col-sm-3 col-md-2 col-lg-1" for="password">Clave:</label>
     <div class="col-sm-6 col-md-5 col-lg-3">
-      <input type="text" class="form-control" id="code" ng-model="code" ng-disabled="component.disabled">
+      <input type="password" class="form-control" id="password" ng-model="password" ng-disabled="component.disabled">
     </div>
   </div>
 
   <div class="form-group">
-    <label class="control-label col-sm-3 col-md-2 col-lg-1" for="code2">Reingrese Clave:</label>
+    <label class="control-label col-sm-3 col-md-2 col-lg-1" for="password2">Reingrese Clave:</label>
     <div class="col-sm-6 col-md-5 col-lg-3">
-      <input type="text" class="form-control" id="code2" ng-model="code2" ng-disabled="component.disabled">
+      <input type="password" class="form-control" id="password2" ng-model="password2" ng-disabled="component.disabled">
     </div>
   </div>
 
   <div class="form-group">
     <div class="col-sm-offset-1 col-sm-10">
       <button type="submit" class="btn btn-default" ng-disabled="component.disabled">Aceptar</button>
+      {{component.message}}
     </div>
   </div>
 </form>

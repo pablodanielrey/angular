@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 
 from model.users.entities.user import User
+from model.users.entities.userPassword import UserPassword
+
 
 
 class UsersAdminModel():
@@ -36,3 +38,17 @@ class UsersAdminModel():
 
         user.persist(ctx)
         return user
+
+
+    @classmethod
+    def changePassword(cls, ctx, userId, password):
+        user = User.findById(ctx, userId)
+        userPasswords = UserPassword.find(ctx, userId=userId, username=user.dni).fetch(ctx)
+
+        up = userPasswords[0] if len(userPasswords) else UserPassword()
+
+        up.userId = user.id
+        up.dni = user.dni
+        up.password = password
+        up.persist(ctx)
+        return up

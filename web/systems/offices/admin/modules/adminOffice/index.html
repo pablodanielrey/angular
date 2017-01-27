@@ -1,0 +1,68 @@
+
+<h2>Oficinas</h2>
+
+<form novalidate class="form-horizontal" ng-submit="submit()" >
+  <div class="form-group">
+    <label class="control-label col-sm-3 col-md-2 col-lg-1" for="name">Nombre:</label>
+    <div class="col-sm-6 col-md-5 col-lg-3">
+      <input type="text" class="form-control" id="name" ng-model="office.name" ng-disabled="component.disabled">
+    </div>
+  </div>
+  <div class="form-group">
+    <label class="control-label col-sm-3 col-md-2 col-lg-1" for="number">Numero:</label>
+    <div class="col-sm-6 col-md-5 col-lg-3">
+      <input type="text" class="form-control" id="number" ng-model="office.number" ng-disabled="component.disabled">
+    </div>
+  </div>
+  <div class="form-group">
+    <label class="control-label col-sm-3 col-md-2 col-lg-1" for="telephone">Teléfono:</label>
+    <div class="col-sm-6 col-md-5 col-lg-3">
+      <input type="text" class="form-control" id="telephone" ng-model="office.telephone" ng-disabled="component.disabled">
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label class="control-label col-sm-3 col-md-2 col-lg-1" for="public">Tipo:</label>
+    <div class="col-sm-6 col-md-5 col-lg-3">
+      <select class="form-control" ng-model="office.type" ng-disabled="component.disabled">
+          <option value="">--Tipo--</option>
+          <option value="departamento">Departamento</option>
+
+      </select>
+    </div>
+  </div>
+
+
+  <div class="form-group">
+    <label class="control-label col-sm-3 col-md-2 col-lg-1" for="public">Publica:</label>
+    <div class="col-sm-6 col-md-5 col-lg-3">
+      <input type="checkbox" class="form-control" id="public" ng-model="office.public" ng-disabled="component.disabled">
+    </div>
+  </div>
+
+  <div  class="form-group">
+    <div class="col-xs-12">
+      <label>USUARIOS:</label>
+      <button class="btn btn-sm btn-info" class="form-control" type="button" ng-click="addDesignation()" ng-disabled="component.disabled">Agregar</button>
+    </div>
+
+    <div ng-repeat="d in designations" class="row">
+      <div class="col-sm-9 col-md-7 col-lg-5">
+        <input type="text" ng-model="d._selected" placeholder="Buscar" uib-typeahead="user as user.label for user in searchUsers($viewValue, $index)" typeahead-wait-ms="300" class="form-control">
+        <span ng-show="$index === selectUser($index)" class="glyphicon glyphicon-ok"></span>
+      </div>
+      <div class="col-sm-3 col-md-2 col-lg-1">
+        <button class="btn btn-sm btn-danger" class="form-control" type="button" ng-click="deleteDesignation($index)" ng-disabled="component.disabled">Eliminar</button>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="form-group">
+    <div class="col-sm-offset-1 col-sm-10">
+      <button type="submit" class="btn btn-default" ng-disabled="component.disabled">Aceptar</button>{{component.message}}
+    </div>
+  </div>
+</form>
+
+<!--div ng-include="'./modules/listEmails/index.html'" ng-controller="ListEmailsCtrl"></div-->

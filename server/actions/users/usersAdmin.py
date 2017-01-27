@@ -96,3 +96,16 @@ class UsersAdmin(wamp.SystemComponentSession):
 
         finally:
             ctx.closeConn()
+
+    @autobahn.wamp.register('users.admin.change_password')
+    def changePassword(self, userId, password):
+        ctx = wamp.getContextManager()
+        ctx.getConn()
+        try:
+            r = UsersAdminModel.changePassword(ctx, userId, password)
+            ctx.con.commit()
+            return r
+
+
+        finally:
+            ctx.closeConn()

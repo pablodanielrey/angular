@@ -125,14 +125,14 @@
             // nada
         }
 
+        //Cargar oficinas
         function loadAllOffices() {
           Utils.findAll().then(
               function(offices) {
                 vm.model.offices = offices;
 
                 // actualizo el objeto de la oficina seleccionada. en el caso de que exista
-                var office = vm.model.office;
-                if (office != null) {
+                if (vm.model.office != null) {
                   for (var i = 0; i < vm.model.offices.length; i++) {
                     if (vm.model.offices[i].id == office.id) {
                       selectOffice(vm.model.offices[i]);
@@ -147,12 +147,13 @@
           );
         }
 
-        // TODO: obtiene el listado de tipos de oficinas
+        //Obtener listado de tipos de oficinas
         function getOfficeTypes() {
           vm.model.officeTypes = [];
           vm.model.selectedType = null;
           Utils.getOfficeTypes().then(
             function(types) {
+              console.log(types)
               vm.model.officeTypes = types;
               //vm.model.selectedType = vm.model.officeTypes[0];
               vm.model.selectedType = '';

@@ -11,19 +11,20 @@
    function ChangePasswordCtrl($scope, $timeout, $q, $location, UsersAdmin, Login) {
 
      //Inicializar componente
-     var init = function(){
-       $scope.component = {
-         disabled: true, //flag para indicar si el formulario esta deshabilitado o no
-         message: "Iniciando", //mensaje
-         userId: null, //Identificacion de la entidad que esta siendo administrada
-         error: false  //flag para indicar error
-       };
 
+     $scope.component = {
+       disabled: true, //flag para indicar si el formulario esta deshabilitado o no
+       message: "Iniciando", //mensaje
+       error: false  //flag para indicar error
      };
 
-     var initUser = function(){
+     $scope.userId = null;
+     $scope.password = null;
+     $scope.password2 = null;
+
+     var init = function(){
        var urlParams = $location.search();
-       if("id" in urlParams)  $scope.component.userId = urlParams["id"];
+       if("id" in urlParams)  $scope.userId = urlParams["id"];
 
        $scope.component.message = null;
        $scope.component.disabled = false;
@@ -35,21 +36,27 @@
        $scope.component.disabled = true;
        $scope.component.message = "Procesando";
 
-       UsersAdmin.changePassword($scope.password).then(
+       if($scope.password != $scope.password2) {
+         $scope.component.message = "Las claves no coinciden";
+         $scope.component.disabled = false;
+         return;
+       }
+
+       UsersAdmin.changePassword($scope.userId, $scope.password).then(
          function(response){
-           if(!response) {
-             $scope.component.message = "Error";
-             $scope.component.error = true;
-           } else {
-             $location.path( "/changePasswordSuccess");
-           }
+           console.log(response)
+           $scope.component.message = "Guardado"
+           $scope.$apply()
+         },
+         function(error){
+           alert("error");
+           console.log(error)
          }
        )
      }
 
      //Inicializar
-     init();
-     $timeout(initUser, 500); //TODO REEMPLAZAR POR EVENTO DE INICIALIZACION DE LOGIN
+     $timeout(init, 500); //TODO REEMPLAZAR POR EVENTO DE INICIALIZACION DE LOGIN
 
    }
 })();

@@ -28,8 +28,8 @@
 
           return Offices.getOfficeTypes().then(
                 function(types) {
-                  $window.sessionStorage.setItem("officesTypes", JSON.stringify(types));
-                  return types;
+                  $window.sessionStorage.setItem("officesTypes", JSON.stringify(types[0]));
+                  return types[0];
                 });
         }
 
@@ -41,7 +41,13 @@
             function(ids) {
               findByIds(ids).then(
                 function(offices) {
-                  d.resolve(offices);
+                  var offices_ = []
+                  for(var i = 0; i < offices.length; i++){
+                    var o = offices[i]
+                    o.type = {name:offices[i].type, value:offices[i].type}
+                    offices_.push(o)
+                  }
+                  d.resolve(offices_);
                 }
               )
             }
