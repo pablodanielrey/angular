@@ -57,19 +57,4 @@ class UserPasswordSqlDAO(SqlDAO):
         finally:
             cur.close()
 
-    """
-    TODO ELIMINAR, CONVIENE USAR EL DE DAO PORQUE PERMITE ORDENAMIENTO Y CONDICION
-    @classmethod
-    def findByIds(cls, ctx, ids):
-        assert isinstance(ids, list)
-        if len(ids) <= 0:
-            return []
-
-        cur = ctx.con.cursor()
-        try:
-            cur.execute('select * from credentials.user_password where id in %s', (tuple(ids),))
-            return [cls._fromResult(UserPassword(), c) for c in cur ]
-
-        finally:
-            cur.close()
-    """
+    

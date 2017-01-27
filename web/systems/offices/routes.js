@@ -1,38 +1,20 @@
 (function() {
     'use strict'
-    var app = angular.module('offices')
+    var app = angular.module('users')
 
     app.config(['$routeProvider', function($routeProvider) {
       $routeProvider
 
-      .when('/profile', {
-         templateUrl: 'modules/profile/profile.html',
-         controller: 'ProfileCtrl',
-         controllerAs: 'vm'
-      })
-
-      .when('/create', {
-         templateUrl: 'modules/offices/index.html',
-         controller: 'OfficesCtrl',
-         controllerAs: 'vm'
-      })
-
-      .when('/edit/:officeId', {
-         templateUrl: 'modules/offices/index.html',
-         controller: 'OfficesCtrl',
-         controllerAs: 'vm'
-      })
-
-      .when('/list', {
-         templateUrl: 'modules/offices/index.html',
-         controller: 'OfficesCtrl',
+      .when('/listUsers', {
+         templateUrl: 'modules/users/listUsers.html',
+         controller: 'ListUsersCtrl',
          controllerAs: 'vm'
       })
 
 
 
       .otherwise({
-        redirectTo: '/list'
+        redirectTo: '/listUsers'
       });
 
     }]);

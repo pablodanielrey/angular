@@ -23,15 +23,8 @@
       };
 
       function initUser(){
-        var p = UsersAdmin.findByIds([$scope.component.userId]).then(
-          function(users){ $scope.user = users[0]; },
-          function(error){
-             alert("error")
-             console.log(error)
-          }
-        )
 
-        p.then(
+
           UsersAdmin.findEmailsByUserId($scope.component.userId).then(
             function(emails){
               $scope.emails = emails;
@@ -44,7 +37,6 @@
             }
           )
 
-        )
       }
 
       //Open modal add email

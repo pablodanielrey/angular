@@ -17,6 +17,7 @@ class Office(Place):
         {'value': 'departamento', 'name': 'departamento'},
       ],
 
+      
 
     @classmethod
     def findByUserId(cls, ctx, userId, tree=False, *args, **kwargs):

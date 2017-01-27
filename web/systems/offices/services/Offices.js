@@ -86,9 +86,8 @@
 				return Login.getPrivateTransport().call('offices.get_office_types', []);
 			}
 
-			function findAll(types) {
-				return Login.getPrivateTransport().call('offices.find_all', [types]);
-			}
+			//Retornar Entidades de Oficinas
+			function findAll(types) { return Login.getPrivateTransport().call('offices.find_all', [types]);	}
 
 			function persist(office) {
 				return Login.getPrivateTransport().call('offices.persist', [office]);

@@ -65,15 +65,14 @@ class SqlDAO(DAO):
 
     @classmethod
     def _createSchema(cls, ctx):
-
         for dep in cls.dependencies:
             dep._createSchema(ctx)
 
 
     @classmethod
-    def findById(cls, con, id):
+    def findById(cls, ctx, id):
         assert id is not None
-        res = cls.findByIds(con, [id])
+        res = cls.findByIds(ctx, [id])
         return res[0] if len(res) else None
 
     @classmethod
