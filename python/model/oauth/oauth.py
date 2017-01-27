@@ -1,7 +1,7 @@
 
 from werkzeug.security import gen_salt
 
-from model.oauth.entities.oauth1 import Client
+from model.oauth.oauth1.entities.oauth1 import Client
 
 class OAuth1Model:
 
