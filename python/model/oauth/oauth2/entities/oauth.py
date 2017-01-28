@@ -1,6 +1,7 @@
 
 
 GRANT_TYPES = ['autorization_code', 'password', 'refresh_token']
+RESPONSE_TYPES = ['code', 'token']
 
 class Client(Entity):
 
@@ -13,29 +14,29 @@ class Client(Entity):
         self.type = self.TYPES[self.PUBLIC]
         self.redirectUri = None
         self.scopes = []
-        self.grants = GRANT_TYPES
-        self.responseTypes = ['code', 'token']
+        self.grant = GRANT_TYPES[0]
+        self.responseType = RESPONSE_TYPES[0]
 
-class AuthorizationToken(Entity):
+
+class BaseToken(Entity):
 
     def __init__(self):
         self.id = None
         self.clientId = None
         self.userId = None
-        self.redirectUri = None
+        self.token = None
         self.scopes = []
-        self.state = None
-        self.code = None
+        self.expires = None
+
+
+class AuthorizationToken(BaseToken):
+
+    def __init__(self):
+        self.redirectUri = None
 
 
 class BearerToken(Entity):
 
     def __init__(self):
-        self.id = None
-        self.accessToken = None
         self.refreshToken = None
-        self.clientId = None
-        self.userId = None
-        self.scopes = []
         self.state = None
-        self.expires = None

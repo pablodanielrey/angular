@@ -29,13 +29,13 @@ class AuthorizationCodeGrantValidator(RequestValidator):
             cheqeua que el cliente sea un cliente "no confidencial"
             retorna True|False
         """
-        self.ctxgetConn()
+        self.ctx.getConn()
         try:
             c = Client.find(ctx, id=client_id).fetch(ctx)[0]
             return c.type == Client.TYPES[Client.PUBLIC]
 
         finally:
-            self.ctxcloseConn()
+            self.ctx.closeConn()
         return True
 
     def client_authentication_required(request, *args, **kwargs):
@@ -59,7 +59,7 @@ class AuthorizationCodeGrantValidator(RequestValidator):
         if request.grant_type not in ['autorization_code', 'password', 'refresh_token']:
             return False
 
-        self.ctxgetConn()
+        self.ctx.getConn()
         try:
             cs = Client.find(ctx, id=request.client_id).fetch(ctx)
             if len(cs) <= 0:
@@ -67,7 +67,7 @@ class AuthorizationCodeGrantValidator(RequestValidator):
             return cs[0].type == Client.TYPES[Client.CONFIDENTIAL]
 
         finally:
-            self.ctxcloseConn()
+            self.ctx.closeConn()
 
         return True
 
@@ -84,13 +84,13 @@ class AuthorizationCodeGrantValidator(RequestValidator):
             Implicit Grant
             Obtiene la url por defecto de redirección para un determinado cliente
         """
-        self.ctxgetConn()
+        self.ctx.getConn()
         try:
             c = Client.find(ctx, id=client_id).fetch(ctx)[0]
             return c.redirectUri
 
         finally:
-            self.ctxcloseConn()
+            self.ctx.closeConn()
 
     def get_default_scopes(client_id, request, *args, **kwargs):
         """
@@ -100,34 +100,34 @@ class AuthorizationCodeGrantValidator(RequestValidator):
             Client Credentials grant
             obtiene los scopes por deefecto para un determinado cliente
         """
-        self.ctxgetConn()
+        self.ctx.getConn()
         try:
             c = Client.find(ctx, id=client_id).fetch(ctx)[0]
             return c.scopes
 
         finally:
-            self.ctxcloseConn()
+            self.ctx.closeConn()
 
     def invalidate_authorization_code(client_id, code, request, *args, **kwargs):
         """
             Authorization Code Grant
             invalida un codigo de autorización
         """
-        self.ctxgetConn()
+        self.ctx.getConn()
         try:
-            tk = AuthorizationToken.find(ctx, clientId=client_id, code=code).fetch(ctx)[0]
+            tk = AuthorizationToken.find(ctx, clientId=client_id, token=code).fetch(ctx)[0]
             tk.delete(ctx)
-            self.ctxcon.commit()
+            self.ctx.con.commit()
 
         finally:
-            self.ctxcloseConn()
+            self.ctx.closeConn()
 
     def save_authorization_code(client_id, code, request, *args, **kwargs):
         """
             Authorization Code Grant
             almacena el codigo de autorización
         """
-        self.ctxgetConn()
+        self.ctx.getConn()
         try:
             tk = AuthorizationToken()
             tk.clientId = client_id
@@ -135,12 +135,12 @@ class AuthorizationCodeGrantValidator(RequestValidator):
             tk.userId = request.user.id if resquest.user else None
             tk.scopes = request.scopes
             tk.state = code.get('state')
-            tk.code = code.get('code')
+            tk.token = code.get('code')
             tk.persist(ctx)
-            self.ctxcon.commit()
+            self.ctx.con.commit()
 
         finally:
-            self.ctxcloseConn()
+            self.ctx.closeConn()
 
     def save_bearer_token(token, request, *args, **kwargs):
         """
@@ -151,10 +151,10 @@ class AuthorizationCodeGrantValidator(RequestValidator):
             almacena el bearer token
         """
         assert token.get('token_type') == 'Bearer'
-        self.ctxgetConn()
+        self.ctx.getConn()
         try:
             tk = BearerToken()
-            tk.accessToken = .get('access_token')
+            tk.token = .get('access_token')
             tk.refreshToken = token.get('refresh_token')
             tk.userId = request.user.id if resquest.user else None
             tk.clientId = request.client_id
@@ -162,10 +162,10 @@ class AuthorizationCodeGrantValidator(RequestValidator):
             tk.state = token.get('state')
             tk.expires = datetime.datetime.now() + datetime.timedelta(seconds=token.get('expires_in'))
             tk.persist(ctx)
-            self.ctxcon.commit()
+            self.ctx.con.commit()
 
         finally:
-            self.ctxcloseConn()
+            self.ctx.closeConn()
 
     def validate_bearer_token(token, scopes, request):
     """
@@ -175,9 +175,9 @@ class AuthorizationCodeGrantValidator(RequestValidator):
         Client Credentials Grant
         asegura que el token sea válido y autorice todos los scopes requeridos
     """
-        self.ctxgetConn()
+        self.ctx.getConn()
         try:
-            tks = BearerToken.find(ctx, accessToken=token).fetch(ctx)
+            tks = BearerToken.find(ctx, token=token).fetch(ctx)
 
             if len(tks) <= 0:
                 return False
@@ -185,13 +185,13 @@ class AuthorizationCodeGrantValidator(RequestValidator):
             tk = tks[0]
             if datetime.datetime.now() > tk.expires:
                 tk.delete(ctx)
-                self.ctxcon.commit()
+                self.ctx.con.commit()
                 return False
 
             return set(tk.scopes).issuperset(set(scopes))
 
         finally:
-            self.ctxcloseConn()
+            self.ctx.closeConn()
 
     def validate_client_id(client_id, request, *args, **kwargs):
         """
@@ -199,7 +199,7 @@ class AuthorizationCodeGrantValidator(RequestValidator):
             Implicit Grant
             chequea que el client_id perterenzca a un cliente válido
         """
-        self.ctxgetConn()
+        self.ctx.getConn()
         try:
             cs = Client.find(ctx, id=client_id).fetch(ctx)
             if len(cs) <= 0:
@@ -209,16 +209,16 @@ class AuthorizationCodeGrantValidator(RequestValidator):
             return True
 
         finally:
-            self.ctxcloseConn()
+            self.ctx.closeConn()
 
     def validate_code(client_id, code, client, request, *args, **kwargs):
         """
             Authorization Code Grant
             verifica que el codigo de autorización sea válido y asignado al cliente
         """
-        self.ctxgetConn()
+        self.ctx.getConn()
         try:
-            tks = AuthorizationToken.find(ctx, clientId=client_id, code=code).fetch(ctx)
+            tks = AuthorizationToken.find(ctx, clientId=client_id, token=code).fetch(ctx)
             if len(tks) <= 0:
                 return False
 
@@ -231,7 +231,7 @@ class AuthorizationCodeGrantValidator(RequestValidator):
             return True
 
         finally:
-            self.ctxcloseConn()
+            self.ctx.closeConn()
 
     def validate_grant_type(client_id, grant_type, client, request, *args, **kwargs):
         """
@@ -250,7 +250,7 @@ class AuthorizationCodeGrantValidator(RequestValidator):
             Implicit Grant
             asegura que el cliente tiene permitido la redireccion a redirect_uri
         """
-        self.ctxgetConn()
+        self.ctx.getConn()
         try:
             cs = Client.find(ctx, id=client_id).fetch(ctx)
             if len(cs) <= 0:
@@ -258,7 +258,7 @@ class AuthorizationCodeGrantValidator(RequestValidator):
             return redirect_uri == cs[0].redirectUri
 
         finally:
-            self.ctxcloseConn()
+            self.ctx.closeConn()
 
     def validate_refresh_token(refresh_token, client, request, *args, **kwargs):
         """
@@ -267,7 +267,7 @@ class AuthorizationCodeGrantValidator(RequestValidator):
             Refresh Token Grant
             asegura que el refresh_token sea valido y asignado al cliente
         """
-        self.ctxgetConn()
+        self.ctx.getConn()
         try:
             tks = BearerToken.find(ctx, clientId=client.id, refreshToken=refresh_token).fetch(ctx)
             if len(tks) <= 0:
@@ -279,7 +279,7 @@ class AuthorizationCodeGrantValidator(RequestValidator):
             return True
 
         finally:
-            self.ctxcloseConn()
+            self.ctx.closeConn()
 
     def validate_response_type(client_id, response_type, client, request, *args, **kwargs):
         """
@@ -287,7 +287,7 @@ class AuthorizationCodeGrantValidator(RequestValidator):
             Implicit Grant
             asegura que el response type esta permitido
         """
-        self.ctxgetConn()
+        self.ctx.getConn()
         try:
             cs = Client.find(ctx, id=client_id).fetch(ctx)
             if len(cs) <= 0:
@@ -295,7 +295,7 @@ class AuthorizationCodeGrantValidator(RequestValidator):
             return response_type in cs[0].responseTypes
 
         finally:
-            self.ctxcloseConn()
+            self.ctx.closeConn()
 
     def validate_scopes(client_id, scopes, client, request, *args, **kwargs):
         """
