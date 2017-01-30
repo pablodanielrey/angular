@@ -1,4 +1,4 @@
-
+from model.entity import Entity
 
 GRANT_TYPES = ['autorization_code', 'password', 'refresh_token']
 RESPONSE_TYPES = ['code', 'token']
@@ -11,6 +11,7 @@ class Client(Entity):
 
     def __init__(self):
         self.id = None
+        self.clientId = None
         self.type = self.TYPES[self.PUBLIC]
         self.redirectUri = None
         self.scopes = []

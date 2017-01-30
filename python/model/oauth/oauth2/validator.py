@@ -31,7 +31,7 @@ class AuthorizationCodeGrantValidator(RequestValidator):
         """
         self.ctx.getConn()
         try:
-            c = Client.find(ctx, id=client_id).fetch(ctx)[0]
+            c = Client.find(ctx, clientId=client_id).fetch(ctx)[0]
             return c.type == Client.TYPES[Client.PUBLIC]
 
         finally:
@@ -61,7 +61,7 @@ class AuthorizationCodeGrantValidator(RequestValidator):
 
         self.ctx.getConn()
         try:
-            cs = Client.find(ctx, id=request.client_id).fetch(ctx)
+            cs = Client.find(ctx, clientId=request.client_id).fetch(ctx)
             if len(cs) <= 0:
                 return True
             return cs[0].type == Client.TYPES[Client.CONFIDENTIAL]
@@ -86,7 +86,7 @@ class AuthorizationCodeGrantValidator(RequestValidator):
         """
         self.ctx.getConn()
         try:
-            c = Client.find(ctx, id=client_id).fetch(ctx)[0]
+            c = Client.find(ctx, clientId=client_id).fetch(ctx)[0]
             return c.redirectUri
 
         finally:
@@ -102,7 +102,7 @@ class AuthorizationCodeGrantValidator(RequestValidator):
         """
         self.ctx.getConn()
         try:
-            c = Client.find(ctx, id=client_id).fetch(ctx)[0]
+            c = Client.find(ctx, clientId=client_id).fetch(ctx)[0]
             return c.scopes
 
         finally:
@@ -154,7 +154,7 @@ class AuthorizationCodeGrantValidator(RequestValidator):
         self.ctx.getConn()
         try:
             tk = BearerToken()
-            tk.token = .get('access_token')
+            tk.token = token.get('access_token')
             tk.refreshToken = token.get('refresh_token')
             tk.userId = request.user.id if resquest.user else None
             tk.clientId = request.client_id
@@ -168,13 +168,13 @@ class AuthorizationCodeGrantValidator(RequestValidator):
             self.ctx.closeConn()
 
     def validate_bearer_token(token, scopes, request):
-    """
+        """
         Authorization Code Grant
         Implicit Grant
         Resource Owner Password Credentials Grant
         Client Credentials Grant
         asegura que el token sea válido y autorice todos los scopes requeridos
-    """
+        """
         self.ctx.getConn()
         try:
             tks = BearerToken.find(ctx, token=token).fetch(ctx)
@@ -201,7 +201,7 @@ class AuthorizationCodeGrantValidator(RequestValidator):
         """
         self.ctx.getConn()
         try:
-            cs = Client.find(ctx, id=client_id).fetch(ctx)
+            cs = Client.find(ctx, clientId=client_id).fetch(ctx)
             if len(cs) <= 0:
                 return False
 
@@ -241,7 +241,7 @@ class AuthorizationCodeGrantValidator(RequestValidator):
             Refresh Token Grant
             chequea que el cliente tenga acceso al grant requerido
         """
-        assert client_id == client.id
+        assert client_id == client.clientId
         return grant_type in client.grants
 
     def validate_redirect_uri(client_id, redirect_uri, request, *args, **kwargs):
@@ -252,7 +252,7 @@ class AuthorizationCodeGrantValidator(RequestValidator):
         """
         self.ctx.getConn()
         try:
-            cs = Client.find(ctx, id=client_id).fetch(ctx)
+            cs = Client.find(ctx, clientId=client_id).fetch(ctx)
             if len(cs) <= 0:
                 return False
             return redirect_uri == cs[0].redirectUri
