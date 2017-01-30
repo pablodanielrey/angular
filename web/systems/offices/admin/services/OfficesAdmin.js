@@ -20,9 +20,20 @@
       //@param id Identificador de oficina, si es nulo, devolvera una instancia de oficina vacia
       this.searchUsers = function (search){ return Login.getPrivateTransport().call('offices.admin.search_users', [search]); }
 
-      //Buscar designaciones de una determinada oficina
+      //Buscar usuarios de una determinada oficina
       //@param officeId Identificador de oficina
-      this.getDesignations = function (officeId){ return Login.getPrivateTransport().call('offices.admin.get_designations', [officeId]); }
+      this.getUsers = function (officeId){ return Login.getPrivateTransport().call('offices.admin.get_users', [officeId]); }
+
+
+      //Agregar usuario a una oficina
+      //@param officeId Identificador de oficina
+      //@param userId Identificador de usuario
+      this.addUser = function (officeId, userId){ return Login.getPrivateTransport().call('offices.admin.add_user', [officeId, userId]); }
+
+      //Eliminar usuario de una oficina
+      //@param officeId Identificador de oficina
+      //@param userId Identificador de usuario
+      this.deleteUser = function (officeId, userId){ return Login.getPrivateTransport().call('offices.admin.delete_user', [officeId, userId]); }
 
 
   }

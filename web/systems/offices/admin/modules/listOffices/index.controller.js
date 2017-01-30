@@ -10,18 +10,18 @@
 
     function ListOfficesCtrl($scope, $timeout, OfficesAdmin) {
 
-      $scope.offices = []; //lista de oficinas
+      $scope.component = { disabled:true, message:"Inicializando" };
 
       var init = function(){
         OfficesAdmin.getOffices().then(
           function(offices){
-            console.log(offices)
             $scope.offices = offices;
+            $scope.component.disabled = false;
+            $scope.component.message = null;
             $scope.$apply();
           }
         )
       }
-
 
       $timeout(init, 500); //TODO reemplazar por evento de inicializacion de Login
 

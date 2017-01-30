@@ -7,8 +7,9 @@ import uuid
 # from autobahn.asyncio.wamp import ApplicationSession
 
 from model.offices.entities.office import Office
+from model.offices.entities.officeDesignation import OfficeDesignation
 from model.users.entities.user import User
-from model.offices.officeAdminModel import OfficeAdminModel
+from model.offices.officeModel import OfficeModel
 
 
 
@@ -36,8 +37,14 @@ class OfficeAdmin(wamp.SystemComponentSession):
         ctx = wamp.getContextManager()
         ctx.getConn()
         try:
-            return OfficeAdminModel.admin(ctx, id)
+            office = None
+            if id is not None:
+                office = Office.findById(ctx, id)
 
+            if office is None:
+                office = Office()
+
+            return office
         finally:
             ctx.closeConn()
 
@@ -48,19 +55,55 @@ class OfficeAdmin(wamp.SystemComponentSession):
         ctx = wamp.getContextManager()
         ctx.getConn()
         try:
-            return OfficeAdminModel.searchUsers(ctx, search)
+            users = User.search(ctx, search).fetch(ctx)
+
+            for u in users:
+                u.label = u.name + " " + u.lastname + " " + u.dni
+
+            return users
 
         finally:
             ctx.closeConn()
 
-    @autobahn.wamp.register('offices.admin.get_designations')
-    def getDesignations(self, placeId):
+    @autobahn.wamp.register('offices.admin.get_users')
+    def getUsers(self, placeId):
         #busqueda de designaciones
         ctx = wamp.getContextManager()
         ctx.getConn()
         try:
-            return OfficeAdminModel.getDesignations(ctx, placeId)
+            return OfficeModel.getUsers(ctx, placeId)
 
+        finally:
+            ctx.closeConn()
+
+    @autobahn.wamp.register('offices.admin.add_user')
+    def addUser(self, placeId, userId):
+        #busqueda de designaciones
+        ctx = wamp.getContextManager()
+        ctx.getConn()
+        try:
+            od = OfficeDesignation()
+            od.userId = userId
+            od.placeId = placeId
+            od.persist(ctx)
+            ctx.con.commit()
+
+
+        finally:
+            ctx.closeConn()
+
+
+    @autobahn.wamp.register('offices.admin.delete_user')
+    def deleteUser(self, placeId, userId):
+        #busqueda de designaciones
+        ctx = wamp.getContextManager()
+        ctx.getConn()
+        try:
+            ods = OfficeDesignation.find(ctx, userId=userId, placeId=placeId, end=False).fetch(ctx)
+
+            for od in ods:
+                od.delete(ctx)
+            ctx.con.commit()
 
 
         finally:
