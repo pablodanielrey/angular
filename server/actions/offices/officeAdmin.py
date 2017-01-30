@@ -48,6 +48,19 @@ class OfficeAdmin(wamp.SystemComponentSession):
         finally:
             ctx.closeConn()
 
+    @autobahn.wamp.register('offices.admin.persist')
+    def persist(self, office):
+        #persistir oficina
+        ctx = wamp.getContextManager()
+        ctx.getConn()
+        try:
+            office.persist(ctx)
+            ctx.con.commit()
+
+        finally:
+            ctx.closeConn()
+
+
 
     @autobahn.wamp.register('offices.admin.search_users')
     def searchUsers(self, search):

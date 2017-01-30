@@ -16,6 +16,11 @@
       //@param id Identificador de oficina, si es nulo, devolvera una instancia de oficina vacia
       this.admin = function (id){ return Login.getPrivateTransport().call('offices.admin.admin', [id]); }
 
+      //Persistir oficina
+      //@param office Oficina a persistir
+      this.persist = function (office){ return Login.getPrivateTransport().call('offices.admin.persist', [office]); }
+
+
       //Buscar usuarios
       //@param id Identificador de oficina, si es nulo, devolvera una instancia de oficina vacia
       this.searchUsers = function (search){ return Login.getPrivateTransport().call('offices.admin.search_users', [search]); }

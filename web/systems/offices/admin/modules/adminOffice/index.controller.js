@@ -42,7 +42,6 @@
         $scope.component.disabled = true;
         $scope.component.message = "Procesando";
 
-        /*
         OfficesAdmin.persist($scope.office).then(
           function(response){
             $scope.component.message = "Guardado";
@@ -53,7 +52,7 @@
              console.log(error)
           }
         )
-        */
+
       }
 
 
