@@ -22,23 +22,28 @@ with open('/tmp/querys.sql', 'w') as q:
         pool = psycopg2.pool.ThreadedConnectionPool(1, 4, host=h, database='au24', user=u2, password=p2, cursor_factory=DictCursor)
         con = pool.getconn()
         try:
+            users = {}
             cur = con.cursor()
-            cur.execute('select username from mdl_user')
-            users = [c['username'] for c in cur]
-            print('Se van a actualizar {} usuarios'.format(len(users)))
-
-            cur = con2.cursor()
-            cur.execute('select dni, student_number from users_moodle where username in %s', (tuple(users),))
+            cur.execute('select username, idnumber from mdl_user')
             for c in cur:
-                if c['student_number']:
-                    cur2 = con.cursor()
-                    cur2.execute('update mdl_user set idnumber = %s where username = %s', (c['student_number'], c['dni']))
+                users[c['username']] = c['idnumber']
+
+            usersFce = {}
+            cur = con2.cursor()
+            cur.execute('select dni, student_number from users_moodle where dni in %s', (tuple(users.keys()),))
+            for c in cur:
+                usersFce[c['dni']] = c['student_number']
+
+            cur2 = con.cursor()
+            for u in usersFce.keys():
+                if usersFce[u] and usersFce[u] != users[u]:
+                    cur2.execute('update mdl_user set idnumber = %s where username = %s', (usersFce[u], u))
                     query = cur2.query.decode('utf8')
                     q.write(query + '\n')
                     print(query)
                     con.commit()
                 else:
-                    q.write('{} no tiene legajo\n'.format(c['dni']))
+                    q.write('{} tiene sincronizado el legajo {}\n'.format(u,usersFce[u]))
 
         finally:
             pool.putconn(con)
