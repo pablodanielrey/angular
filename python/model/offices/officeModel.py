@@ -65,9 +65,10 @@ class OfficeModel():
 
 
     @classmethod
-    def getUsers(cls, ctx, oId):
-        desig = OfficeDesignation.find(ctx, officeId=[oId]).fetch(ctx)
-        list(set([d.userId for d in desig]))
+    def getUsers(cls, ctx, placeId):
+        ds = OfficeDesignation.find(ctx, placeId=[placeId], positionId="1", end=False).fetch(ctx)
+        userIds = list(set([d.userId for d in ds]))
+        return User.find(ctx, id=userIds).fetch(ctx)
 
     @classmethod
     def searchUsers(cls, ctx, regexp):

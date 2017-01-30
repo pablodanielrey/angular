@@ -180,7 +180,7 @@ class OfficeSqlDAO(PlaceSqlDAO):
                 cur.execute('insert into offices.office (id, telephone, nro, email) values (%(id)s, %(telephone)s, %(number)s, %(email)s)', entity.__dict__)
 
             else:
-                cur.execute('update offices.office set telephone = %(telephone)s, nro = %(number)s, email = %(email)s, where id = %(id)s', entity.__dict__)
+                cur.execute('update offices.office set telephone = %(telephone)s, nro = %(number)s, email = %(email)s where id = %(id)s', entity.__dict__)
 
             return entity
 

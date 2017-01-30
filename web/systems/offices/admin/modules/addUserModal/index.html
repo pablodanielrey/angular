@@ -1,0 +1,17 @@
+
+
+<form novalidate class="form-horizontal" ng-submit="submit()" >
+  <div class="form-group">
+    <label class="control-label col-sm-3" for="name">Usuario:</label>
+    <div class="col-sm-9">
+      <input type="text" ng-model="user_.selected" placeholder="Buscar" uib-typeahead="user as user.label for user in searchUsers($viewValue)" typeahead-wait-ms="300" class="form-control">
+      <span ng-show="selectUser()" class="glyphicon glyphicon-ok"></span>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <div class="col-sm-offset-1 col-sm-10">
+      <button type="submit" class="btn btn-default" ng-disabled="form.disabled">Aceptar</button>{{component.message}}
+    </div>
+  </div>
+</form>

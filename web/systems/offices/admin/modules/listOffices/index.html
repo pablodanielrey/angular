@@ -28,7 +28,11 @@
        <td>{{office.telephone}}</td>
        <td>{{office.email}}</td>
        <td>{{office.type}}</td>
-       <td><a ng-href="./#/adminOffice?id={{office.id}}">Modificar</a>
+       <td>
+         <a class="btn btn-default" ng-href="./#/adminOffice?id={{office.id}}">Modificar</a>
+         <a class="btn btn-default" ng-href="./#/listUsers?id={{office.id}}">Usuarios</a>
+       </td>
+
      </tr>
    </tbody>
  </table>
