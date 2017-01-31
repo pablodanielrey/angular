@@ -31,6 +31,23 @@ class OfficeAdmin(wamp.SystemComponentSession):
         finally:
             ctx.closeConn()
 
+    @autobahn.wamp.register('offices.admin.get_offices_by_user')
+    def getOfficesByUser(self, userId):
+        #busqueda de usuario
+        ctx = wamp.getContextManager()
+        ctx.getConn()
+        try:
+            if not userId:
+                return []
+
+            ods = OfficeDesignation.find(ctx, userId=userId, end=False).fetch(ctx)
+            placeIds = [od.placeId for od in ods]
+
+            return Office.find(ctx, id=placeIds).fetch(ctx)
+
+        finally:
+            ctx.closeConn()
+
     @autobahn.wamp.register('offices.admin.admin')
     def admin(self, id):
         #administracion de usuario

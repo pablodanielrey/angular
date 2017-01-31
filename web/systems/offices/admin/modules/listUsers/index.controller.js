@@ -5,63 +5,38 @@
         .module('offices.admin')
         .controller('ListUsersCtrl', ListUsersCtrl);
 
-    ListUsersCtrl.$inject = ['$scope', '$timeout', '$location', '$uibModal', 'OfficesAdmin', 'Login'];
+    ListUsersCtrl.$inject = ['$scope', '$timeout', 'OfficesAdmin'];
 
 
-    function ListUsersCtrl($scope, $timeout, $location, $uibModal, OfficesAdmin, Login) {
+    function ListUsersCtrl($scope, $timeout, OfficesAdmin) {
 
-      $scope.component = { disabled: true, message: "Inicializando" };
+      $scope.searchDisabled = true; //flag para habilitar formulario de busqueda
+      $scope.search = null; //busqueda
+      $scope.searchMessage = null; //Mensaje
 
-      function init(){
-        var urlParams = $location.search();
-        if("id" in urlParams) $scope.officeId = urlParams["id"];
+      $scope.users = []; //lista de usuarios
 
-        OfficesAdmin.getUsers($scope.officeId).then(
-          function(users){
-            $scope.component.disabled = false;
-            $scope.component.message = null;
-            $scope.users = users;
-            $scope.$apply();
-          },
-          function(error){
-             alert("error");
-             console.log(error);
-          }
-        )
+      var init = function(){
+        $scope.searchDisabled = false;
       }
 
-      //Open modal add email
-      $scope.addUser = function () {
-        var modalInstance = $uibModal.open({
-          animation: true,
-          templateUrl: "modules/addUserModal/index.html",
-          controller: "AddUserModalCtrl",
-          resolve: {
-            officeId: function () { return $scope.officeId; }
-          }
-        });
+      $scope.searchUsers = function(){
 
-        modalInstance.result.then(
-           function (user) { $scope.users.push(user); },
-           function (error) { console.log(error); }
-         );
-       };
+        if($scope.search.length > 3){
+          $scope.searchDisabled = true;
+          $scope.searchMessage = "Buscando";
 
+          OfficesAdmin.searchUsers($scope.search).then(
+            function(users){
+              $scope.searchMessage = null; //Mensaje
+              $scope.users = users;
+              $scope.$apply();
+            }
+          )
+        }
+      }
 
-       $scope.deleteUser = function(index){
-         OfficesAdmin.deleteUser($scope.officeId, $scope.users[index].id).then(
-           function(response){
-             $scope.users.splice(index, 1);
-             $scope.$apply();
-           },
-           function(error){
-              alert("error")
-              console.log(error);
-           }
-         )
-       }
-
-      $timeout(init, 500); //TODO reemplazar $timeout por algun evento que indique inicializacion
+      $timeout(init, 500); //TODO reemplazar por evento de inicializacion de Login
 
     }
 })();

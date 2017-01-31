@@ -1,12 +1,20 @@
 
 <h2>Usuarios</h2>
 
+<form class="form-inline">
+  <div class="form-group">
+    <label for="search">Buscar:</label>
+    <input type="text" class="form-control" id="search" ng-model="search">
+  </div>
+  <button type="button" class="btn btn-default" ng-click="searchUsers()">Buscar</button>
+  {{searchMessage}}
+</form>
 
 <table class="table table-striped table-bordered table-hover">
    <thead>
      <tr>
-       <th>Nombre</th>
-       <th>Apellido</th>
+       <th>Nombres</th>
+       <th>Apellidos</th>
        <th>DNI</th>
        <th>Opciones</th>
      </tr>
@@ -16,9 +24,9 @@
        <td>{{user.name}}</td>
        <td>{{user.lastname}}</td>
        <td>{{user.dni}}</td>
-       <td><button type="button" ng-click="deleteUser($index)">Eliminar</button></td>
+       <td><a class="btn btn-default" ng-href="./#/listOfficesByUser?userId={{user.id}}">Oficinas</a></td>
+
+
      </tr>
    </tbody>
  </table>
-
-<button type="button" ng-click="addUser()" class="btn btn-default">Agregar</button>

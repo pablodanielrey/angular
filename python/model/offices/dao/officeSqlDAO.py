@@ -36,9 +36,8 @@ class OfficeSqlDAO(PlaceSqlDAO):
                 if k in ["telephone", "number", "email"]:
                     conditionList.append("({} IN %s)".format(cls.namemapping(k)))
                 else:
-                    conditionList.append("((designations.place.{} IN %s)".format(cls.namemapping(k)))
-                print(condition[k])
-                conditionValues.append(tuple(condition))
+                    conditionList.append("(designations.place.{} IN %s)".format(cls.namemapping(k)))
+                conditionValues.append(tuple(condition[k]))
 
         return {"list":conditionList, "values":conditionValues}
 
