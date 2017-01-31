@@ -18,6 +18,14 @@ class Client(Entity):
         self.grant = GRANT_TYPES[0]
         self.responseType = RESPONSE_TYPES[0]
 
+    @property
+    def client_id(self):
+        return self.clientId
+
+    @client_id.setter
+    def client_id(self, value):
+        self.clientId = value
+
 
 class BaseToken(Entity):
 
@@ -28,16 +36,22 @@ class BaseToken(Entity):
         self.token = None
         self.scopes = []
         self.expires = None
+        self.type = self.__class__.__name__
 
 
 class AuthorizationToken(BaseToken):
 
     def __init__(self):
+        super().__init__()
         self.redirectUri = None
+        self.refreshToken = None
+        self.state = None
 
 
-class BearerToken(Entity):
+class BearerToken(BaseToken):
 
     def __init__(self):
+        super().__init__()
+        self.redirectUri = None
         self.refreshToken = None
         self.state = None

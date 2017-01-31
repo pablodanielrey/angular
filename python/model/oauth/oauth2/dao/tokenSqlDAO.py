@@ -56,7 +56,7 @@ class BaseTokenSqlDAO(SqlDAO):
                 c.id = str(uuid.uuid4())
                 p.id = c.id
                 cur.execute("insert into {}{} (id, client_id, user_id, token, expires, scopes, refresh_token, redirect_uri, state, type) "
-                            "values (%(id)s, %(clientId)s, %(userId)s, %(token)s, %(expires)s, %(scopes_transformed)s, %(refreshToken)s, %(redirectUri)s, %(state)s, %(__name__)s)"
+                            "values (%(id)s, %(clientId)s, %(userId)s, %(token)s, %(expires)s, %(scopes_transformed)s, %(refreshToken)s, %(redirectUri)s, %(state)s, %(type)s)"
                             .format(cls._schema, cls._table),
                             p.__dict__)
             else:
@@ -68,7 +68,7 @@ class BaseTokenSqlDAO(SqlDAO):
                                              "refresh_token = %(refreshToken)s "
                                              "redirect_uri = %(redirectUri)s "
                                              "state = %(state)s "
-                                             "type = %(__name__)s"
+                                             "type = %(type)s"
                                              "where id = %(id)s"
                             .format(cls._schema, cls._table),
                             p.__dict__)

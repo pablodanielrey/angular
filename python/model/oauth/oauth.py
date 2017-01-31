@@ -32,11 +32,12 @@ class OAuth2Model:
 
     @classmethod
     def createClient(cls, ctx):
-        from model.oauth.oauth2.entities.oauth import GRANT_TYPES
+        from model.oauth.oauth2.entities.oauth import GRANT_TYPES, RESPONSE_TYPES
         c = Client()
         c.clientId = gen_salt(40)
-        c.redirectUri = ['http://127.0.0.1/client']
-        c.scopes = []
+        c.redirectUri = 'http://127.0.0.1/client'
+        c.scopes = ['admin.users']
         c.grant = GRANT_TYPES[0]  # authorization_code
+        c.responseType = RESPONSE_TYPES[0]
         c.persist(ctx)
         return c
