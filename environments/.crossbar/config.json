@@ -254,24 +254,7 @@
                         "url": "ws://localhost:8081"
                     }
                 },
-                {
-                    "id": "s_core",
-                    "type": "class",
-                    "classname": "wamp.session.WampSessionComponent",
-                    "realm": "core",
-                    "extra": {
-                        "parametro1": "ejemplo"
-                    },
-                    "transport": {
-                        "type": "websocket",
-                        "endpoint": {
-                            "type": "tcp",
-                            "host": "127.0.0.1",
-                            "port": 8081
-                        },
-                        "url": "ws://localhost:8081"
-                    }
-                },
+
                 {
                     "id": "library",
                     "type": "class",
@@ -288,24 +271,7 @@
                     }
                 },
 
-                {
-                    "id": "s_public",
-                    "type": "class",
-                    "classname": "wamp.session.WampSessionComponent",
-                    "realm": "public",
-                    "extra": {
-                        "parametro1": "ejemplo"
-                    },
-                    "transport": {
-                        "type": "websocket",
-                        "endpoint": {
-                            "type": "tcp",
-                            "host": "127.0.0.1",
-                            "port": 8081
-                        },
-                        "url": "ws://localhost:8081"
-                    }
-                },
+
                 {
                     "id": "lp1",
                     "type": "class",
@@ -371,9 +337,9 @@
                 },
 
                 {
-                    "id": "assistance",
+                    "id": "users.admin",
                     "type": "class",
-                    "classname": "actions.systems.assistance.assistance.Assistance",
+                    "classname": "actions.users.usersAdmin.UsersAdmin",
                     "realm": "core",
                     "transport": {
                         "type": "websocket",
@@ -386,10 +352,10 @@
                     }
                 },
 
-		            {
-                    "id": "issues",
+                {
+                    "id": "users.profile",
                     "type": "class",
-                    "classname": "actions.systems.issues.issues.Issues",
+                    "classname": "actions.users.usersProfile.UsersProfile",
                     "realm": "core",
                     "transport": {
                         "type": "websocket",
@@ -401,6 +367,40 @@
                         "url": "ws://localhost:8081"
                     }
                 },
+
+                {
+                    "id": "users.recover",
+                    "type": "class",
+                    "classname": "actions.users.usersRecover.UsersRecover",
+                    "realm": "core",
+                    "transport": {
+                        "type": "websocket",
+                        "endpoint": {
+                            "type": "tcp",
+                            "host": "127.0.0.1",
+                            "port": 8081
+                        },
+                        "url": "ws://localhost:8081"
+                    }
+                },
+
+
+                {
+                    "id": "offices.admin",
+                    "type": "class",
+                    "classname": "actions.offices.officeAdmin.OfficeAdmin",
+                    "realm": "core",
+                    "transport": {
+                        "type": "websocket",
+                        "endpoint": {
+                            "type": "tcp",
+                            "host": "127.0.0.1",
+                            "port": 8081
+                        },
+                        "url": "ws://localhost:8081"
+                    }
+                },
+
 
                 {
                     "id": "offices",
