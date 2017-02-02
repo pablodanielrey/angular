@@ -26,7 +26,7 @@
 
       //Agregar email
       //@param email Email a persistir
-      this.addEmail = function(email){ return Login.getPrivateTransport().call('users.admin.add_email', [email]); }
+      this.persistEmail = function(email){ return Login.getPrivateTransport().call('users.admin.persist_email', [email]); }
 
       //Eliminar email
       //@param email Email a eliminar
@@ -35,5 +35,6 @@
       //Cambiar clave
       //@param email Email a eliminar
       this.changePassword = function(userId, password){ return Login.getPrivateTransport().call('users.admin.change_password', [userId, password]);  }
+
   }
 })();

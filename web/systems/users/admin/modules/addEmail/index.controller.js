@@ -29,7 +29,7 @@
         $scope.form.disabled = true;
         $scope.form.message = "Procesando";
 
-        UsersAdmin.addEmail($scope.email).then(
+        UsersAdmin.persistEmail($scope.email).then(
           function(email){
             $scope.form.message = "Guardado";
             $scope.email.id = email.id

@@ -27,8 +27,9 @@
 
           UsersAdmin.findEmailsByUserId($scope.component.userId).then(
             function(emails){
+              $scope.component.disabled = false;
+              $scope.component.message = null
               $scope.emails = emails;
-              console.log($scope.emails);
               $scope.$apply();
             },
             function(error){
@@ -73,6 +74,23 @@
          )
        }
 
+
+      $scope.confirmEmail = function(index){
+         $scope.component.disabled = true
+         $scope.component.message = "Confirmando"
+         UsersAdmin.persistEmail($scope.emails[index]).then(
+           function(email){
+             $scope.component.disabled = false;
+             $scope.component.message = "Email Confirmado";
+             $scope.$apply();
+
+           },
+           function(error){
+              alert("error")
+              console.log(error);
+           }
+         )
+      }
 
 
 

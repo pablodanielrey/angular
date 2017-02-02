@@ -6,7 +6,7 @@ import uuid
 # from asyncio import coroutine
 # from autobahn.asyncio.wamp import ApplicationSession
 
-from model.users.usersAdminModel import UsersAdminModel
+from model.users.usersModel import UsersModel
 from model.users.entities.user import User
 from model.users.entities.mail import Mail
 
@@ -35,7 +35,7 @@ class UsersAdmin(wamp.SystemComponentSession):
         ctx = wamp.getContextManager()
         ctx.getConn()
         try:
-            return UsersAdminModel.admin(ctx, id)
+            return UsersModel.admin(ctx, id)
 
         finally:
             ctx.closeConn()
@@ -52,8 +52,8 @@ class UsersAdmin(wamp.SystemComponentSession):
             ctx.closeConn()
 
 
-    @autobahn.wamp.register('users.admin.add_email')
-    def addEmail(self, email):
+    @autobahn.wamp.register('users.admin.persist_email')
+    def persistEmail(self, email):
         ctx = wamp.getContextManager()
         ctx.getConn()
         try:
@@ -75,13 +75,15 @@ class UsersAdmin(wamp.SystemComponentSession):
         finally:
             ctx.closeConn()
 
+
+
     @autobahn.wamp.register('users.admin.persist')
     def persist(self, user):
         #administracion de usuario
         ctx = wamp.getContextManager()
         ctx.getConn()
         try:
-            UsersAdminModel.persist(ctx, user)
+            UsersModel.persist(ctx, user)
             ctx.con.commit()
 
         finally:
@@ -102,7 +104,7 @@ class UsersAdmin(wamp.SystemComponentSession):
         ctx = wamp.getContextManager()
         ctx.getConn()
         try:
-            r = UsersAdminModel.changePassword(ctx, userId, password)
+            r = UsersModel.changePassword(ctx, userId, password)
             ctx.con.commit()
             return r
 
