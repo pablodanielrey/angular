@@ -26,7 +26,7 @@
 
   function LoginCtrl($scope, $window, $interval, $location, Login, $q, $timeout) {
 
-      $scope.$on('wamp.open', function(event) {
+      $scope.$on('wamp_public.open', function(event) {
         Login.login("31073351", "Hola1024").then(
           function (conn) {
 
