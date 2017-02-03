@@ -3,14 +3,14 @@ import uuid
 
 from model.sileg.entities.teachingDesignation import TeachingDesignation
 from model.designation.dao.designationSqlDAO import DesignationSqlDAO
-from model.sileg.dao.teachingPlaceSqlDAO import TeachingPlaceSqlDAO
+from model.offices.dao.OfficeSqlDAO import OfficeSqlDAO
 from model.sileg.dao.teachingPositionSqlDAO import TeachingPositionSqlDAO
 
 
 class TeachingDesignationSqlDAO(DesignationSqlDAO):
     ''' DAO teachingDesignation '''
 
-    dependencies = [TeachingPlaceSqlDAO, TeachingPositionSqlDAO]
+    dependencies = [OfficeSqlDAO, TeachingPositionSqlDAO]
     _schema = "sileg."
     _table = "designation_"
     _entity = TeachingDesignation
@@ -32,8 +32,6 @@ class TeachingDesignationSqlDAO(DesignationSqlDAO):
                     dout DATE,
                     resolution VARCHAR,
                     record VARCHAR,
-
-                    created timestamptz default now()
                 );
             """)
         finally:

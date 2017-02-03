@@ -14,6 +14,7 @@ class PlaceSqlDAO(SqlDAO):
 
     @classmethod
     def _createSchema(cls, ctx):
+        """ No asignar restriccion unique al atributo 'name' ya que puede eliminarse logicamente una oficina """
         super()._createSchema(ctx)
 
         cur = ctx.con.cursor()
@@ -28,7 +29,6 @@ class PlaceSqlDAO(SqlDAO):
                     parent VARCHAR REFERENCES designations.place (id),
                     removed TIMESTAMPTZ,
                     public boolean default false,
-                    UNIQUE (name)
                 );
             """)
             print(cur.statusmessage)

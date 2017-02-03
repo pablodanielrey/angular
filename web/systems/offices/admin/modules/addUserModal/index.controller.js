@@ -44,7 +44,7 @@
       //Buscar usuarios para seleccionar
       $scope.searchUsers = function(search) {
         $scope.user_.search = search; //cache de busqueda
-        if (search.length < 4) return "";
+        if (search.length < 3) return "";
 
         return OfficesAdmin.searchUsers(search).then(
           function(users){ return users; },
