@@ -102,6 +102,7 @@ if __name__ == '__main__':
                     primero genero del lado de la administración del dominio todos los alias faltantes.
                     asi le doy a google tiempo para actualizar los servidores para cuando acceda a los alias desde el lado del usuario
                 """
+                dirty = False
 
                 for u in toSync:
 
@@ -127,8 +128,13 @@ if __name__ == '__main__':
                             'alias': u['email']
                         }
                         r = adminAlias.insert(userKey=userKeyG, body=alias1).execute()
+                        dirty = True
 
 
+
+                if dirty:
+                    print('esperando un tiempo para darle a gmail tiempo de sincronizar datos')
+                    time.sleep(120)
 
                 """
                     Ahora accedo delegando a cada usuario y configurando el alias como cuenta predeterminada si no existe.
