@@ -77,16 +77,25 @@ if __name__ == '__main__':
 
                 cur.execute('select u.id, dni, name, lastname, username, password, email, google '
                             'from profile.mails m left join profile.users u on (m.user_id = u.id) left join credentials.user_password up on (up.user_id = u.id) '
-                            'where m.confirmed and m.email like %s and google = false order by m.email', ('%econo.unlp.edu.ar',))
+                            'where m.confirmed and m.email like %s order by m.email', ('%econo.unlp.edu.ar',))
 
                 toSyncAux = cur.fetchall()
 
                 """
                     elimino las personas que se hayan sincronizado hace menos de determinado tiempo.
                 """
-                cur.execute("select id from google.alias_sync where date + interval '7 days' < NOW()")
-                toRemove = [c['id'] for c in cur]
+                cur.execute("select user_id from google.alias_sync where date + interval '7 days' > NOW()")
+                toRemove = [c['user_id'] for c in cur]
+                print('sacando {} usuarios de la sincronización ya que no expiró el período'.format(len(toRemove)))
                 toSync = [u for u in toSyncAux if u['id'] not in toRemove]
+
+
+                """
+                    convierto los alias de depeco a econo. ya que gmail agrega depeco automáticamente.
+                """
+                for u in toSync:
+                    if 'depeco.econo.unlp.edu.ar' in u['email'].lower():
+                        u['email'] = u['email'].replace('depeco.econo.unlp.edu.ar', 'econo.unlp.edu.ar')
 
 
                 """
@@ -113,11 +122,12 @@ if __name__ == '__main__':
                     r = adminAlias.list(userKey=userKeyG).execute()
                     aliases = [a['alias'] for a in r.get('aliases', [])]
                     if u['email'] not in aliases:
+                        print('creando alias del lado del dominio {}'.format(u['email']))
                         alias1 = {
                             'alias': u['email']
                         }
                         r = adminAlias.insert(userKey=userKeyG, body=alias1).execute()
-                        print('creando alias del lado del dominio {}'.format(u['email']))
+
 
 
                 """
@@ -148,22 +158,30 @@ if __name__ == '__main__':
                         'isDefault': True
                     }
 
+                    print('accediendo a gmail con {}'.format(userKeyG))
                     gmail = GAuth.getService('gmail', 'v1', SCOPESGMAIL, userKeyG)
                     r = gmail.users().settings().sendAs().list(userId='me').execute()
                     aliases = [ a['sendAsEmail'] for a in r['sendAs'] ]
+                    print('alias encontrados : {} '.format(aliases))
 
                     try:
                         if alias['sendAsEmail'] not in aliases:
                             print('creando alias')
                             r = gmail.users().settings().sendAs().create(userId='me', body=alias).execute()
                             print(r)
-                            cur.execute('insert into google.alias_sync (user_id, dni, name, lastname, alias) values (%s,%s,%s,%s,%s)', (u['id'], u['dni'], u['name'], u['lastname'], u['email']))
+
                         """
                         else:
                             print('actualizando alias')
                             r = gmail.users().settings().sendAs().update(userId='me', sendAsEmail=u['email'], body=alias).execute()
                             print(r)
                         """
+
+                        cur.execute('select user_id from google.alias_sync where user_id = %s', (u['id'],))
+                        if cur.rowcount > 0:
+                            cur.execute('update google.alias_sync set date = NOW() where user_id = %s', (u['id'],))
+                        else:
+                            cur.execute('insert into google.alias_sync (user_id, dni, name, lastname, alias) values (%s,%s,%s,%s,%s)', (u['id'], u['dni'], u['name'], u['lastname'], u['email']))
 
                     except Exception as e:
                         print(e)
