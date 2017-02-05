@@ -30,7 +30,6 @@ if __name__ == '__main__':
     db = sys.argv[2]
     duser = sys.argv[3]
     dpass = sys.argv[4]
-    defaultPassword = sys.argv[5]
 
     admin = GAuth.getService('admin', 'directory_v1', SCOPES, 'econo@econo.unlp.edu.ar')
     #results = service.users().list(domain='econo.unlp.edu.ar', query='email={}@econo.unlp.edu.ar'.format(user['dni'])).execute()
@@ -41,7 +40,7 @@ if __name__ == '__main__':
 
 
     """
-        obtengo los usuarios creados en google, estos van a ser ignorados por el script.
+        obtengo los usuarios creados en google, usuarios son los que van a ser configurados.
     """
     import itertools
     users = []
@@ -70,62 +69,14 @@ if __name__ == '__main__':
                             'where m.confirmed and m.email like %s and google = false', ('%econo.unlp.edu.ar',))
 
                 for u in cur:
-                    userKeyG = u['dni'] + '@econo.unlp.edu.ar'
-                    if userKeyG in users:
-                        print('ignorando usuario ya existente {}'.format(userKeyG))
+
+                    if u['dni'] == '27294557':
                         continue
 
-                    users.append(userKeyG)
-
-                    password = defaultPassword
-                    if len(u['password']) >= 8:
-                        password = u['password']
-
-
-                    """
-                        ///////////////////////
-                        agrego el usuario nuevo a google
-                        ///////////////////////
-                    """
-
-                    user = {
-                        'primaryEmail': userKeyG,
-                        'name': {
-                            'givenName': u['name'],
-                            'familyName': u['lastname'],
-                            'fullName': u['name'] + ' ' + u['lastname']
-                        },
-                        'password': password,
-                        'changePasswordAtNextLogin': False,
-                        'emails': [
-                            {
-                                'address': u['dni'] + '@econo.unlp.edu.ar',
-                                'primary': True,
-                                'type': 'work'
-                            }
-                        ],
-                        'externalIds': [
-                            {
-                                'type': 'custom',
-                                'value': u['id']
-                            }
-                        ]
-                    }
-
-                    r = adminUsers.insert(body=user).execute()
-                    print(r)
-
-                    userId = r['id']
-
-                    time.sleep(5)
-
-                    alias1 = {
-                        'alias': u['email']
-                    }
-                    r = adminAlias.insert(userKey=userKeyG, body=alias1).execute()
-                    print(r)
-
-                    time.sleep(5)
+                    userKeyG = u['dni'] + '@econo.unlp.edu.ar'
+                    if userKeyG not in users:
+                        print('ignorando usuario no existente {}'.format(userKeyG))
+                        continue
 
                     """
                         ///////////////////////////////////////////
@@ -133,7 +84,7 @@ if __name__ == '__main__':
                         ///////////////////////////////////////////
                     """
                     alias = {
-                        'displayName': user['name']['fullName'],
+                        'displayName': u['name'] + ' ' + u['lastname'],
                         'replyToAddress': u['email'],
                         'sendAsEmail': u['email'],
                         'treatAsAlias': True,
@@ -141,16 +92,21 @@ if __name__ == '__main__':
                         'isDefault': True
                     }
 
-                    gmail = GAuth.getService('gmail', 'v1', SCOPESGMAIL, userKeyG)
+                    print(alias)
+                    print(userKeyG)
                     try:
-                        r = gmail.users().settings().sendAs().update(userId='me', sendAsEmail=u['email'], body=alias).execute()
-                        print(r)
+                        gmail = GAuth.getService('gmail', 'v1', SCOPESGMAIL, userKeyG)
+                        try:
+                            r = gmail.users().settings().sendAs().patch(userId='me', sendAsEmail=u['email'], body=alias).execute()
+                            print(r)
 
-                    except Exception:
-                        r = gmail.users().settings().sendAs().create(userId='me', body=alias).execute()
-                        print(r)
+                        except Exception:
+                            r = gmail.users().settings().sendAs().create(userId='me', body=alias).execute()
+                            print(r)
+                    finally:
+                        pass
 
-                    time.sleep(10)
+                    #time.sleep(10)
 
                     continue
 
