@@ -32,11 +32,8 @@ if __name__ == '__main__':
     dpass = sys.argv[4]
 
     admin = GAuth.getService('admin', 'directory_v1', SCOPES, 'econo@econo.unlp.edu.ar')
-    #results = service.users().list(domain='econo.unlp.edu.ar', query='email={}@econo.unlp.edu.ar'.format(user['dni'])).execute()
-    #users = results.get('users', [])
     adminUsers = admin.users()
     adminAlias = adminUsers.aliases()
-
 
 
     """
@@ -56,6 +53,9 @@ if __name__ == '__main__':
             r = req.execute()
     print('se obtuvieron {} usuarios'.format(len(users)))
 
+
+
+
     import time
     pool = psycopg2.pool.ThreadedConnectionPool(1, 50, host=host, database=db, user=duser, password=dpass, cursor_factory=DictCursor)
     try:
@@ -64,18 +64,74 @@ if __name__ == '__main__':
             conn.set_isolation_level(psycopg2.extensions.ISOLATION_LEVEL_AUTOCOMMIT)
             cur = conn.cursor()
             try:
+                cur.execute('create schema if not exists google')
+                cur.execute("create table if not exists google.alias_sync ("
+                    "id varchar primary key default uuid_generate_v4(), "
+                    "date timestamp default NOW(), "
+                    "user_id varchar not null, "
+                    "dni varchar not null, "
+                    "name varchar not null, "
+                    "lastname varchar not null, "
+                    "alias varchar not null)"
+                )
+
                 cur.execute('select u.id, dni, name, lastname, username, password, email, google '
                             'from profile.mails m left join profile.users u on (m.user_id = u.id) left join credentials.user_password up on (up.user_id = u.id) '
-                            'where m.confirmed and m.email like %s and google = false', ('%econo.unlp.edu.ar',))
+                            'where m.confirmed and m.email like %s and google = false order by m.email', ('%econo.unlp.edu.ar',))
 
-                for u in cur:
+                toSyncAux = cur.fetchall()
+
+                """
+                    elimino las personas que se hayan sincronizado hace menos de determinado tiempo.
+                """
+                cur.execute("select id from google.alias_sync where date + interval '7 days' < NOW()")
+                toRemove = [c['id'] for c in cur]
+                toSync = [u for u in toSyncAux if u['id'] not in toRemove]
+
+
+                """
+                    primero genero del lado de la administración del dominio todos los alias faltantes.
+                    asi le doy a google tiempo para actualizar los servidores para cuando acceda a los alias desde el lado del usuario
+                """
+
+                for u in toSync:
 
                     if u['dni'] == '27294557':
                         continue
 
                     userKeyG = u['dni'] + '@econo.unlp.edu.ar'
                     if userKeyG not in users:
-                        print('ignorando usuario no existente {}'.format(userKeyG))
+                        #print('ignorando usuario no existente {}'.format(userKeyG))
+                        continue
+
+                    """
+                        //////////////////////////////////////////
+                        Ajusto el alias del lado de la administración del dominio
+                        si no existe lo creo.
+                        //////////////////////////////////////////
+                    """
+                    r = adminAlias.list(userKey=userKeyG).execute()
+                    aliases = [a['alias'] for a in r.get('aliases', [])]
+                    if u['email'] not in aliases:
+                        alias1 = {
+                            'alias': u['email']
+                        }
+                        r = adminAlias.insert(userKey=userKeyG, body=alias1).execute()
+                        print('creando alias del lado del dominio {}'.format(u['email']))
+
+
+                """
+                    Ahora accedo delegando a cada usuario y configurando el alias como cuenta predeterminada si no existe.
+                """
+
+                for u in toSync:
+
+                    if u['dni'] == '27294557':
+                        continue
+
+                    userKeyG = u['dni'] + '@econo.unlp.edu.ar'
+                    if userKeyG not in users:
+                        #print('ignorando usuario no existente {}'.format(userKeyG))
                         continue
 
                     """
@@ -92,42 +148,25 @@ if __name__ == '__main__':
                         'isDefault': True
                     }
 
-                    print(alias)
-                    print(userKeyG)
-                    try:
-                        gmail = GAuth.getService('gmail', 'v1', SCOPESGMAIL, userKeyG)
-                        try:
-                            r = gmail.users().settings().sendAs().patch(userId='me', sendAsEmail=u['email'], body=alias).execute()
-                            print(r)
-
-                        except Exception:
-                            r = gmail.users().settings().sendAs().create(userId='me', body=alias).execute()
-                            print(r)
-                    finally:
-                        pass
-
-                    #time.sleep(10)
-
-                    continue
-
                     gmail = GAuth.getService('gmail', 'v1', SCOPESGMAIL, userKeyG)
                     r = gmail.users().settings().sendAs().list(userId='me').execute()
-
                     aliases = [ a['sendAsEmail'] for a in r['sendAs'] ]
-                    print(aliases)
 
-                    time.sleep(5)
+                    try:
+                        if alias['sendAsEmail'] not in aliases:
+                            print('creando alias')
+                            r = gmail.users().settings().sendAs().create(userId='me', body=alias).execute()
+                            print(r)
+                            cur.execute('insert into google.alias_sync (user_id, dni, name, lastname, alias) values (%s,%s,%s,%s,%s)', (u['id'], u['dni'], u['name'], u['lastname'], u['email']))
+                        """
+                        else:
+                            print('actualizando alias')
+                            r = gmail.users().settings().sendAs().update(userId='me', sendAsEmail=u['email'], body=alias).execute()
+                            print(r)
+                        """
 
-                    if alias['sendAsEmail'] in aliases:
-                        print('actualizando alias')
-                        r = gmail.users().settings().sendAs().update(userId='me', sendAsEmail=u['email'], body=alias).execute()
-                        print(r)
-                    else:
-                        print('creando alias')
-                        r = gmail.users().settings().sendAs().create(userId='me', body=alias).execute()
-                        print(r)
-
-                    time.sleep(5)
+                    except Exception as e:
+                        print(e)
 
 
             finally:
