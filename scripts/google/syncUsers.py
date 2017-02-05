@@ -57,6 +57,8 @@ if __name__ == '__main__':
             r = req.execute()
     print('se obtuvieron {} usuarios'.format(len(users)))
 
+
+
     import time
     pool = psycopg2.pool.ThreadedConnectionPool(1, 50, host=host, database=db, user=duser, password=dpass, cursor_factory=DictCursor)
     try:
@@ -65,17 +67,27 @@ if __name__ == '__main__':
             conn.set_isolation_level(psycopg2.extensions.ISOLATION_LEVEL_AUTOCOMMIT)
             cur = conn.cursor()
             try:
-                cur.execute('select u.id, dni, name, lastname, username, password, email, google '
+                cur.execute('select u.id, dni, name, lastname, username, password, email '
                             'from profile.mails m left join profile.users u on (m.user_id = u.id) left join credentials.user_password up on (up.user_id = u.id) '
-                            'where m.confirmed and m.email like %s and google = false', ('%econo.unlp.edu.ar',))
+                            'where m.confirmed and m.email like %s', ('%\.%econo.unlp.edu.ar',))
 
-                for u in cur:
-                    userKeyG = u['dni'] + '@econo.unlp.edu.ar'
-                    if userKeyG in users:
-                        print('ignorando usuario ya existente {}'.format(userKeyG))
+                uss = cur.fetchall()
+                toSync = [c for c in uss if c['dni'] + '@econo.unlp.edu.ar' not in users]
+                print('usuarios a sincronizar {}'.format(len(toSync)))
+
+                for u in toSync:
+                    print('analizando {}'.format(u))
+
+                    if u['password'] is None or u['id'] is None or u['name'] is None or u['lastname'] is None or u['dni'] is None:
                         continue
 
-                    users.append(userKeyG)
+                    if u['dni'] == '27294557':
+                        continue
+
+                    userKeyG = u['dni'] + '@econo.unlp.edu.ar'
+                    if userKeyG in users:
+                        #print('ignorando usuario existente {}'.format(userKeyG))
+                        continue
 
                     password = defaultPassword
                     if len(u['password']) >= 8:
@@ -112,67 +124,12 @@ if __name__ == '__main__':
                         ]
                     }
 
-                    r = adminUsers.insert(body=user).execute()
-                    print(r)
-
-                    userId = r['id']
-
-                    time.sleep(5)
-
-                    alias1 = {
-                        'alias': u['email']
-                    }
-                    r = adminAlias.insert(userKey=userKeyG, body=alias1).execute()
-                    print(r)
-
-                    time.sleep(5)
-
-                    """
-                        ///////////////////////////////////////////
-                        Ajusta las preferencias del usuario de gmail para agregar el alias como predeterminado
-                        ///////////////////////////////////////////
-                    """
-                    alias = {
-                        'displayName': user['name']['fullName'],
-                        'replyToAddress': u['email'],
-                        'sendAsEmail': u['email'],
-                        'treatAsAlias': True,
-                        'isPrimary': False,
-                        'isDefault': True
-                    }
-
-                    gmail = GAuth.getService('gmail', 'v1', SCOPESGMAIL, userKeyG)
+                    print('agregando usuario {} '.format(userKeyG))
                     try:
-                        r = gmail.users().settings().sendAs().update(userId='me', sendAsEmail=u['email'], body=alias).execute()
+                        r = adminUsers.insert(body=user).execute()
                         print(r)
-
-                    except Exception:
-                        r = gmail.users().settings().sendAs().create(userId='me', body=alias).execute()
-                        print(r)
-
-                    time.sleep(10)
-
-                    continue
-
-                    gmail = GAuth.getService('gmail', 'v1', SCOPESGMAIL, userKeyG)
-                    r = gmail.users().settings().sendAs().list(userId='me').execute()
-
-                    aliases = [ a['sendAsEmail'] for a in r['sendAs'] ]
-                    print(aliases)
-
-                    time.sleep(5)
-
-                    if alias['sendAsEmail'] in aliases:
-                        print('actualizando alias')
-                        r = gmail.users().settings().sendAs().update(userId='me', sendAsEmail=u['email'], body=alias).execute()
-                        print(r)
-                    else:
-                        print('creando alias')
-                        r = gmail.users().settings().sendAs().create(userId='me', body=alias).execute()
-                        print(r)
-
-                    time.sleep(5)
-
+                    except Exception as e:
+                        print(e)
 
             finally:
                 cur.close()
