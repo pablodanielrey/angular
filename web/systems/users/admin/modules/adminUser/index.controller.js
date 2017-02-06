@@ -19,7 +19,12 @@
         };
 
         var urlParams = $location.search();
-        if("id" in urlParams) $scope.form.id = urlParams["id"];
+        if("id" in urlParams) {
+          $scope.form.id = urlParams["id"];
+          $scope.action = 'edit';
+        } else {
+          $scope.action = 'create';
+        }
       };
 
       //Inicializar usuario
@@ -57,6 +62,10 @@
              console.log(error)
           }
         )
+      }
+
+      $scope.back = function() {
+        window.history.back();
       }
 
       //Agregar / eliminar telefono

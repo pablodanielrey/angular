@@ -55,6 +55,10 @@
        )
      }
 
+     $scope.back = function() {
+       window.history.back();
+     }
+
      //Inicializar
      $timeout(init, 500); //TODO REEMPLAZAR POR EVENTO DE INICIALIZACION DE LOGIN
 

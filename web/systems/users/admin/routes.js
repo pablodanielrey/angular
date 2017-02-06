@@ -10,6 +10,8 @@
       .when('/adminUser', {templateUrl: 'modules/adminUser/index.html', controller: 'AdminUserCtrl'})
       .when('/changePassword', {templateUrl: 'modules/changePassword/index.html', controller: 'ChangePasswordCtrl'})
 
+      .when('/listUsers/:search', {templateUrl: 'modules/listUsers/index.html', controller: 'ListUsersCtrl'})
+
       .otherwise({
         redirectTo: '/listUsers'
       });
