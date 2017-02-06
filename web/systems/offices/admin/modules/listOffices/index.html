@@ -23,7 +23,7 @@
      </tr>
    </thead>
    <tbody>
-     <tr ng-repeat="office in offices">
+     <tr ng-repeat="office in offices | filter: search.text">
        <td>{{office.name}}</td>
        <td>{{office.number}}</td>
        <td>{{office.telephone}}</td>
