@@ -5,24 +5,33 @@
         .module('offices.admin')
         .controller('ListOfficesCtrl', ListOfficesCtrl);
 
-    ListOfficesCtrl.$inject = ['$scope', '$timeout', 'OfficesAdmin'];
+    ListOfficesCtrl.$inject = ['$scope', '$timeout', '$routeParams', '$location', 'OfficesAdmin'];
 
 
-    function ListOfficesCtrl($scope, $timeout, OfficesAdmin) {
+    function ListOfficesCtrl($scope, $timeout, $routeParams, $location, OfficesAdmin) {
 
-      $scope.component = { disabled:true, message:"Inicializando" };
+      $scope.search = { disabled:true, message:"Inicializando", text: '' };
 
       var init = function(){
         OfficesAdmin.getOffices().then(
           function(offices){
             $scope.offices = offices;
-            $scope.component.disabled = false;
-            $scope.component.message = null;
+            $scope.search.disabled = false;
+            $scope.search.message = null;
             $scope.$apply();
+
+            var params = $routeParams;
+            if ('search' in params) {
+              $timeout(function() { $scope.search.text = params.search;}, 0)
+            }
           }
         )
       }
 
+      $scope.edit  = function(office) {
+
+        $location.path("/adminOffice/").search({id:office.id, search: $scope.search.text});
+      }
       $timeout(init, 500); //TODO reemplazar por evento de inicializacion de Login
 
     }

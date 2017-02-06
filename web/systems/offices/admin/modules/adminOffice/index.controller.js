@@ -26,6 +26,10 @@
           $scope.action = 'create';
         }
 
+        if ("search" in urlParams) {
+          $scope.search = urlParams['search'];
+        }
+
          OfficesAdmin.admin($scope.officeId).then(
           function(office){
             $scope.office = office;
@@ -41,7 +45,7 @@
       };
 
       $scope.back = function() {
-        window.history.back();
+        $location.path("/listOffices/").search({search: $scope.search});
       }
 
       //Enviar formulario
