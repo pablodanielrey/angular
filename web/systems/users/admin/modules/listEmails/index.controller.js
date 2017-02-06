@@ -92,6 +92,9 @@
          )
       }
 
+      $scope.back = function() {
+        window.history.back();
+      }
 
 
       init();
