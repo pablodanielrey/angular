@@ -19,7 +19,12 @@
       //Inicializar componente
       var init = function(){
         var urlParams = $location.search();
-        if("id" in urlParams) $scope.officeId = urlParams["id"];
+        if("id" in urlParams) {
+          $scope.officeId = urlParams["id"];
+          $scope.action = 'edit';
+        } else {
+          $scope.action = 'create';
+        }
 
          OfficesAdmin.admin($scope.officeId).then(
           function(office){
@@ -35,7 +40,9 @@
         )
       };
 
-
+      $scope.back = function() {
+        window.history.back();
+      }
 
       //Enviar formulario
       $scope.submit = function(){

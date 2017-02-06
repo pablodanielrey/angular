@@ -30,6 +30,28 @@
           return;
         }
 
+        OfficesAdmin.getUsers($scope.officeId).then(
+          function(users) {
+            if (include($scope.user, users)) {
+              $uibModalInstance.close(null);
+              return;
+            }
+            $scope.addUser();
+
+          })
+
+      }
+
+      function include(user, users) {
+        if (user == null || users.length < 1) return true;
+        for (var i = 0; i < users.length; i++) {
+          if (user.id == users[i].id) {
+            return true;
+          }
+        }
+      }
+
+      $scope.addUser = function() {
         OfficesAdmin.addUser($scope.officeId, $scope.user.id).then(
           function(response){
             $scope.component.message = "Guardado";
@@ -38,7 +60,6 @@
           function(error){ $uibModalInstance.dismiss(error); }
         )
       }
-
 
 
       //Buscar usuarios para seleccionar
@@ -65,6 +86,11 @@
         $scope.user = null;
         return false;
       };
+
+      $scope.cancel = function() {
+        $scope.user = null;
+        $uibModalInstance.close(null);
+      }
 
 
       //Inicializar

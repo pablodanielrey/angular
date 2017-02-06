@@ -14,7 +14,12 @@
 
       function init(){
         var urlParams = $location.search();
-        if("id" in urlParams) $scope.officeId = urlParams["id"];
+        if("id" in urlParams) {
+          $scope.officeId = urlParams["id"];
+          $scope.action = 'edit';
+        } else {
+          $scope.action = 'create';
+        }
 
         OfficesAdmin.getUsers($scope.officeId).then(
           function(users){
@@ -30,11 +35,15 @@
         )
       }
 
+      $scope.back = function() {
+        window.history.back();
+      }
+
       //Open modal add email
       $scope.addUser = function () {
         var modalInstance = $uibModal.open({
           animation: true,
-          templateUrl: "modules/addUserModal/index.html",
+          templateUrl: "modules/addUserModal/index.html?t=" + new Date().getTime(),
           controller: "AddUserModalCtrl",
           resolve: {
             officeId: function () { return $scope.officeId; }
@@ -42,7 +51,7 @@
         });
 
         modalInstance.result.then(
-           function (user) { $scope.users.push(user); },
+           function (user) { if (user != null) $scope.users.push(user); },
            function (error) { console.log(error); }
          );
        };

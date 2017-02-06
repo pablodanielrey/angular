@@ -42,6 +42,7 @@
 
   <div class="form-group">
     <div class="col-sm-offset-1 col-sm-10">
+      <button ng-if="action == 'edit'" type="button" class="btn btn-default" ng-click="back()">Volver</button>
       <button type="submit" class="btn btn-default" ng-disabled="component.disabled">Aceptar</button>{{component.message}}
     </div>
   </div>
