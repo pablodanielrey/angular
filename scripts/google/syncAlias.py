@@ -36,6 +36,8 @@ if __name__ == '__main__':
     adminAlias = adminUsers.aliases()
 
 
+    errorTimer = 1
+
     """
         obtengo los usuarios creados en google, usuarios son los que van a ser configurados.
     """
@@ -52,9 +54,6 @@ if __name__ == '__main__':
         if req:
             r = req.execute()
     print('se obtuvieron {} usuarios'.format(len(users)))
-
-
-
 
     import time
     pool = psycopg2.pool.ThreadedConnectionPool(1, 50, host=host, database=db, user=duser, password=dpass, cursor_factory=DictCursor)
@@ -87,8 +86,9 @@ if __name__ == '__main__':
                 cur.execute("select user_id from google.alias_sync where date + interval '7 days' > NOW()")
                 toRemove = [c['user_id'] for c in cur]
                 print('sacando {} usuarios de la sincronización ya que no expiró el período'.format(len(toRemove)))
-                toSync = [u for u in toSyncAux if u['id'] not in toRemove]
+                toSync = [u for u in toSyncAux if u['id'] not in toRemove and u['dni'] + '@econo.unlp.edu.ar' in users ]
 
+                print('despues del filtrado quedaron {} usuarios a sincronizar'.format(len(toSync)))
 
                 """
                     convierto los alias de depeco a econo. ya que gmail agrega depeco automáticamente.
@@ -114,6 +114,10 @@ if __name__ == '__main__':
                         #print('ignorando usuario no existente {}'.format(userKeyG))
                         continue
 
+                    if u['email'] in users:
+                        ''' el alias ya esta configurado '''
+                        continue
+
                     """
                         //////////////////////////////////////////
                         Ajusto el alias del lado de la administración del dominio
@@ -127,7 +131,10 @@ if __name__ == '__main__':
                         alias1 = {
                             'alias': u['email']
                         }
-                        r = adminAlias.insert(userKey=userKeyG, body=alias1).execute()
+                        try:
+                            r = adminAlias.insert(userKey=userKeyG, body=alias1).execute()
+                        except Exception as e:
+                            print(e)
                         dirty = True
 
 
@@ -164,13 +171,15 @@ if __name__ == '__main__':
                         'isDefault': True
                     }
 
-                    print('accediendo a gmail con {}'.format(userKeyG))
-                    gmail = GAuth.getService('gmail', 'v1', SCOPESGMAIL, userKeyG)
-                    r = gmail.users().settings().sendAs().list(userId='me').execute()
-                    aliases = [ a['sendAsEmail'] for a in r['sendAs'] ]
-                    print('alias encontrados : {} '.format(aliases))
 
                     try:
+                        print('accediendo a gmail con {}'.format(userKeyG))
+                        gmail = GAuth.getService('gmail', 'v1', SCOPESGMAIL, userKeyG)
+                        r = gmail.users().settings().sendAs().list(userId='me').execute()
+                        aliases = [ a['sendAsEmail'] for a in r['sendAs'] ]
+                        print('alias encontrados : {} '.format(aliases))
+
+
                         if alias['sendAsEmail'] not in aliases:
                             print('creando alias')
                             r = gmail.users().settings().sendAs().create(userId='me', body=alias).execute()
