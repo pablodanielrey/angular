@@ -12,6 +12,29 @@ class OfficeSqlDAO(PlaceSqlDAO):
     _mappings = {"number":"nro"}
     _entity = Office
 
+    @classmethod
+    def _createSchema(cls, ctx):
+        """ se incluye el atributo area y assistance porque estban en el sistema viejo, pero no se si se utilizan """
+        super()._createSchema(ctx)
+
+        cur = ctx.con.cursor()
+        try:
+            cur.execute("""
+                CREATE SCHEMA IF NOT EXISTS offices;
+
+                CREATE TABLE IF NOT EXISTS offices.office (
+                  id VARCHAR NOT NULL PRIMARY KEY REFERENCES designations.place (id),
+                  telephone VARCHAR,
+                  nro VARCHAR,
+                  email VARCHAR,
+
+                  area BOOLEAN,
+                  assistance BOOLEAN,
+                );
+            """)
+        finally:
+            cur.close()
+
 
     @classmethod
     def _condition(cls, **kwargs):
@@ -60,24 +83,7 @@ class OfficeSqlDAO(PlaceSqlDAO):
 
 
 
-    @classmethod
-    def _createSchema(cls, ctx):
-        super()._createSchema(ctx)
 
-        cur = ctx.con.cursor()
-        try:
-            cur.execute("""
-                CREATE SCHEMA IF NOT EXISTS offices;
-
-                CREATE TABLE IF NOT EXISTS offices.office (
-                  id VARCHAR NOT NULL PRIMARY KEY REFERENCES designations.place (id),
-                  telephone VARCHAR,
-                  nro VARCHAR,
-                  email VARCHAR
-                );
-            """)
-        finally:
-            cur.close()
 
     @classmethod
     def _fromResult(cls, o, r):

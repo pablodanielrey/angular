@@ -23,8 +23,6 @@
       };
 
       function initUser(){
-
-
           UsersAdmin.findEmailsByUserId($scope.component.userId).then(
             function(emails){
               $scope.component.disabled = false;
@@ -37,7 +35,6 @@
                console.log(error);
             }
           )
-
       }
 
       //Open modal add email

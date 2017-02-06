@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import logging
 from model.sileg.entities.teachingDesignation import TeachingDesignation
-from model.sileg.entities.teachingPlace import TeachingPlace
+from model.offices.entities.office import Office
 from model.sileg.entities.teachingPosition import TeachingPosition
 from model.users.entities.user import User
 
@@ -18,7 +18,7 @@ class SilegModel:
 
     @classmethod
     def getUsers(cls, ctx):
-        placesIds = TeachingPlace.find(ctx, type=["catedra"])
+        placesIds = Office.find(ctx, type=["catedra"])
         if len(placesIds.values) == 0:
             return []
 
@@ -29,12 +29,12 @@ class SilegModel:
 
     @classmethod
     def getCathedras(cls, ctx):
-        return TeachingPlace.find(ctx, type=["catedra"]).fetch(ctx)
+        return Office.find(ctx, type=["catedra"]).fetch(ctx)
 
 
     @classmethod
     def findPositionsActiveByUser(cls, ctx, userId):
-        placesIds = TeachingPlace.find(ctx, type=["catedra"])
+        placesIds = Office.find(ctx, type=["catedra"])
         if len(placesIds.values) == 0:
             return []
 
@@ -45,7 +45,7 @@ class SilegModel:
         data = {}
         for d in designations:
             position = TeachingPosition.findByIds(ctx, [d.positionId])[0]
-            place = TeachingPlace.findByIds(ctx, [d.placeId])[0]
+            place = Office.findByIds(ctx, [d.placeId])[0]
             d.place = place
             if position.position not in data:
                 data[position.position] = {"position":position, "designations":[]}

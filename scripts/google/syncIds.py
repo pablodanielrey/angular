@@ -30,7 +30,6 @@ if __name__ == '__main__':
     db = sys.argv[2]
     duser = sys.argv[3]
     dpass = sys.argv[4]
-    defaultPassword = sys.argv[5]
 
     admin = GAuth.getService('admin', 'directory_v1', SCOPES, 'econo@econo.unlp.edu.ar')
     #results = service.users().list(domain='econo.unlp.edu.ar', query='email={}@econo.unlp.edu.ar'.format(user['dni'])).execute()
@@ -39,9 +38,9 @@ if __name__ == '__main__':
     adminAlias = adminUsers.aliases()
 
 
-
     """
-        obtengo los usuarios creados en google, estos van a ser ignorados por el script.
+        obtengo los usuarios creados en google.
+        estos usuarios son los que van a ser actualizados con los ids de los usuarios de econo.
     """
     import itertools
     users = []
@@ -59,7 +58,6 @@ if __name__ == '__main__':
 
 
 
-    import time
     pool = psycopg2.pool.ThreadedConnectionPool(1, 50, host=host, database=db, user=duser, password=dpass, cursor_factory=DictCursor)
     try:
         conn = pool.getconn()
@@ -67,55 +65,16 @@ if __name__ == '__main__':
             conn.set_isolation_level(psycopg2.extensions.ISOLATION_LEVEL_AUTOCOMMIT)
             cur = conn.cursor()
             try:
-                cur.execute('select u.id, dni, name, lastname, username, password, email '
+                cur.execute('select u.id, dni, name, lastname, username, password, email, google '
                             'from profile.mails m left join profile.users u on (m.user_id = u.id) left join credentials.user_password up on (up.user_id = u.id) '
-                            'where m.confirmed and m.email like %s', ('%\.%econo.unlp.edu.ar',))
+                            'where m.confirmed and m.email like %s and google = false', ('%econo.unlp.edu.ar',))
 
-                uss = cur.fetchall()
-                toSync = [c for c in uss if c['dni'] + '@econo.unlp.edu.ar' not in users]
-                print('usuarios a sincronizar {}'.format(len(toSync)))
-
-                for u in toSync:
-                    print('analizando {}'.format(u))
-
-                    if u['password'] is None or u['id'] is None or u['name'] is None or u['lastname'] is None or u['dni'] is None:
-                        continue
-
-                    if u['dni'] == '27294557':
-                        continue
-
+                for u in cur:
                     userKeyG = u['dni'] + '@econo.unlp.edu.ar'
-                    if userKeyG in users:
-                        #print('ignorando usuario existente {}'.format(userKeyG))
+                    if userKeyG not in users:
                         continue
-
-                    password = defaultPassword
-                    if len(u['password']) >= 8:
-                        password = u['password']
-
-
-                    """
-                        ///////////////////////
-                        agrego el usuario nuevo a google
-                        ///////////////////////
-                    """
 
                     user = {
-                        'primaryEmail': userKeyG,
-                        'name': {
-                            'givenName': u['name'],
-                            'familyName': u['lastname'],
-                            'fullName': u['name'] + ' ' + u['lastname']
-                        },
-                        'password': password,
-                        'changePasswordAtNextLogin': False,
-                        'emails': [
-                            {
-                                'address': u['dni'] + '@econo.unlp.edu.ar',
-                                'primary': True,
-                                'type': 'work'
-                            }
-                        ],
                         'externalIds': [
                             {
                                 'type': 'custom',
@@ -124,12 +83,8 @@ if __name__ == '__main__':
                         ]
                     }
 
-                    print('agregando usuario {} '.format(userKeyG))
-                    try:
-                        r = adminUsers.insert(body=user).execute()
-                        print(r)
-                    except Exception as e:
-                        print(e)
+                    r = adminUsers.update(userKey=userKeyG, body=user).execute()
+                    print(r)
 
             finally:
                 cur.close()
