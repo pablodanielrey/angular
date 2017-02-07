@@ -43,7 +43,10 @@ class OfficeAdmin(wamp.SystemComponentSession):
             ods = OfficeDesignation.find(ctx, userId=userId, end=False).fetch(ctx)
             placeIds = [od.placeId for od in ods]
 
-            return Office.find(ctx, id=placeIds).fetch(ctx)
+            allOffices = Office.find(ctx, id=placeIds).fetch(ctx)
+            offices = [o for o in allOffices if not o.removed]
+            return offices
+
 
         finally:
             ctx.closeConn()
