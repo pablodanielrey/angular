@@ -1,12 +1,11 @@
+<div class="listUsers">
+<h3><i class=" titleSearch fa fa-search" aria-hidden="true"></i> Buscar Usuario</h3>
 
-<h2>Usuarios</h2>
-
-<form class="form-inline" ng-submit="searchUsers()">
+<form class="search form-inline" ng-submit="searchUsers()">
   <div class="form-group">
-    <label for="search">Buscar:</label>
     <input type="text" class="form-control" id="search" ng-model="search">
   </div>
-  <button type="submit" class="btn btn-default" ng-click="searchUsers()">Buscar</button>
+  <button type="submit" class="btn btn-primary" ng-click="searchUsers()">Buscar</button>
   {{searchMessage}}
 </form>
 
@@ -36,11 +35,12 @@
        <td>{{user.name}}</td>
        <td>{{user.lastname}}</td>
        <td>{{user.dni}}</td>
-       <td><a ng-href="./#/adminUser?id={{user.id}}">Modificar</a>
-       <a ng-href="./#/listEmails?id={{user.id}}">Emails</a>
-       <a ng-href="./#/changePassword?id={{user.id}}">Cambiar clave</a></td>
+       <td><a class="btn btn-primary btn-xs" ng-href="./#/adminUser?id={{user.id}}">Editar</a>
+       <a class="btn btn-primary btn-xs" ng-href="./#/listEmails?id={{user.id}}">Emails</a>
+       <a class="btn btn-primary btn-xs" ng-href="./#/changePassword?id={{user.id}}">Cambiar clave</a></td>
 
 
      </tr>
    </tbody>
  </table>
+<div>
