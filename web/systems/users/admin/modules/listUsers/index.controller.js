@@ -13,6 +13,8 @@
       $scope.searchDisabled = true; //flag para habilitar formulario de busqueda
       $scope.search = null; //busqueda
       $scope.searchMessage = null; //Mensaje
+      $scope.sortType = 'name'; // criterio de ordenación
+      $scope.sortReverse = false; // ordenacion ascendente o descendente
 
       $scope.users = []; //lista de usuarios
 
@@ -23,6 +25,11 @@
         if ('search' in params) {
           $scope.searching();
         }
+      }
+
+      $scope.sort = function(type) {
+        $scope.sortReverse = ($scope.sortType != type) ? false : !$scope.sortReverse;
+        $scope.sortType = type;
       }
 
       $scope.searchUsers = function(){
