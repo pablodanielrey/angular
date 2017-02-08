@@ -8,3 +8,15 @@
 .listUsers .search {
   margin-bottom: 20px;
 }
+
+.listUsers .btnEdit {
+  background-color: #e0e0e0;
+  border-color: #c1c1c1;
+  color: #222222;
+}
+
+.listUsers .btnEdit:hover {
+  background-color: #337ab7;
+  border-color: #337ab7;
+  color: white;
+}
