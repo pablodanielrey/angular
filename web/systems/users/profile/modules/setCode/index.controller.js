@@ -3,12 +3,12 @@
 
     angular
         .module('users.profile')
-        .controller('ChangePasswordSetCodeCtrl', ChangePasswordSetCodeCtrl);
+        .controller('SetCodeCtrl', SetCodeCtrl);
 
-    ChangePasswordSetCodeCtrl.$inject = ['$scope', '$timeout', '$q', '$location', 'UsersProfile', 'Login'];
+    SetCodeCtrl.$inject = ['$scope', '$timeout', '$q', '$location', 'UsersProfile', 'Login'];
 
 
-    function ChangePasswordSetCodeCtrl($scope, $timeout, $q, $location, UsersProfile, Login) {
+    function SetCodeCtrl($scope, $timeout, $q, $location, UsersProfile, Login) {
 
       //Inicializar componente
       var init = function(){
@@ -32,13 +32,16 @@
         $scope.component.disabled = true;
         $scope.component.message = "Procesando";
 
+        $location.path( "/listEmails");
+        return
+
         UsersProfile.processCode($scope.code).then(
           function(response){
             if(!response) {
               $scope.component.message = "Error";
               $scope.component.error = true;
             } else {
-              $location.path( "/changePassword");
+              $location.path( "/listEmails");
             }
           }
         )

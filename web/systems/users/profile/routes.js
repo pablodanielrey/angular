@@ -6,8 +6,8 @@
       $routeProvider
 
       .when('/adminUser', {templateUrl: 'modules/adminUser/index.html', controller: 'AdminUserCtrl'})
-      .when('/changePasswordSendCode', {templateUrl: 'modules/changePasswordSendCode/index.html', controller: 'ChangePasswordSendCodeCtrl'})
-      .when('/changePasswordSetCode', {templateUrl: 'modules/changePasswordSetCode/index.html', controller: 'ChangePasswordSetCodeCtrl'})
+      .when('/sendCode', {templateUrl: 'modules/sendCode/index.html', controller: 'SendCodeCtrl'})
+      .when('/setCode', {templateUrl: 'modules/setCode/index.html', controller: 'SetCodeCtrl'})
       .when('/changePassword', {templateUrl: 'modules/changePassword/index.html', controller: 'ChangePasswordCtrl'})
       .when('/listEmails', {templateUrl: 'modules/listEmails/index.html', controller: 'ListEmailsCtrl'})
 
