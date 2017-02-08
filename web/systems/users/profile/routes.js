@@ -9,6 +9,7 @@
       .when('/changePasswordSendCode', {templateUrl: 'modules/changePasswordSendCode/index.html', controller: 'ChangePasswordSendCodeCtrl'})
       .when('/changePasswordSetCode', {templateUrl: 'modules/changePasswordSetCode/index.html', controller: 'ChangePasswordSetCodeCtrl'})
       .when('/changePassword', {templateUrl: 'modules/changePassword/index.html', controller: 'ChangePasswordCtrl'})
+      .when('/listEmails', {templateUrl: 'modules/listEmails/index.html', controller: 'ListEmailsCtrl'})
 
       .otherwise({
         redirectTo: '/adminUser'
