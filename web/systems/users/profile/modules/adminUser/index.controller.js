@@ -22,6 +22,7 @@
 
       //Inicializar usuario
       var initUser = function(){
+        $scope.alerts = [];
 
         UsersProfile.findById($scope.form.id).then(
           function(user){

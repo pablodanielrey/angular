@@ -34,5 +34,7 @@
       //Procesar codigo de confirmacion
       this.processCode = function(code){ return Login.getPrivateTransport().call('users.profile.process_code', [code]); }
 
+      this.changePassword = function(password){ return Login.getPrivateTransport().call('users.profile.change_password', [password]);  }
+
   }
 })();

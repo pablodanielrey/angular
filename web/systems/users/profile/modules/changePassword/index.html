@@ -3,12 +3,12 @@
 
 <div class="jumbotron">
 
-  <form  class="form-horizontal" ng-submit="submit()" data-toggle="validator">
+  <form class="form-horizontal" ng-submit="submit()" >
     <div class="form-group">
       <label class="control-label col-sm-3 col-md-2 col-lg-1" for="code">Clave:</label>
       <div class="col-sm-6 col-md-5 col-lg-3">
-        <input ng-show="!isViewPassword" type="password" class="form-control"  data-min-length="6" id="code" ng-model="code" required>
-        <input ng-show="isViewPassword" type="text" class="form-control" id="codeDisplay" ng-model="code">
+        <input ng-show="!isViewPassword" type="password" class="form-control" id="code" ng-model="code">
+        <input ng-show="isViewPassword" type="text" class="form-control" id="code" ng-model="code">
         <div class="help-block">Mínimo de 6 caracteres</div>
       </div>
     </div>
@@ -16,9 +16,8 @@
     <div class="form-group">
       <label class="control-label col-sm-3 col-md-2 col-lg-1" for="code2">Reingrese Clave:</label>
       <div class="col-sm-6 col-md-5 col-lg-3">
-        <input ng-show="!isViewPassword" type="password" class="form-control" id="code2" ng-model="code2" required data-match="#code" data-match-error="Error, no coinciden las claves">
-        <input ng-show="isViewPassword" type="text" class="form-control" id="code2Display" ng-model="code2">
-        <div class="help-block with-errors"></div>
+        <input ng-show="!isViewPassword" type="password" class="form-control" id="code2" ng-model="code2">
+        <input ng-show="isViewPassword" type="text" class="form-control" id="code2" ng-model="code2">
       </div>
     </div>
 
@@ -33,6 +32,10 @@
       <div class="col-sm-offset-1 col-sm-10">
         <button type="submit" class="btn btn-default">Aceptar</button>
       </div>
+    </div>
+
+    <div uib-alert ng-repeat="alert in alerts" ng-class="'alert-' + (alert.type || 'warning')" close="closeAlert($index)">
+      <h4><strong>{{alert.title}}</strong></h4> <p>{{alert.msg}}</p>
     </div>
   </form>
 </div>
