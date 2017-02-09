@@ -1,3 +1,4 @@
+<div class=adminMenu>
       <div class="navbar-header">
         <button type="button" class="navbar-toggle" ng-init="navCollapsed = true" ng-click="navCollapsed = !navCollapsed">
           <span class="sr-only">Toggle navigation</span>
@@ -5,23 +6,18 @@
           <span class="icon-bar"></span>
           <span class="icon-bar"></span>
         </button>
-        <a class="navbar-brand" href="#options">Usuarios</a>
+        <a class="navbar-brand" href="#options">Usuarios </a>
       </div>
 
       <div class="collapse navbar-collapse" ng-class="!navCollapsed && 'in'">
         <ul class="nav navbar-nav">
-          <li uib-dropdown>
-            <a uib-dropdown-toggle href="#">Usuarios<span class="caret"></span></a>
-            <ul uib-dropdown-menu>
-              <li><a href="#/gridUser">Ver</a></li>
-              <li><a href="#/adminUser">Agregar</a></li>
-
-            </ul>
-          </li>
-
-
+          <li><a href="#/gridUser"><span class="glyphicon glyphicon-search"></span> Buscar Usuario</a></li>
+        </ul>
+        <ul class="nav navbar-nav">
+          <li><a href="#/adminUser"><span class="glyphicon glyphicon-plus-sign"></span> Nuevo Usuario</a></li>
         </ul>
         <ul class="nav navbar-nav navbar-right">
-          <li><a href="#" ng-click="logout()"><span class="glyphicon glyphicon-log-out"></span> Salir</a></li>
+          <li><a class="btnOut" href="#" ng-click="logout()"><span class="glyphicon glyphicon-log-out"></span> Salir</a></li>
         </ul>
       </div>
+</div>

@@ -39,9 +39,10 @@
 
       //Open modal add email
       $scope.addEmail = function () {
+        var d = new Date();
         var modalInstance = $uibModal.open({
           animation: true,
-          templateUrl: "modules/addEmail/index.html",
+          templateUrl: "modules/addEmail/index.html?d="+d.getTime(),
           controller: "AddEmailCtrl",
           resolve: {
             userId: function () { return $scope.component.userId; }
