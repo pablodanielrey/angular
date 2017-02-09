@@ -17,6 +17,7 @@
       };
 
       $scope.form.id = Login.getCredentials()["userId"]
+      $scope.alerts = [];
 
 
       //Inicializar usuario
@@ -40,19 +41,33 @@
 
       //Enviar formulario
       $scope.submit = function(){
+        if ($scope.form.disabled) {
+          return;
+        }
         $scope.form.disabled = true;
         $scope.form.message = "Procesando";
-
         UsersProfile.persist($scope.user).then(
-          function(response){
-            $scope.form.message = "Guardado";
+          function(response) {
+            $scope.alerts.push({type: 'success', msg: 'Los cambios se han guardado correctamente'})
+            $scope.form.disabled = false;
+            $scope.form.message = "";
             $scope.$apply();
           },
           function(error){
-             alert("error")
-             console.log(error)
+            $scope.form.disabled = false;
+            $scope.form.message = "";
+            $scope.alerts.push({type: 'danger', title: 'Error: ' + error.error, msg:  error.args[0]})
+            $scope.$apply();
           }
         )
+      }
+
+      $scope.closeAlert = function(index) {
+        $scope.alerts.splice(index, 1);
+      }
+
+      $scope.closeAllAlerts = function() {
+        $scope.alerts = [];
       }
 
       //Agregar / eliminar telefono
