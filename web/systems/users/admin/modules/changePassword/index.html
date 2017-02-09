@@ -1,27 +1,37 @@
+<div class="changePassword">
+<h3><i class="fa fa-key" aria-hidden="true"></i> Cambiar Contraseña</h3>
 
-<h2>Cambiar Clave</h2>
 
+<!-- <div class="form-group file">
+  <div class="col-sm-6 col-md-5 col-lg-3">
+      <span><b>Nombre</b></span>
+    <input type="text" class="form-control" id="name" ng-model="user.name" ng-disabled="form.disabled">
+  </div>
+</div> -->
 
 <form novalidate class="form-horizontal" ng-submit="submit()" >
-  <div class="form-group">
-    <label class="control-label col-sm-3 col-md-2 col-lg-1" for="password">Clave:</label>
+  <div class="form-group file">
     <div class="col-sm-6 col-md-5 col-lg-3">
+      <span><b>Ingrese nueva contraseña</b></span>
+
       <input type="password" class="form-control" id="password" ng-model="password" ng-disabled="component.disabled">
     </div>
   </div>
 
-  <div class="form-group">
-    <label class="control-label col-sm-3 col-md-2 col-lg-1" for="password2">Reingrese Clave:</label>
-    <div class="col-sm-6 col-md-5 col-lg-3">
+  <div class="form-group file">
+        <div class="col-sm-6 col-md-5 col-lg-3">
+          <span><b>Repita la contraseña</b></span>
+
       <input type="password" class="form-control" id="password2" ng-model="password2" ng-disabled="component.disabled">
     </div>
   </div>
 
   <div class="form-group">
-    <div class="col-sm-offset-1 col-sm-10">
+    <div class="col-sm-6 col-md-5 col-lg-3 action">
+      <button type="submit" class="btn btn-primary" ng-disabled="component.disabled">Aceptar</button>
       <button type="button" class="btn btn-default" ng-click="back()">Volver</button>
-      <button type="submit" class="btn btn-default" ng-disabled="component.disabled">Aceptar</button>
       {{component.message}}
     </div>
   </div>
 </form>
+</div>

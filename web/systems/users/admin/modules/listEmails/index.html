@@ -1,5 +1,5 @@
-
-<h2>Emails</h2>
+<div class="listEmails">
+  <h3><i class=" titleSearch fa fa-envelope-o" aria-hidden="true"></i> Correo Electrónico</h3>
 
 
 
@@ -7,20 +7,24 @@
    <thead>
      <tr>
        <th>Email</th>
-       <th>Confirmado</th>
+       <th>Confirmación</th>
        <th>Opciones</th>
      </tr>
    </thead>
    <tbody>
      <tr ng-repeat="email in emails">
        <td>{{email.email}}</td>
-       <td> <input type="checkbox" class="form-control" ng-model="email.confirmed" ng-disabled="component.disabled" ng-click="confirmEmail($index)" ng-disabled="component.disabled"></td>
-       <td><button type="button" ng-click="deleteEmail($index)">Eliminar</button>
-       <a ng-href="./#/?id={{email.id}}">Enviar Confirmación</a></td>
+       <td>
+         <input type="checkbox" class="" ng-model="email.confirmed" ng-disabled="component.disabled" ng-click="confirmEmail($index)" ng-disabled="component.disabled">
+         <a ng-href="./#/?id={{email.id}}" class="btnEdit btn btn-primary btn-xs">Enviar Confirmación</a></td>
+       </td>
+       <td><button type="button" class="btn btn-sm btn-danger" ng-click="deleteEmail($index)">Eliminar</button>
+
 
      </tr>
    </tbody>
  </table>
 
+<button type="button" ng-click="addEmail()" class="btn btn-primary">Agregar correo</button>{{component.message}}
 <button type="button" class="btn btn-default" ng-click="back()">Volver</button>
-<button type="button" ng-click="addEmail()" class="btn btn-default">Agregar</button>{{component.message}}
+</div>
