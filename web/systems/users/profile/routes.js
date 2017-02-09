@@ -7,7 +7,7 @@
 
       .when('/adminUser', {templateUrl: 'modules/adminUser/index.html', controller: 'AdminUserCtrl'})
       .when('/sendCode', {templateUrl: 'modules/sendCode/index.html', controller: 'SendCodeCtrl'})
-      .when('/setCode', {templateUrl: 'modules/setCode/index.html', controller: 'SetCodeCtrl'})
+      .when('/setCode/:id', {templateUrl: 'modules/setCode/index.html', controller: 'SetCodeCtrl'})
       .when('/changePassword', {templateUrl: 'modules/changePassword/index.html', controller: 'ChangePasswordCtrl'})
       .when('/listEmails', {templateUrl: 'modules/listEmails/index.html', controller: 'ListEmailsCtrl'})
 

@@ -13,7 +13,6 @@ from model.users.usersModel import UsersModel
 
 
 
-
 # from model.exceptions import *
 
 import autobahn
@@ -69,6 +68,37 @@ class UsersProfile(wamp.SystemComponentSession):
         finally:
             ctx.closeConn()
 
+    @autobahn.wamp.register('users.profile.send_email_confirmation')
+    def sendEmailConfirmation(self, userId, eid, details):
+        ctx = wamp.getContextManager()
+        ctx.getConn()
+        try:
+            logging.warn('userId: {} sendEmailConfirmation {}'.format(userId,eid))
+            return eid
+            # Ingreso.sendEmailConfirmation(ctx.con, name, lastname, eid)
+            # ctx.con.commit()
+
+        finally:
+            ctx.closeConn()
+
+    @autobahn.wamp.register('users.profile.process_code')
+    def processCode(self, emailId, code, details):
+        ctx = wamp.getContextManager()
+        ctx.getConn()
+        try:
+            if code != 'admin123':
+                raise Exception('Código incorrecto')
+
+            emails =  Mail.findByIds(ctx, [emailId])
+            if len(emails) < 1:
+                raise Exception('Correo no encontrado')
+
+            emails[0].confirmed = True
+            emails[0].persist(ctx)
+            ctx.con.commit()
+        finally:
+            ctx.closeConn()
+
     @autobahn.wamp.register('users.profile.persist')
     def persist(self, user, details):
         #administracion de usuario
@@ -81,8 +111,6 @@ class UsersProfile(wamp.SystemComponentSession):
         finally:
             ctx.closeConn()
 
-
-    import logging
 
 
     @autobahn.wamp.register('users.profile.change_password')

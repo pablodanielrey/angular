@@ -19,5 +19,9 @@
         <button type="submit" class="btn btn-default" ng-disabled="component.disabled">Aceptar</button>
       </div>
     </div>
+
+    <div uib-alert ng-repeat="alert in alerts" ng-class="'alert-' + (alert.type || 'warning')" close="closeAlert($index)">
+      <h4><strong>{{alert.title}}</strong></h4> <p>{{alert.msg}}</p>
+    </div>    
   </form>
 </div>

@@ -28,11 +28,10 @@
       //@param email Email a eliminar
       this.deleteEmail = function(email){ return Login.getPrivateTransport().call('users.profile.delete_email', [email]); }
 
-      //Enviar codigo de confirmacion por email
-      this.sendCode = function(userId){ return Login.getPrivateTransport().call('users.profile.send_code', [userId]); }
+      this.sendEmailConfirmation = function(userId,emailId){ return Login.getPrivateTransport().call('users.profile.send_email_confirmation', [userId, emailId]); }
 
       //Procesar codigo de confirmacion
-      this.processCode = function(code){ return Login.getPrivateTransport().call('users.profile.process_code', [code]); }
+      this.processCode = function(emailId, code){ return Login.getPrivateTransport().call('users.profile.process_code', [emailId, code]); }
 
       this.changePassword = function(password){ return Login.getPrivateTransport().call('users.profile.change_password', [password]);  }
 

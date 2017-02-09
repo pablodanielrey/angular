@@ -23,6 +23,14 @@
 
       var initUser = function(){
         $scope.component.userId = Login.getCredentials()["userId"]
+
+        var urlParams = $location.search();
+        if("id" in urlParams) {
+          $scope.emailId = urlParams["id"];
+        } else {
+          return;
+        }
+
         $scope.component.message = null;
         $scope.component.disabled = false;
       }
@@ -32,16 +40,15 @@
         $scope.component.disabled = true;
         $scope.component.message = "Enviando Codigo";
 
-        $location.path( "/setCode");
-        return;
-        UsersProfile.sendCode($scope.component.userId).then(
-          function(response){
-            if(!response) {
-              $scope.component.message = "Error";
-              $scope.component.error = true;
-            } else {
-              $location.path( "/setCode");
-            }
+        UsersProfile.sendEmailConfirmation($scope.component.userId, $scope.emailId).then(
+          function(response) {
+            $timeout(function() {
+              $location.path( "/setCode/" + $scope.emailId);
+            });
+
+          }, function (error) {
+            $scope.component.message = "Error";
+            $scope.component.error = true;
           }
         );
       }
