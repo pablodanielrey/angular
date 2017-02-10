@@ -8,10 +8,15 @@ import hashlib
 import inject
 import uuid
 
+from model.registry import Registry
+
+
 class UsersModel():
 
     mail = inject.attr(model.mail.mail.Mail)
 
+
+    reg = inject.instance(Registry).getRegistry('mail')
 
     @classmethod
     def admin(cls, ctx, id):
@@ -72,12 +77,13 @@ class UsersModel():
         email.hash = code
         email.persist(ctx)
 
-        #From = cls.reg.get('confirm_mail_from')
-        #subject = cls.reg.get('confirm_mail_subject')
-        #template = cls.reg.get('confirm_mail_template')
-        From = "emanuel@econo.unlp.edu.ar"
-        subject = "Prueba de envio"
-        template = "/root/sileg/python/model/ingreso/templates/codigoActivacion.html"
+
+        From = cls.reg.get('confirmation_from')
+        subject = cls.reg.get('confirmation_subject')
+        template = cls.reg.get('confirmation_template')
+        #From = "emanuel@econo.unlp.edu.ar"
+        #subject = "Prueba de envio"
+        #template = "../../python/model/ingreso/templates/codigoActivacion.html"
         To = email.email
 
         replace = [

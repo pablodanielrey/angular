@@ -82,9 +82,8 @@ class UsersAdmin(wamp.SystemComponentSession):
         ctx.getConn()
         try:
             logging.warn('userId: {} sendEmailConfirmation {}'.format(userId,eid))
-            return eid
-            # Ingreso.sendEmailConfirmation(ctx.con, name, lastname, eid)
-            # ctx.con.commit()
+            UsersModel.sendEmailConfirmation(ctx, userId, eid)
+            ctx.con.commit()
 
         finally:
             ctx.closeConn()

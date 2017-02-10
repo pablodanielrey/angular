@@ -86,14 +86,10 @@ class UsersProfile(wamp.SystemComponentSession):
         ctx.getConn()
         try:
             emails = Mail.findByIds(ctx, [emailId])
-            logging.info('Email: {}',emails[0].hash)
             if len(emails) <= 0:
                 raise Exception('No existe el correo')
             if code != emails[0].hash:
                 raise Exception('Código incorrecto')
-
-            if len(emails) < 1:
-                raise Exception('Correo no encontrado')
 
             emails[0].confirmed = True
             emails[0].persist(ctx)

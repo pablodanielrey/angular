@@ -100,7 +100,7 @@ class Mail:
                 fTemplate.close()
 
         if text:
-            fTemplate = open(text,'r')
+            fTemplate = open(text,'r', encoding="utf-8")
             try:
                 tbody = fTemplate.read()
                 for pattern,data in replace:
