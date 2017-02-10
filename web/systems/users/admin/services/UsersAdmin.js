@@ -32,7 +32,9 @@
       //@param email Email a eliminar
       this.deleteEmail = function(email){ return Login.getPrivateTransport().call('users.admin.delete_email', [email]); }
 
-      
+      //Envia un correo para confirmar el email
+      this.sendConfirmation = function(userId, eId) { return Login.getPrivateTransport().call('users.admin.send_confirmation', [userId, eId]); }
+
       //Cambiar clave
       //@param email Email a eliminar
       this.changePassword = function(userId, password){ return Login.getPrivateTransport().call('users.admin.change_password', [userId, password]);  }

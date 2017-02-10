@@ -76,6 +76,19 @@ class UsersAdmin(wamp.SystemComponentSession):
             ctx.closeConn()
 
 
+    @autobahn.wamp.register('users.admin.send_confirmation')
+    def sendConfirmation(self, userId, eid):
+        ctx = wamp.getContextManager()
+        ctx.getConn()
+        try:
+            logging.warn('userId: {} sendEmailConfirmation {}'.format(userId,eid))
+            return eid
+            # Ingreso.sendEmailConfirmation(ctx.con, name, lastname, eid)
+            # ctx.con.commit()
+
+        finally:
+            ctx.closeConn()
+
 
     @autobahn.wamp.register('users.admin.persist')
     def persist(self, user):

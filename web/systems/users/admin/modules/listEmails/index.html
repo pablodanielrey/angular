@@ -16,7 +16,7 @@
        <td>{{email.email}}</td>
        <td>
          <input type="checkbox" class="" ng-model="email.confirmed" ng-disabled="component.disabled" ng-click="confirmEmail($index)" ng-disabled="component.disabled">
-         <a ng-href="./#/?id={{email.id}}" class="btnEdit btn btn-primary btn-xs">Enviar Confirmación</a></td>
+         <a ng-click="sendConfirmation(email)" class="btnEdit btn btn-primary btn-xs">Enviar Confirmación</a></td>
        </td>
        <td><button type="button" class="btn btn-sm btn-danger" ng-click="deleteEmail($index)">Eliminar</button>
 
@@ -27,4 +27,9 @@
 
 <button type="button" ng-click="addEmail()" class="btn btn-primary">Agregar correo</button>{{component.message}}
 <button type="button" class="btn btn-default" ng-click="back()">Volver</button>
+
+<div ng-show="alerts.length > 0" ng-click="closeAllAlerts()"> Cerrar todos los mensajes</div>
+<div uib-alert ng-repeat="alert in alerts" ng-class="'alert-' + (alert.type || 'warning')" close="closeAlert($index)">
+  <h4><strong>{{alert.title}}</strong></h4> <p>{{alert.msg}}</p>
+</div>
 </div>

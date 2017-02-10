@@ -12,6 +12,7 @@
 
       //Inicializar componente
       function init(){
+        $scope.alerts = [];
         $scope.component = {
           disabled: true, //flag para indicar si el formulario esta deshabilitado o no
           message: "Inicializando", //mensaje
@@ -37,6 +38,14 @@
           )
       }
 
+      $scope.closeAlert = function(index) {
+        $scope.alerts.splice(index, 1);
+      }
+
+      $scope.closeAllAlerts = function() {
+        $scope.alerts = [];
+      }
+
       //Open modal add email
       $scope.addEmail = function () {
         var d = new Date();
@@ -58,6 +67,18 @@
          );
        };
 
+       $scope.sendConfirmation = function(email) {
+         UsersAdmin.sendConfirmation($scope.component.userId, email.id).then(
+           function (result) {
+             $scope.alerts.push({type: 'success', title: "Confirmacion enviada",msg: 'Se ha enviado un correo con el código a la dirección: ' + email.email});
+             $scope.$apply();
+           }, function(error) {
+             $scope.alerts.push({type: 'danger', title: 'Error: al enviar la confirmación ', msg:  error.args[0]})
+             $scope.$apply();
+
+           }
+         )
+       }
 
        $scope.deleteEmail = function(index){
          UsersAdmin.deleteEmail($scope.emails[index]).then(
