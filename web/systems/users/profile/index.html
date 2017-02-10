@@ -49,7 +49,13 @@
   <script type="text/javascript" src="./modules/setCode/index.controller.js"></script>
   <script type="text/javascript" src="./modules/changePassword/index.controller.js"></script>
 
-
+  <!-- Estilos -->
+  <link rel="stylesheet" type="text/css" href="./modules/listUsers/listUsers.css">
+  <link rel="stylesheet" type="text/css" href="./modules/menu/adminMenu.css">
+  <link rel="stylesheet" type="text/css" href="./modules/adminUser/adminUser.css">
+  <link rel="stylesheet" type="text/css" href="./modules/listEmails/listEmails.css">
+  <link rel="stylesheet" type="text/css" href="./modules/addEmail/addEmail.css">
+  <link rel="stylesheet" type="text/css" href="./modules/changePassword/changePassword.css">
 
 
   <style>.view { margin: 60px 10px; }</style>
@@ -57,7 +63,7 @@
 </head>
 <body class="container-fluid"  ng-controller="IndexCtrl">
 
-  <nav class="navbar navbar-default navbar-fixed-top" role="navigation" ng-include="'modules/menu/adminMenu.html?r='+time"></nav>
+  <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation" ng-include="'modules/menu/adminMenu.html?r='+time"></nav>
 
   <div class="view" ng-view></div>
 

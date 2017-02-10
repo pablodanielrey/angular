@@ -16,7 +16,8 @@
        <td>{{email.email}}</td>
        <td>
          <input type="checkbox" class="" ng-model="email.confirmed" ng-disabled="component.disabled" ng-click="confirmEmail($index)" ng-disabled="component.disabled">
-         <a ng-click="sendConfirmation(email)" class="btnEdit btn btn-primary btn-xs">Enviar Confirmación</a></td>
+         <a class="btnEdit btn-sm btn-primary" ng-click="sendConfirmation(email)">Reenviar Confirmación</a>
+       </td>
        </td>
        <td><button type="button" class="btn btn-sm btn-danger" ng-click="deleteEmail($index)">Eliminar</button>
 

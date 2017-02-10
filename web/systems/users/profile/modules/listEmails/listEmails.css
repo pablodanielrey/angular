@@ -1,0 +1,15 @@
+.listEmails .titleSearch {
+  margin-top: 10px;
+}
+
+.listEmails .btnEdit {
+  background-color: #e0e0e0;
+  border-color: #c1c1c1;
+  color: #222222;
+}
+
+.listEmails .btnEdit:hover {
+  background-color: #337ab7;
+  border-color: #337ab7;
+  color: white;
+}

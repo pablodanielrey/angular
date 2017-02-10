@@ -1,12 +1,13 @@
 
-<h2>Cambiar Clave</h2>
+<div class="changePassword">
 
-<div class="jumbotron">
+  <h3><i class="fa fa-key" aria-hidden="true"></i> Cambiar Contraseña</h3>
+
 
   <form class="form-horizontal" ng-submit="submit()" >
     <div class="form-group">
-      <label class="control-label col-sm-3 col-md-2 col-lg-1" for="code">Clave:</label>
       <div class="col-sm-6 col-md-5 col-lg-3">
+        <span><b>Ingrese nueva contraseña</b></span>
         <input ng-show="!isViewPassword" type="password" class="form-control" id="code" ng-model="code">
         <input ng-show="isViewPassword" type="text" class="form-control" id="code" ng-model="code">
         <div class="help-block">Mínimo de 6 caracteres</div>
@@ -14,27 +15,25 @@
     </div>
 
     <div class="form-group">
-      <label class="control-label col-sm-3 col-md-2 col-lg-1" for="code2">Reingrese Clave:</label>
       <div class="col-sm-6 col-md-5 col-lg-3">
+        <span><b>Repita la contraseña</b></span>
         <input ng-show="!isViewPassword" type="password" class="form-control" id="code2" ng-model="code2">
         <input ng-show="isViewPassword" type="text" class="form-control" id="code2" ng-model="code2">
       </div>
     </div>
 
     <div class="form-group">
-      <label class="control-label col-sm-3 col-md-2 col-lg-1" > Mostrar clave: </label>
       <div class="col-sm-6 col-md-5 col-lg-3">
-        <input type="checkbox" class="form-control" ng-model="isViewPassword">
+        <span><input type="checkbox" class="" ng-model="isViewPassword"> Mostrar contraseña </span>
       </div>
-    </div>
 
-    <div class="form-group">
-      <div class="col-sm-offset-1 col-sm-10">
-        <button type="submit" class="btn btn-default">Aceptar</button>
-      </div>
     </div>
+    <div>
+    <button type="submit" class="btn btn-primary">Guardar</button>
+  </div>
 
-    <div uib-alert ng-repeat="alert in alerts" ng-class="'alert-' + (alert.type || 'warning')" close="closeAlert($index)">
+
+    <div class="alert col-sm-6 col-md-5 col-lg-4" uib-alert ng-repeat="alert in alerts" ng-class="'alert-' + (alert.type || 'warning')" close="closeAlert($index)">
       <h4><strong>{{alert.title}}</strong></h4> <p>{{alert.msg}}</p>
     </div>
   </form>
