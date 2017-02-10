@@ -90,7 +90,7 @@ class Mail:
         parts = []
 
         if html:
-            fTemplate = open(html,'r')
+            fTemplate = open(html,'r', encoding="utf-8")
             try:
                 hbody = fTemplate.read()
                 for pattern,data in replace:

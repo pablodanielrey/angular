@@ -74,9 +74,8 @@ class UsersProfile(wamp.SystemComponentSession):
         ctx.getConn()
         try:
             logging.warn('userId: {} sendEmailConfirmation {}'.format(userId,eid))
-            return eid
-            # Ingreso.sendEmailConfirmation(ctx.con, name, lastname, eid)
-            # ctx.con.commit()
+            UsersModel.sendEmailConfirmation(ctx, userId, eid)
+            ctx.con.commit()
 
         finally:
             ctx.closeConn()
@@ -86,10 +85,13 @@ class UsersProfile(wamp.SystemComponentSession):
         ctx = wamp.getContextManager()
         ctx.getConn()
         try:
-            if code != 'admin123':
+            emails = Mail.findByIds(ctx, [emailId])
+            logging.info('Email: {}',emails[0].hash)
+            if len(emails) <= 0:
+                raise Exception('No existe el correo')
+            if code != emails[0].hash:
                 raise Exception('Código incorrecto')
 
-            emails =  Mail.findByIds(ctx, [emailId])
             if len(emails) < 1:
                 raise Exception('Correo no encontrado')
 

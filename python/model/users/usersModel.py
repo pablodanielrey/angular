@@ -1,8 +1,18 @@
 # -*- coding: utf-8 -*-
 from model.users.entities.user import User
 from model.users.entities.userPassword import UserPassword
+from model.users.entities.mail import Mail
+
+import model.mail.mail
+import hashlib
+import inject
+import uuid
 
 class UsersModel():
+
+    mail = inject.attr(model.mail.mail.Mail)
+
+
     @classmethod
     def admin(cls, ctx, id):
         user = None
@@ -48,3 +58,32 @@ class UsersModel():
         up.password = password
         up.persist(ctx)
         return up
+
+    @classmethod
+    def sendEmailConfirmation(cls, ctx, userId, eId):
+        user = User.findById(ctx, userId)
+        emails = Mail.findByIds(ctx, [eId])
+        if emails is None or len(emails) <= 0:
+            raise Exception()
+
+        email = emails[0]
+        hash = hashlib.sha1(str(uuid.uuid4()).encode('utf-8')).hexdigest()
+        code = hash[:5]
+        email.hash = code
+        email.persist(ctx)
+
+        #From = cls.reg.get('confirm_mail_from')
+        #subject = cls.reg.get('confirm_mail_subject')
+        #template = cls.reg.get('confirm_mail_template')
+        From = "emanuel@econo.unlp.edu.ar"
+        subject = "Prueba de envio"
+        template = "/root/sileg/python/model/ingreso/templates/codigoActivacion.html"
+        To = email.email
+
+        replace = [
+            ('###CODE###', code),
+            ('###NAME###', user.name),
+            ('###LASTNAME###', user.lastname)
+        ]
+        cls.mail.sendMail(From, [To], subject, replace, html=template)
+        return True
