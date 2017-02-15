@@ -15,7 +15,7 @@
      <tr ng-repeat="email in emails">
        <td>{{email.email}}</td>
        <td>
-         <input type="checkbox" class="" ng-model="email.confirmed" ng-disabled="component.disabled" ng-click="confirmEmail($index)" ng-disabled="component.disabled">
+         <input type="checkbox" class="" ng-model="email.confirmed" ng-click="confirmEmail($index)">
          <a class="btnEdit btn-sm btn-primary" ng-click="sendConfirmation(email)">Reenviar Confirmación</a>
        </td>
        </td>
@@ -26,7 +26,7 @@
    </tbody>
  </table>
 
-<button type="button" ng-click="addEmail()" class="btn btn-primary">Agregar correo</button>{{component.message}}
+<button type="button" ng-click="addEmail()" class="btn btn-primary">Agregar correo</button>
 <button type="button" class="btn btn-default" ng-click="back()">Volver</button>
 
 <div ng-show="alerts.length > 0" ng-click="closeAllAlerts()"> Cerrar todos los mensajes</div>
