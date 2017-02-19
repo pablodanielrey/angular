@@ -27,7 +27,8 @@ def getMessagesToSync(imap, folder):
             return
         #totalMessages = int(bytes.decode(data[0]))
         print('Buscando mensajes a sincronizar en : {}'.format(folder))
-        rv, data = imap.search(None, 'NOT KEYWORD synched')
+        #rv, data = imap.search(None, 'NOT KEYWORD synched')
+        rv, data = imap.search(None,'ALL')
         nums = data[0].split()
         totalMessages = len(nums)
         for n in nums:
