@@ -62,6 +62,7 @@ if __name__ == '__main__':
     euser = sys.argv[3]
     epass = sys.argv[4]
 
+    imaplib._MAXLINE = 99999999
 
     parser = BytesParser()
 
