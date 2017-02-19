@@ -88,11 +88,11 @@ if __name__ == '__main__':
                     folders.append('INBOX')
                     for folder in folders:
                         print(folder)
-                        #if 'grupos/' in folder:
-                        #    print('Ignorando {}'.format(folder))
-                        #    continue
+                        if 'grupos/' in folder:
+                            print('Ignorando {}'.format(folder))
+                            continue
 
-                        if 'Trash' in folder:
+                        if 'Trash' in folder or 'Papelera' in folder:
                             print('Ignorando {}'.format(folder))
                             continue
 
@@ -103,9 +103,15 @@ if __name__ == '__main__':
                         print('Obteniendo mensajes de {}'.format(folder))
                         for data in getMessagesToSync(m, folder):
                             try:
-
                                 if data is None:
                                     continue
+
+                                gfolder = 'copiados/' + folder
+                                gfolder = gfolder.replace(' ','')
+                                print('Subiendo a ' + gfolder)
+                                rrv, ddata = gmail.create(gfolder)
+                                if rrv == 'OK':
+                                    print('Carpeta creada correctamente')
 
                                 (n, totalMessages, flags, internalDate, size, message) = data
                                 time2 = datetime.datetime.now()
@@ -131,16 +137,20 @@ if __name__ == '__main__':
                                 ''' chequeo que no haya venido de gmail '''
                                 headers = parser.parsebytes(message, True)
                                 if 'X-Gm-Spam' in headers.keys():
-                                    m.store(n, '+FLAGS', '(synched)')
+                                    #m.store(n, '+FLAGS', '(synched)')
                                     print('Mensaje {} ya sincronizado'.format(n))
                                     continue
 
                                 ''' subo el correo a gmail '''
                                 fla = [bytes.decode(x) for x in flags if b'unknown' not in x]
                                 try:
-                                    rv,data = gmail.append('copiados', ' '.join(fla), None, message)
+
+                                    rv,data = gmail.append(gfolder, ' '.join(fla), None, message)
                                     if 'OK' in rv:
-                                        m.store(n, '+FLAGS', '(synched)')
+                                        #m.store(n, '+FLAGS', '(synched)')
+                                        print(data)
+                                    else:
+                                        print(rv)
                                         print(data)
 
                                 except socket.error as v:

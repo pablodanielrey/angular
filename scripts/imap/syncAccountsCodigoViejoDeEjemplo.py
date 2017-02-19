@@ -44,12 +44,13 @@ def getUids(imap, folder):
 
 def getMessagesId(imap, folder):
     rv, data = imap.select(folder)
-    totalMessages = int(bytes.decode(data[0]))
-    rv, data = imap.search(None, 'NOT KEYWORD synched')
-    nums = data[0].split()
-    for n in nums:
-        rv, data = imap.fetch(n, "(FLAGS BODY.PEEK[HEADER.FIELDS (Message-Id)])")
-        yield (n, totalMessages, imaplib.ParseFlags(data[0][0]), bytes.decode(data[0][1]).replace('Message-ID:','').strip())
+    if rv == 'OK':
+        totalMessages = int(bytes.decode(data[0]))
+        rv, data = imap.search(None, 'NOT KEYWORD synched')
+        nums = data[0].split()
+        for n in nums:
+            rv, data = imap.fetch(n, "(FLAGS BODY.PEEK[HEADER.FIELDS (Message-Id)])")
+            yield (n, totalMessages, imaplib.ParseFlags(data[0][0]), bytes.decode(data[0][1]).replace('Message-ID:','').strip())
 
 def getMessage(imap, folder, n):
     rv, data = imap.select(folder)
@@ -126,7 +127,8 @@ if __name__ == '__main__':
             foldersProcessed = [n.replace('\n','') for n in f]
     except Exception as e:
         pass
-
+    foldersProcessed.append('Trash')
+    foldersProcessed.append('Papelera')
 
 
     parser = BytesParser()
@@ -142,8 +144,8 @@ if __name__ == '__main__':
                 except Exception as e:
                     print(e)
 
-
-                m = imaplib.IMAP4_SSL('163.10.17.115')
+                imaplib.IMAP4.debug = 10
+                m = imaplib.IMAP4('163.10.17.115')
                 try:
                     m.login(euser, epass)
                     try:
@@ -161,22 +163,28 @@ if __name__ == '__main__':
                                 fla = [bytes.decode(x) for x in fl if b'unknown' not in x]
                                 print('{} {} {} {}'.format(n, total, folder, u))
                                 if u in copied:
-                                    m.store(n, '+FLAGS', '(synched)')
+                                    #m.store(n, '+FLAGS', '(synched)')
+                                    pass
                                 else:
                                     message = getMessage(m, folder, n)
                                     headers = parser.parsebytes(message, True)
                                     if 'X-Gm-Spam' in headers.keys():
-                                        m.store(n, '+FLAGS', '(synched)')
+                                        #m.store(n, '+FLAGS', '(synched)')
                                         f.write(u + '\n')
                                         print(u)
                                     else:
                                         print(u)
                                         try:
-                                            rv,data = gmail.append('copiados', ' '.join(fla), None, message)
+                                            rrv, ddata = gmail.select('copiados/'+folder)
+                                            if rrv != 'OK':
+                                                rrv, ddata = gmail.create('copiados/'+folder)
+                                                if rrv == 'OK':
+                                                    print('Creando carpeta {} ok'.format('copiados/'+folder))
+                                            rv,data = gmail.append('copiados/'+folder, ' '.join(fla), None, message)
                                             print(rv)
                                             if rv == 'OK':
                                                 f.write(u + '\n')
-                                                m.store(n, '+FLAGS', '(synched)')
+                                                #m.store(n, '+FLAGS', '(synched)')
                                                 print(data)
 
                                         except socket.error as v:
