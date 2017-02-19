@@ -27,8 +27,8 @@ def getMessagesToSync(imap, folder):
             return
         #totalMessages = int(bytes.decode(data[0]))
         print('Buscando mensajes a sincronizar en : {}'.format(folder))
-        #rv, data = imap.search(None, 'NOT KEYWORD synched')
-        rv, data = imap.search(None,'ALL')
+        rv, data = imap.search(None, 'NOT KEYWORD synched2')
+        #rv, data = imap.search(None,'ALL')
         nums = data[0].split()
         totalMessages = len(nums)
         for n in nums:
@@ -139,7 +139,7 @@ if __name__ == '__main__':
                                 ''' chequeo que no haya venido de gmail '''
                                 headers = parser.parsebytes(message, True)
                                 if 'X-Gm-Spam' in headers.keys():
-                                    #m.store(n, '+FLAGS', '(synched)')
+                                    m.store(n, '+FLAGS', '(synched2)')
                                     print('Mensaje {} ya sincronizado'.format(n))
                                     continue
 
@@ -149,7 +149,7 @@ if __name__ == '__main__':
 
                                     rv,data = gmail.append(gfolder, ' '.join(fla), None, message)
                                     if 'OK' in rv:
-                                        #m.store(n, '+FLAGS', '(synched)')
+                                        m.store(n, '+FLAGS', '(synched2)')
                                         print(data)
                                     else:
                                         print(rv)
