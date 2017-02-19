@@ -5,7 +5,7 @@ import sys
 import re
 import datetime
 
-pattern_folder = re.compile('\(.*?\) \".*?\" \"(?P<folder>.*?)\"')
+pattern_folder = re.compile('\(.*?\) \"\/\" (?P<folder>.*)')
 pattern_size_response = re.compile('.*RFC822.SIZE (?P<size>\d+)')
 pattern_fetch_response = re.compile('.* INTERNALDATE (?P<date>\".*\") RFC822.SIZE (?P<size>\d+)')
 GMAIL_LIMIT = 25000000
@@ -15,10 +15,14 @@ def getFolders(imap):
     print(data)
     for d in data:
         print(d)
-        match = pattern_folder.match(bytes.decode(d))
+        sdata = bytes.decode(d)
+        match = pattern_folder.match(sdata)
         print(match)
         if match:
-            yield match.group('folder')
+        #    yield match.group('folder')
+            folder = match.group('folder')
+            print(folder)
+            yield folder.replace("\"",'')
 
 def getMessagesToSync(imap, folder):
     try:
