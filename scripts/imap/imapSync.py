@@ -1,5 +1,4 @@
 import imaplib
-imaplib._MAXLINE = 999999999
 from email.parser import BytesParser
 import socket
 import sys
@@ -19,20 +18,17 @@ def getFolders(imap):
         match = pattern_folder.match(bytes.decode(d))
         print(match)
         if match:
-            yield match.group('folder').replace('\"','')
+            yield match.group('folder')
 
 def getMessagesToSync(imap, folder):
     try:
-        if ' ' in folder:
-            folder = '\"{}\"'.format(folder)
         rv, data = imap.select(folder)
         if 'OK' not in rv:
-            print(rv)
-            print(data)
             return
         #totalMessages = int(bytes.decode(data[0]))
         print('Buscando mensajes a sincronizar en : {}'.format(folder))
-        rv, data = imap.search(None, 'NOT KEYWORD synched2')
+        #rv, data = imap.search(None, 'NOT KEYWORD synched')
+        rv, data = imap.search(None,'ALL')
         nums = data[0].split()
         totalMessages = len(nums)
         for n in nums:
@@ -66,6 +62,7 @@ if __name__ == '__main__':
     euser = sys.argv[3]
     epass = sys.argv[4]
 
+    imaplib._MAXLINE = 99999999
 
     parser = BytesParser()
 
@@ -97,7 +94,7 @@ if __name__ == '__main__':
                             print('Ignorando {}'.format(folder))
                             continue
 
-                        if 'Trash' in folder:
+                        if 'Trash' in folder or 'Papelera' in folder:
                             print('Ignorando {}'.format(folder))
                             continue
 
@@ -108,9 +105,15 @@ if __name__ == '__main__':
                         print('Obteniendo mensajes de {}'.format(folder))
                         for data in getMessagesToSync(m, folder):
                             try:
-
                                 if data is None:
                                     continue
+
+                                gfolder = 'copiados/' + folder
+                                gfolder = gfolder.replace(' ','')
+                                print('Subiendo a ' + gfolder)
+                                rrv, ddata = gmail.create(gfolder)
+                                if rrv == 'OK':
+                                    print('Carpeta creada correctamente')
 
                                 (n, totalMessages, flags, internalDate, size, message) = data
                                 time2 = datetime.datetime.now()
@@ -136,16 +139,20 @@ if __name__ == '__main__':
                                 ''' chequeo que no haya venido de gmail '''
                                 headers = parser.parsebytes(message, True)
                                 if 'X-Gm-Spam' in headers.keys():
-                                    m.store(n, '+FLAGS', '(synched2)')
+                                    #m.store(n, '+FLAGS', '(synched)')
                                     print('Mensaje {} ya sincronizado'.format(n))
                                     continue
 
                                 ''' subo el correo a gmail '''
                                 fla = [bytes.decode(x) for x in flags if b'unknown' not in x]
                                 try:
-                                    rv,data = gmail.append('copiados', ' '.join(fla), None, message)
+
+                                    rv,data = gmail.append(gfolder, ' '.join(fla), None, message)
                                     if 'OK' in rv:
-                                        m.store(n, '+FLAGS', '(synched2)')
+                                        #m.store(n, '+FLAGS', '(synched)')
+                                        print(data)
+                                    else:
+                                        print(rv)
                                         print(data)
 
                                 except socket.error as v:
