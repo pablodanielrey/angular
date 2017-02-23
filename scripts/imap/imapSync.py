@@ -1,4 +1,5 @@
 import imaplib
+imaplib._MAXLINE = 999999999
 from email.parser import BytesParser
 import socket
 import sys
