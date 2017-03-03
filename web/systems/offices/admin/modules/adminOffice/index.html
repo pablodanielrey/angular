@@ -44,6 +44,7 @@
     <div class="col-sm-offset-1 col-sm-10">
       <button ng-if="action == 'edit'" type="button" class="btn btn-default" ng-click="back()">Volver</button>
       <button type="submit" class="btn btn-default" ng-disabled="component.disabled">Aceptar</button>{{component.message}}
+      <a ng-show="officeId" class="btn btn-default" ng-href="./#/listUsersByOffice?id={{officeId}}">Usuarios</a>
     </div>
   </div>
 </form>

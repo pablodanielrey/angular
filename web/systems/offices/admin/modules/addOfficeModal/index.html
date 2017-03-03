@@ -1,0 +1,17 @@
+
+<form novalidate class="form-horizontal" ng-submit="submit()" >
+  <div class="form-group">
+    <label class="control-label col-sm-3" for="name">Oficinas:</label>
+    <div class="col-sm-9">
+      <input type="text" ng-model="office.selected" placeholder="Buscar" uib-typeahead="office as office.name for office in searchOffices($viewValue)" typeahead-wait-ms="300" class="form-control">
+      <span ng-show="selectOffice()" class="glyphicon glyphicon-ok"></span>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <div class="col-sm-offset-1 col-sm-10">
+      <button type="button" class="btn btn-default" ng-click="cancel()">Cancelar</button>
+      <button type="submit" class="btn btn-default" ng-disabled="form.disabled">Aceptar</button>{{component.message}}
+    </div>
+  </div>
+</form>

@@ -49,6 +49,24 @@
       //@param userId Identificador de usuario
       this.deleteUser = function (officeId, userId){ return Login.getPrivateTransport().call('offices.admin.delete_user', [officeId, userId]); }
 
+      //Buscar oficinas
+      //TODO reemplazar por un metodo que directamente busque los datos en el servidor, o implemente algun tipo de cache
+      //@param officeId Identificador de oficina
+      //@param userId Identificador de usuario
+      this.searchOffices = function (search){
+        return Login.getPrivateTransport().call('offices.admin.get_offices', []).then(
+          function(offices){
+            var offices_ = [];
+            for(var i = 0; i < offices.length; i++){
+              if(offices[i].name.toLowerCase().indexOf(search.toLowerCase()) !== -1) offices_.push(offices[i]);
+            }
+
+            return offices_;
+          }
+        );
+      }
+
+
 
   }
 })();
