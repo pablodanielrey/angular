@@ -70,7 +70,9 @@ if __name__ == '__main__':
     euser = sys.argv[3]
     epass = sys.argv[4]
 
-    logging.basicConfig(filename='/var/log/imap-sync-{}.log'.format(guser,str(datetime.datetime.now())), filemode='w', level=logging.DEBUG)
+    logFile = '/var/log/imap-sync-{}.log'.format(guser,str(datetime.datetime.now()))
+    logging.basicConfig(filename=logFile, filemode='w', level=logging.DEBUG)
+    print('logueando info del proceso sobre : {}'.format(logFile))
 
     imaplib._MAXLINE = 99999999
 
