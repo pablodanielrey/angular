@@ -32,6 +32,7 @@ def getFolders(imap):
                 yield match.group('folder')
             else:
                 logging.info('carpeta no reconocida')
+    yield 'INBOX'
 
 def getMessagesToSync(imap, folder):
     try:
@@ -109,9 +110,7 @@ if __name__ == '__main__':
                 logging.info('logueandose a econo')
                 m.login(euser, epass)
                 try:
-                    folders = list(getFolders(m))
-                    folders.append('INBOX')
-                    for folder in folders:
+                    for folder in getFolders(m):
                         logging.info(folder)
                         if 'grupos/' in folder:
                             logging.info('Ignorando {}'.format(folder))
