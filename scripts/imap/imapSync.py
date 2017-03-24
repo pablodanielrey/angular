@@ -21,7 +21,10 @@ def getFolders(imap):
         match = pattern_folder.match(bytes.decode(d))
         logging.info(match)
         if match:
+            logging.info('carpeta reconocida')
             yield match.group('folder')
+        else:
+            logging.info('carpeta no reconocida')
 
 def getMessagesToSync(imap, folder):
     try:
