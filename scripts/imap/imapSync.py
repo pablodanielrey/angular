@@ -35,7 +35,7 @@ def getFolders(imap):
 
 def getMessagesToSync(imap, folder):
     try:
-        logggin.info(folder)
+        logging.info(folder)
         if ' ' in folder:
             rv, data = imap.select('\"' + folder + '\"')
             if 'OK' not in rv:
