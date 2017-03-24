@@ -9,6 +9,7 @@ import logging
 
 
 pattern_folder = re.compile('\(.*?\) \".*?\" \"(?P<folder>.*?)\"')
+pattern2_folder = re.compile('\(.*?\) \".*?\" (?P<folder>.*?)')
 pattern_size_response = re.compile('.*RFC822.SIZE (?P<size>\d+)')
 pattern_fetch_response = re.compile('.* INTERNALDATE (?P<date>\".*\") RFC822.SIZE (?P<size>\d+)')
 GMAIL_LIMIT = 25000000
@@ -24,7 +25,13 @@ def getFolders(imap):
             logging.info('carpeta reconocida')
             yield match.group('folder')
         else:
-            logging.info('carpeta no reconocida')
+            match = pattern2_folder.match(bytes.decode(d))
+            logging.info(match)
+            if match:
+                logging.info('carpeta reconocida')
+                yield match.group('folder')
+            else:
+                logging.info('carpeta no reconocida')
 
 def getMessagesToSync(imap, folder):
     try:
