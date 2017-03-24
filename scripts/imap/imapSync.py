@@ -38,8 +38,7 @@ def getMessagesToSync(imap, folder):
         rv, data = imap.select(folder)
         if 'OK' not in rv:
             if ' ' in folder:
-                #rv, data = imap.select('\"' + folder + '\"')
-                rv, data = imap.select(folder)
+                rv, data = imap.select('\"' + folder + '\"')
                 if 'OK' not in rv:
                     logging.info('ERROR selecconando carpeta desde el server imap econo')
                     logging.info(rv)
