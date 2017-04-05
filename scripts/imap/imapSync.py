@@ -46,6 +46,14 @@ def getMessagesToSync(imap, folder):
                     logging.info(rv)
                     logging.info(data)
                     return
+        else:
+            rv, data = imap.select(folder)
+            if 'OK' not in rv:
+                logging.info('ERROR selecconando carpeta desde el server imap econo')
+                logging.info(rv)
+                logging.info(data)
+                return
+
         #totalMessages = int(bytes.decode(data[0]))
         logging.info('Buscando mensajes a sincronizar en : {}'.format(folder))
         rv, data = imap.search(None, 'NOT KEYWORD synched2')
