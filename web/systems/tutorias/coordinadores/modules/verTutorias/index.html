@@ -1,0 +1,25 @@
+
+
+<div class="table-responsive">
+  <table class="table table-striped table-bordered table-hover">
+    <thead>
+      <tr>
+        <th>date</th>
+        <th>tutor id</th>
+        <th>Opciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr ng-repeat="t in tutorias">
+
+        <td>{{t.date}}</td>
+        <td>{{t.tutor}}</a></td>
+        <td>
+          <a class="btn btn-info btn-xs" href="#/detailTutoria?id={{t.id}}">DETALLE</a>
+        </td>
+
+      </tr>
+    </tbody>    
+  </table>
+</div>
+
