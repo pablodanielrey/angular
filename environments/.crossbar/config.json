@@ -289,9 +289,9 @@
                 },
 
                 {
-                    "id": "sileg",
+                    "id": "tutoriascoordinadores",
                     "type": "class",
-                    "classname": "actions.systems.sileg.sileg.Sileg",
+                    "classname": "actions.tutoriascoordinadores.tutoriascoordinadores.TutoriasCoordinadores",
                     "realm": "public",
                     "transport": {
                         "type": "websocket",
@@ -336,70 +336,7 @@
                     }
                 },
 
-                {
-                    "id": "users.admin",
-                    "type": "class",
-                    "classname": "actions.users.usersAdmin.UsersAdmin",
-                    "realm": "core",
-                    "transport": {
-                        "type": "websocket",
-                        "endpoint": {
-                            "type": "tcp",
-                            "host": "127.0.0.1",
-                            "port": 8081
-                        },
-                        "url": "ws://localhost:8081"
-                    }
-                },
-
-                {
-                    "id": "users.profile",
-                    "type": "class",
-                    "classname": "actions.users.usersProfile.UsersProfile",
-                    "realm": "core",
-                    "transport": {
-                        "type": "websocket",
-                        "endpoint": {
-                            "type": "tcp",
-                            "host": "127.0.0.1",
-                            "port": 8081
-                        },
-                        "url": "ws://localhost:8081"
-                    }
-                },
-
-                {
-                    "id": "users.recover",
-                    "type": "class",
-                    "classname": "actions.users.usersRecover.UsersRecover",
-                    "realm": "core",
-                    "transport": {
-                        "type": "websocket",
-                        "endpoint": {
-                            "type": "tcp",
-                            "host": "127.0.0.1",
-                            "port": 8081
-                        },
-                        "url": "ws://localhost:8081"
-                    }
-                },
-
-
-                {
-                    "id": "offices.admin",
-                    "type": "class",
-                    "classname": "actions.offices.officeAdmin.OfficeAdmin",
-                    "realm": "core",
-                    "transport": {
-                        "type": "websocket",
-                        "endpoint": {
-                            "type": "tcp",
-                            "host": "127.0.0.1",
-                            "port": 8081
-                        },
-                        "url": "ws://localhost:8081"
-                    }
-                },
+                
 
 
                 {

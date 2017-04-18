@@ -12,7 +12,7 @@ from model.tutoriascoordinadores.tutoriasCoordinadoresModel import TutoriasCoord
 import autobahn
 import wamp
 
-class OfficeAdmin(wamp.SystemComponentSession):
+class TutoriasCoordinadores(wamp.SystemComponentSession):
 
     @autobahn.wamp.register('tutorias.coordinadores.get_tutorias')
     def getTutorias(self, userId):
@@ -27,8 +27,8 @@ class OfficeAdmin(wamp.SystemComponentSession):
 
 
 
-    @autobahn.wamp.register('tutorias.coordinadores.detalle_tutoria')
-    def getTutorias(self, tutoriaId):
+    @autobahn.wamp.register('tutorias.coordinadores.detail_tutoria')
+    def detailTutorias(self, tutoriaId):
         #busqueda de usuario
         ctx = wamp.getContextManager()
         ctx.getConn()
