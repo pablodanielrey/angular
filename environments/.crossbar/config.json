@@ -419,7 +419,7 @@
                 }
                 
                 {
-                    "id": "sileg",
+                    "id": "tutoriascoordinadores",
                     "type": "class",
                     "classname": "actions.systems.tutoriascoordinadores.tutoriascoordinadores.TutoriasCoordinadores",
                     "realm": "public",
