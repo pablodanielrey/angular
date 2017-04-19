@@ -419,10 +419,10 @@
                 }
                 
                 {
-                    "id": "tutoriascoordinadores",
+                    "id": "tutorias.coordinadores",
                     "type": "class",
                     "classname": "actions.systems.tutoriascoordinadores.tutoriascoordinadores.TutoriasCoordinadores",
-                    "realm": "public",
+                    "realm": "core",
                     "transport": {
                         "type": "websocket",
                         "endpoint": {

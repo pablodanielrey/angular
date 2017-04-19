@@ -19,7 +19,7 @@ class TutoriasCoordinadoresModel():
        #return tutorias
        
 
-   @classmethod
+    @classmethod
     def detailTutoria(cls, ctx, id):
        return "detalle"
        #tutorias = Tutorias.find(ctx, {id:[id]}).fetch(ctx)

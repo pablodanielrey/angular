@@ -20,7 +20,7 @@ class TutoriasCoordinadores(wamp.SystemComponentSession):
         ctx = wamp.getContextManager()
         ctx.getConn()
         try:
-            return TutoriasModel.getTutorias(ctx, userId)
+            return TutoriasCoordinadoresModel.getTutorias(ctx, userId)
 
         finally:
             ctx.closeConn()
@@ -28,12 +28,12 @@ class TutoriasCoordinadores(wamp.SystemComponentSession):
 
 
     @autobahn.wamp.register('tutorias.coordinadores.detail_tutoria')
-    def detailTutorias(self, tutoriaId):
+    def detailTutoria(self, tutoriaId):
         #busqueda de usuario
         ctx = wamp.getContextManager()
         ctx.getConn()
         try:
-            return TutoriasModel.detalleTutoria(ctx, tutoriaId)
+            return TutoriasCoordinadoresModel.detailTutoria(ctx, tutoriaId)
 
         finally:
             ctx.closeConn()

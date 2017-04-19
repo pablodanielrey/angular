@@ -10,3 +10,23 @@ class UserSqlDAO(SqlDAO):
     _entity = User
 
 
+
+
+    @classmethod
+    def getTutores(cls, ctx, coordinadorId):
+        
+        sql = """
+            SELECT tutor_id
+            FROM coordinador
+            WHERE coordinador_id = %s
+        """
+
+        cur = ctx.con.cursor()
+        try:
+            cur.execute(sql, (tuple(coordinadorId),))
+            return [r['tutor'] for r in cur]
+
+
+        finally:
+            cur.close()
+
