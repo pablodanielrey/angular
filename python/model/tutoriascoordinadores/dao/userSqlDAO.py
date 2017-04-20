@@ -1,7 +1,8 @@
 import uuid
+import session
 
 from model.dao import SqlDAO
-from model.tutoriascoordinadores.entities.user import User
+from model.tutoriascoordinadores.entities.User import User
 
 class UserSqlDAO(SqlDAO):
 
@@ -9,24 +10,30 @@ class UserSqlDAO(SqlDAO):
     _table  = "users"
     _entity = User
 
-
+    @classmethod
+    def _fromResult(cls, u, r):
+        u.id = r['id']
+        u.dni = r['dni']
+        u.name = r['name']
+        u.lastname = r['lastname']
+        return u
 
 
     @classmethod
-    def getTutores(cls, ctx, coordinadorId):
-        
+    def findTutores(cls, ctx, coordinadorId):
+
+
         sql = """
             SELECT tutor_id
-            FROM coordinador
+            FROM tutoring.coordinador
             WHERE coordinador_id = %s
         """
 
         cur = ctx.con.cursor()
         try:
-            cur.execute(sql, (tuple(coordinadorId),))
-            return [r['tutor'] for r in cur]
+            cur.execute(sql, (session[userId],))
+            return [r['tutor_id'] for r in cur]
 
 
         finally:
             cur.close()
-

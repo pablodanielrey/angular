@@ -9,3 +9,8 @@ class User(Entity):
         self.name = None
         self.lastname = None
         self.dni = None
+
+
+    @classmethod
+    def findTutores(cls, ctx):
+        return Ids(cls, ctx.dao(cls).getTutores(ctx))

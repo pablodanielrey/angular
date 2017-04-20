@@ -11,11 +11,14 @@
 
       //Buscar todas las tutorias asociadas al coordinador logueado
       //@return List<Tutorias>
-      this.getTutorias = function (userId){ return Login.getPrivateTransport().call('tutorias.coordinadores.get_tutorias', [userId]); }
+      this.getTutorias = function (userId){
+         console.log(userId)
+         return Login.getPrivateTransport().call('tutorias.coordinadores.get_tutorias', [userId]);
+       }
 
       //@return Tutorias
       this.detailTutoria = function (id){ return Login.getPrivateTransport().call('tutorias.coordinadores.detail_tutoria', [id]); }
-      
+
 
 
   }

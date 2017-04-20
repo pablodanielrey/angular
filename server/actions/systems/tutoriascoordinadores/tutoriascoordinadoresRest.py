@@ -12,7 +12,7 @@ from model.tutoriascoordinadores.tutoriasCoordinadoresModel import TutoriasCoord
 import autobahn
 import wamp
 
-class TutoriasCoordinadores(wamp.SystemComponentSession):
+class TutoriasCoordinadoresRest(wamp.SystemComponentSession):
 
     @autobahn.wamp.register('tutorias.coordinadores.get_tutorias')
     def getTutorias(self, userId):
