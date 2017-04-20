@@ -416,8 +416,8 @@
                         },
                         "url": "ws://localhost:8081"
                     }
-                }
-                
+                },
+
                 {
                     "id": "tutorias.coordinadores",
                     "type": "class",
@@ -432,8 +432,7 @@
                         },
                         "url": "ws://localhost:8081"
                     }
-                },
-
+                }
             ]
         }
 
