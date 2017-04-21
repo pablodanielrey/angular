@@ -12,5 +12,5 @@ class User(Entity):
 
 
     @classmethod
-    def findTutores(cls, ctx):
-        return Ids(cls, ctx.dao(cls).getTutores(ctx))
+    def findTutores(cls, ctx, coordinadorId):
+        return Ids(cls, ctx.dao(cls).findTutores(ctx, coordinadorId))

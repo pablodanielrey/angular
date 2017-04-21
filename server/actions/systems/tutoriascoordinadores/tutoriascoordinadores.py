@@ -20,7 +20,7 @@ class TutoriasCoordinadores(wamp.SystemComponentSession):
         ctx = wamp.getContextManager()
         ctx.getConn()
         try:
-            return TutoriasCoordinadoresModel.getTutorias(ctx)
+            return TutoriasCoordinadoresModel.getTutorias(ctx, userId)
 
         finally:
             ctx.closeConn()

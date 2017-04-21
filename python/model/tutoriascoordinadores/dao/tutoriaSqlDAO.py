@@ -5,12 +5,14 @@ from model.tutoriascoordinadores.entities.Tutoria import Tutoria
 
 class TutoriaSqlDAO(SqlDAO):
 
-    _schema = "tutoria."
-    _table  = "tutoria"
+    _schema = "tutoring."
+    _table  = "tutorings"
     _entity = Tutoria
 
 
-    // buscar tutorias par coordinador logueado para rol A para tutor B
-    def find(para) {
-        return consultar(param, condicionobligatioriasessonrolA)
-    }
+    @classmethod
+    def _fromResult(cls, t, r):
+        t.id = r['id']
+        t.tutorId = r['tutor_id']
+        t.date = r['date']
+        return t

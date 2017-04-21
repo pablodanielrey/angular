@@ -6,6 +6,7 @@
       $routeProvider
 
       .when('/verTutorias', {templateUrl: 'modules/verTutorias/index.html', controller: 'VerTutoriasCtrl'})
+      .when('/detailTutoria', {templateUrl: 'modules/detalleTutoria/index.html', controller: 'DetalleTutoriaCtrl'})
 
 
       .otherwise({

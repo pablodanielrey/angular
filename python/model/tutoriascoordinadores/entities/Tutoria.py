@@ -6,5 +6,5 @@ class Tutoria(Entity):
 
     def __init__(self):
         self.id = None
-        self.tutor_id = None
+        self.tutorId = None
         self.date = None

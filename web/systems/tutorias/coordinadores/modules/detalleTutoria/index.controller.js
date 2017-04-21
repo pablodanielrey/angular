@@ -5,28 +5,32 @@
         .module('tutorias.coordinadores')
         .controller('DetalleTutoriaCtrl', DetalleTutoriaCtrl);
 
-    DetalleTutoriaCtrl.$inject = ['$scope', 'TutoriasCoordinadores'];
+    DetalleTutoriaCtrl.$inject = ['$scope', '$timeout', '$location', 'TutoriasCoordinadores'];
 
-    function VerTutoriasCtrl($scope, TutoriasCoordinadores) {
+    function DetalleTutoriaCtrl($scope, $timeout, $location, TutoriasCoordinadores) {
 
       $scope.component = { disabled: false, message: null };
       $scope.tutoria = [];
-        
-     
+
+
 
       //Inicializar tutorias
       $scope.init = function() {
         var urlParams = $location.search();
 
-        return TutoriasCoordinadores.getTutorias(urlParams[id]).then(
-          function(response){ return $scope.tutorias = response; },
+        return TutoriasCoordinadores.detailTutoria(urlParams["id"]).then(
+          function(response){
+            $scope.situaciones = response;
+            console.log(situaciones)
+            $scope.$apply();
+          },
           function(error){ console.log(error); }
         )
       };
 
 
       //Inicializar
-      $timeout(init, 500); //TODO reemplazar por evento de inicializacion de Login
+      $timeout($scope.init, 500); //TODO reemplazar por evento de inicializacion de Login
 
     }
 })();
