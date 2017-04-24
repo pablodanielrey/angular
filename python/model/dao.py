@@ -93,7 +93,7 @@ class SqlDAO(DAO):
     @classmethod
     def find(cls, ctx, *args, **kwargs):
         condition = cls._condition(**kwargs)
-        orderBy = cls._orderBy(**kwargs);
+        orderBy = cls._orderBy(**kwargs)
 
         c = " WHERE {}".format(' AND ' .join(condition["list"])) if len(condition["list"]) else ""
         o = " ORDER BY {}".format(', ' .join(orderBy)) if len(orderBy) else ""

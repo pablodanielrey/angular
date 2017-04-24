@@ -29,4 +29,5 @@ class TutoriasCoordinadoresModel():
 
     @classmethod
     def detailTutoria(cls, ctx, id):
+       print("detailTutoria")
        return Situation.find(ctx, tutoringId=[id]).fetch(ctx)
