@@ -13,7 +13,6 @@
       $scope.tutoria = [];
 
 
-
       //Inicializar tutorias
       $scope.init = function() {
         var urlParams = $location.search();
@@ -21,7 +20,6 @@
         return TutoriasCoordinadores.detailTutoria(urlParams["id"]).then(
           function(response){
             $scope.situaciones = response;
-            console.log(situaciones)
             $scope.$apply();
           },
           function(error){ console.log(error); }

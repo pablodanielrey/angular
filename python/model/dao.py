@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import logging
 from model import DAO, SqlContext
 import re
@@ -77,6 +78,7 @@ class SqlDAO(DAO):
 
     @classmethod
     def findByIds(cls, ctx, ids, *args, **kwargs):
+        print(ids)
         orderBy = cls._orderBy(**kwargs)
         o = " ORDER BY {}".format(', ' .join(orderBy)) if len(orderBy) else ""
         sql = "SELECT * FROM {}{} WHERE id IN %s {};".format(cls._schema, cls._table, o)
@@ -93,7 +95,7 @@ class SqlDAO(DAO):
     @classmethod
     def find(cls, ctx, *args, **kwargs):
         condition = cls._condition(**kwargs)
-        orderBy = cls._orderBy(**kwargs);
+        orderBy = cls._orderBy(**kwargs)
 
         c = " WHERE {}".format(' AND ' .join(condition["list"])) if len(condition["list"]) else ""
         o = " ORDER BY {}".format(', ' .join(orderBy)) if len(orderBy) else ""

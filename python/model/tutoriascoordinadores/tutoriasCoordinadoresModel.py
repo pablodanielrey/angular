@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import re
 import uuid
 import datetime
@@ -29,4 +30,22 @@ class TutoriasCoordinadoresModel():
 
     @classmethod
     def detailTutoria(cls, ctx, id):
-       return Situation.find(ctx, tutoringId=[id]).fetch(ctx)
+       situations = Situation.find(ctx, tutoringId=[id]).fetch(ctx)      
+       userIds = []
+
+       for s in situations:
+         userIds.append(s.userId)
+
+       users = User.findByIds(ctx, userIds)
+       for s in situations:
+         for u in users:
+            if s.userId == u.id:
+                s.user = u
+          
+       
+       
+       return situations
+       
+       
+       
+       

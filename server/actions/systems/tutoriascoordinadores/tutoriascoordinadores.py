@@ -34,6 +34,7 @@ class TutoriasCoordinadores(wamp.SystemComponentSession):
         ctx.getConn()
         try:
             return TutoriasCoordinadoresModel.detailTutoria(ctx, tutoriaId)
+      
 
         finally:
             ctx.closeConn()
