@@ -26,7 +26,7 @@
 
     service.username = null;
     service.password = null;
-    service.ticket = null;
+    service.ticket = 1;
 
     service.privateConnection = null;
     service.publicConnection = null;
@@ -56,7 +56,7 @@
     };
     service.publicConnection = new autobahn.Connection(options);
     service.publicConnection.onopen = function(session, details) {
-      console.log(details);
+      console.log("wamp_public.open")
       $rootScope.$broadcast('wamp_public.open');
     }
     service.publicConnection.onclose = function(reason, details) {
@@ -97,22 +97,28 @@
 
 
     service.check = function() {
-      var creds = service._getAuthCookie();
-      if (creds == null) {
+      //var creds = service._getAuthCookie();
+
+
+      var creds  = {username:'31073351',ticket:'Hola1024'};
+
+
+      /*if (creds == null) {
         $window.location.href = '/';
         return;
-      }
+      }*/
 
       // debo reconectarme con las nuevas credenciales en caso de no estar conectado
       if (service.privateConnection == null || !service.privateConnection.isOpen) {
         service.login(creds.username, creds.ticket).then(
           function(conn) {
+            console.log(conn);
             // 28/10/16 Lo comente porque se dispara en el onOpen del metodo login (Consultar con pa)
             // $rootScope.$broadcast('wamp.open');
           },
           function(err) {
             console.log(err);
-            $window.location.href = '/';
+            //$window.location.href = '/';
           }
         );
       }
@@ -167,7 +173,6 @@
 
     service.getPrivateConnection = function(username, password) {
       var d = $q.defer();
-
       var host = location.host;
       var options = {
           url: 'ws://' + host + '/ws',
@@ -214,9 +219,11 @@
     service.login = function(username, password) {
       var d = $q.defer();
       service.getPrivateConnection(username, password).then(function(conn) {
+        console.log(conn)
         service.privateConnection = conn;
         d.resolve(conn);
       }, function(err) {
+        console.log(err)
         d.reject(err);
       });
       return d.promise;
@@ -238,7 +245,7 @@
     }
 
     service._getAuthCookie = function() {
-      return $cookies.getObject('authlogin');
+      return $cookies.getObject('authfce');
     }
   }
 })();
