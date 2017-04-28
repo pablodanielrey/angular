@@ -1,3 +1,0 @@
-#apt-get install libnacl-dev libffi-dev
-apt-get install python3-nacl
-pip3 install crossbar

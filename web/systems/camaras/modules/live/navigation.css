@@ -1,9 +1,0 @@
-.live .contentFilters {
-  transform: translate3d(0,0,0);
-  transition: all 0.4s ease-in-out;
-}
-
-.live .contentFilters.hidden {
-  transform: translate3d(0,-100%,0);
-  transition: all 0.4s ease-in-out;
-}

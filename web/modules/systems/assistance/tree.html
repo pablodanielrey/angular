@@ -1,9 +1,0 @@
-
-<div >
-  <p class="item treeElem" ng-click="family.click(family)" ng-class="{true:'hidden'}[family.hidden]">{{ family.name }}</p>
-  <ul>
-    <li ng-repeat="child in family.children" ng-class="{true:'hidden'}[child.hidden]">
-      <tree family="child"></tree>
-    </li>
-  </ul>
-</div>

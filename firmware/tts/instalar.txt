@@ -1,3 +1,0 @@
-apt-get install python python-easpeak python-pip
-pip install inject
-
