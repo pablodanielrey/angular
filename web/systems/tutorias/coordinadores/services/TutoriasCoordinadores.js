@@ -4,10 +4,9 @@
       .module('tutorias.coordinadores')
       .service('TutoriasCoordinadores', TutoriasCoordinadores);
 
-    TutoriasCoordinadores.inject = ['$rootScope', 'Login', '$q', 'Files', '$cookies'];
+    TutoriasCoordinadores.inject = ['$rootScope', 'Login', '$q',  '$cookies'];
 
-    function TutoriasCoordinadores($rootScope, Login, $q, Files, $cookies) {
-
+    function TutoriasCoordinadores($rootScope, Login, $q, $cookies) {
 
       //Buscar todas las tutorias asociadas al coordinador logueado
       //@return List<Tutorias>
@@ -19,8 +18,6 @@
 
       //@return Tutorias
       this.detailTutoria = function (id){ return Login.getPrivateTransport().call('tutorias.coordinadores.detail_tutoria', [id]); }
-
-
 
   }
 })();
