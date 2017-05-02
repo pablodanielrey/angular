@@ -97,16 +97,9 @@
 
 
     service.check = function() {
-      //var creds = service._getAuthCookie();
+      var creds = service._getAuthCookie();
 
-
-      var creds  = {username:'31073351',ticket:'Hola1024'};
-
-
-      /*if (creds == null) {
-        $window.location.href = '/';
-        return;
-      }*/
+      var creds  = {username:creds.login.username,ticket:creds.login.password};
 
       // debo reconectarme con las nuevas credenciales en caso de no estar conectado
       if (service.privateConnection == null || !service.privateConnection.isOpen) {

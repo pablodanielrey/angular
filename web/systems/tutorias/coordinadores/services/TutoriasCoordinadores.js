@@ -4,16 +4,17 @@
       .module('tutorias.coordinadores')
       .service('TutoriasCoordinadores', TutoriasCoordinadores);
 
-    TutoriasCoordinadores.inject = ['$rootScope', 'Login', '$q', 'Files'];
+    TutoriasCoordinadores.inject = ['$rootScope', 'Login', '$q', 'Files', '$cookies'];
 
-    function TutoriasCoordinadores($rootScope, Login, $q, Files) {
+    function TutoriasCoordinadores($rootScope, Login, $q, Files, $cookies) {
 
 
       //Buscar todas las tutorias asociadas al coordinador logueado
       //@return List<Tutorias>
-      this.getTutorias = function (userId){
-         console.log(userId)
-         return Login.getPrivateTransport().call('tutorias.coordinadores.get_tutorias', [userId]);
+      this.getTutorias = function (){
+         var auth = $cookies.getObject('authfce');
+         console.log(auth);
+         return Login.getPrivateTransport().call('tutorias.coordinadores.get_tutorias', [auth.user_id]);
        }
 
       //@return Tutorias
