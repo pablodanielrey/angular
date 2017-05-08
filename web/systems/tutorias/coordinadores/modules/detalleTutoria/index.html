@@ -4,14 +4,18 @@
   <table class="table table-striped table-bordered table-hover">
     <thead>
       <tr>
-        <th>usuario</th>
-        <th>situacion</th>
+        <th ng-click="setSort('user.name')">nombre</th>
+        <th ng-click="setSort('user.lastname')">apellidos</th>
+        <th ng-click="setSort('user.dni')">dni</th>
+        <th ng-click="setSort('situation')">situacion</th>
 
       </tr>
     </thead>
     <tbody>
-      <tr ng-repeat="s in situaciones">
-        <td>{{s.user.name}} {{s.user.lastname}} {{s.user.dni}}</td>
+      <tr ng-repeat="s in situaciones | orderBy:sortVal:sortDir">
+        <td>{{s.user.name}}</td>
+        <td>{{s.user.lastname}}</td>
+        <td>{{s.user.dni}}</td>
         <td>{{s.situation}}</td>
       </tr>
     </tbody>

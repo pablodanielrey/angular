@@ -11,6 +11,7 @@
 
       $scope.component = { disabled: false, message: null };
       $scope.tutoria = [];
+      $scope.sortVal = "user.lastname";
 
 
       //Inicializar tutorias
@@ -25,6 +26,16 @@
           function(error){ console.log(error); }
         )
       };
+
+      $scope.setSort = function(sort){
+         if($scope.sortVal == sort){
+             $scope.sortDir = !$scope.sortDir;
+         } else {
+             $scope.sortVal = sort;
+             $scope.sortDir = true;
+         }
+      }
+
 
 
       //Inicializar

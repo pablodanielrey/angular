@@ -1,19 +1,22 @@
 
-
 <div class="table-responsive">
   <table class="table table-striped table-bordered table-hover">
     <thead>
       <tr>
-        <th>fecha</th>
-        <th>tutor</th>
+        <th ng-click="setSort('date')">fecha</th>
+        <th ng-click="setSort('tutor.name')">nombre</th>
+        <th ng-click="setSort('tutor.lastname')">apellido</th>
+        <th ng-click="setSort('tutor.dni')">dni</th>
         <th>Opciones</th>
       </tr>
     </thead>
     <tbody>
-      <tr ng-repeat="t in tutorias">
+      <tr ng-repeat="t in tutorias | orderBy:sortVal:sortDir">
 
-        <td>{{t.date  | date : "dd/MM/y" }}</td>
-        <td>{{t.tutor.name}} {{t.tutor.lastname}} {{t.tutor.dni}}</a></td>
+        <td>{{t.date  | date : "dd/MM/y"}}</td>
+        <td>{{t.tutor.name}}</td>
+        <td>{{t.tutor.lastname}}</td>
+        <td>{{t.tutor.dni}}</a></td>
         <td>
           <a class="btn btn-info btn-xs" href="#/detailTutoria?id={{t.id}}">DETALLE</a>
         </td>

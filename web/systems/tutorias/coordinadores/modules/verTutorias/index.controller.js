@@ -11,6 +11,7 @@
 
       $scope.component = { disabled: false, message: null };
       $scope.tutorias = [];
+      $scope.sortVal = "date";
 
       //Inicializar tutorias
       $scope.init = function() {
@@ -25,6 +26,15 @@
           function(error){ console.log(error); }
         )
       };
+
+      $scope.setSort = function(sort){
+         if($scope.sortVal == sort){
+             $scope.sortDir = !$scope.sortDir;
+         } else {
+             $scope.sortVal = sort;
+             $scope.sortDir = true;
+         }
+      }
 
 
       //Inicializar
