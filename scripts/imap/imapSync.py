@@ -14,17 +14,24 @@ pattern_size_response = re.compile('.*RFC822.SIZE (?P<size>\d+)')
 pattern_fetch_response = re.compile('.* INTERNALDATE (?P<date>\".*\") RFC822.SIZE (?P<size>\d+)')
 GMAIL_LIMIT = 25000000
 
+#def parse_mailbox(data):
+#    flags, b, c = data.partition(' ')
+#    separator, b, name = c.partition(' ')
+#    return (flags, separator.replace('"', ''), name.replace('"', ''))
+
 def parse_mailbox(data):
-    flags, b, c = data.partition(' ')
-    separator, b, name = c.partition(' ')
-    return (flags, separator.replace('"', ''), name.replace('"', ''))
+    ms = data.split(")")[-1].split("\"")
+    if ms[-1] == '':
+        return ms[-2].lstrip().rstrip()
+    else:
+        return ms[-1].lstrip().rstrip()
 
 
 def getFolders(imap):
     rv, data = imap.list()
     logging.info(data)
     for d in data:
-        flags, separator, name = parse_mailbox(bytes.decode(d))
+        name = parse_mailbox(bytes.decode(d))
         logging.info(name)
         yield name
         #match = pattern_folder.match(bytes.decode(d))
