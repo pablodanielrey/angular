@@ -14,24 +14,32 @@ pattern_size_response = re.compile('.*RFC822.SIZE (?P<size>\d+)')
 pattern_fetch_response = re.compile('.* INTERNALDATE (?P<date>\".*\") RFC822.SIZE (?P<size>\d+)')
 GMAIL_LIMIT = 25000000
 
+def parse_mailbox(data):
+    flags, b, c = data.partition(' ')
+    separator, b, name = c.partition(' ')
+    return (flags, separator.replace('"', ''), name.replace('"', ''))
+
+
 def getFolders(imap):
     rv, data = imap.list()
     logging.info(data)
     for d in data:
-        logging.info(d)
-        match = pattern_folder.match(bytes.decode(d))
-        logging.info(match)
-        if match:
-            logging.info('carpeta reconocida')
-            yield match.group('folder')
-        else:
-            match = pattern2_folder.match(bytes.decode(d))
-            logging.info(match)
-            if match:
-                logging.info('carpeta reconocida')
-                yield match.group('folder')
-            else:
-                logging.info('carpeta no reconocida')
+        flags, separator, name = parse_mailbox(bytes.decode(d))
+        logging.info(name)
+        yield name
+        #match = pattern_folder.match(bytes.decode(d))
+        #logging.info(match)
+        #if match:
+        #   logging.info('carpeta reconocida')
+        #    yield match.group('folder')
+        #else:
+        #    match = pattern2_folder.match(bytes.decode(d))
+        #    logging.info(match)
+        #    if match:
+        #        logging.info('carpeta reconocida')
+        #        yield match.group('folder')
+        #    else:
+        #        logging.info('carpeta no reconocida')
     yield 'INBOX'
 
 def getMessagesToSync(imap, folder):
