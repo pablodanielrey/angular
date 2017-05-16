@@ -24,7 +24,7 @@ def getFolders(imap):
     rv, data = imap.list()
     logging.info(data)
     for d in data:
-        flags, separator, name = parse_mailbox(bytes.decode(d))
+        name = parse_mailbox(bytes.decode(d))
         logging.info(name)
         yield name
     yield 'INBOX'
