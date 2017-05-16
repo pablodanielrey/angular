@@ -6,10 +6,18 @@ import re
 import datetime
 import logging
 
+#def parse_mailbox(data):
+#    flags, b, c = data.partition(' ')
+#    separator, b, name = c.partition(' ')
+#    return (flags, separator.replace('"', ''), name.replace('"', ''))
+
 def parse_mailbox(data):
-    flags, b, c = data.partition(' ')
-    separator, b, name = c.partition(' ')
-    return (flags, separator.replace('"', ''), name.replace('"', ''))
+    ms = data.split(")")[-1].split("\"")
+    if ms[-1] == '':
+        return ms[-2].lstrip().rstrip()
+    else:
+        return ms[-1].lstrip().rstrip()
+
 
 
 def getFolders(imap):
