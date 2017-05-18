@@ -45,7 +45,7 @@ if __name__ == '__main__':
                 if cur.rowcount > 0:
                     logging.info('Eliminando {}'.format(email))
                     cur.execute('delete from leads where lower(email) = lower(%s)', (email,))
-                    cur.commit()
+                    db.commit()
 
         finally:
             cur.close()
