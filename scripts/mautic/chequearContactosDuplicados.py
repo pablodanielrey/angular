@@ -40,12 +40,26 @@ if __name__ == '__main__':
     try:
         cur = db.cursor()
         try:
+            emails2 = set()
+
+            cur.execute('select email from leads where email is not null')
+            for c in cur:
+                emails2.add(str.lower(c[0]).strip())
+
+            toRemove = emails.intersection(emails2)
+            for email in toRemove:
+                logging.info('Eliminando {}'.format(email))
+                cur.execute('delete from leads where lower(email) = lower(%s)', (email,))
+                db.commit()
+
+            """
             for email in emails:
                 cur.execute('select email from leads where lower(email) = lower(%s)', (email,))
                 if cur.rowcount > 0:
                     logging.info('Eliminando {}'.format(email))
                     cur.execute('delete from leads where lower(email) = lower(%s)', (email,))
                     db.commit()
+            """
         finally:
             cur.close()
     finally:
