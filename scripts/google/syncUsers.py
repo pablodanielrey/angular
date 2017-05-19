@@ -44,7 +44,7 @@ if __name__ == '__main__':
                             'where m.confirmed and m.email like %s and google = false', ('%econo.unlp.edu.ar',))
 
                 for u in cur:
-                    password = 'lclcynpc'
+                    password = 'algo'
                     if len(u['password']) >= 8:
                         password = u['password']
 
