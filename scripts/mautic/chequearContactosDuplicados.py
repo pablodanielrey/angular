@@ -40,15 +40,12 @@ if __name__ == '__main__':
     try:
         cur = db.cursor()
         try:
-            cur.execute('delete from leads where lower(email) in %s', (emails,))
-            """
             for email in emails:
                 cur.execute('select email from leads where lower(email) = lower(%s)', (email,))
                 if cur.rowcount > 0:
                     logging.info('Eliminando {}'.format(email))
                     cur.execute('delete from leads where lower(email) = lower(%s)', (email,))
                     db.commit()
-            """
         finally:
             cur.close()
     finally:
