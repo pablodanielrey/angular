@@ -231,10 +231,12 @@ class RedmineAPI:
                 issue.fromOfficeId = cf.value
                 issue.fromOffice = cls._findOffice(con, issue.fromOfficeId)
 
+        """
         if related:
             childrens = [iss.id for iss in r.children if iss is not None]
             issue.children = cls.findByIds(con, childrens)
-            issue.files = [cls._loadFile(file) for file in r.attachments if file is not None]
+        """
+        issue.files = [cls._loadFile(file) for file in r.attachments if file is not None]
 
         return issue
 
