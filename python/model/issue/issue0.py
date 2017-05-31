@@ -113,6 +113,7 @@ class RedmineAPI:
         att.name = file.filename
         return att
 
+
     officeRedmineIdCache = {}
     officeIdCache = {}
     officeCache = {}
@@ -131,6 +132,17 @@ class RedmineAPI:
         else:
             id = cls.officeRedmineIdCache[officeId]
 
+        """
+        saco la cache de office asi las obtengo siempre desde le server
+        office = None
+        if id not in cls.officeCache.keys():
+            office = cls._findOffice(con, id)
+            cls.officeCache[id] = office
+        else:
+            office = cls.officeCache[id]
+
+        return office
+        """
         return cls._findOffice(con, id)
 
     @classmethod
@@ -138,6 +150,7 @@ class RedmineAPI:
         if id is None:
             return None
 
+        """ saco la cache
         office = None
         if id not in cls.officeCache.keys():
             offices = Office.findByIds(con, [id])
@@ -151,7 +164,6 @@ class RedmineAPI:
         offices = Office.findByIds(con, [id])
         office = offices[0] if len(offices) > 0 else None
         return office
-        """
 
 
     """
