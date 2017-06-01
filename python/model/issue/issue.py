@@ -383,19 +383,18 @@ class RedmineAPI:
         if redmine is None:
             return []
         issues = []
-        projects = [p.identifier for p in redmine.project.all()]
-        for pId in pIds:
+        projects = [p for p in redmine.project.all() if p.identifier in pIds]
+        for project in projects:
             # issues.extend(redmine.issue.filter(tracker_id=cls.TRACKER_ERROR, project_id=pidentifier, subproject_id='!*', status_id='open'))
 
-            if pId in projects:
                 if cIds is None:
-                    issues.extend(redmine.issue.filter(tracker_id=cls.TRACKER_ERROR, project_id=pId, status_id='*'))
+                    issues.extend(redmine.issue.filter(tracker_id=cls.TRACKER_ERROR, project_id=project.id, status_id='*'))
 
                 elif len(cIds) <= 0:
                     """
                         no tienen oficina origen
                     """
-                    auxIssues = redmine.issue.filter(tracker_id=cls.TRACKER_ERROR, project_id=pId, status_id='*')
+                    auxIssues = redmine.issue.filter(tracker_id=cls.TRACKER_ERROR, project_id=project.id, status_id='*')
                     issues.extend([iss for iss in auxIssues if not cls._hasCustomField(iss, RedmineAPI.FROM_FIELD)])
 
                 else:
