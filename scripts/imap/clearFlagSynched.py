@@ -105,7 +105,7 @@ if __name__ == '__main__':
     epass = sys.argv[2]
 
 
-    logFile = '/var/log/imap-sync-{}-{}.log'.format(euser,str(datetime.datetime.now()))
+    logFile = '/var/log/clear-flag-{}-{}.log'.format(euser,str(datetime.datetime.now()))
     logging.basicConfig(filename=logFile, filemode='w', level=logging.DEBUG)
 
     imaplib._MAXLINE = 99999999
