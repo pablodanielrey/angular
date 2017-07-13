@@ -104,10 +104,12 @@ if __name__ == '__main__':
     gpass = sys.argv[2]
     euser = sys.argv[3]
     epass = sys.argv[4]
+    checkGoogle = eval(sys.argv[5]) if len(sys.argv) > 5 else True
+
 
     logFile = '/var/log/imap-sync-{}-{}.log'.format(guser,str(datetime.datetime.now()))
     logging.basicConfig(filename=logFile, filemode='w', level=logging.DEBUG)
-    print('logueando info del proceso sobre : {}'.format(logFile))
+    print('logueando info del proceso sobre : {} checkGoogle: {}'.format(logFile, checkGoogle))
 
     imaplib._MAXLINE = 99999999
 
@@ -183,7 +185,7 @@ if __name__ == '__main__':
 
                                 ''' chequeo que no haya venido de gmail '''
                                 headers = parser.parsebytes(message, True)
-                                if 'X-Gm-Spam' in headers.keys():
+                                if checkGoogle and 'X-Gm-Spam' in headers.keys():
                                     m.store(n, '+FLAGS', '(synched2)')
                                     logging.info('Mensaje {} ya sincronizado'.format(n))
                                     continue
