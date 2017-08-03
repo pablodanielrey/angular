@@ -40,7 +40,7 @@ class Schedule(JSONSerializable):
             if self.start:
                 return Utils._localizeLocal(dt + datetime.timedelta(seconds=self.start))
             else:
-                return return Utils._localizeLocal(dt)
+                return Utils._localizeLocal(dt)
         except Exception as e:
             logging.exception('Error obteniendo la fecha de inicio : ')
             logging.exception(e)
