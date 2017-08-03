@@ -35,8 +35,14 @@ class Schedule(JSONSerializable):
         return (self.date <= date) and (self.weekday == date.weekday())
 
     def getStartDate(self, date):
-        dt = datetime.datetime.combine(date, datetime.time(0,0))
-        return Utils._localizeLocal(dt + datetime.timedelta(seconds=self.start))
+        try:
+            dt = datetime.datetime.combine(date, datetime.time(0,0))
+            return Utils._localizeLocal(dt + datetime.timedelta(seconds=self.start))
+        except Exception as e:
+            logging.exception('Error obteniendo la fecha de inicio : ')
+            logging.exception(e)
+            logging.exception(self.__dict__)
+            raise e
 
     def getEndDate(self, date):
         dt = datetime.datetime.combine(date, datetime.time(0,0))
