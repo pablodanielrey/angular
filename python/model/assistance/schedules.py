@@ -37,7 +37,10 @@ class Schedule(JSONSerializable):
     def getStartDate(self, date):
         try:
             dt = datetime.datetime.combine(date, datetime.time(0,0))
-            return Utils._localizeLocal(dt + datetime.timedelta(seconds=self.start))
+            if self.start:
+                return Utils._localizeLocal(dt + datetime.timedelta(seconds=self.start))
+            else:
+                return return Utils._localizeLocal(dt)
         except Exception as e:
             logging.exception('Error obteniendo la fecha de inicio : ')
             logging.exception(e)
@@ -46,7 +49,11 @@ class Schedule(JSONSerializable):
 
     def getEndDate(self, date):
         dt = datetime.datetime.combine(date, datetime.time(0,0))
-        return Utils._localizeLocal(dt + datetime.timedelta(seconds=self.end))
+        if self.end:
+            return Utils._localizeLocal(dt + datetime.timedelta(seconds=self.end))
+        else:
+            ''' retorno el final del día. '''
+            return Utils._localizeLocal(dt + datetime.timedelta(seconds=24*60*60*60))
 
     def getScheduleSeconds(self):
         if self.end is None or self.start is None:
