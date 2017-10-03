@@ -137,7 +137,7 @@ class WorkPeriod(JSONSerializable):
         actual = None
         for l in logs:
             if not actual or (l.log - actual) > self.internalLogsTolerance:
-                filteredLogs.apend(l)
+                filteredLogs.append(l)
                 actual = l.log
 
         return filteredLogs
