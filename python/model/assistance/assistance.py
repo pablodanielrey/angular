@@ -81,6 +81,7 @@ class AssistanceData(JSONSerializable):
 
 class WorkPeriod(JSONSerializable):
     logsTolerance = datetime.timedelta(hours=2)
+    internalLogsTolerance = datetime.timedelta(minutes=5)
 
     @classmethod
     def _create(cls, userId, date):
@@ -128,12 +129,26 @@ class WorkPeriod(JSONSerializable):
             return None
         return self.logs[-1]
 
+    def _filterLogsTolerance(self, logs):
+        if not logs or len(logs) <= 0:
+            return []
+
+        filteredLogs = []
+        actual = None
+        for l in logs:
+            if not actual or (l.log - actual) > self.internalLogsTolerance:
+                filteredLogs.apend(l)
+                actual = l.log
+
+        return filteredLogs
+
     def getWorkedSeconds(self):
         """
             Retorna los segundos trabajados
         """
         total = 0
-        workingLogs = [ self.logs[k:k+2] for k in range(0, len(self.logs), 2) ]
+        filteredLogs = self._filterLogsTolerance(self.logs)
+        workingLogs = [ filteredLogs[k:k+2] for k in range(0, len(filteredLogs), 2) ]
         for wl in workingLogs:
             if len(wl) >= 2:
                 total = total + (wl[1].log - wl[0].log).total_seconds()
