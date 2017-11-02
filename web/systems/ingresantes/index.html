@@ -2,7 +2,7 @@
 <html lang="es">
 
 <head>
-    <title>Ingresantes 2015</title>
+    <title>Usuarios FCE | Alta de cuenta</title>
     <meta charset="utf-8" />
     <meta name='viewport' content='width=device-width'/>
     <link rel="stylesheet" href="ingresantes.css" />
@@ -62,7 +62,8 @@
       <!--CLASES (home, genero, mail,activacion, password,fin)  y (mostrarEspere, ocultarEspere) y de errores (DNInoExiste, DNIActivado, CorreoNoLlega, consultaEnviada )-->
 
         <div class="header">
-          &nbsp; <img class="logo" src="./img/siFCE_LogoMenu.png">
+          &nbsp; <img class="logo" src="./img/usersico.gif" alt="" height="27" width="30"> <span class="textTitulo"><b>Usuarios FCE </b>| Alta de cuenta</span>
+
         </div>
 
         <div class="pantallas">
@@ -78,7 +79,7 @@
                   </div>
 
                   <div ng-if='!model.dniOk' class="textSpan">
-                    <i class="fa fa-exclamation-triangle"></i> <b>ATENCIÓN |</b> DNI sin puntos - Pasaporte sólo letras y números (sin barras, puntos, guiones)
+                    <i class="fa fa-exclamation-triangle"></i>  DNI sin puntos - Pasaporte sólo letras y números <br>(sin barras, puntos, guiones)
                   </div>
 
                   <div>
@@ -122,7 +123,7 @@
                   <div>
                       <h1><span class="textHola">Hola!</span> , <b>{{model.user.name}} {{model.user.lastname}}</b> </div></h1>
                   <div>
-                      Para dar de alta tu cuenta y acceder a AU24 es necesario que nos informes tu dirección de correo electrónico
+                      Para dar de alta tu cuenta y acceder a AU24 es necesario que nos informe su dirección de correo electrónico
                   </div>
 
                   <form name="emailform">
@@ -149,16 +150,16 @@
                     <h1><i class="fa fa-key"></i> Código de Activación</h1>
                 </div>
                 <div class="textTitles2">
-                    Te hemos enviado un mensaje con el código de activación a <b>{{model.email.email}}</b>
+                    Le hemos enviado un mensaje con el código de activación a <b>{{model.email.email}}</b>
                 </div>
                 <div class="textSpan4">
                   <button class="modificarMail" ng-click='changeScreenBackwards()'><i class="fa fa-pencil textBlanco2"></i> Modificar dirección de correo </button>
                 </div>
                 <div class="textSpan2">
-                  <i class="fa fa-exclamation-triangle"></i> <b>Revisá la bandeja de correo no deseado </b>
+                  <i class="fa fa-exclamation-triangle"></i> <b>Revise la bandeja de correo no deseado </b>
                 </div>
                 <div class="textSpan2">
-                  <i class="fa fa-exclamation-triangle"></i> Si te llegó a "correo no deseado" tilda y da clic en "es correo deseado"
+                  <i class="fa fa-exclamation-triangle"></i> Si le llegó a "correo no deseado" tilda y da clic en "es correo deseado"
                 </div>
 
                 <div class="textTitles2 tituloCodAct">
@@ -181,18 +182,16 @@
                   <h1><i class="fa fa-lock"></i> Crear Contraseña</h1>
               </div>
               <div class="textTitles4">
-                  ¡Último paso! es necesario que crees tu contraseña<br>
+                  ¡Último paso! es necesario que cree su contraseña<br>
               </div>
               <div class="textTitles5">
                   para ingresar a AU24.
               </div>
 
-              <div class="textSpan2">
-                <i class="fa fa-exclamation-triangle"></i> <b>Debe comenzar con una letra </b>
+              <div class="textSpan2 textRequisitos">
+                <i class="fa fa-exclamation-triangle"></i> <b>Requisitos:</b> Tener una longitud mínima de 8 caracteres y <br> estar compuesta de forma alfanumérica (letras y números)
               </div>
-              <div class="textSpan2">
-                 <b>y contener al menos un número</b>
-              </div>
+
 
               <div class="passwords">
                   <div>
@@ -228,11 +227,11 @@
                     <h1><i class="fa fa-check-square-o"></i> Proceso Finalizado Correctamente!</h1>
                 </div>
                 <div class="textTitles2">
-                    Ahora podrás acceder a AU24 <br>
+                    Ahora podrá acceder a AU24 <br>
                     <a href='http://www.au24.econo.unlp.edu.ar'><b>www.au24.econo.unlp.edu.ar<b></a>
                 </div><br>
 
-                <div> <h3><i class="fa fa-envelope-o "></i> Te hemos enviado un correo con tus datos de acceso a AU24</h3></div>
+                <div> <h3><i class="fa fa-envelope-o "></i> Le hemos enviado un correo con sus datos de acceso a AU24</h3></div>
                 <!--
                 <div class="textTitles2">
                   <i class="fa fa-user"></i> Usuario: <span class="textTitles3"><b{{model.dni}}</b></span>
@@ -261,14 +260,14 @@
           <div><h1> El Nº de Documento <span class="textSpan2">{{model.dni}}</span> no existe</h1> <br> </div>
           <button class="btns3" type="button" ng-click='backToDni()'><i class="fa fa-angle-left"></i> Volver  </button>
           <div>
-            <i class="fa fa-clock-o fa-3x"></i> Tené en cuenta que la carga del documento al sistema puede demorar hasta 48 hs luego de la confirmación de la inscripción
+            <i class="fa fa-clock-o fa-3x"></i> Tenga en cuenta que la carga del número de documento al sistema puede demorar hasta 48 hs luego de la confirmación de la inscripción
           </div>
           <br>
           <div>
-            Si ese lapso a sido superado y continua aún el problema,
+            Si ese lapso ha sido superado y continúa aún el problema,
           </div>
           <div>
-            por favor completá el formulario, nos comunicaremos con vos a la brevedad
+            por favor complete el formulario, nos comunicaremos a la brevedad
           </div>
 
           <br>
@@ -295,7 +294,7 @@
           </div>
 
           <div>
-             Si ya estabas registrado y no recuerdas la contraseña o deseas modificar tu datos personales
+             Si ya estaba registrado y no recuerda la contraseña o desea modificar sus datos personales
           </div>
           <div>
              accede al portal de administración de cuentas desde <a class="textTitles3" href="http://www.fce.econo.unlp.edu.ar" target="_blank">aquí</a>
@@ -303,7 +302,7 @@
           <br>
 
           <div>
-            Si aún continuas con problemas, por favor completá el formulario, nos comunicaremos con vos a la brevedad
+            Si aún continua con problemas, por favor complete el formulario, nos comunicaremos a la brevedad
           </div>
 
           <br>
@@ -362,7 +361,7 @@
 
 
         <div class="footer">
-          &nbsp;  © 2015 | DiTESI | Dirección de tecnologías y Sistemas Informáticos | Secretaría de Administración y Finanzas | DeTISE | Departamento de tecnología Informática y Servicios Educativos | Secretaría Académica | Facultad de Ciencias Económicas | UNLP | Calle 6 Nº 777 - 1er Subsuelo | La Plata | Bs. As. | Tel: +54 (221) 423-6769/71/72 int. 123 | ditesi@econo.unlp.edu.ar
+          &nbsp;  DiTeSI | Dirección de tecnologías y Sistemas Informáticos | Facultad de Ciencias Económicas | UNLP | Calle 6 Nº 777 - 1er Subsuelo | La Plata | Bs. As. | Tel: +54 (221) 423-6769/71/72 int. 123 | ditesi@econo.unlp.edu.ar
         </div>
     </div>
 </body>
