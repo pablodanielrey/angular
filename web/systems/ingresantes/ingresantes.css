@@ -27,7 +27,7 @@ input[type="checkbox"]{
   z-index: 999;
   width: 100%;
   height: 50px;
-  background-color: #e5e4e4;
+  background-color: #222222;
   -moz-box-shadow: .5px 0 8px 0 #9c9c9c;
   -webkit-box-shadow: .5px 0 8px 0 #9c9c9c;
   -o-box-shadow: .5px 0 8px 0 #9c9c9c;
@@ -42,8 +42,8 @@ input[type="checkbox"]{
 }
 
 .footer {
-  background-color: #e5e4e4;
-  height: 37px;
+  background-color: #222222;
+  height: 20px;
   width: 100%;
   position: fixed;
   bottom: 0;
@@ -82,13 +82,13 @@ input[type="checkbox"]{
 }
 
 .textTitles2 {
-  font-size: 1.5em;
+  font-size: 1.3em;
   margin-top: 20px;
   margin-bottom: 10px;
 }
 
 .textTitles3 {
-  color: #92AD17;
+  color: #0066a6;
 }
 
 .textTitles4 {
@@ -103,7 +103,7 @@ input[type="checkbox"]{
 }
 
 .textTitles6 {
-  color: #92AD17;
+  color: #0066a6;
   font-size:1.4em;
 }
 
@@ -111,8 +111,14 @@ input[type="checkbox"]{
   font-size: 2em;
   padding: 10px;
   width: 250px;
-  color: #92AD17;
+  color: #0066a6;
   border: solid 1px #E5E4E4;
+
+}
+
+
+.logo {
+  margin-left: 10px;
 
 }
 
@@ -125,20 +131,30 @@ input[type="checkbox"]{
 
 }
 
+.textTitulo {
+  color:#9d9d9d;
+  font-size: 14px;
+  margin-left: 10px;
+}
+
 .inputPassword {
   font-size: 2em;
   padding: 10px;
   width: 250px;
-  color: #92AD17;
+  color: #0066a6;
   border: solid 1px #E5E4E4;
   margin-right: 20px;
+}
+
+.textRequisitos {
+  font-size: 12px;
 }
 
 .inputMail {
   font-size: 2em;
   padding: 10px;
   width: 540px;
-  color: #92AD17;
+  color: #0066a6;
   border: solid 1px #E5E4E4;
 }
 
@@ -146,7 +162,7 @@ input[type="checkbox"]{
   font-size: 2em;
   padding: 10px;
   width: 250px;
-  color: #92AD17;
+  color: #0066a6;
   border: solid 1px #E5E4E4;
   margin-top: 5px;
 }
@@ -156,14 +172,14 @@ input[type="checkbox"]{
   padding: 10px;
   width: 274px;
   margin-top: 20px;
-  background-color: #92AD17;
+  background-color: #1E88E5;
   color: white;
   cursor: pointer;
   border: none;
 }
 
 .btns:hover {
-  background-color: #707f27;
+  background-color: #0066a6;
 }
 
 .btns2 {
@@ -253,22 +269,24 @@ input[type="checkbox"]{
 }
 
 .textSpan {
-  color: #92AD17;
+  color: #1E88E5;
   padding: 5px;
+  font-size: 12px;
 
 }
 
 .textSpan2 {
-  color: #92AD17;
+  color: #1E88E5;
 }
 
 .textSpan3 {
-  color: #92AD17;
+  color: #1E88E5;
   margin-top: 10px;
+  font-size: 14px;
 }
 
 .textSpan4 {
-  background-color:#92AD17;
+  background-color:#1E88E5;
   color:white;
   margin-bottom: 10px;
 
@@ -280,7 +298,17 @@ input[type="checkbox"]{
 
 .modificarMail {
   border:none;
-  background-color:#92AD17;
+  background-color:#ddd;
+  color:#222222;
+  padding: 5px;
+  font-size: 1em;
+  cursor: pointer;
+
+}
+
+.modificarMail:hover {
+  border:none;
+  background-color:#5c5f69;
   color:white;
   padding: 5px;
   font-size: 1em;
@@ -332,7 +360,7 @@ input[type="checkbox"]{
 .textHola {
   font-family: 'Indie Flower', 'Helvetica Neue', Helvetica, Arial, sans-serif;
   font-size: 2em;
-  color:#92AD17;
+  color:#1E88E5;
 }
 
 .pantallaActivacion {
@@ -542,7 +570,7 @@ input[type="checkbox"]{
   font-size: 1.2em;
   padding: 5px;
   width: 250px;
-  color: #92AD17;
+  color: #0066a6;
   border: solid 1px #E5E4E4;
   margin: 2px;
 
