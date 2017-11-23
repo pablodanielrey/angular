@@ -41,6 +41,7 @@ if __name__ == '__main__':
                 if r.match(up.username) is None or ' ' in up.username:
                     continue
 
+                up.password = up.password.replace('"','').replace('\'','')
                 f.write("""
 
 {} Cleartext-Password := "{}"
